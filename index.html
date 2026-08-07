@@ -297,7 +297,7 @@ dialog::backdrop{background:rgba(7,8,21,.55);backdrop-filter:blur(5px)}
       <button class="nav-item" data-page="progress"><span class="nav-icon">↗</span>Progress</button>
       <button class="nav-item" data-page="resources"><span class="nav-icon">◇</span>Resources</button>
       <button class="nav-item" data-page="community"><span class="nav-icon">♧</span>Community</button>
-      <button class="nav-item" data-page="milestones"><span class="nav-icon">◆</span>Milestones</button><button class="nav-item" data-page="then-now"><span class="nav-icon">↔</span>Then & Now</button><button class="nav-item" data-page="story"><span class="nav-icon">▤</span>My Recovery Story</button><button class="nav-item" data-page="settings"><span class="nav-icon">⚙</span>Settings</button>
+      <button class="nav-item" data-page="milestones"><span class="nav-icon">◆</span>Milestones</button><button class="nav-item" data-page="then-now"><span class="nav-icon">↔</span>Then & Now</button><button class="nav-item" data-page="story"><span class="nav-icon">▤</span>My Recovery Story</button><button class="nav-item" data-page="longterm"><span class="nav-icon">∞</span>Year 3+</button><button class="nav-item" data-page="settings"><span class="nav-icon">⚙</span>Settings</button>
     </nav>
     <div class="side-spacer"></div>
     <div class="help-card">
@@ -573,9 +573,84 @@ dialog::backdrop{background:rgba(7,8,21,.55);backdrop-filter:blur(5px)}
         </div>
       </section>
 
-      <section class="page" id="page-milestones"><div class="section-shell"><div class="section-header"><div class="eyebrow">Milestone Reviews</div><h2>Your recovery, seen over time</h2><p>7 days • 14 days • 30 • 60 • 90 • 6 months • 9 months • 1 year • 15 • 18 • 21 months • 2 years</p></div><div class="simple-card"><h3>Milestone reviews are ready</h3><p class="subtle">Reached milestones can compare earlier guided responses with current responses and save your own reflection in milestone_reviews.</p><button class="primary" id="saveMilestoneDemo">Save Current Milestone Review</button></div></div></section>
+      <section class="page" id="page-milestones"><div class="section-shell"><div class="section-header"><div class="eyebrow">Milestone Reviews</div><h2>Your recovery, seen over time</h2><p>7 days • 14 days • 30 • 60 • 90 • 6 months • 9 months • 1 year • 15 • 18 • 21 months • 2 years • annual reviews for life</p></div><div class="simple-card"><h3>Milestone reviews are ready</h3><p class="subtle">Reached milestones can compare earlier guided responses with current responses and save your own reflection in milestone_reviews.</p><button class="primary" id="saveMilestoneDemo">Save Current Milestone Review</button> <button class="secondary" id="saveAnnualReview">Save Annual Review</button></div></div></section>
 <section class="page" id="page-then-now"><div class="section-shell"><div class="section-header"><div class="eyebrow">Then & Now</div><h2>See what has changed</h2><p>Compare repeated recovery themes across time.</p></div><div class="simple-card"><div class="field"><label>Theme</label><select id="tnKey"><option value="current_feeling">How I was feeling</option><option value="evening_what_helped">What helped me</option><option value="life_areas_needing_care">Areas needing care</option></select></div><button class="primary" id="tnLoad">Build Comparison</button></div><div id="tnResult" style="margin-top:14px"></div></div></section>
-<section class="page" id="page-story"><div class="section-shell"><div class="section-header"><div class="eyebrow">My Recovery Story</div><h2>Prepare your private hardcopy story</h2><p>Available as a meaningful two-year-and-beyond recovery record.</p></div><div class="two-col"><div class="simple-card"><h3>Book setup</h3><div class="field"><label>Title</label><input id="storyTitle" value="My Recovery Story"></div><div class="field"><label>Opening message</label><textarea id="storyOpen" style="min-height:100px"></textarea></div></div><div class="simple-card"><h3>Include</h3><label class="check"><input id="storyMilestones" type="checkbox" checked> Milestones</label><label class="check"><input id="storyThen" type="checkbox" checked> Then & Now</label><label class="check"><input id="storyGuided" type="checkbox"> Approved guided responses</label><label class="check"><input id="storyJournal" type="checkbox"> Selected journal entries</label><p class="subtle">Journal entries remain excluded by default.</p></div></div><button class="primary" id="storyBuild" style="margin-top:14px">Build Story Preview</button><div id="storyResult" style="margin-top:14px"></div></div></section>
+<section class="page" id="page-story"><div class="section-shell"><div class="section-header"><div class="eyebrow">My Recovery Story</div><h2>Prepare your private hardcopy story</h2><p>Available as a meaningful two-year-and-beyond recovery record.</p></div><div class="two-col"><div class="simple-card"><h3>Book setup</h3><div class="field"><label>Title</label><input id="storyTitle" value="My Recovery Story"></div><div class="field"><label>Opening message</label><textarea id="storyOpen" style="min-height:100px"></textarea></div></div><div class="simple-card"><h3>Include</h3><label class="check"><input id="storyMilestones" type="checkbox" checked> Milestones</label><label class="check"><input id="storyThen" type="checkbox" checked> Then & Now</label><label class="check"><input id="storyGuided" type="checkbox"> Approved guided responses</label><label class="check"><input id="storyJournal" type="checkbox"> Selected journal entries</label><p class="subtle">Journal entries remain excluded by default.</p></div></div><button class="primary" id="storyBuild" style="margin-top:14px">Build Story Preview</button>
+<div class="simple-card" style="margin-top:14px">
+  <div class="phase-chip">RECOVERY STORY EDITIONS</div>
+  <h3>Choose your edition</h3>
+  <div class="field">
+    <label>Edition</label>
+    <select id="storyEditionAdvanced">
+      <option value="two_year">Two-Year Recovery Story</option>
+      <option value="five_year">Five-Year Recovery Story</option>
+      <option value="ten_year">Ten-Year Recovery Story</option>
+      <option value="custom">Custom Edition</option>
+    </select>
+  </div>
+  <p class="subtle">Five- and ten-year editions compare early recovery, Year 1, Year 2, and long-term milestones. The user reviews every included section before printing.</p>
+</div>
+
+<div class="simple-card" style="margin-top:14px">
+  <div class="phase-chip">PRINT PREPARATION</div>
+  <h3>Hardcopy workflow</h3>
+  <p class="subtle">Preview → choose sections → approve content → generate print view → print to PDF or send to a future book-printing service.</p>
+  <button class="secondary" id="printStoryPreview">Open Print View</button>
+</div>
+<div id="storyResult" style="margin-top:14px"></div></div></section>
+
+<section class="page" id="page-longterm">
+  <div class="section-shell">
+    <div class="section-header">
+      <div class="eyebrow">Year 3 & Beyond</div>
+      <h2>Long-term recovery</h2>
+      <p>After two years, Lellee becomes lighter. Instead of a daily curriculum, you get one thoughtful weekly recovery focus while your history and milestones continue for life.</p>
+    </div>
+
+    <div class="hero-phase">
+      <div class="phase-content">
+        <span class="phase-chip">LONG-TERM RECOVERY</span>
+        <div class="phase-name" id="ltHeadline">Keep recovery connected to the life you're building.</div>
+        <p class="subtle" id="ltLead">Your weekly guidance adapts to recovery, relationships, health, purpose, stability, and growth.</p>
+      </div>
+    </div>
+
+    <div class="phase-grid">
+      <div class="simple-card">
+        <div class="phase-chip">THIS WEEK</div>
+        <h3 id="ltWeekTitle">Protect What Works</h3>
+        <p class="subtle" id="ltWeekPrompt">What does your recovery need from you this week?</p>
+        <div id="ltChoices" class="focus"></div>
+        <button class="primary" id="saveLongTermWeek">Save This Week</button>
+        <div id="ltSaved" class="day2-saved day2-hidden" style="margin-top:10px">Weekly reflection saved.</div>
+      </div>
+
+      <div class="simple-card">
+        <div class="phase-chip">YOUR LONG VIEW</div>
+        <h3>Recovery continues for life</h3>
+        <div class="metric-row">
+          <div class="metric"><b id="ltDays">—</b><small>Recovery days</small></div>
+          <div class="metric"><b id="ltYears">—</b><small>Years</small></div>
+          <div class="metric"><b id="ltNextAnniv">—</b><small>Next anniversary</small></div>
+        </div>
+        <p class="subtle" style="margin-top:14px">You can hide the day counter in a future preference if you prefer milestone-based tracking.</p>
+      </div>
+    </div>
+
+    <div class="simple-card" style="margin-top:16px">
+      <div class="phase-chip">ANNUAL RHYTHM</div>
+      <h3>One deeper review each year</h3>
+      <p class="subtle">Lellee keeps the weekly experience light, then invites you into a deeper annual review around your recovery anniversary.</p>
+      <div class="focus">
+        <div>What changed this year?</div>
+        <div>What still needs care?</div>
+        <div>What protected recovery?</div>
+        <div>What are you building next?</div>
+      </div>
+      <button class="secondary" data-page="milestones">Open Annual Reviews</button>
+    </div>
+  </div>
+</section>
 <section class="page" id="page-settings">
         <div class="section-shell">
           <div class="section-header"><div class="eyebrow">Settings</div><h2>Personalize Lellee</h2><p>Your recovery pathway and belief preference are separate and can be changed at any time.</p></div>
@@ -885,7 +960,7 @@ function setAuthMode(mode,msg=''){authMode=mode;$('#authTitle').textContent=mode
 $('#authToggle').addEventListener('click',()=>setAuthMode(authMode==='signin'?'signup':'signin'));
 $('#authForm').addEventListener('submit',async e=>{e.preventDefault();const email=$('#authEmail').value.trim(),password=$('#authPassword').value;let result;if(authMode==='signin')result=await sb.auth.signInWithPassword({email,password});else result=await sb.auth.signUp({email,password});if(result.error){$('#authMsg').textContent=result.error.message;$('#authMsg').className='auth-msg error';return}if(authMode==='signup'&&!result.data.session){setAuthMode('signin','Account created. Confirm your email, then sign in.');return}await beginSession(result.data.user)});
 $('#signOutBtn').addEventListener('click',async()=>{await sb.auth.signOut();currentUser=null;$('#authOverlay').classList.remove('hidden')});
-async function beginSession(user){currentUser=user;const [p,r,u,l,j,dc,ra]=await Promise.all([sb.from('profiles').select('*').eq('id',user.id).single(),sb.from('recovery_profiles').select('*').eq('user_id',user.id).single(),sb.from('user_preferences').select('*').eq('user_id',user.id).single(),sb.from('local_preferences').select('*').eq('user_id',user.id).single(),sb.from('journal_entries').select('content,created_at').eq('user_id',user.id).order('created_at',{ascending:false}).limit(20),sb.from('daily_checkins').select('*').eq('user_id',user.id).eq('checkin_date',todayKey()),sb.from('recovery_actions').select('*').eq('user_id',user.id).eq('action_date',todayKey())]);data.name=p.data?.display_name||data.name;data.recoveryDate=r.data?.recovery_date||data.recoveryDate;data.goal=r.data?.current_goal||data.goal;data.approach=approachFromDb(u.data?.recovery_approach);data.belief=beliefFromDb(u.data?.belief_preference);data.faith=u.data?.faith_tradition||'';data.denomination=u.data?.denomination||'';data.city=l.data?.city||'';data.state=l.data?.state||'';data.journalEntries=(j.data||[]).map(x=>({date:x.created_at,text:x.content}));data.daily[todayKey()]={};if(dc.data?.length)data.daily[todayKey()].checkin='Checked in';for(const a of (ra.data||[])){const rev={daily_focus:'focus',gratitude:'gratitude',recovery_action:'action',evening_reflection:'reflection'};if(rev[a.action_type])data.daily[todayKey()][rev[a.action_type]]=a.content||'Completed'}localStorage.setItem(STORAGE,JSON.stringify(data));renderBasics();$('#authOverlay').classList.add('hidden');if(!p.data?.display_name||!r.data?.recovery_date){showPage('settings');setTimeout(()=>alert('Complete your Lellee profile and recovery date, then click Save Preferences.'),100)}else if((Number(new URLSearchParams(location.search).get('day'))>=1&&Number(new URLSearchParams(location.search).get('day'))<=730)||(daysInRecovery()>=1&&daysInRecovery()<=730)){renderGuidedDay();showPage('day2')}}
+async function beginSession(user){currentUser=user;const [p,r,u,l,j,dc,ra]=await Promise.all([sb.from('profiles').select('*').eq('id',user.id).single(),sb.from('recovery_profiles').select('*').eq('user_id',user.id).single(),sb.from('user_preferences').select('*').eq('user_id',user.id).single(),sb.from('local_preferences').select('*').eq('user_id',user.id).single(),sb.from('journal_entries').select('content,created_at').eq('user_id',user.id).order('created_at',{ascending:false}).limit(20),sb.from('daily_checkins').select('*').eq('user_id',user.id).eq('checkin_date',todayKey()),sb.from('recovery_actions').select('*').eq('user_id',user.id).eq('action_date',todayKey())]);data.name=p.data?.display_name||data.name;data.recoveryDate=r.data?.recovery_date||data.recoveryDate;data.goal=r.data?.current_goal||data.goal;data.approach=approachFromDb(u.data?.recovery_approach);data.belief=beliefFromDb(u.data?.belief_preference);data.faith=u.data?.faith_tradition||'';data.denomination=u.data?.denomination||'';data.city=l.data?.city||'';data.state=l.data?.state||'';data.journalEntries=(j.data||[]).map(x=>({date:x.created_at,text:x.content}));data.daily[todayKey()]={};if(dc.data?.length)data.daily[todayKey()].checkin='Checked in';for(const a of (ra.data||[])){const rev={daily_focus:'focus',gratitude:'gratitude',recovery_action:'action',evening_reflection:'reflection'};if(rev[a.action_type])data.daily[todayKey()][rev[a.action_type]]=a.content||'Completed'}localStorage.setItem(STORAGE,JSON.stringify(data));renderBasics();$('#authOverlay').classList.add('hidden');if(!p.data?.display_name||!r.data?.recovery_date){showPage('settings');setTimeout(()=>alert('Complete your Lellee profile and recovery date, then click Save Preferences.'),100)}else if(Number(new URLSearchParams(location.search).get('day'))>=1&&Number(new URLSearchParams(location.search).get('day'))<=730){renderGuidedDay();showPage('day2')}else if(daysInRecovery()<=730){renderGuidedDay();showPage('day2')}else{showPage('longterm');renderLongTermMode()}}
 
 const phase1Curriculum = [
 {d:1,t:"Start Here: Safety & Support",lead:"Today is about getting a little steadier. You do not need to solve your whole recovery at once.",focus:"What would help you feel a little safer or steadier today?",choices:["A safe place","Someone I trust","Food / water","Rest","Distance from alcohol / drugs","A meeting or recovery support","Medical / professional help","I'm not sure yet"],actions:["Call or text someone supportive","Eat and hydrate","Rest somewhere safe","Attend a meeting","Create distance from alcohol / drugs","Ask for professional help","Take one hour at a time"]},
@@ -1080,6 +1155,13 @@ function activateGuidedDay(){
 document.getElementById('openGuidedDay2')?.addEventListener('click',activateGuidedDay);
 document.getElementById('guidedBack')?.addEventListener('click',()=>showPage('today'));
 document.getElementById('saveGuidedDay')?.addEventListener('click',saveCurrentGuidedDay);
+
+
+function routeForRecoveryStage(){
+  const d=daysInRecovery();
+  if(d<=730)return 'day2';
+  return 'longterm';
+}
 
 async function initSupabase(){const {data:{session}}=await sb.auth.getSession();if(session?.user)await beginSession(session.user);else $('#authOverlay').classList.remove('hidden')}
 initSupabase();
