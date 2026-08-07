@@ -325,7 +325,7 @@ dialog::backdrop{background:rgba(7,8,21,.55);backdrop-filter:blur(5px)}
 
     <div class="content">
       <section class="page active" id="page-today">
-        <div class="page-title"><h2>TODAY <span class="date" id="todayDate"></span></h2><button class="btn btn-secondary" id="openGuidedDay2">Preview Guided Day 2</button></div>
+        <div class="page-title"><h2>TODAY <span class="date" id="todayDate"></span></h2><button class="btn btn-secondary" id="openGuidedDay2">Today's Guided Recovery</button></div>
 
         <div class="mobile-summary">
           <div><small>Days in Recovery</small><div class="big" data-recovery-day>43</div><small id="mobilePhase">Phase 2 • Build</small></div>
@@ -434,92 +434,34 @@ dialog::backdrop{background:rgba(7,8,21,.55);backdrop-filter:blur(5px)}
       </section>
 
       
+      
       <section class="page" id="page-day2">
         <div class="day2-shell">
           <section class="day2-hero">
-            <div class="day2-ey">Day 2 • Phase 1 — Stabilize</div>
-            <h2>You don't have to fix everything today.</h2>
-            <p class="day2-soft">Today is simply about noticing what feels true, what could use a little care, and one manageable step that may support your recovery.</p>
+            <div class="day2-ey" id="guidedEyebrow">Phase 1 • Stabilize</div>
+            <h2 id="guidedTitle">Today's Recovery</h2>
+            <p class="day2-soft" id="guidedLead"></p>
           </section>
 
-          <section class="day2-card">
-            <div class="day2-ey">1 • Check-In</div>
-            <h3>How are you arriving today?</h3>
-            <p class="day2-soft">No need to explain everything. Choose anything that feels close.</p>
-            <div class="day2-choices" data-d2-group="day2_feeling" data-multi="true">
-              <button class="day2-choice">Tired</button><button class="day2-choice">Hopeful</button><button class="day2-choice">Anxious</button><button class="day2-choice">Irritable</button><button class="day2-choice">Clear-headed</button><button class="day2-choice">Sad</button><button class="day2-choice">Restless</button><button class="day2-choice">Craving</button><button class="day2-choice">Not sure</button>
-            </div>
-            <details class="day2-note"><summary>Want to add a thought? (optional)</summary><textarea data-d2-note="day2_feeling" placeholder="A few words is enough..."></textarea></details>
-
-            <h3 style="margin-top:22px">What feels heaviest right now?</h3>
-            <p class="day2-soft">Choose the closest fit. You can always change it.</p>
-            <div class="day2-choices" data-d2-group="day2_heaviest_now">
-              <button class="day2-choice">Cravings</button><button class="day2-choice">Sleep</button><button class="day2-choice">My emotions</button><button class="day2-choice">Family / relationships</button><button class="day2-choice">Money</button><button class="day2-choice">Work</button><button class="day2-choice">Legal concerns</button><button class="day2-choice">Being alone</button><button class="day2-choice">Something else</button>
-            </div>
-          </section>
-
-          <section class="day2-card">
-            <div class="day2-ey">2 • Daily Focus</div>
-            <h3>What parts of life could use a little more care right now?</h3>
-            <p class="day2-soft">You do not need to work on all of them today. Just notice what stands out.</p>
-            <div class="day2-choices" data-d2-group="life_areas_needing_care" data-multi="true">
-              <button class="day2-choice">Physical health</button><button class="day2-choice">Mental / emotional health</button><button class="day2-choice">Family</button><button class="day2-choice">Relationships</button><button class="day2-choice">Work</button><button class="day2-choice">School</button><button class="day2-choice">Money</button><button class="day2-choice">Housing</button><button class="day2-choice">Legal concerns</button><button class="day2-choice">Spiritual life</button><button class="day2-choice">Self-respect</button><button class="day2-choice">I'm not sure yet</button>
-            </div>
-          </section>
-
-          <section class="day2-card day2-hidden" id="d2Personalized">
-            <div class="day2-ey">3 • Your Next Step</div>
-            <h3>One small step is enough.</h3>
-            <p class="day2-soft" id="d2PersonalLead"></p>
-            <div class="day2-choices" data-d2-group="day2_personalized_next_step" id="d2NextChoices"></div>
-          </section>
-
-          <section class="day2-card">
-            <div class="day2-ey">4 • Gratitude</div>
-            <h3>Is there something small you can appreciate right now?</h3>
-            <p class="day2-soft">You do not have to feel grateful for everything.</p>
-            <div class="day2-choices" data-d2-group="day2_gratitude">
-              <button class="day2-choice">A person</button><button class="day2-choice">A safe place</button><button class="day2-choice">Another chance</button><button class="day2-choice">Something I learned</button><button class="day2-choice">Something that made me smile</button><button class="day2-choice">Something else</button>
-            </div>
-            <details class="day2-note"><summary>Want to add a thought? (optional)</summary><textarea data-d2-note="day2_gratitude" placeholder="What makes this meaningful today?"></textarea></details>
-          </section>
-
-          <section class="day2-card">
-            <div class="day2-ey">5 • Recovery Action</div>
-            <h3>What feels manageable today?</h3>
-            <p class="day2-soft">One action is enough. Choose what feels realistic, not what sounds impressive.</p>
-            <div class="day2-choices" data-d2-group="day2_recovery_action">
-              <button class="day2-choice">Attend a meeting</button><button class="day2-choice">Call a support person</button><button class="day2-choice">Create some distance from alcohol / drugs</button><button class="day2-choice">Avoid a high-risk person / place</button><button class="day2-choice">Eat and hydrate</button><button class="day2-choice">Rest</button><button class="day2-choice">Make a treatment / counseling appointment</button><button class="day2-choice">Follow my prescribed care plan</button><button class="day2-choice">Something else</button>
-            </div>
-          </section>
+          <div id="guidedSections"></div>
 
           <section class="day2-card day2-summary">
             <div class="day2-ey">My Recovery Picture</div>
             <h3>What you've shared today</h3>
             <p class="day2-soft">This is your picture, not a diagnosis. You can change anything that doesn't feel right.</p>
             <div class="day2-summary-grid">
-              <div class="day2-sum"><small>I'm feeling</small><b id="d2SumFeeling">Not selected</b></div>
-              <div class="day2-sum"><small>What feels heaviest</small><b id="d2SumHeavy">Not selected</b></div>
-              <div class="day2-sum"><small>What could use care</small><b id="d2SumArea">Not selected</b></div>
-              <div class="day2-sum"><small>My recovery action</small><b id="d2SumAction">Not selected</b></div>
+              <div class="day2-sum"><small>How I'm arriving</small><b id="gSumFeeling">Not selected</b></div>
+              <div class="day2-sum"><small>Today's focus</small><b id="gSumFocus">Not selected</b></div>
+              <div class="day2-sum"><small>My recovery action</small><b id="gSumAction">Not selected</b></div>
+              <div class="day2-sum"><small>What I want to remember</small><b id="gSumReflection">Not selected</b></div>
             </div>
-          </section>
-
-          <section class="day2-card">
-            <div class="day2-ey">6 • Evening Reflection</div>
-            <h3>Before the day closes, what helped even a little?</h3>
-            <p class="day2-soft">“Nothing really helped” is an honest answer too.</p>
-            <div class="day2-choices" data-d2-group="day2_evening_helped" data-multi="true">
-              <button class="day2-choice">A person</button><button class="day2-choice">A meeting</button><button class="day2-choice">Staying busy</button><button class="day2-choice">Rest</button><button class="day2-choice">Prayer / faith</button><button class="day2-choice">A coping skill</button><button class="day2-choice">Avoiding a trigger</button><button class="day2-choice">Nothing really helped</button><button class="day2-choice">Something else</button>
-            </div>
-            <details class="day2-note"><summary>Reflect a little more (optional)</summary><textarea data-d2-note="day2_evening_helped" placeholder="What do you want to remember from today?"></textarea></details>
           </section>
 
           <div class="day2-savebar">
-            <button class="btn btn-secondary" data-route="home">Back to Today</button>
-            <button class="btn btn-primary" id="saveGuidedDay2">Save Day 2</button>
+            <button class="btn btn-secondary" id="guidedBack">Back to Today</button>
+            <button class="btn btn-primary" id="saveGuidedDay">Save Today's Recovery</button>
           </div>
-          <div class="day2-saved day2-hidden" id="d2Saved">Saved to your Lellee recovery history.</div>
+          <div class="day2-saved day2-hidden" id="guidedSaved">Saved to your Lellee recovery history.</div>
         </div>
       </section>
 
@@ -940,7 +882,162 @@ function setAuthMode(mode,msg=''){authMode=mode;$('#authTitle').textContent=mode
 $('#authToggle').addEventListener('click',()=>setAuthMode(authMode==='signin'?'signup':'signin'));
 $('#authForm').addEventListener('submit',async e=>{e.preventDefault();const email=$('#authEmail').value.trim(),password=$('#authPassword').value;let result;if(authMode==='signin')result=await sb.auth.signInWithPassword({email,password});else result=await sb.auth.signUp({email,password});if(result.error){$('#authMsg').textContent=result.error.message;$('#authMsg').className='auth-msg error';return}if(authMode==='signup'&&!result.data.session){setAuthMode('signin','Account created. Confirm your email, then sign in.');return}await beginSession(result.data.user)});
 $('#signOutBtn').addEventListener('click',async()=>{await sb.auth.signOut();currentUser=null;$('#authOverlay').classList.remove('hidden')});
-async function beginSession(user){currentUser=user;const [p,r,u,l,j,dc,ra]=await Promise.all([sb.from('profiles').select('*').eq('id',user.id).single(),sb.from('recovery_profiles').select('*').eq('user_id',user.id).single(),sb.from('user_preferences').select('*').eq('user_id',user.id).single(),sb.from('local_preferences').select('*').eq('user_id',user.id).single(),sb.from('journal_entries').select('content,created_at').eq('user_id',user.id).order('created_at',{ascending:false}).limit(20),sb.from('daily_checkins').select('*').eq('user_id',user.id).eq('checkin_date',todayKey()),sb.from('recovery_actions').select('*').eq('user_id',user.id).eq('action_date',todayKey())]);data.name=p.data?.display_name||data.name;data.recoveryDate=r.data?.recovery_date||data.recoveryDate;data.goal=r.data?.current_goal||data.goal;data.approach=approachFromDb(u.data?.recovery_approach);data.belief=beliefFromDb(u.data?.belief_preference);data.faith=u.data?.faith_tradition||'';data.denomination=u.data?.denomination||'';data.city=l.data?.city||'';data.state=l.data?.state||'';data.journalEntries=(j.data||[]).map(x=>({date:x.created_at,text:x.content}));data.daily[todayKey()]={};if(dc.data?.length)data.daily[todayKey()].checkin='Checked in';for(const a of (ra.data||[])){const rev={daily_focus:'focus',gratitude:'gratitude',recovery_action:'action',evening_reflection:'reflection'};if(rev[a.action_type])data.daily[todayKey()][rev[a.action_type]]=a.content||'Completed'}localStorage.setItem(STORAGE,JSON.stringify(data));renderBasics();$('#authOverlay').classList.add('hidden');if(!p.data?.display_name||!r.data?.recovery_date){showPage('settings');setTimeout(()=>alert('Complete your Lellee profile and recovery date, then click Save Preferences.'),100)}else if(new URLSearchParams(location.search).get('day')==='2'||phaseInfo().day===2){showPage('day2')}}
+async function beginSession(user){currentUser=user;const [p,r,u,l,j,dc,ra]=await Promise.all([sb.from('profiles').select('*').eq('id',user.id).single(),sb.from('recovery_profiles').select('*').eq('user_id',user.id).single(),sb.from('user_preferences').select('*').eq('user_id',user.id).single(),sb.from('local_preferences').select('*').eq('user_id',user.id).single(),sb.from('journal_entries').select('content,created_at').eq('user_id',user.id).order('created_at',{ascending:false}).limit(20),sb.from('daily_checkins').select('*').eq('user_id',user.id).eq('checkin_date',todayKey()),sb.from('recovery_actions').select('*').eq('user_id',user.id).eq('action_date',todayKey())]);data.name=p.data?.display_name||data.name;data.recoveryDate=r.data?.recovery_date||data.recoveryDate;data.goal=r.data?.current_goal||data.goal;data.approach=approachFromDb(u.data?.recovery_approach);data.belief=beliefFromDb(u.data?.belief_preference);data.faith=u.data?.faith_tradition||'';data.denomination=u.data?.denomination||'';data.city=l.data?.city||'';data.state=l.data?.state||'';data.journalEntries=(j.data||[]).map(x=>({date:x.created_at,text:x.content}));data.daily[todayKey()]={};if(dc.data?.length)data.daily[todayKey()].checkin='Checked in';for(const a of (ra.data||[])){const rev={daily_focus:'focus',gratitude:'gratitude',recovery_action:'action',evening_reflection:'reflection'};if(rev[a.action_type])data.daily[todayKey()][rev[a.action_type]]=a.content||'Completed'}localStorage.setItem(STORAGE,JSON.stringify(data));renderBasics();$('#authOverlay').classList.add('hidden');if(!p.data?.display_name||!r.data?.recovery_date){showPage('settings');setTimeout(()=>alert('Complete your Lellee profile and recovery date, then click Save Preferences.'),100)}else if((Number(new URLSearchParams(location.search).get('day'))>=1&&Number(new URLSearchParams(location.search).get('day'))<=30)||(daysInRecovery()>=1&&daysInRecovery()<=30)){renderGuidedDay();showPage('day2')}}
+
+const phase1Curriculum = [
+{d:1,t:"Start Here: Safety & Support",lead:"Today is about getting a little steadier. You do not need to solve your whole recovery at once.",focus:"What would help you feel a little safer or steadier today?",choices:["A safe place","Someone I trust","Food / water","Rest","Distance from alcohol / drugs","A meeting or recovery support","Medical / professional help","I'm not sure yet"],actions:["Call or text someone supportive","Eat and hydrate","Rest somewhere safe","Attend a meeting","Create distance from alcohol / drugs","Ask for professional help","Take one hour at a time"]},
+{d:2,t:"Understanding Where I Am",lead:"Notice what feels true, what could use a little care, and one manageable next step.",focus:"What parts of life could use a little more care right now?",choices:["Physical health","Mental / emotional health","Family","Relationships","Work","School","Money","Housing","Legal concerns","Spiritual life","Self-respect","I'm not sure yet"],actions:["Call a support person","Attend a meeting","Eat and hydrate","Rest","Avoid a high-risk person / place","Make a treatment / counseling appointment","Take one small healthy step"]},
+{d:3,t:"What Do I Need Today?",lead:"Some things need attention now. Other things can wait. Today is about telling the difference.",focus:"What needs your attention first today?",choices:["My body","Safety","Cravings","Emotions","Support","Sleep","A responsibility","Something else"],actions:["Handle one urgent need","Ask someone for help","Eat / hydrate","Rest","Use a coping tool","Make one necessary call","Let one non-urgent thing wait"]},
+{d:4,t:"Understanding Cravings",lead:"A craving can feel urgent without being a command. It can rise, change, and pass.",focus:"What do you notice most when a craving shows up?",choices:["Thoughts about using","Restlessness","Anxiety","Body tension","Irritability","A strong memory","Wanting relief","I'm not sure"],actions:["Wait 10 minutes before acting","Change my environment","Call someone","Use grounding","Eat / hydrate","Go to a meeting","Remove access if I safely can"]},
+{d:5,t:"Recognizing Triggers",lead:"Triggers are information. Noticing one gives you more choice about what happens next.",focus:"What kind of trigger stands out most right now?",choices:["A person","A place","Stress","Conflict","Loneliness","Money","Celebration","Boredom","A memory","Seeing substances"],actions:["Avoid one trigger today","Plan an exit","Tell a support person","Use a coping tool","Change one routine","Write down what happened"]},
+{d:6,t:"HALT: Check the Basics",lead:"Sometimes recovery gets harder when a basic need has been ignored.",focus:"Which need feels loudest today?",choices:["Hungry","Angry","Lonely","Tired","More than one","None of these","I'm not sure"],actions:["Eat something nourishing","Rest","Talk to someone","Cool down before responding","Take a walk","Slow the day down"]},
+{d:7,t:"Week 1 Review: What Helped?",lead:"You made it through your first week. You do not need a perfect score—just notice what helped.",focus:"What supported you most this week?",choices:["A person","A meeting","Routine","Avoiding triggers","Rest","Prayer / spirituality","Professional support","A coping skill","Simply getting through each day"],actions:["Keep one thing that worked","Strengthen one support","Adjust one routine","Ask for more help","Celebrate the week quietly"]},
+{d:8,t:"Building a Simple Routine",lead:"A little predictability can make recovery feel less chaotic.",focus:"What part of your day could use more structure?",choices:["Morning","Meals","Work / school","Afternoon","Evening","Sleep","Medication / appointments","Recovery time"],actions:["Choose a consistent wake time","Plan meals","Schedule recovery time","Set one reminder","Create a calmer evening","Prepare tomorrow tonight"]},
+{d:9,t:"People Who Support Recovery",lead:"Not every relationship supports the direction you are going. Today, notice who helps you move toward recovery.",focus:"Who feels safest or most supportive right now?",choices:["Family member","Friend","Sponsor / peer","Counselor","Recovery group","Faith community","Coworker","No one yet"],actions:["Reach out to one safe person","Save a support number","Attend a group","Tell someone what I need","Identify one relationship to limit"]},
+{d:10,t:"Asking for Help",lead:"Asking clearly can make it easier for people to support you.",focus:"What kind of help would make today easier?",choices:["Someone to listen","A ride","A meeting","Help with food / basics","Professional support","Company","Advice","Accountability"],actions:["Make one specific request","Call a support person","Ask for a meeting ride","Schedule professional support","Tell someone I need company"]},
+{d:11,t:"Changing the Environment",lead:"You do not have to rely on willpower alone. Your surroundings can make recovery easier or harder.",focus:"What could you change around you today?",choices:["Remove substances","Avoid a location","Limit contact with someone","Change my route","Stay with supportive people","Clean / reset my space","Plan where I will go"],actions:["Remove one cue","Avoid one high-risk place","Change one routine","Prepare a safe place","Tell someone my plan"]},
+{d:12,t:"Coping Without Using",lead:"Coping is not about feeling good immediately. It is about getting through the moment safely.",focus:"What might help you ride out discomfort for 10 minutes?",choices:["Walk","Music","Shower","Breathing","Call someone","Meeting","Write","Eat / drink water","Rest","Prayer / meditation"],actions:["Try one coping tool for 10 minutes","Use a second tool if needed","Contact support","Move to a safer environment"]},
+{d:13,t:"Sleep, Rest & Recovery",lead:"Exhaustion can make everything feel harder. Rest is part of recovery, not a reward for doing enough.",focus:"What would help your body settle tonight?",choices:["Less screen time","A regular bedtime","Quiet","Food / hydration","A shower","Medication as prescribed","Less caffeine","A calmer room"],actions:["Choose one bedtime support","Prepare the room","Set a wind-down time","Ask for medical guidance if sleep is persistently difficult"]},
+{d:14,t:"Week 2 Review: My Foundation",lead:"Two weeks in, notice what is beginning to hold you up.",focus:"What feels a little stronger than it did at the start?",choices:["Routine","Support","Sleep","Coping","Honesty","Avoiding triggers","Hope","Nothing yet","I'm not sure"],actions:["Keep one helpful habit","Strengthen one weak area","Ask for more support","Give myself credit for continuing"]},
+{d:15,t:"Thoughts Are Not Commands",lead:"A thought can be loud without being something you have to follow.",focus:"What kind of thought tends to pull you toward old behavior?",choices:["I can't do this","Just once won't hurt","I deserve relief","No one cares","I've already messed up","I miss using","I feel trapped","Something else"],actions:["Name the thought","Wait before acting","Replace it with a more balanced thought","Tell someone","Change my environment"]},
+{d:16,t:"Emotions Without Escape",lead:"Feelings can be uncomfortable without being dangerous. You can learn to stay with them safely.",focus:"What feeling is strongest underneath the urge to escape?",choices:["Fear","Sadness","Anger","Shame","Loneliness","Boredom","Stress","Grief","I don't know"],actions:["Name the feeling","Breathe and stay present","Talk to someone","Write it down","Move my body","Use a grounding tool"]},
+{d:17,t:"Stress & Overload",lead:"When everything feels urgent, recovery can get buried. Today, make the load smaller.",focus:"What is creating the most pressure right now?",choices:["Work","Family","Money","Legal issues","Health","Too many tasks","Conflict","Uncertainty"],actions:["Postpone one non-urgent task","Ask for help","Do one task only","Take a short break","Write a short priority list"]},
+{d:18,t:"Anger & Recovery",lead:"Anger can carry important information. The goal is to create space between the feeling and the action.",focus:"What does your anger seem connected to?",choices:["Feeling disrespected","Fear","Stress","A boundary crossed","Guilt","Frustration","Feeling powerless","I'm not sure"],actions:["Pause before responding","Leave the situation briefly","Talk to someone safe","Write before speaking","Use breathing / grounding"]},
+{d:19,t:"Loneliness & Connection",lead:"Isolation can make recovery harder. Connection can be small and still count.",focus:"What kind of connection would feel most manageable today?",choices:["Text someone","Phone call","Meeting","Sit with family","Online recovery group","Faith community","Professional support","Just be around safe people"],actions:["Make one connection","Attend one group","Tell someone I'm lonely","Spend time in a safe public place"]},
+{d:20,t:"Boundaries for Early Recovery",lead:"A boundary is one way of protecting what you are building.",focus:"Where might you need a little more space or a clearer limit?",choices:["A person who uses","Family conflict","Social events","Work demands","Money requests","Phone / social media","A relationship","My own schedule"],actions:["Say no once","Leave early","Limit contact","Ask for space","Tell someone my boundary","Plan an exit"]},
+{d:21,t:"Week 3 Review: Warning Signs",lead:"Warning signs are easier to respond to when you recognize them early.",focus:"What sign tells you recovery needs more attention?",choices:["Isolating","Skipping support","Poor sleep","Romanticizing use","More anger","Stopping routines","Being around substances","Keeping secrets","Feeling hopeless"],actions:["Tell someone","Return to a routine","Attend support","Reduce risk","Schedule professional help","Use my safety plan"]},
+{d:22,t:"Meetings & Peer Support",lead:"Recovery support does not have to look the same for everyone. Explore what helps you feel connected.",focus:"What kind of peer support feels most useful?",choices:["12-Step","SMART / skills-based","Faith-based","Secular recovery","Online meeting","In-person meeting","One-to-one peer support","I'm still exploring"],actions:["Try one meeting","Save a meeting option","Talk to a peer","Try a different format","Ask someone what helped them"]},
+{d:23,t:"Professional Support",lead:"Self-help is valuable, and some things deserve professional care too.",focus:"Is there an area where more support could help?",choices:["Mental health","Medication","Withdrawal / medical concerns","Trauma","Relationships","Legal / social services","Housing","Work","I'm okay for now"],actions:["Schedule an appointment","Ask for a referral","Write down questions","Call a program","Talk to my current provider"]},
+{d:24,t:"Repair Starts With Stability",lead:"You do not have to fix every relationship immediately. Stability comes first.",focus:"What relationship needs patience rather than rushing?",choices:["Partner","Parent","Child","Sibling","Friend","Coworker","Myself","I'm not ready to focus on relationships"],actions:["Avoid making a promise I can't keep","Respect a boundary","Listen more than I explain","Give someone space","Focus on consistent actions"]},
+{d:25,t:"Handling High-Risk Moments",lead:"Planning before a difficult situation gives you more options when it arrives.",focus:"What high-risk situation might be coming up?",choices:["Weekend","Payday","Party","Family event","Conflict","Being alone","Seeing someone I used with","Stressful appointment","Travel"],actions:["Make an exit plan","Bring support","Avoid the event","Arrange transportation","Call someone before and after","Plan a safe alternative"]},
+{d:26,t:"What Gives Me Hope?",lead:"Hope does not have to be huge. It can simply be a reason to keep going today.",focus:"What do you want more of in your life?",choices:["Peace","Family","Health","Trust","Freedom","Stability","Purpose","Work / education","Self-respect","Joy"],actions:["Do one thing that supports that future","Write down why recovery matters","Tell someone what I hope for","Protect today's recovery"]},
+{d:27,t:"Values: Who Do I Want to Be?",lead:"Recovery can become more than avoiding substances. It can help your choices line up with who you want to be.",focus:"What value feels important to you now?",choices:["Honesty","Family","Responsibility","Faith","Kindness","Courage","Health","Freedom","Growth","Service","Respect"],actions:["Choose one action that matches my value","Pause before a choice and ask what fits my values","Write down what this value means to me"]},
+{d:28,t:"Week 4 Review: What Is Changing?",lead:"Change can be quiet. Look for differences in how you respond, not just how you feel.",focus:"What seems different from Day 1?",choices:["I ask for help sooner","I recognize triggers","I have more routine","I cope differently","I am more honest","I feel more hopeful","My cravings changed","Nothing feels different yet"],actions:["Keep one change going","Strengthen one area","Review what worked","Ask for help with what is still hard"]},
+{d:29,t:"My Early Warning Plan",lead:"A plan is easier to use when it is simple enough to remember.",focus:"What is one early sign that tells you to act sooner?",choices:["Isolation","Skipping meetings / support","Poor sleep","More cravings","Thinking about old people / places","More conflict","Stopping routines","Keeping secrets","Feeling hopeless"],actions:["Contact support","Go to a meeting","Reduce access","Return to routine","Ask for professional help","Leave a risky environment"]},
+{d:30,t:"30-Day Review: My Next Step",lead:"Thirty days is a place to look back, not a finish line. Notice what you have learned about your recovery.",focus:"What has mattered most in your first month?",choices:["Support","Routine","Honesty","Coping skills","Avoiding triggers","Professional care","Faith / spirituality","Learning about myself","Simply not giving up"],actions:["Choose one priority for Phase 2","Keep one strong habit","Ask for help with one unfinished need","Mark the milestone","Review my first-month Recovery Picture"]}
+];
+
+const guidedState={};
+function selectedFor(key){
+  const box=document.querySelector(`[data-guided-group="${key}"]`);
+  return box?[...box.querySelectorAll('.day2-choice.selected')].map(x=>x.textContent.trim()):[];
+}
+function guidedDayNumber(){
+  const requested=Number(new URLSearchParams(location.search).get('day'));
+  if(requested>=1&&requested<=30)return requested;
+  return Math.max(1,Math.min(30,daysInRecovery()));
+}
+function renderGuidedDay(){
+  const day=guidedDayNumber();
+  const c=phase1Curriculum.find(x=>x.d===day)||phase1Curriculum[0];
+  const ey=document.getElementById('guidedEyebrow'),title=document.getElementById('guidedTitle'),lead=document.getElementById('guidedLead'),holder=document.getElementById('guidedSections');
+  if(!holder)return;
+  ey.textContent=`Day ${day} • Phase 1 — Stabilize`;
+  title.textContent=c.t;
+  lead.textContent=c.lead;
+
+  const faithAllowed=['Faith-Based','Mixed','Spiritual'].includes(data.belief);
+  const feelingChoices=["Tired","Hopeful","Anxious","Irritable","Clear-headed","Sad","Restless","Craving","Not sure"];
+  let evening=["A person","A meeting","Staying busy","Rest","A coping skill","Avoiding a trigger","Nothing really helped","Something else"];
+  if(faithAllowed) evening.splice(4,0,"Prayer / spirituality");
+
+  holder.innerHTML=`
+    <section class="day2-card">
+      <div class="day2-ey">1 • Check-In</div>
+      <h3>How are you arriving today?</h3>
+      <p class="day2-soft">No need to explain everything. Choose anything that feels close.</p>
+      ${guidedChoices('current_feeling',feelingChoices,true)}
+      ${guidedNote('current_feeling','Want to add a thought? (optional)')}
+    </section>
+    <section class="day2-card">
+      <div class="day2-ey">2 • Today's Focus</div>
+      <h3>${c.focus}</h3>
+      <p class="day2-soft">Choose what fits. You do not need to work on everything today.</p>
+      ${guidedChoices(`day_${day}_focus`,c.choices,true)}
+      ${guidedNote(`day_${day}_focus`,'Want to say more? (optional)')}
+    </section>
+    <section class="day2-card">
+      <div class="day2-ey">3 • Recovery Action</div>
+      <h3>What feels manageable today?</h3>
+      <p class="day2-soft">One action is enough. Choose something realistic.</p>
+      ${guidedChoices(`day_${day}_action`,c.actions,false)}
+      ${guidedNote(`day_${day}_action`,'Add your own version (optional)')}
+    </section>
+    <section class="day2-card">
+      <div class="day2-ey">4 • Evening Reflection</div>
+      <h3>Before the day closes, what helped even a little?</h3>
+      <p class="day2-soft">“Nothing really helped” is an honest answer too.</p>
+      ${guidedChoices('evening_what_helped',evening,true)}
+      ${guidedNote('evening_what_helped','What do you want to remember from today? (optional)')}
+    </section>`;
+  bindGuidedChoices();
+  updateGuidedSummary();
+}
+function guidedChoices(key,choices,multi){
+  return `<div class="day2-choices" data-guided-group="${key}" data-multi="${multi?'true':'false'}">${choices.map(x=>`<button class="day2-choice">${x}</button>`).join('')}</div>`;
+}
+function guidedNote(key,label){
+  return `<details class="day2-note"><summary>${label}</summary><textarea data-guided-note="${key}" placeholder="A few words is enough..."></textarea></details>`;
+}
+function bindGuidedChoices(){
+  document.querySelectorAll('[data-guided-group]').forEach(box=>{
+    const multi=box.dataset.multi==='true';
+    box.querySelectorAll('.day2-choice').forEach(btn=>btn.onclick=()=>{
+      if(!multi)box.querySelectorAll('.day2-choice').forEach(x=>x.classList.remove('selected'));
+      btn.classList.toggle('selected');
+      updateGuidedSummary();
+    });
+  });
+}
+function updateGuidedSummary(){
+  const day=guidedDayNumber();
+  const set=(id,val)=>{const el=document.getElementById(id);if(el)el.textContent=val||'Not selected'};
+  set('gSumFeeling',selectedFor('current_feeling').join(', '));
+  set('gSumFocus',selectedFor(`day_${day}_focus`).slice(0,3).join(', '));
+  set('gSumAction',selectedFor(`day_${day}_action`).join(', '));
+  set('gSumReflection',selectedFor('evening_what_helped').slice(0,3).join(', '));
+}
+async function saveCurrentGuidedDay(){
+  if(!currentUser){alert('Please sign in first.');return}
+  const day=guidedDayNumber(),c=phase1Curriculum.find(x=>x.d===day)||phase1Curriculum[0];
+  const prompts=[
+    ['current_feeling','How are you arriving today?'],
+    [`day_${day}_focus`,c.focus],
+    [`day_${day}_action`,'What feels manageable today?'],
+    ['evening_what_helped','Before the day closes, what helped even a little?']
+  ];
+  const notes={};
+  document.querySelectorAll('[data-guided-note]').forEach(x=>notes[x.dataset.guidedNote]=x.value.trim());
+  const rows=prompts.map(([key,text])=>({
+    user_id:currentUser.id,
+    response_date:todayKey(),
+    recovery_day:daysInRecovery(),
+    phase_key:'stabilize',
+    curriculum_day:day,
+    content_slug:`phase-1-day-${String(day).padStart(2,'0')}`,
+    prompt_key:key,
+    prompt_version:1,
+    prompt_text:text,
+    selected_choices:selectedFor(key),
+    optional_reflection:notes[key]||null,
+    allow_milestone_review:true,
+    allow_recovery_story:false
+  }));
+  const {error}=await sb.from('guided_responses').upsert(rows,{onConflict:'user_id,response_date,prompt_key'});
+  if(error){alert(error.message);return}
+  document.getElementById('guidedSaved')?.classList.remove('day2-hidden');
+  showSync(`Day ${day} saved`);
+}
+function activateGuidedDay(){
+  renderGuidedDay();
+  showPage('day2');
+}
+
+
+document.getElementById('openGuidedDay2')?.addEventListener('click',activateGuidedDay);
+document.getElementById('guidedBack')?.addEventListener('click',()=>showPage('today'));
+document.getElementById('saveGuidedDay')?.addEventListener('click',saveCurrentGuidedDay);
+
 async function initSupabase(){const {data:{session}}=await sb.auth.getSession();if(session?.user)await beginSession(session.user);else $('#authOverlay').classList.remove('hidden')}
 initSupabase();
 </script>
