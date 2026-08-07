@@ -867,6 +867,17 @@ dialog::backdrop{background:rgba(7,8,21,.55);backdrop-filter:blur(5px)}
 .approved-upcoming-empty b{font-size:.66rem}
 .approved-upcoming-empty span{font-size:.57rem;color:#77727b;line-height:1.4}
 
+
+/* Recovery Planner */
+.approved-subnav{grid-template-columns:repeat(6,1fr)}
+.approved-planner-form{margin:12px 0;border:1px solid #e5e1e6;border-radius:9px;background:linear-gradient(180deg,#fff,#fdfcfd);padding:15px}
+.approved-planner-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font-size:.71rem}
+.approved-planner-form>label{display:grid;gap:5px;font-size:.61rem;font-weight:760;color:#56515b;margin:9px 0}
+.approved-planner-form input,.approved-planner-form select{width:100%;border:1px solid #e4e0e5;border-radius:7px;background:#fcfbfc;padding:9px 10px;font-size:.68rem}
+.approved-planner-sectionhead{margin-top:19px}
+.approved-planner-empty{display:grid;gap:3px;border:1px dashed #dfd9e2;border-radius:8px;padding:14px;background:#faf8fb}.approved-planner-empty b{font-size:.68rem}.approved-planner-empty small{font-size:.59rem;color:#777}
+@media(max-width:820px){.approved-subnav{grid-template-columns:1fr 1fr}}
+
 </style>
 <title>Lellee — Approved Interior Rebuild</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -1004,7 +1015,7 @@ Includes the approved Lellee consumer experience from early recovery through lif
       <button data-page="then-now">Then &amp; Now</button>
       <button data-page="history">My History</button>
       <button data-page="story">Recovery Story</button>
-      <button data-page="longterm">Long-Term</button>
+      <button data-page="longterm">Long-Term</button><button data-page="planner">Planner</button>
     </div>
   </div>
 </section>
@@ -1308,6 +1319,66 @@ Includes the approved Lellee consumer experience from early recovery through lif
   </div>
 </section>
 
+
+<section class="page" id="page-planner">
+  <div class="approved-inner">
+    <div class="approved-inner-head">
+      <div><span class="approved-kicker">RECOVERY PLANNER</span><h2>Keep the next few things close</h2><p>Save meetings, goals, and planned recovery actions. Lellee surfaces only what is coming up soon.</p></div>
+      <button class="approved-link" data-page="today">← Today</button>
+    </div>
+
+    <div class="approved-three">
+      <article class="approved-module tint-purple">
+        <span>▣</span>
+        <div><small>MEETINGS</small><h3>Save a meeting</h3><p>Keep a meeting or peer-support option in your weekly rhythm.</p><button class="approved-small-action" id="openMeetingForm">Add Meeting</button></div>
+      </article>
+      <article class="approved-module tint-green">
+        <span>◎</span>
+        <div><small>GOALS</small><h3>Choose one goal</h3><p>Keep goals small enough to act on.</p><button class="approved-small-action" id="openGoalForm">Add Goal</button></div>
+      </article>
+      <article class="approved-module tint-blue">
+        <span>✓</span>
+        <div><small>RECOVERY ACTIONS</small><h3>Plan one action</h3><p>Put one practical recovery action on your calendar.</p><button class="approved-small-action" id="openActionForm">Add Action</button></div>
+      </article>
+    </div>
+
+    <div class="approved-planner-form hidden" id="meetingForm">
+      <div class="approved-planner-head"><b>Save a meeting</b><button class="approved-link" data-close-planner>Close</button></div>
+      <div class="approved-field-row">
+        <label>Meeting name<input id="meetingName" placeholder="e.g., Tuesday Night Recovery"></label>
+        <label>Format<select id="meetingFormat"><option value="in_person">In person</option><option value="online">Online</option><option value="hybrid">Hybrid</option></select></label>
+      </div>
+      <div class="approved-field-row">
+        <label>Day<select id="meetingDay"><option value="0">Sunday</option><option value="1">Monday</option><option value="2">Tuesday</option><option value="3">Wednesday</option><option value="4">Thursday</option><option value="5">Friday</option><option value="6">Saturday</option></select></label>
+        <label>Time<input type="time" id="meetingTime"></label>
+      </div>
+      <label>Location or link<input id="meetingLocation" placeholder="Address or meeting link"></label>
+      <button class="approved-small-action" id="saveMeeting">Save Meeting</button>
+    </div>
+
+    <div class="approved-planner-form hidden" id="goalForm">
+      <div class="approved-planner-head"><b>Add a goal</b><button class="approved-link" data-close-planner>Close</button></div>
+      <label>Goal<input id="goalTitle" placeholder="What are you working toward?"></label>
+      <div class="approved-field-row">
+        <label>Category<input id="goalCategory" placeholder="Recovery, health, work..."></label>
+        <label>Target date<input type="date" id="goalDate"></label>
+      </div>
+      <button class="approved-small-action" id="saveGoal">Save Goal</button>
+    </div>
+
+    <div class="approved-planner-form hidden" id="actionForm">
+      <div class="approved-planner-head"><b>Plan a recovery action</b><button class="approved-link" data-close-planner>Close</button></div>
+      <label>Action<input id="plannedAction" placeholder="e.g., Call my sponsor"></label>
+      <label>Date<input type="date" id="plannedActionDate"></label>
+      <button class="approved-small-action" id="savePlannedAction">Save Action</button>
+    </div>
+
+    <div class="approved-inner-head approved-planner-sectionhead">
+      <div><span class="approved-kicker">SAVED</span><h2>Your upcoming recovery plan</h2><p>Only active items appear here.</p></div>
+    </div>
+    <div id="plannerSavedList" class="approved-list"></div>
+  </div>
+</section>
 <section class="page" id="page-settings">
   <div class="approved-inner">
     <div class="approved-inner-head">
