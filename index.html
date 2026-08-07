@@ -856,6 +856,17 @@ dialog::backdrop{background:rgba(7,8,21,.55);backdrop-filter:blur(5px)}
 #todayInspirationText{display:block}
 #todayInspirationLabel{font-size:.56rem;opacity:.78}
 
+
+/* Dynamic Upcoming — approved dashboard styling */
+.approved-upcoming-list{display:grid;gap:9px}
+.approved-upcoming-row{display:grid;grid-template-columns:28px 1fr;gap:9px;align-items:center}
+.approved-upcoming-icon{width:28px;height:28px;border-radius:7px;background:#f0eaf5;color:#65409a;display:grid;place-items:center;font-size:.72rem}
+.approved-upcoming-row b{display:block;font-size:.66rem;line-height:1.3}
+.approved-upcoming-row small{display:block;font-size:.56rem;color:#77727b;margin-top:2px;line-height:1.35}
+.approved-upcoming-empty{padding:9px 0;display:grid;gap:2px}
+.approved-upcoming-empty b{font-size:.66rem}
+.approved-upcoming-empty span{font-size:.57rem;color:#77727b;line-height:1.4}
+
 </style>
 <title>Lellee — Approved Interior Rebuild</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -952,8 +963,8 @@ Includes the approved Lellee consumer experience from early recovery through lif
           </div>
           <div class="panel upcoming-panel">
             <h3>Upcoming</h3>
-            <div class="upcoming-list">
-              <div class="upcoming-item"><span>▣</span><div><b>Evening Meeting</b><br><small>Today • 7:00 PM</small></div></div>
+<div id="dynamicUpcomingList" class="approved-upcoming-list"></div>
+</div></div>
               <div class="upcoming-item"><span>▣</span><div><b>Check-in with Support</b><br><small>Tomorrow • 6:00 PM</small></div></div>
             </div>
           </div>
