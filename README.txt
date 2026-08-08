@@ -1,23 +1,25 @@
-LELLEE — BIG PERSONALIZED LEARNING ENGINE BUILD
+LELLEE — BIG LONG-TERM RECOVERY STORY STUDIO
+
+THIS BUILD REPLACES THE OLDER BOXY LONG-TERM SCREENS.
 
 Adds:
-- Learn library
-- phase-aware recommended learning
-- topic browsing
-- saved learning
-- worksheets
-- learning progress
-- Recovery Paths page
-- faith/spiritual/secular content-variant selection
-- optional Baptist-specific variant support
-- TAP 21 domains stored internally on content
-- TAP 21 terminology stays out of consumer-facing UI
-- starter evidence-informed recovery library
-- approved design preserved
+- approved-design Milestones screen
+- milestone timeline from 7 days through 2 years
+- annual milestones after Year 2
+- saved milestone reflections
+- Recovery Story opt-in at review level
+- approved-design Then & Now
+- first-vs-most-recent comparison using stable guided prompt keys
+- saved Then & Now reflections
+- approved-design My Recovery Story builder
+- 2-year, 5-year, 10-year, and custom editions
+- milestones, Then & Now, goals, and approved guided responses
+- journal excluded by default
+- printable / Save-as-PDF story preview
+- user data remains private under RLS
 
-RUN IN SUPABASE:
-1. 11_learning_engine.sql
-2. 12_learning_seed.sql
+RUN:
+13_longterm_story_studio.sql
 
-THEN:
-Upload web/PWA files to GitHub and commit.
+The previous_10/11/12 SQL files are included only for reference in case a prior step was missed.
+Then upload index.html + PWA assets to GitHub and commit.

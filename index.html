@@ -953,6 +953,31 @@ button,a{cursor:pointer}
 .approved-reading-sheet{background:#fffdf9;border:1px solid #e7e0da;border-radius:10px;padding:24px;box-shadow:0 7px 20px rgba(58,49,43,.04)}.approved-reading-sheet h1,.approved-reading-sheet h2,.approved-reading-sheet h3{font-family:Georgia,serif;font-weight:500}.approved-reading-sheet h2{font-size:1.05rem}.approved-reading-sheet h3{font-size:.85rem}.approved-reading-sheet p{font-size:.69rem;line-height:1.7;color:#4f4a50}.approved-reading-actions{display:flex;justify-content:space-between;align-items:center;border-top:1px solid #eee6df;margin-top:20px;padding-top:12px}
 @media(max-width:820px){.approved-learning-grid{grid-template-columns:1fr}.approved-topic-grid,.approved-path-grid{grid-template-columns:1fr 1fr}.approved-reading-sheet{padding:17px}}
 
+
+/* Long-Term Studio: Milestones, Then & Now, Recovery Story */
+.approved-milestone-timeline{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}
+.approved-milestone-node{display:grid;grid-template-columns:34px 1fr;gap:8px;align-items:center;border:1px solid #e6e2e8;background:#fff;border-radius:9px;padding:11px}
+.approved-milestone-node.future{opacity:.55}.approved-milestone-node.next{background:#f5f0fa;border-color:#d7c7e7}.approved-milestone-node.reached{background:#fbfdfb}
+.approved-milestone-dot{width:30px;height:30px;border-radius:50%;background:#eee9f2;color:#633b92;display:grid;place-items:center;font-size:.72rem;font-weight:900}
+.approved-milestone-node small{font-size:.5rem;color:#8b8490}.approved-milestone-node h3{font-size:.67rem;margin:2px 0}.approved-milestone-node p{font-size:.54rem;color:#777;margin:0}
+.approved-story-check{display:flex;align-items:flex-start;gap:7px;font-size:.6rem;color:#5f5963;line-height:1.4}.approved-story-check input{margin-top:2px}
+.approved-inline-select{margin-top:7px;border:1px solid #ddd7df;background:#fff;border-radius:7px;padding:8px 10px;font-size:.64rem;max-width:260px}
+.approved-then-now-grid{display:grid;grid-template-columns:1fr 48px 1fr;align-items:stretch;gap:8px}
+.approved-time-card{border:1px solid #e4dfe6;border-radius:10px;background:#fff;padding:18px}.approved-time-card.then{background:#faf7fc}.approved-time-card.now{background:#f6fbf8}
+.approved-time-card h3{font-size:.74rem;margin:5px 0}.approved-time-card>small{font-size:.54rem;color:#8a838c}.approved-choice-line{font-size:.68rem;font-weight:750;line-height:1.5}
+.approved-time-card blockquote{margin:10px 0 0;border-left:2px solid #cab7db;padding-left:10px;color:#6d6570;font-size:.63rem;line-height:1.5}.approved-time-arrow{display:grid;place-items:center;font-size:1.1rem;color:#76559c}
+.approved-story-hero{display:flex;justify-content:space-between;align-items:center;gap:24px;background:linear-gradient(135deg,#f2edf7,#fff9f1);border:1px solid #e2d9e8;border-radius:11px;padding:20px}
+.approved-story-hero h3{font-family:Georgia,serif;font-weight:500;font-size:1rem;margin:5px 0}.approved-story-hero p{font-size:.62rem;color:#726b75;line-height:1.5;margin:0;max-width:650px}
+.approved-story-edition{min-width:180px}.approved-story-edition label{display:block;font-size:.54rem;font-weight:850;letter-spacing:.08em;text-transform:uppercase;color:#6d6570}.approved-story-edition select{width:100%;margin-top:6px;border:1px solid #dcd5df;background:#fff;border-radius:7px;padding:9px;font-size:.63rem}
+.approved-story-form{border:1px solid #e5e1e6;background:#fff;border-radius:10px;padding:17px}.approved-story-form>label:not(.approved-story-check){display:block;font-size:.58rem;font-weight:800;color:#59535d;margin:10px 0}.approved-story-form input[type=text],.approved-story-form>label>input:not([type=checkbox]),.approved-story-form textarea{display:block;width:100%;margin-top:5px;border:1px solid #e1dce3;background:#fcfbfc;border-radius:7px;padding:9px;font-size:.64rem}.approved-story-form textarea{min-height:105px;resize:vertical}
+.approved-story-form .approved-story-check{margin:11px 0}.approved-story-actions{display:flex;justify-content:flex-end;gap:16px;margin:14px 0}
+.approved-story-preview{margin-top:10px}.approved-story-paper{background:#fffdf8;border:1px solid #e7ded3;border-radius:10px;padding:28px;box-shadow:0 10px 28px rgba(64,52,45,.05);max-width:850px;margin:auto}
+.story-cover{text-align:center;padding:36px 18px 42px;border-bottom:1px solid #e9e0d6;margin-bottom:22px}.story-cover span{font-size:.56rem;letter-spacing:.12em;text-transform:uppercase;color:#76569b;font-weight:850}.story-cover h1{font-family:Georgia,serif;font-weight:500;font-size:2rem;margin:11px 0}.story-cover small{font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;color:#888}
+.approved-story-paper section{padding:8px 0 18px}.approved-story-paper section h3{font-family:Georgia,serif;font-weight:500;font-size:1rem}.approved-story-paper section>p{font-family:Georgia,serif;font-size:.72rem;line-height:1.75;color:#4e484d}
+.story-entry{padding:11px 0;border-bottom:1px solid #eee7de}.story-entry b{display:block;font-size:.68rem}.story-entry small{font-size:.53rem;color:#8c8384}.story-entry p{font-family:Georgia,serif;font-size:.69rem;line-height:1.65;color:#555;margin:5px 0 0}.story-print-actions{text-align:right;margin-top:18px}
+@media(max-width:850px){.approved-milestone-timeline{grid-template-columns:1fr 1fr}.approved-then-now-grid{grid-template-columns:1fr}.approved-time-arrow{transform:rotate(90deg)}.approved-story-hero{display:block}.approved-story-edition{margin-top:14px}.approved-story-paper{padding:18px}}
+@media print{body *{visibility:hidden!important}.approved-story-paper,.approved-story-paper *{visibility:visible!important}.approved-story-paper{position:absolute;left:0;top:0;width:100%;max-width:none;border:0;box-shadow:none}.story-print-actions{display:none!important}}
+
 </style>
 <title>Lellee — Approved Interior Rebuild</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -1334,31 +1359,163 @@ Includes the approved Lellee consumer experience from early recovery through lif
         </div>
       </section>
 
-      <section class="page" id="page-milestones"><div class="section-shell"><div class="section-header"><div class="eyebrow">Milestone Reviews</div><h2>Your recovery, seen over time</h2><p>7 days • 14 days • 30 • 60 • 90 • 6 months • 9 months • 1 year • 15 • 18 • 21 months • 2 years • annual reviews for life</p></div><div class="simple-card"><h3>Milestone reviews are ready</h3><p class="subtle">Reached milestones can compare earlier guided responses with current responses and save your own reflection in milestone_reviews.</p><button class="primary" id="saveMilestoneDemo">Save Current Milestone Review</button> <button class="secondary" id="saveAnnualReview">Save Annual Review</button></div></div></section>
-<section class="page" id="page-then-now"><div class="section-shell"><div class="section-header"><div class="eyebrow">Then & Now</div><h2>See what has changed</h2><p>Compare repeated recovery themes across time.</p></div><div class="simple-card"><div class="field"><label>Theme</label><select id="tnKey"><option value="current_feeling">How I was feeling</option><option value="evening_what_helped">What helped me</option><option value="life_areas_needing_care">Areas needing care</option></select></div><button class="primary" id="tnLoad">Build Comparison</button></div><div id="tnResult" style="margin-top:14px"></div></div></section>
-<section class="page" id="page-story"><div class="section-shell"><div class="section-header"><div class="eyebrow">My Recovery Story</div><h2>Prepare your private hardcopy story</h2><p>Available as a meaningful two-year-and-beyond recovery record.</p></div><div class="two-col"><div class="simple-card"><h3>Book setup</h3><div class="field"><label>Title</label><input id="storyTitle" value="My Recovery Story"></div><div class="field"><label>Opening message</label><textarea id="storyOpen" style="min-height:100px"></textarea></div></div><div class="simple-card"><h3>Include</h3><label class="check"><input id="storyMilestones" type="checkbox" checked> Milestones</label><label class="check"><input id="storyThen" type="checkbox" checked> Then & Now</label><label class="check"><input id="storyGuided" type="checkbox"> Approved guided responses</label><label class="check"><input id="storyJournal" type="checkbox"> Selected journal entries</label><p class="subtle">Journal entries remain excluded by default.</p></div></div><button class="primary" id="storyBuild" style="margin-top:14px">Build Story Preview</button>
-<div class="simple-card" style="margin-top:14px">
-  <div class="phase-chip">RECOVERY STORY EDITIONS</div>
-  <h3>Choose your edition</h3>
-  <div class="field">
-    <label>Edition</label>
-    <select id="storyEditionAdvanced">
-      <option value="two_year">Two-Year Recovery Story</option>
-      <option value="five_year">Five-Year Recovery Story</option>
-      <option value="ten_year">Ten-Year Recovery Story</option>
-      <option value="custom">Custom Edition</option>
-    </select>
-  </div>
-  <p class="subtle">Five- and ten-year editions compare early recovery, Year 1, Year 2, and long-term milestones. The user reviews every included section before printing.</p>
-</div>
+      <section class="page" id="page-milestones">
+  <div class="approved-inner">
+    <div class="approved-inner-head">
+      <div>
+        <span class="approved-kicker">MILESTONES</span>
+        <h2>Your recovery, seen over time</h2>
+        <p>Milestones are places to notice change—not tests you have to pass.</p>
+      </div>
+      <button class="approved-link" data-page="progress">← Progress</button>
+    </div>
 
-<div class="simple-card" style="margin-top:14px">
-  <div class="phase-chip">PRINT PREPARATION</div>
-  <h3>Hardcopy workflow</h3>
-  <p class="subtle">Preview → choose sections → approve content → generate print view → print to PDF or send to a future book-printing service.</p>
-  <button class="secondary" id="printStoryPreview">Open Print View</button> <button class="secondary" id="saveStoryProject">Save Story Project</button>
-</div>
-<div id="storyResult" style="margin-top:14px"></div></div></section>
+    <div class="approved-feature-band">
+      <div class="approved-phase-badge" id="milestoneCurrentDay">DAY —</div>
+      <div class="approved-feature-copy">
+        <h3 id="milestoneNextTitle">Your next milestone</h3>
+        <p id="milestoneNextText">Lellee will show the next meaningful review point based on your recovery date.</p>
+      </div>
+    </div>
+
+    <div id="milestoneTimeline" class="approved-milestone-timeline"></div>
+
+    <div class="approved-review-sheet" style="margin-top:12px">
+      <div class="approved-review-block">
+        <span class="approved-kicker">CURRENT REVIEW</span>
+        <h3 id="milestoneReviewHeading">What stands out when you look back from here?</h3>
+        <div class="day2-choices" id="milestoneObservations" data-multi="true">
+          <button class="day2-choice">I ask for help sooner</button>
+          <button class="day2-choice">I notice triggers earlier</button>
+          <button class="day2-choice">My routines are stronger</button>
+          <button class="day2-choice">My relationships are changing</button>
+          <button class="day2-choice">I cope differently</button>
+          <button class="day2-choice">My confidence has changed</button>
+          <button class="day2-choice">I still need more support</button>
+          <button class="day2-choice">I am still figuring it out</button>
+        </div>
+      </div>
+      <div class="approved-review-block">
+        <span class="approved-kicker">IN MY OWN WORDS</span>
+        <textarea id="milestoneReflection" placeholder="What do you want your future self to remember about this point in recovery?"></textarea>
+      </div>
+      <div class="approved-settings-footer">
+        <label class="approved-story-check"><input type="checkbox" id="milestoneStoryOptIn"> Allow this review to be considered for My Recovery Story</label>
+        <button class="approved-small-action" id="saveMilestoneReviewV2">Save Milestone Review</button>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="page" id="page-then-now">
+  <div class="approved-inner">
+    <div class="approved-inner-head">
+      <div>
+        <span class="approved-kicker">THEN &amp; NOW</span>
+        <h2>See what has changed</h2>
+        <p>Lellee compares your own repeated responses without labeling the change good or bad.</p>
+      </div>
+      <button class="approved-link" data-page="progress">← Progress</button>
+    </div>
+
+    <div class="approved-two">
+      <article class="approved-wide-module">
+        <div class="approved-icon purple-icon">↔</div>
+        <div>
+          <small>COMPARE A THEME</small>
+          <h3>Choose something you have answered more than once</h3>
+          <select id="tnKeyV2" class="approved-inline-select">
+            <option value="current_feeling">How I was feeling</option>
+            <option value="evening_what_helped">What helped me</option>
+            <option value="life_areas_needing_care">Areas needing care</option>
+          </select>
+        </div>
+      </article>
+      <article class="approved-wide-module">
+        <div class="approved-icon green-icon">◷</div>
+        <div>
+          <small>LONG VIEW</small>
+          <h3>First response compared with your most recent response</h3>
+          <p>The exact original wording is preserved in your private history.</p>
+        </div>
+      </article>
+    </div>
+
+    <div style="display:flex;justify-content:flex-end;margin:12px 0">
+      <button class="approved-small-action" id="buildThenNowV2">Build Comparison</button>
+    </div>
+
+    <div id="thenNowResultV2" class="approved-then-now-grid">
+      <div class="approved-resource-empty"><b>No comparison loaded yet.</b><small>Choose a theme and build the comparison.</small></div>
+    </div>
+
+    <div class="approved-review-sheet" style="margin-top:12px">
+      <div class="approved-review-block">
+        <span class="approved-kicker">WHAT I NOTICE</span>
+        <h3>What feels different when you see these responses side by side?</h3>
+        <textarea id="thenNowReflection" placeholder="Optional reflection..."></textarea>
+      </div>
+      <div class="approved-settings-footer">
+        <label class="approved-story-check"><input type="checkbox" id="thenNowStoryOptIn"> Allow this comparison reflection in My Recovery Story</label>
+        <button class="approved-small-action" id="saveThenNowReflection">Save Reflection</button>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="page" id="page-story">
+  <div class="approved-inner">
+    <div class="approved-inner-head">
+      <div>
+        <span class="approved-kicker">MY RECOVERY STORY</span>
+        <h2>Turn your recovery history into something you can keep</h2>
+        <p>Create a private two-year, five-year, ten-year, or custom recovery record. Nothing is published publicly.</p>
+      </div>
+      <button class="approved-link" data-page="recovery">← My Recovery</button>
+    </div>
+
+    <div class="approved-story-hero">
+      <div>
+        <span class="approved-kicker">PRIVATE STORY BUILDER</span>
+        <h3>Your journal stays out unless you deliberately include it.</h3>
+        <p>Milestones and Then &amp; Now can form the backbone. Guided responses are included only when you have allowed Recovery Story use.</p>
+      </div>
+      <div class="approved-story-edition">
+        <label>Edition</label>
+        <select id="storyEditionV2">
+          <option value="two_year">Two-Year Story</option>
+          <option value="five_year">Five-Year Story</option>
+          <option value="ten_year">Ten-Year Story</option>
+          <option value="custom">Custom Story</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="approved-two" style="margin-top:12px">
+      <article class="approved-story-form">
+        <span class="approved-kicker">COVER &amp; OPENING</span>
+        <label>Title<input id="storyTitleV2" value="My Recovery Story"></label>
+        <label>Opening message<textarea id="storyOpeningV2" placeholder="What would you like to say at the beginning of your story?"></textarea></label>
+      </article>
+      <article class="approved-story-form">
+        <span class="approved-kicker">WHAT TO INCLUDE</span>
+        <label class="approved-story-check"><input id="storyMilestonesV2" type="checkbox" checked> Milestone reviews</label>
+        <label class="approved-story-check"><input id="storyThenNowV2" type="checkbox" checked> Then &amp; Now reflections</label>
+        <label class="approved-story-check"><input id="storyGoalsV2" type="checkbox" checked> Recovery goals</label>
+        <label class="approved-story-check"><input id="storyGuidedV2" type="checkbox"> Guided responses I previously approved</label>
+        <label class="approved-story-check"><input id="storyJournalV2" type="checkbox"> Selected journal material</label>
+        <p class="approved-setting-note">Journal content is excluded by default. This builder does not automatically pull private journal entries.</p>
+      </article>
+    </div>
+
+    <div class="approved-story-actions">
+      <button class="approved-link" id="saveStoryDraftV2">Save Draft</button>
+      <button class="approved-small-action" id="buildStoryPreviewV2">Build Story Preview</button>
+    </div>
+
+    <div id="storyPreviewV2" class="approved-story-preview">
+      <div class="approved-resource-empty"><b>Your preview will appear here.</b><small>You choose what belongs in the story.</small></div>
+    </div>
+  </div>
+</section>
 
 <section class="page" id="page-longterm">
   <div class="section-shell">
