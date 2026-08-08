@@ -1,0 +1,81 @@
+{
+  "phase": "SEO 2 + 3 Combined",
+  "indexable_public_urls": 54,
+  "articles_total": 32,
+  "topic_hubs": [
+    "early-recovery",
+    "cravings-and-coping",
+    "relapse-prevention",
+    "recovery-pathways",
+    "relationships-and-support",
+    "long-term-recovery"
+  ],
+  "local_city_hubs": [
+    {
+      "slug": "los-angeles-ca",
+      "city": "Los Angeles",
+      "state": "CA",
+      "county": "Los Angeles County"
+    },
+    {
+      "slug": "long-beach-ca",
+      "city": "Long Beach",
+      "state": "CA",
+      "county": "Los Angeles County"
+    },
+    {
+      "slug": "torrance-ca",
+      "city": "Torrance",
+      "state": "CA",
+      "county": "Los Angeles County"
+    },
+    {
+      "slug": "inglewood-ca",
+      "city": "Inglewood",
+      "state": "CA",
+      "county": "Los Angeles County"
+    },
+    {
+      "slug": "compton-ca",
+      "city": "Compton",
+      "state": "CA",
+      "county": "Los Angeles County"
+    },
+    {
+      "slug": "carson-ca",
+      "city": "Carson",
+      "state": "CA",
+      "county": "Los Angeles County"
+    }
+  ],
+  "resource_categories": [
+    {
+      "slug": "recovery-meetings",
+      "name": "Recovery Meetings"
+    },
+    {
+      "slug": "peer-support",
+      "name": "Peer Support"
+    },
+    {
+      "slug": "treatment",
+      "name": "Treatment Resources"
+    },
+    {
+      "slug": "recovery-residences",
+      "name": "Recovery Residences"
+    },
+    {
+      "slug": "housing-support",
+      "name": "Housing Support"
+    },
+    {
+      "slug": "employment-support",
+      "name": "Employment Support"
+    }
+  ],
+  "category_template_indexing": "noindex until populated",
+  "minimum_verified_resources_before_indexing": 5,
+  "sponsored_listing_policy": "must be clearly labeled; sponsorship cannot imply clinical appropriateness",
+  "private_app_indexing": "blocked"
+}

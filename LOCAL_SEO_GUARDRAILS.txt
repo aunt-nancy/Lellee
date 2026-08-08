@@ -1,0 +1,16 @@
+LELLEE LOCAL SEO PUBLISHING GUARDRAIL
+
+City hub pages may be indexed when they provide useful orientation and access to the live Lellee resource search.
+
+City + resource-category pages are currently NOINDEX.
+
+Before changing a category page to indexable:
+1. Add at least 5 currently verified local resources.
+2. Include verification/review dates.
+3. Include meaningful comparison/helpful information, not only names and links.
+4. Clearly label paid/sponsored placements.
+5. Do not state or imply that sponsorship equals clinical recommendation.
+6. Confirm the page is substantially useful without requiring the visitor to click elsewhere.
+7. Add the page to sitemap.xml only after it passes review.
+
+This avoids manufacturing thin location pages solely for search traffic.
