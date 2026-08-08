@@ -1,0 +1,42 @@
+LELLEE SEO PHASE 4 — SEARCH ENGINE + ANALYTICS SETUP
+
+DO NOT DO THESE STEPS UNTIL LELLEE.COM IS ACTUALLY SERVING THE PUBLIC SEO SITE.
+
+GOOGLE SEARCH CONSOLE
+1. Add lellee.com as a Domain property.
+2. Complete Google's ownership verification.
+3. Submit https://lellee.com/sitemap.xml.
+4. Use URL Inspection on:
+   - homepage
+   - /learn/
+   - one learning article
+   - /resources/
+   - one city hub
+5. Confirm the live URL is crawlable and the Google-selected canonical matches Lellee's canonical.
+6. Request indexing for a small representative group first.
+7. Review Page Indexing and Core Web Vitals reports after Google has collected data.
+
+BING WEBMASTER TOOLS
+1. Import the verified Google Search Console property OR add lellee.com manually.
+2. Confirm sitemap.xml is present.
+3. After launch, run submit_indexnow_after_launch.py once for this release.
+4. Use Bing Site Scan after the public site is live.
+5. Review IndexNow and URL Inspection reports.
+
+ANALYTICS
+analytics-config.js is intentionally blank.
+To enable public-site measurement later, enter:
+- GA4 Measurement ID in ga4
+- Microsoft Clarity project ID in clarity
+
+Public analytics is designed not to execute within /app.
+Do not send journal text, recovery answers, craving data, support contacts, recovery dates,
+health information, or other sensitive recovery data to advertising/analytics platforms.
+
+CONVERSION EVENTS
+The public site tracks only public CTA labels and destination paths when analytics is enabled.
+Primary event: seo_cta_click → Start Free / Open App.
+
+INDEXNOW
+The IndexNow key file is included in the package.
+Do not submit IndexNow URLs before the domain is live.

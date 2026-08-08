@@ -1,39 +1,52 @@
-LELLEE — SEO PHASES 2 + 3 COMBINED
+LELLEE — SEO PHASE 4: LAUNCH READINESS
+Audit status: PASS
 
-PHASE 2 — HIGH-INTENT CONTENT EXPANSION
-- Added 24 new substantial recovery pages.
-- Existing Phase 1 pages retained.
-- Added 6 topic-cluster hubs.
-- Added About and Editorial Policy pages for transparency.
-- New health-adjacent pages cite/reference SAMHSA guidance.
-- Added stronger internal linking and Article structured data.
+THIS IS THE FINAL SEO BUILD PHASE.
+It DOES NOT launch Lellee.com and DOES NOT replace the current preview Vercel config.
 
-PHASE 3 — RESOURCE + LOCAL SEO
-- Added /resources/ hub.
-- Added 6 indexable Los Angeles County-area city hubs:
-  Los Angeles, Long Beach, Torrance, Inglewood, Compton and Carson.
-- Added 6 resource categories per city.
-- IMPORTANT: the 36 city/category pages are NOINDEX templates until populated with real verified local resources.
-- Added LOCAL_SEO_GUARDRAILS.txt requiring at least 5 verified resources before a category page becomes indexable.
-- No provider listings were invented.
-- Sponsored placement must be clearly labeled and does not imply clinical recommendation.
+COMPLETED
+- WebSite structured data on homepage for site-name signaling
+- Organization structured data on homepage
+- normalized Article structured data on learning pages
+- BreadcrumbList structured data across indexable internal pages
+- removed FAQPage markup as a primary SEO tactic; visible FAQs remain
+- minified public CSS
+- favicon/theme/social metadata polish
+- sitemap lastmod values
+- analytics/conversion loader prepared but disabled
+- private /app excluded from public analytics
+- IndexNow key + submission script prepared but NOT submitted
+- Search Console/Bing setup checklist
+- Core Web Vitals performance budget
+- final static technical SEO audit
+- final launch routing file prepared but NOT activated
 
-SEO QUALITY
-- Sitemap contains only intended indexable pages.
-- Private /app remains blocked from crawling.
-- Thin local templates are excluded from the sitemap and marked noindex.
-- Duplicate canonical check passed.
-- People-first editorial policy added.
+CURRENT STATIC AUDIT
+- 54 indexable sitemap URLs
+- 36 noindex pages/templates
+- 90 public HTML files checked
+- broken internal links: 0
+- JSON-LD parse errors: 0
+- noindex URLs in sitemap: 0
+- duplicate canonical URLs: 0
+- largest HTML: 12.55 KB
+- minified SEO CSS: 3.96 KB
+- public analytics JS: 1.13 KB
 
-FILES TO REVIEW
-- SEO_PHASE_2_3_MANIFEST.json
-- SEO_QA_REPORT.json
-- LOCAL_SEO_GUARDRAILS.txt
+ANALYTICS
+analytics-config.js is intentionally blank.
+Do not add GA4/Clarity IDs until you decide to enable public-site measurement.
+Never send private recovery inputs or health-related app data to public analytics/ad systems.
 
-DO NOT DEPLOY vercel.SEO_LAUNCH.json UNTIL PUBLIC DOMAIN CUTOVER.
+INDEXNOW
+The included key file is ready for eventual public launch.
+Run submit_indexnow_after_launch.py ONLY after Lellee.com is serving this public site.
 
-NEXT
-Only SEO Phase 4 remains:
-technical launch audit, Search Console/Bing setup, analytics/conversion tracking,
-performance/Core Web Vitals review, final structured-data audit, sitemap submission,
-indexing checks and Lellee.com cutover.
+VERCEL
+DO NOT deploy vercel.SEO_PHASE4_LAUNCH.json now.
+Keep the existing preview/testing vercel.json until the full cutover checklist is satisfied.
+
+AFTER THIS
+There are no more planned SEO build phases.
+Remaining SEO work is live operational work: domain cutover, verification, sitemap submission,
+URL inspection, IndexNow submission, live CWV measurement, indexing monitoring and content performance.

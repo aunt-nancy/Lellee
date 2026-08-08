@@ -1,0 +1,30 @@
+{
+  "release": "SEO Phase 4 Launch Readiness",
+  "audit_date": "2026-08-08",
+  "indexable_urls_in_sitemap": 54,
+  "html_files_total": 90,
+  "noindex_pages": 36,
+  "missing_titles": [],
+  "missing_descriptions": [],
+  "missing_canonicals": [],
+  "duplicate_titles": {},
+  "duplicate_descriptions_count": 6,
+  "duplicate_canonicals": {},
+  "jsonld_parse_errors": [],
+  "h1_issues": [],
+  "noindex_in_sitemap": [],
+  "broken_internal_links": [],
+  "asset_sizes": {
+    "seo.min.css_kb": 3.96,
+    "public-analytics.js_kb": 1.13,
+    "largest_html_kb": 12.55
+  },
+  "asset_budget_issues": [],
+  "robots_blocks_private_app": true,
+  "analytics_disabled_by_default": true,
+  "analytics_runs_in_private_app": false,
+  "indexnow_prepared_not_submitted": true,
+  "vercel_launch_config_activated": false,
+  "static_audit_status": "PASS",
+  "notes": []
+}
