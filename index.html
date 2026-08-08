@@ -918,6 +918,27 @@ dialog::backdrop{background:rgba(7,8,21,.55);backdrop-filter:blur(5px)}
 .prod-overlay{position:fixed;inset:0;background:rgba(14,13,30,.55);backdrop-filter:blur(7px);z-index:10020;display:grid;place-items:center;padding:18px}.prod-onboarding{width:min(510px,100%);background:linear-gradient(145deg,#fff,#f7f2f9);border:1px solid #ded5e5;border-radius:18px;box-shadow:0 24px 70px rgba(20,14,32,.24);padding:28px}.prod-step h2{font-family:Georgia,serif;font-size:1.8rem;font-weight:500;margin:7px 0}.prod-step p{font-size:.72rem;color:#706b74;line-height:1.6;margin:0 0 17px}.prod-loading{position:fixed;right:16px;top:14px;z-index:10030;background:#fff;border:1px solid #e1dce5;border-radius:999px;padding:8px 11px;box-shadow:0 8px 24px rgba(25,20,36,.12);display:flex;gap:8px;align-items:center;font-size:.59rem;color:#625b67}.prod-loading>div{width:10px;height:10px;border:2px solid #d8cde0;border-top-color:#65409a;border-radius:50%;animation:prodspin .8s linear infinite}@keyframes prodspin{to{transform:rotate(360deg)}}.prod-toast{position:fixed;right:16px;bottom:18px;z-index:10040;background:#2f2637;color:#fff;border-radius:9px;padding:10px 13px;font-size:.62rem;box-shadow:0 12px 30px rgba(20,14,32,.2);max-width:330px}.prod-toast[data-type="error"]{background:#7c3737}.approved-setting-section textarea{width:100%;min-height:90px;border:1px solid #e4e0e5;border-radius:7px;background:#fcfbfc;padding:9px 10px;font-size:.68rem}
 @media(max-width:820px){.prod-toast{left:12px;right:12px;bottom:82px}.prod-loading{top:8px;right:8px}}
 
+
+/* Final accessibility + mobile hardening */
+.lellee-skip{position:fixed;left:10px;top:-60px;z-index:11000;background:#fff;color:#2c2135;border:2px solid #65409a;border-radius:6px;padding:9px 12px;font-size:.7rem;font-weight:850;transition:.15s}
+.lellee-skip:focus{top:10px}
+:focus-visible{outline:3px solid rgba(101,64,154,.38)!important;outline-offset:2px!important}
+button,a,input,select,textarea{touch-action:manipulation}
+button,a{cursor:pointer}
+.approved-diagnostic-grid{display:grid;gap:8px}.approved-diagnostic-row{display:grid;grid-template-columns:30px 1fr;gap:9px;align-items:center;border:1px solid #e6e2e7;background:#fff;border-radius:8px;padding:11px 13px}.approved-diagnostic-row>span{width:27px;height:27px;border-radius:7px;background:#f1edf4;display:grid;place-items:center;color:#65409a;font-weight:900}.approved-diagnostic-row>span[data-ok="true"]{background:#edf7ef;color:#2a8f4d}.approved-diagnostic-row b{display:block;font-size:.67rem}.approved-diagnostic-row small{display:block;font-size:.58rem;color:#777;margin-top:2px}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+@media(max-width:820px){
+  input,select,textarea{font-size:16px!important}
+  .approved-small-action,.approved-link,.secondary,.primary,.btn{min-height:42px!important}
+  .approved-help-choices button,.approved-tool-tile,.approved-subnav button{min-height:54px}
+  .mobile-bottom button{min-height:48px}
+}
+@media(max-width:380px){
+  .content{padding-left:9px!important;padding-right:9px!important}
+  .approved-subnav{grid-template-columns:1fr!important}
+  .approved-three{grid-template-columns:1fr!important}
+}
+
 </style>
 <title>Lellee — Approved Interior Rebuild</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -937,7 +958,7 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <meta name="theme-color" content="#0d1029">
 
 </head>
-<body>
+<body><a class="lellee-skip" href="#lelleeMain">Skip to main content</a>
 <div id="onboardingOverlay" class="prod-overlay hidden">
   <div class="prod-onboarding">
     <div class="prod-step" data-onboard-step="1"><span class="approved-kicker">WELCOME TO LELLEE</span><h2>Recovery. Every day.</h2><p>Lellee gives you one calm place for today's recovery, your journal, support, tools, and long-term progress.</p><button class="approved-small-action" data-onboard-next="2">Continue</button></div>
@@ -977,7 +998,7 @@ Includes the approved Lellee consumer experience from early recovery through lif
     </div>
   </aside>
 
-  <main class="main">
+  <main class="main" id="lelleeMain" tabindex="-1">
     <header class="topbar">
       <button class="mobile-menu-btn" aria-label="Open menu" data-page="settings">☰</button>
       <div class="mobile-brand mobile-title">Today</div>
@@ -1393,10 +1414,10 @@ Includes the approved Lellee consumer experience from early recovery through lif
   <div class="section-shell">
     <div class="section-header"><div class="eyebrow">Account & Privacy</div><h2>Your account, your recovery data</h2><p>Control your account and what Lellee keeps available for your recovery experience.</p></div>
     <div class="two-col">
-      <div class="simple-card"><h3>Account</h3><p class="subtle" id="accountEmail">Signed-in account</p><button class="secondary" id="sendPasswordReset">Send Password Reset Email</button></div>
+      <div class="simple-card"><h3>Account</h3><p class="subtle" id="accountEmail">Signed-in account</p><button class="secondary" data-page="account-recovery">Account Recovery</button></div>
       <div class="simple-card"><h3>Recovery Story Privacy</h3><p class="subtle">Guided responses may be used for private milestone comparisons. Hardcopy Recovery Story inclusion remains opt-in.</p><button class="secondary" data-page="story">Review Recovery Story</button></div>
     </div>
-    <div class="simple-card" style="margin-top:14px"><h3>Export</h3><p class="subtle">Create a private browser download of your guided recovery history and milestone reviews.</p><button class="secondary" id="exportRecoveryData">Export My Recovery Data</button></div>
+    <div class="simple-card" style="margin-top:14px"><h3>Export</h3><p class="subtle">Create a private browser download of your guided recovery history and milestone reviews.</p><button class="secondary" id="exportRecoveryData">Export My Recovery Data</button> <button class="secondary" data-page="data-lifecycle">Data Lifecycle</button></div>
   </div>
 </section>
 
@@ -1683,6 +1704,89 @@ Includes the approved Lellee consumer experience from early recovery through lif
     </div>
   </div>
 </section>
+
+<section class="page" id="page-account-recovery">
+  <div class="approved-inner">
+    <div class="approved-inner-head">
+      <div><span class="approved-kicker">ACCOUNT RECOVERY</span><h2>Get back into Lellee</h2><p>Password recovery should be simple and private.</p></div>
+      <button class="approved-link" data-page="account">← Account &amp; Privacy</button>
+    </div>
+
+    <div class="approved-two">
+      <article class="approved-wide-module">
+        <div class="approved-icon purple-icon">✉</div>
+        <div>
+          <small>PASSWORD RESET</small>
+          <h3>Send a recovery email</h3>
+          <p>Lellee will send a secure Supabase password-reset link to your signed-in email address.</p>
+          <button class="approved-small-action" id="recoverySendEmail">Send Reset Email</button>
+        </div>
+      </article>
+      <article class="approved-wide-module">
+        <div class="approved-icon green-icon">✓</div>
+        <div>
+          <small>NEW PASSWORD</small>
+          <h3>Update my password</h3>
+          <p>If you opened Lellee from a recovery link, create your new password here.</p>
+          <button class="approved-small-action" id="openNewPasswordForm">Set New Password</button>
+        </div>
+      </article>
+    </div>
+
+    <div class="approved-planner-form hidden" id="newPasswordForm">
+      <div class="approved-planner-head"><b>Set a new password</b><button class="approved-link" id="closeNewPasswordForm">Close</button></div>
+      <label>New password<input type="password" id="newPassword" autocomplete="new-password" minlength="8"></label>
+      <label>Confirm password<input type="password" id="newPasswordConfirm" autocomplete="new-password" minlength="8"></label>
+      <button class="approved-small-action" id="saveNewPassword">Update Password</button>
+    </div>
+  </div>
+</section>
+
+<section class="page" id="page-data-lifecycle">
+  <div class="approved-inner">
+    <div class="approved-inner-head">
+      <div><span class="approved-kicker">DATA LIFECYCLE</span><h2>Export, preserve, or request deletion</h2><p>Your account history should remain under your control.</p></div>
+      <button class="approved-link" data-page="privacy-center">← Privacy &amp; Data</button>
+    </div>
+
+    <div class="approved-three">
+      <article class="approved-module tint-blue"><span>⇩</span><div><small>EXPORT</small><h3>Download my data</h3><p>Keep a private copy before making any account decision.</p><button class="approved-small-action" id="lifecycleExport">Export</button></div></article>
+      <article class="approved-module tint-purple"><span>▤</span><div><small>PRESERVE</small><h3>Keep my history</h3><p>Recovery date changes never erase earlier entries or milestones.</p><button class="approved-small-action" data-page="recovery-date">Recovery Date</button></div></article>
+      <article class="approved-module tint-pink"><span>×</span><div><small>DELETE</small><h3>Request account deletion</h3><p>Submit a deletion request for review and processing.</p><button class="approved-small-action" id="openDeleteRequest">Request Deletion</button></div></article>
+    </div>
+
+    <div class="approved-planner-form hidden" id="deleteRequestForm">
+      <div class="approved-planner-head"><b>Request account deletion</b><button class="approved-link" id="closeDeleteRequest">Close</button></div>
+      <p class="approved-setting-note">This sends a deletion request. It does not immediately erase your account from the browser. Export anything you want to keep first.</p>
+      <label>Reason (optional)<textarea id="deleteReason" placeholder="You may leave this blank."></textarea></label>
+      <label class="check"><input type="checkbox" id="deleteConfirm"> I understand this request is for deletion of my Lellee account and stored recovery data.</label>
+      <button class="approved-small-action" id="submitDeleteRequest">Submit Deletion Request</button>
+    </div>
+
+    <div class="approved-inner-head approved-planner-sectionhead">
+      <div><span class="approved-kicker">REQUEST STATUS</span><h2>My deletion requests</h2></div>
+    </div>
+    <div id="deleteRequestStatus" class="approved-list"></div>
+  </div>
+</section>
+
+<section class="page" id="page-diagnostics">
+  <div class="approved-inner">
+    <div class="approved-inner-head">
+      <div><span class="approved-kicker">SYNC &amp; DIAGNOSTICS</span><h2>Is Lellee connected?</h2><p>A simple health check for authentication, database access, PWA support, and notification permission.</p></div>
+      <button class="approved-link" data-page="settings">← Settings</button>
+    </div>
+
+    <div class="approved-diagnostic-grid">
+      <div class="approved-diagnostic-row"><span id="diagAuthIcon">○</span><div><b>Account session</b><small id="diagAuth">Checking…</small></div></div>
+      <div class="approved-diagnostic-row"><span id="diagDbIcon">○</span><div><b>Supabase database</b><small id="diagDb">Checking…</small></div></div>
+      <div class="approved-diagnostic-row"><span id="diagSwIcon">○</span><div><b>App / PWA shell</b><small id="diagSw">Checking…</small></div></div>
+      <div class="approved-diagnostic-row"><span id="diagNotifIcon">○</span><div><b>Notifications</b><small id="diagNotif">Checking…</small></div></div>
+      <div class="approved-diagnostic-row"><span id="diagNetIcon">○</span><div><b>Internet connection</b><small id="diagNet">Checking…</small></div></div>
+    </div>
+    <button class="approved-small-action" id="runDiagnostics" style="margin-top:12px">Run Health Check</button>
+  </div>
+</section>
 <section class="page" id="page-settings">
   <div class="approved-inner">
     <div class="approved-inner-head">
@@ -1718,7 +1822,7 @@ Includes the approved Lellee consumer experience from early recovery through lif
       </div>
 
       <div class="approved-settings-footer">
-        <button class="approved-link" data-page="notifications">Notifications &amp; Reminders</button><button class="approved-link" data-page="privacy-center">Privacy &amp; Data</button><button class="approved-link" data-page="recovery-date">Recovery Date &amp; History</button><button class="approved-link" data-page="story">Recovery Story &amp; Hardcopy</button>
+        <button class="approved-link" data-page="notifications">Notifications &amp; Reminders</button><button class="approved-link" data-page="privacy-center">Privacy &amp; Data</button><button class="approved-link" data-page="diagnostics">Sync &amp; Diagnostics</button><button class="approved-link" data-page="recovery-date">Recovery Date &amp; History</button><button class="approved-link" data-page="story">Recovery Story &amp; Hardcopy</button>
         <button class="approved-small-action" id="saveSettings">Save Preferences</button>
       </div>
     </div>

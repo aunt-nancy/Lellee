@@ -1,0 +1,54 @@
+LELLEE FINAL QA CHECKLIST
+
+DESKTOP
+[ ] Sign in
+[ ] Dashboard matches approved visual design
+[ ] Today guided recovery opens
+[ ] My Recovery / Journey / Tools / Journal / Progress / Resources / Settings all open without reverting to legacy UI
+[ ] Planner creates a meeting, goal, and recovery action
+[ ] Upcoming reflects saved items
+[ ] Support Network saves a support person
+[ ] Help Me Right Now opens each pathway
+[ ] Notifications settings save
+[ ] Reminder center loads
+[ ] Privacy/consent saves
+[ ] Recovery date change preserves earlier history
+[ ] Account recovery sends reset email
+[ ] New password form updates password when recovery session is valid
+[ ] Data export downloads
+[ ] Deletion request submits
+[ ] Diagnostics show auth/database/network/PWA status
+
+ANDROID / CHROME
+[ ] Install prompt available
+[ ] Home-screen icon looks correct
+[ ] App opens standalone
+[ ] Bottom navigation is usable
+[ ] No horizontal scrolling
+[ ] Forms do not zoom unexpectedly
+[ ] Notification permission can be granted
+[ ] Offline shell loads after prior successful visit
+
+IPHONE / SAFARI
+[ ] Add to Home Screen works
+[ ] Standalone mode launches
+[ ] Bottom navigation clears safe-area inset
+[ ] Forms usable without zoom/layout break
+[ ] Journal textarea and guided choices fit screen
+[ ] 988 call/text links work where supported
+
+ACCESSIBILITY
+[ ] Tab focus is visible
+[ ] Skip-to-content link works
+[ ] Buttons have accessible names
+[ ] Inputs have labels
+[ ] Reduced-motion preference is respected
+[ ] Text remains readable at browser zoom 200%
+[ ] No information depends on color alone
+
+DATA / PRIVACY
+[ ] User can only read/write own private rows
+[ ] Journal not included in Recovery Story by default
+[ ] Guided responses not included in Recovery Story unless approved
+[ ] Changing recovery date does not delete history
+[ ] Export works before deletion request
