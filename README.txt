@@ -1,38 +1,20 @@
-LELLEE — BIG NOTIFICATIONS / REMINDERS BUILD
+LELLEE — BIG PRODUCTION READINESS BUILD
 
-THIS IS ONE CONSOLIDATED BUILD, NOT AN INCREMENTAL PATCH.
+Adds in one build:
+- first-use onboarding
+- support-tool / privacy / personalization consent
+- recovery date change with prior history preserved
+- privacy/data center
+- data export access
+- loading/sync state
+- user-friendly error toast
+- global promise error handling
+- Recovery Story opt-in reminder
+- PWA files preserved
+- notification/reminder build preserved
+- approved visual system preserved
 
-ADDS
-- Notification Center
-- daily recovery reminder
-- saved-meeting reminders
-- weekly reflection reminder
-- milestone / anniversary reminders
-- quiet hours
-- browser / phone notification permission
-- test notification
-- snooze / complete / dismiss controls
-- in-app reminder center
-- PWA notification-click routing
-- Supabase preference storage
-- Supabase reminder storage
-- automatic reminder generation from saved meetings and recovery date
-- service worker notification click support
-- current approved design preserved
+Run 06_production_readiness.sql once in Supabase.
+Upload all web/PWA files in this package to GitHub and commit.
 
-DEPLOYMENT
-1. Run 05_notifications_reminders.sql in Supabase SQL Editor once.
-2. Upload ALL web files in this folder to GitHub:
-   index.html
-   service-worker.js
-   manifest.webmanifest
-   icon-192.png
-   icon-512.png
-   vercel.json
-3. Commit. Vercel auto-deploys.
-
-IMPORTANT LIMITATION
-This build can deliver notifications reliably while the PWA/site is active.
-True background push notifications when the app is fully closed require a
-server-side Web Push service/VAPID subscription system. The database and
-preference architecture here is ready for that later production service.
+This does not delete or reset existing user recovery history.

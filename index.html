@@ -913,6 +913,11 @@ dialog::backdrop{background:rgba(7,8,21,.55);backdrop-filter:blur(5px)}
 .approved-reminder-actions button{border:1px solid #e0dbe3;background:#fff;border-radius:6px;padding:6px 7px;color:#5f5269;font-size:.55rem;font-weight:800}
 @media(max-width:820px){.approved-reminder-actions{grid-column:2}.approved-list-row{grid-template-columns:28px 1fr}.approved-reminder-actions{margin-top:4px}}
 
+
+/* Production readiness */
+.prod-overlay{position:fixed;inset:0;background:rgba(14,13,30,.55);backdrop-filter:blur(7px);z-index:10020;display:grid;place-items:center;padding:18px}.prod-onboarding{width:min(510px,100%);background:linear-gradient(145deg,#fff,#f7f2f9);border:1px solid #ded5e5;border-radius:18px;box-shadow:0 24px 70px rgba(20,14,32,.24);padding:28px}.prod-step h2{font-family:Georgia,serif;font-size:1.8rem;font-weight:500;margin:7px 0}.prod-step p{font-size:.72rem;color:#706b74;line-height:1.6;margin:0 0 17px}.prod-loading{position:fixed;right:16px;top:14px;z-index:10030;background:#fff;border:1px solid #e1dce5;border-radius:999px;padding:8px 11px;box-shadow:0 8px 24px rgba(25,20,36,.12);display:flex;gap:8px;align-items:center;font-size:.59rem;color:#625b67}.prod-loading>div{width:10px;height:10px;border:2px solid #d8cde0;border-top-color:#65409a;border-radius:50%;animation:prodspin .8s linear infinite}@keyframes prodspin{to{transform:rotate(360deg)}}.prod-toast{position:fixed;right:16px;bottom:18px;z-index:10040;background:#2f2637;color:#fff;border-radius:9px;padding:10px 13px;font-size:.62rem;box-shadow:0 12px 30px rgba(20,14,32,.2);max-width:330px}.prod-toast[data-type="error"]{background:#7c3737}.approved-setting-section textarea{width:100%;min-height:90px;border:1px solid #e4e0e5;border-radius:7px;background:#fcfbfc;padding:9px 10px;font-size:.68rem}
+@media(max-width:820px){.prod-toast{left:12px;right:12px;bottom:82px}.prod-loading{top:8px;right:8px}}
+
 </style>
 <title>Lellee — Approved Interior Rebuild</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -933,6 +938,16 @@ Includes the approved Lellee consumer experience from early recovery through lif
 
 </head>
 <body>
+<div id="onboardingOverlay" class="prod-overlay hidden">
+  <div class="prod-onboarding">
+    <div class="prod-step" data-onboard-step="1"><span class="approved-kicker">WELCOME TO LELLEE</span><h2>Recovery. Every day.</h2><p>Lellee gives you one calm place for today's recovery, your journal, support, tools, and long-term progress.</p><button class="approved-small-action" data-onboard-next="2">Continue</button></div>
+    <div class="prod-step hidden" data-onboard-step="2"><span class="approved-kicker">YOUR EXPERIENCE</span><h2>Only what is relevant now</h2><p>Your current recovery phase stays visible. Future phases stay out of the way until you reach them.</p><button class="approved-small-action" data-onboard-next="3">Continue</button></div>
+    <div class="prod-step hidden" data-onboard-step="3"><span class="approved-kicker">YOUR PRIVACY</span><h2>Your story belongs to you</h2><p>Milestone reviews can use your history privately. Hardcopy Recovery Story content remains opt-in.</p><button class="approved-small-action" id="finishOnboarding">Start Lellee</button></div>
+  </div>
+</div>
+<div id="globalLoading" class="prod-loading hidden"><div></div><span>Keeping Lellee in sync…</span></div>
+<div id="globalToast" class="prod-toast hidden"></div>
+
 <div id="offlineBar" class="lellee-offline hidden">You’re offline. Lellee will keep this page available and sync when you reconnect.</div>
 <div id="installPrompt" class="lellee-install hidden">
   <div><b>Add Lellee to your phone</b><span>Open it from your home screen like an app.</span></div>
@@ -1643,6 +1658,31 @@ Includes the approved Lellee consumer experience from early recovery through lif
     <div id="reminderCenterList" class="approved-list"></div>
   </div>
 </section>
+
+<section class="page" id="page-privacy-center">
+  <div class="approved-inner">
+    <div class="approved-inner-head"><div><span class="approved-kicker">PRIVACY &amp; DATA</span><h2>Your recovery data stays under your control</h2><p>Review consent, export your history, and choose what can appear in milestone reviews or Recovery Story editions.</p></div><button class="approved-link" data-page="settings">← Settings</button></div>
+    <div class="approved-two">
+      <article class="approved-wide-module"><div class="approved-icon purple-icon">⇩</div><div><small>EXPORT</small><h3>Download my recovery data</h3><p>Create a private JSON copy of your guided responses, milestones, goals, and settings.</p><button class="approved-small-action" id="prodExport">Export My Data</button></div></article>
+      <article class="approved-wide-module"><div class="approved-icon green-icon">▤</div><div><small>RECOVERY STORY</small><h3>Hardcopy remains opt-in</h3><p>Journal entries and guided responses are excluded unless you deliberately approve them.</p><button class="approved-small-action" data-page="story">Review Story Settings</button></div></article>
+    </div>
+    <div class="approved-settings-sheet" style="margin-top:12px">
+      <div class="approved-setting-section"><h3>Consent &amp; safety</h3><label class="check"><input type="checkbox" id="consentTerms"> I understand Lellee is a recovery-support tool and not emergency, medical, or professional treatment.</label><label class="check"><input type="checkbox" id="consentPrivacy"> I understand my entries are stored in my private account and can be deleted or exported.</label><label class="check"><input type="checkbox" id="consentPersonalization"> Allow Lellee to use my saved preferences and recovery history to personalize my experience.</label></div>
+      <div class="approved-settings-footer"><span class="approved-setting-note" id="consentStatus"></span><button class="approved-small-action" id="saveConsents">Save Choices</button></div>
+    </div>
+  </div>
+</section>
+
+<section class="page" id="page-recovery-date">
+  <div class="approved-inner">
+    <div class="approved-inner-head"><div><span class="approved-kicker">RECOVERY DATE</span><h2>Update my recovery date</h2><p>Changing the current counter does not erase your previous journey.</p></div><button class="approved-link" data-page="settings">← Settings</button></div>
+    <div class="approved-feature-band"><div class="approved-phase-badge">HISTORY PRESERVED</div><div class="approved-feature-copy"><h3>A new date starts a new chapter—not a blank history.</h3><p>Your earlier guided responses, milestones, journal entries, and Recovery Story history remain available.</p></div></div>
+    <div class="approved-settings-sheet">
+      <div class="approved-setting-section"><h3>New current recovery date</h3><label>Recovery date<input type="date" id="newRecoveryDate"></label><label>Optional note<textarea id="recoveryDateNote" placeholder="What do you want to remember about this change?"></textarea></label></div>
+      <div class="approved-settings-footer"><span class="approved-setting-note">This action updates the current counter only.</span><button class="approved-small-action" id="saveRecoveryDateChange">Update Date &amp; Preserve History</button></div>
+    </div>
+  </div>
+</section>
 <section class="page" id="page-settings">
   <div class="approved-inner">
     <div class="approved-inner-head">
@@ -1678,7 +1718,7 @@ Includes the approved Lellee consumer experience from early recovery through lif
       </div>
 
       <div class="approved-settings-footer">
-        <button class="approved-link" data-page="notifications">Notifications &amp; Reminders</button><button class="approved-link" data-page="story">Recovery Story &amp; Hardcopy</button>
+        <button class="approved-link" data-page="notifications">Notifications &amp; Reminders</button><button class="approved-link" data-page="privacy-center">Privacy &amp; Data</button><button class="approved-link" data-page="recovery-date">Recovery Date &amp; History</button><button class="approved-link" data-page="story">Recovery Story &amp; Hardcopy</button>
         <button class="approved-small-action" id="saveSettings">Save Preferences</button>
       </div>
     </div>
