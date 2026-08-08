@@ -1047,6 +1047,7 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <link rel="stylesheet" href="/guided-reviews.css">
 <link rel="stylesheet" href="/connections-progress.css">
 <link rel="stylesheet" href="/paths-resources.css">
+<link rel="stylesheet" href="/lellee-plus.css">
 </head>
 <body><a class="skip-link" href="#mainContent">Skip to main content</a><a class="lellee-skip" href="#lelleeMain">Skip to main content</a>
 <div id="onboardingOverlay" class="prod-overlay hidden">
@@ -1079,7 +1080,8 @@ Includes the approved Lellee consumer experience from early recovery through lif
       <button class="nav-item" data-page="progress"><span class="nav-icon">↗</span>Progress</button>
       <button class="nav-item" data-page="resources"><span class="nav-icon">◇</span>Resources</button>
       <button class="nav-item" data-page="community"><span class="nav-icon">♧</span>Community</button>
-      <button class="nav-item" data-page="milestones"><span class="nav-icon">◆</span>Milestones</button><button class="nav-item" data-page="then-now"><span class="nav-icon">↔</span>Then & Now</button><button class="nav-item" data-page="story"><span class="nav-icon">▤</span>My Recovery Story</button><button class="nav-item" data-page="history"><span class="nav-icon">◷</span>My History</button><button class="nav-item" data-page="longterm"><span class="nav-icon">∞</span>Year 3+</button><button class="nav-item" data-page="account"><span class="nav-icon">◉</span>Account & Privacy</button><button class="nav-item" data-page="settings"><span class="nav-icon">⚙</span>Settings</button>
+      <button class="nav-item" data-page="milestones"><span class="nav-icon">◆</span>Milestones</button><button class="nav-item" data-page="then-now"><span class="nav-icon">↔</span>Then & Now</button><button class="nav-item" data-page="story"><span class="nav-icon">▤</span>My Recovery Story</button><button class="nav-item" data-page="history"><span class="nav-icon">◷</span>My History</button><button class="nav-item" data-page="longterm"><span class="nav-icon">∞</span>Year 3+</button><button class="nav-item" data-page="account"><span class="nav-icon">◉</span>Account & Privacy</button><button class="nav-item" data-page="plus"><span class="nav-icon">✦</span>Lellee Plus</button>
+      <button class="nav-item" data-page="settings"><span class="nav-icon">⚙</span>Settings</button>
     </nav>
     <div class="side-spacer"></div>
     <div class="help-card">
@@ -1728,6 +1730,7 @@ Includes the approved Lellee consumer experience from early recovery through lif
     <div class="approved-subnav progress-subnav">
       <button data-page="weekly-review">Weekly Review</button>
       <button data-page="monthly-review">Monthly Review</button>
+      <button data-page="recovery-review">Recovery Review+</button>
       <button data-page="insights">My Insights</button>
       <button data-page="milestones">Milestones</button>
       <button data-page="then-now">Then &amp; Now</button>
@@ -2758,6 +2761,42 @@ Includes the approved Lellee consumer experience from early recovery through lif
     </article>
   </div>
 </section>
+<section class="page" id="page-plus">
+  <div class="approved-inner">
+    <div class="approved-inner-head">
+      <div><span class="approved-kicker">LELLEE PLUS</span><h2>More reflection and convenience—not more access to safety</h2><p>Core recovery support stays free. Plus adds deeper summaries, archive tools, customization, and Recovery Story extras.</p></div>
+      <div class="plus-price-pill"><span id="plusPriceMonthly">$3.99</span><small>/ month</small></div>
+    </div>
+    <div class="plus-hero">
+      <div class="plus-hero-copy"><span class="approved-kicker">OPTIONAL MEMBERSHIP</span><h3>Keep the core free. Pay only for the extras.</h3><p>Lellee Plus is designed around preservation, convenience, customization, and a deeper look at your own recovery history.</p><div class="plus-hero-actions"><button class="approved-small-action" id="startPlusMembership">Start Lellee Plus</button><button class="approved-link" id="showPlusComparison">Compare Free vs Plus →</button></div><small class="plus-no-pressure">Help Me Right Now and core coping tools remain free.</small></div>
+      <div class="plus-review-preview"><span class="approved-kicker">PLUS FEATURE</span><h3>Your Recovery Review</h3><p>A weekly/monthly summary built from what you already saved—without diagnosing or grading you.</p><div class="plus-preview-lines"><div><span>✓</span><b>What helped most</b></div><div><span>↗</span><b>What showed up often</b></div><div><span>◇</span><b>What to carry forward</b></div></div></div>
+    </div>
+    <div id="plusStatusBand" class="plus-status-band"><div><span class="approved-kicker">MEMBERSHIP STATUS</span><h3 id="plusStatusTitle">Free account</h3><p id="plusStatusText">You have the full core recovery experience. Plus features are optional.</p></div><span id="plusStatusBadge">FREE</span></div>
+    <div class="plus-feature-grid">
+      <article><span class="plus-feature-icon">↗</span><small>RECOVERY REVIEW</small><h3>Weekly & Monthly Summaries</h3><p>Turn your own saved activity into a simple pattern summary and carry-forward plan.</p></article>
+      <article><span class="plus-feature-icon">↔</span><small>THEN & NOW+</small><h3>More Comparison Themes</h3><p>Compare more areas over time without turning them into recovery scores.</p></article>
+      <article><span class="plus-feature-icon">✎</span><small>JOURNAL+</small><h3>Expanded Search & Collections</h3><p>More custom collections, saved filters, favorites, and longer-range journal review.</p></article>
+      <article><span class="plus-feature-icon">◆</span><small>RECOVERY STORY+</small><h3>PDF Story Editions</h3><p>Create enhanced digital 2-, 5-, and 10-year Recovery Story editions for printing or archiving.</p></article>
+      <article><span class="plus-feature-icon">◷</span><small>REMINDERS+</small><h3>Custom Reminder Sets</h3><p>Create more personalized recovery, meeting, journal, and milestone reminders.</p></article>
+      <article><span class="plus-feature-icon">✦</span><small>PERSONALIZATION+</small><h3>Deeper “For You” Choices</h3><p>Use more of your own saved preferences and patterns to decide what Lellee surfaces first.</p></article>
+    </div>
+    <div id="plusComparison" class="plus-comparison hidden"><div class="plus-comparison-head"><div><span class="approved-kicker">FREE VS PLUS</span><h3>Core recovery stays free</h3></div><button class="approved-link" id="closePlusComparison">Close</button></div><div class="plus-comparison-grid"><div class="plus-compare-card"><span class="approved-kicker">LELLEE FREE</span><h3>$0</h3><ul><li>Today dashboard</li><li>Guided Recovery Journey</li><li>Help Me Right Now</li><li>Core recovery tools</li><li>Journal</li><li>Planner & Support Network</li><li>Resources</li><li>Basic progress & milestones</li></ul></div><div class="plus-compare-card featured"><span class="approved-kicker">LELLEE PLUS</span><h3><span id="plusComparePrice">$3.99</span><small>/mo</small></h3><ul><li>Everything in Free</li><li>Recovery Review+</li><li>Expanded Then & Now</li><li>Advanced journal organization</li><li>Enhanced Recovery Story PDFs</li><li>More custom reminders</li><li>Deeper personalization</li><li>Potential physical-journal discounts</li></ul></div></div></div>
+    <div class="plus-boundary-note"><b>Free-core promise:</b> Plus never controls access to Help Me Right Now, core guided recovery, core coping tools, urgent safety information, or basic support/resource access.</div>
+  </div>
+</section>
+<section class="page" id="page-recovery-review">
+  <div class="approved-inner">
+    <div class="approved-inner-head"><div><span class="approved-kicker">RECOVERY REVIEW</span><h2>Your own recovery activity, organized into a useful summary</h2><p>No diagnosis. No grade. No prediction. Just patterns from what you saved in Lellee.</p></div><div class="review-period-control"><select id="recoveryReviewPeriod"><option value="7">Last 7 days</option><option value="30" selected>Last 30 days</option><option value="90">Last 90 days</option></select><button class="approved-small-action" id="buildRecoveryReview">Build Review</button></div></div>
+    <div id="recoveryReviewLock" class="plus-lock-card hidden"><span>✦</span><div><small>LELLEE PLUS</small><h3>This deeper Recovery Review is a Plus feature.</h3><p>Your standard Weekly and Monthly Reviews remain free.</p></div><button class="approved-small-action" data-page="plus">View Plus</button></div>
+    <div id="recoveryReviewContent">
+      <div class="review-summary-hero"><div class="review-summary-number"><span id="reviewActiveDays">0</span><small>ACTIVE DAYS</small></div><div><span class="approved-kicker">YOUR REVIEW</span><h3 id="reviewHeadline">Your recovery history is ready when you are.</h3><p id="reviewLead">Build the review to organize recent activity into a few useful themes.</p></div></div>
+      <div class="review-insight-grid"><article class="review-insight-card tint-purple"><span class="review-insight-icon">✓</span><small>WHAT HELPED</small><h3 id="reviewTopSupport">Still learning</h3><p id="reviewTopSupportText"></p></article><article class="review-insight-card tint-blue"><span class="review-insight-icon">◎</span><small>WHAT NEEDED CARE</small><h3 id="reviewTopChallenge">Still learning</h3><p id="reviewTopChallengeText"></p></article><article class="review-insight-card tint-green"><span class="review-insight-icon">◇</span><small>WHAT YOU USED</small><h3 id="reviewTopTool">No tools logged yet</h3><p id="reviewTopToolText"></p></article></div>
+      <div class="review-detail-grid"><article class="review-detail-card"><span class="approved-kicker">CONSISTENCY</span><h3 id="reviewConsistencyTitle">Beginning</h3><p id="reviewConsistencyText"></p></article><article class="review-detail-card"><span class="approved-kicker">CONNECTION</span><h3 id="reviewConnectionTitle">Your support picture</h3><p id="reviewConnectionText"></p></article><article class="review-detail-card"><span class="approved-kicker">CARRY FORWARD</span><h3 id="reviewCarryTitle">Choose what deserves protection</h3><p id="reviewCarryText"></p></article></div>
+      <div class="review-evidence-section"><div class="review-evidence-head"><div><span class="approved-kicker">RECENT ACTIVITY</span><h3>What this review was built from</h3></div><span id="reviewEvidenceCount">0 saved items</span></div><div id="reviewEvidenceList" class="review-evidence-list"></div></div>
+      <div class="review-actions"><label class="approved-story-check"><input type="checkbox" id="reviewStoryOptIn"> Allow this review to be selected for My Recovery Story</label><div><button class="approved-link" id="saveRecoveryReview">Save Review</button><button class="approved-small-action" id="printRecoveryReview">Print / Save as PDF</button></div></div>
+    </div>
+  </div>
+</section>
 <section class="page" id="page-settings">
   <div class="approved-inner">
     <div class="approved-inner-head">
@@ -3352,5 +3391,6 @@ Includes:
 <script src="/guided-reviews.js"></script>
 <script src="/connections-progress.js"></script>
 <script src="/paths-resources.js"></script>
+<script src="/lellee-plus.js"></script>
 </body>
 </html>
