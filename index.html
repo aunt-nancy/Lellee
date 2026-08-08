@@ -1045,6 +1045,7 @@ Includes the approved Lellee consumer experience from early recovery through lif
       .guided-activity-hint{font-size:.53rem;color:#8a828d;margin-top:5px}
     </style>
 <link rel="stylesheet" href="/guided-reviews.css">
+<link rel="stylesheet" href="/connections-progress.css">
 </head>
 <body><a class="skip-link" href="#mainContent">Skip to main content</a><a class="lellee-skip" href="#lelleeMain">Skip to main content</a>
 <div id="onboardingOverlay" class="prod-overlay hidden">
@@ -1390,15 +1391,34 @@ Includes the approved Lellee consumer experience from early recovery through lif
         </div>
       </section>
 
-      <section class="page" id="page-meetings">
-        <div class="section-shell">
-          <div class="section-header"><div class="eyebrow">Meetings</div><h2>Keep connection close</h2><p>V1 shows a simple personal meeting plan. Live meeting search can be connected during backend integration.</p></div>
-          <div class="list-cards">
-            <div class="list-card"><div class="left"><div class="round-icon">▣</div><div><h3>Evening Recovery Meeting</h3><p>Today • 7:00 PM • Saved meeting</p></div></div><button class="secondary">Details</button></div>
-            <div class="list-card"><div class="left"><div class="round-icon">◉</div><div><h3>Online Support Meeting</h3><p>Tomorrow • 6:30 PM • Online</p></div></div><button class="secondary">Details</button></div>
-          </div>
-        </div>
-      </section>
+      
+<section class="page" id="page-meetings">
+  <div class="approved-inner">
+    <div class="approved-inner-head">
+      <div><span class="approved-kicker">MEETINGS</span><h2>Keep recovery connection close</h2><p>Your saved meeting plan, without turning Lellee into a noisy directory.</p></div>
+      <button class="approved-small-action" data-page="planner">Add / Manage Meetings</button>
+    </div>
+
+    <div class="connection-hero">
+      <div class="connection-hero-icon">▣</div>
+      <div><span class="approved-kicker">NEXT SAVED MEETING</span><h3 id="nextMeetingTitle">No meeting scheduled yet</h3><p id="nextMeetingMeta">Add a meeting in Recovery Planner and it will appear here.</p></div>
+      <button class="approved-link" data-page="planner">Open Planner →</button>
+    </div>
+
+    <div class="connection-section-head">
+      <div><span class="approved-kicker">MY MEETING PLAN</span><h3>Saved meetings</h3></div>
+      <span class="connection-count" id="savedMeetingCount">0 saved</span>
+    </div>
+    <div id="meetingPlanList" class="connection-list"></div>
+
+    <div class="approved-insight-panel">
+      <span class="approved-kicker">CONNECTION, NOT PRESSURE</span>
+      <h3>Your meeting plan can change as your recovery changes.</h3>
+      <p>Meetings are one recovery-support option. Lellee can also support counseling, medication-supported recovery, peer support, faith/spiritual support, skills-based recovery, or a combination.</p>
+    </div>
+  </div>
+</section>
+
 
       
 
@@ -1594,26 +1614,58 @@ Includes the approved Lellee consumer experience from early recovery through lif
 
 
       
+
 <section class="page" id="page-progress">
   <div class="approved-inner">
     <div class="approved-inner-head">
-      <div><span class="approved-kicker">PROGRESS</span><h2>Notice how far you've come</h2><p>Progress is information, not a score.</p></div>
+      <div><span class="approved-kicker">PROGRESS</span><h2>Notice change without turning recovery into a score</h2><p>Your history can show consistency, connection, and reflection without grading your recovery.</p></div>
+      <button class="approved-link" data-page="insights">View My Insights →</button>
     </div>
 
-    <div class="approved-progress-layout">
-      <div class="approved-ring-card">
-        <div class="rings"><div class="rings-center"><span data-recovery-day>43</span><small>Days</small></div></div>
-        <div><span class="approved-kicker">RECOVERY DAYS</span><h3>Keep going. You've got this.</h3><p>Your counter can eventually be hidden if you prefer milestone-based tracking.</p></div>
+    <div class="progress-live-hero">
+      <div class="progress-live-ring">
+        <span data-recovery-day>—</span><small>DAYS</small>
       </div>
-      <div class="approved-progress-stats">
-        <div><b id="checkinCount">4</b><small>Check-ins</small></div>
-        <div><b>3</b><small>Connections</small></div>
-        <div><b>2</b><small>Meetings</small></div>
+      <div class="progress-live-copy">
+        <span class="approved-kicker" id="progressPhaseKicker">CURRENT PHASE</span>
+        <h3 id="progressPhaseTitle">—</h3>
+        <p id="progressPhaseDescription">Your current recovery phase will appear here.</p>
+        <div class="progress-live-bar"><i id="progressLiveBar"></i></div>
+        <small id="progressLivePercent">—</small>
       </div>
-      <div class="approved-phase-strip"><b id="progressPhaseLabel">Phase 2 • Build</b><span id="phasePercent">43%</span><div class="progressbar"><span id="phaseBar" style="width:43%"></span></div></div>
+    </div>
+
+    <div class="progress-metric-grid">
+      <article><span>✓</span><div><b id="progressGuidedDays">0</b><small>Guided days saved</small></div></article>
+      <article><span>✎</span><div><b id="progressJournalEntries">0</b><small>Journal entries</small></div></article>
+      <article><span>♡</span><div><b id="progressSupportPeople">0</b><small>Support people</small></div></article>
+      <article><span>▣</span><div><b id="progressMeetings">0</b><small>Saved meetings</small></div></article>
+      <article><span>◇</span><div><b id="progressToolsUsed">0</b><small>Tools used</small></div></article>
+      <article><span>◆</span><div><b id="progressReviews">0</b><small>Reviews & milestones</small></div></article>
+    </div>
+
+    <div class="approved-two" style="margin-top:12px">
+      <article class="approved-wide-module">
+        <div class="approved-icon purple-icon">↗</div>
+        <div><small>THIS MONTH</small><h3 id="progressMonthHeadline">Your month is taking shape</h3><p id="progressMonthText">Saved recovery activity from this month will appear here.</p></div>
+      </article>
+      <article class="approved-wide-module">
+        <div class="approved-icon green-icon">↶</div>
+        <div><small>LOOK BACK</small><h3>History stays available when you want it</h3><p>Review guided days, journals, reviews, and milestones without crowding Today.</p><button class="approved-link" data-page="history">Open Recovery History →</button></div>
+      </article>
+    </div>
+
+    <div class="approved-subnav progress-subnav">
+      <button data-page="weekly-review">Weekly Review</button>
+      <button data-page="monthly-review">Monthly Review</button>
+      <button data-page="insights">My Insights</button>
+      <button data-page="milestones">Milestones</button>
+      <button data-page="then-now">Then &amp; Now</button>
+      <button data-page="story">Recovery Story</button>
     </div>
   </div>
 </section>
+
 
 
       
@@ -1658,12 +1710,48 @@ Includes the approved Lellee consumer experience from early recovery through lif
 
 
 
-      <section class="page" id="page-community">
-        <div class="section-shell">
-          <div class="section-header"><div class="eyebrow">Community</div><h2>Connection without clutter</h2><p>Community is intentionally light in V1. Lellee should not overwhelm the daily recovery experience with a noisy social feed.</p></div>
-          <div class="simple-card"><h3>Coming after the core recovery experience</h3><p class="subtle">Possible future features: moderated recovery stories, milestones, challenges, and opt-in peer connection.</p></div>
-        </div>
-      </section>
+      
+<section class="page" id="page-community">
+  <div class="approved-inner">
+    <div class="approved-inner-head">
+      <div><span class="approved-kicker">COMMUNITY</span><h2>Connection without a social-media feed</h2><p>Lellee keeps community quiet and intentional: people you trust, meetings you choose, and vetted recovery resources.</p></div>
+      <button class="approved-link" data-page="support-network">My Support →</button>
+    </div>
+
+    <div class="connection-hub-grid">
+      <article class="connection-hub-card tint-purple">
+        <div class="connection-hub-icon">♡</div>
+        <span class="approved-kicker">MY PEOPLE</span>
+        <h3 id="communitySupportHeadline">Your support network</h3>
+        <p id="communitySupportText">Add people you trust so support stays easier to reach.</p>
+        <button class="approved-link" data-page="support-network">Open My Support →</button>
+      </article>
+
+      <article class="connection-hub-card tint-green">
+        <div class="connection-hub-icon">▣</div>
+        <span class="approved-kicker">MY MEETINGS</span>
+        <h3 id="communityMeetingHeadline">Your meeting plan</h3>
+        <p id="communityMeetingText">Saved meetings appear here as part of your connection plan.</p>
+        <button class="approved-link" data-page="meetings">Open Meetings →</button>
+      </article>
+
+      <article class="connection-hub-card tint-blue">
+        <div class="connection-hub-icon">⌂</div>
+        <span class="approved-kicker">PEER &amp; COMMUNITY SUPPORT</span>
+        <h3 id="communityResourceHeadline">Find another layer of support</h3>
+        <p id="communityResourceText">Vetted peer-support and community resources can be prioritized by location.</p>
+        <button class="approved-link" data-page="resources">Open Resources →</button>
+      </article>
+    </div>
+
+    <div class="approved-insight-panel">
+      <span class="approved-kicker">WHY NO ENDLESS FEED?</span>
+      <h3>Recovery connection should not compete for your attention.</h3>
+      <p>Lellee's consumer V1 intentionally avoids likes, follower counts, public relapse disclosures, engagement streaks, and an endless social feed. Community stays opt-in and recovery-supporting.</p>
+    </div>
+  </div>
+</section>
+
 
       <section class="page" id="page-milestones">
   <div class="approved-inner">
@@ -1889,16 +1977,47 @@ Includes the approved Lellee consumer experience from early recovery through lif
   </div>
 </section>
 
+
 <section class="page" id="page-history">
-  <div class="section-shell">
-    <div class="section-header"><div class="eyebrow">My Recovery History</div><h2>Your journey, when you want to look back</h2><p>Daily life stays focused on today. Your past remains available here.</p></div>
-    <div class="two-col">
-      <div class="simple-card"><h3>Recovery Timeline</h3><p class="subtle">Review guided days, weekly long-term reflections, and milestones by date.</p><button class="secondary" id="loadHistoryTimeline">Load Timeline</button></div>
-      <div class="simple-card"><h3>Then & Now</h3><p class="subtle">Compare repeated recovery themes across time.</p><button class="secondary" data-page="then-now">Open Then & Now</button></div>
+  <div class="approved-inner">
+    <div class="approved-inner-head">
+      <div><span class="approved-kicker">MY RECOVERY HISTORY</span><h2>Your past, when you choose to look back</h2><p>Today stays focused on today. Saved recovery work remains available here by date.</p></div>
+      <button class="approved-link" data-page="then-now">Then &amp; Now →</button>
     </div>
-    <div id="historyTimeline" class="list-cards" style="margin-top:14px"></div>
+
+    <div class="history-summary-grid">
+      <article><b id="historyGuidedCount">0</b><small>Guided entries</small></article>
+      <article><b id="historyJournalCount">0</b><small>Journal entries</small></article>
+      <article><b id="historyReviewCount">0</b><small>Reviews</small></article>
+      <article><b id="historyMilestoneCount">0</b><small>Milestones</small></article>
+    </div>
+
+    <div class="history-toolbar">
+      <div class="history-filter-group">
+        <button class="active" data-history-filter="all">All</button>
+        <button data-history-filter="guided">Guided</button>
+        <button data-history-filter="journal">Journal</button>
+        <button data-history-filter="review">Reviews</button>
+        <button data-history-filter="milestone">Milestones</button>
+      </div>
+      <select id="historyRange">
+        <option value="90">Last 90 days</option>
+        <option value="365">Last year</option>
+        <option value="all">All history</option>
+      </select>
+    </div>
+
+    <div id="historyTimeline" class="history-timeline"></div>
+
+    <div class="approved-subnav" style="margin-top:12px">
+      <button data-page="then-now">Then &amp; Now</button>
+      <button data-page="milestones">Milestones</button>
+      <button data-page="story">Recovery Story</button>
+      <button data-page="journal">Journal</button>
+    </div>
   </div>
 </section>
+
 
 <section class="page" id="page-account">
   <div class="section-shell">
@@ -3112,5 +3231,6 @@ Includes:
 <script src="/group-a-core.js"></script>
 <script src="/group-b-production.js"></script>
 <script src="/guided-reviews.js"></script>
+<script src="/connections-progress.js"></script>
 </body>
 </html>
