@@ -38,3 +38,21 @@ self.addEventListener('fetch',event=>{
     }))
   );
 });
+
+
+self.addEventListener('notificationclick',event=>{
+  event.notification.close();
+  const page=event.notification.data?.page||'today';
+  const url='/?page='+encodeURIComponent(page);
+  event.waitUntil(
+    clients.matchAll({type:'window',includeUncontrolled:true}).then(list=>{
+      for(const client of list){
+        if('focus' in client){
+          client.postMessage({type:'LELLEE_OPEN_PAGE',page});
+          return client.focus();
+        }
+      }
+      return clients.openWindow(url);
+    })
+  );
+});

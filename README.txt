@@ -1,18 +1,38 @@
-LELLEE — DAY 2 SUPABASE-CONNECTED UPDATE
+LELLEE — BIG NOTIFICATIONS / REMINDERS BUILD
 
-Deploy this folder to replace the current Vercel build.
+THIS IS ONE CONSOLIDATED BUILD, NOT AN INCREMENTAL PATCH.
 
-NEW:
-- Guided Day 2 interface
-- Soft interaction styling
-- Preview button on Today
-- ?day=2 can open Day 2 for testing
-- Day 2 responses save to public.guided_responses
-- Stable prompt keys support Then & Now comparisons
-- allow_recovery_story defaults to false
+ADDS
+- Notification Center
+- daily recovery reminder
+- saved-meeting reminders
+- weekly reflection reminder
+- milestone / anniversary reminders
+- quiet hours
+- browser / phone notification permission
+- test notification
+- snooze / complete / dismiss controls
+- in-app reminder center
+- PWA notification-click routing
+- Supabase preference storage
+- Supabase reminder storage
+- automatic reminder generation from saved meetings and recovery date
+- service worker notification click support
+- current approved design preserved
 
-TEST:
-1. Sign in.
-2. Click Preview Guided Day 2 on Today, or open the deployed URL with ?day=2.
-3. Make selections and save.
-4. Supabase -> Table Editor -> guided_responses should show 7 rows for that user/date.
+DEPLOYMENT
+1. Run 05_notifications_reminders.sql in Supabase SQL Editor once.
+2. Upload ALL web files in this folder to GitHub:
+   index.html
+   service-worker.js
+   manifest.webmanifest
+   icon-192.png
+   icon-512.png
+   vercel.json
+3. Commit. Vercel auto-deploys.
+
+IMPORTANT LIMITATION
+This build can deliver notifications reliably while the PWA/site is active.
+True background push notifications when the app is fully closed require a
+server-side Web Push service/VAPID subscription system. The database and
+preference architecture here is ready for that later production service.
