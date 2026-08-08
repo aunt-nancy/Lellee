@@ -1046,6 +1046,7 @@ Includes the approved Lellee consumer experience from early recovery through lif
     </style>
 <link rel="stylesheet" href="/guided-reviews.css">
 <link rel="stylesheet" href="/connections-progress.css">
+<link rel="stylesheet" href="/paths-resources.css">
 </head>
 <body><a class="skip-link" href="#mainContent">Skip to main content</a><a class="lellee-skip" href="#lelleeMain">Skip to main content</a>
 <div id="onboardingOverlay" class="prod-overlay hidden">
@@ -1374,22 +1375,91 @@ Includes the approved Lellee consumer experience from early recovery through lif
   </div>
 </section>
 
+
 <section class="page" id="page-paths">
-        <div class="section-shell">
-          <div class="section-header"><div class="eyebrow">Recovery Paths</div><h2>Your chosen approach</h2><p>Lellee can support more than one legitimate pathway without forcing one belief system.</p></div>
-          <div class="simple-card">
-            <span class="phase-chip">CURRENT PREFERENCE</span>
-            <h3 id="pathSummary">Mixed recovery approach</h3>
-            <p class="subtle" id="beliefSummary">Faith/spiritual preference: Mixed</p>
-            <button class="secondary" data-page="settings">Change preferences</button>
-          </div>
-          <div class="list-cards" style="margin-top:14px">
-            <div class="list-card"><div class="left"><div class="round-icon">12</div><div><h3>12-Step</h3><p>Peer support, meetings, steps, sponsorship, and fellowship.</p></div></div></div>
-            <div class="list-card"><div class="left"><div class="round-icon">S</div><div><h3>Skills-Based Recovery</h3><p>Practical coping, motivation, thinking, and behavior-change tools.</p></div></div></div>
-            <div class="list-card"><div class="left"><div class="round-icon">✦</div><div><h3>Faith & Spirituality</h3><p>Optional content based on the preferences you select.</p></div></div></div>
-          </div>
+  <div class="approved-inner">
+    <div class="approved-inner-head">
+      <div>
+        <span class="approved-kicker">RECOVERY PATHS</span>
+        <h2>Build a recovery approach that fits you</h2>
+        <p>You can use more than one legitimate pathway. Lellee keeps your recovery method separate from your faith or spiritual preference.</p>
+      </div>
+      <button class="approved-link" data-page="settings">Preferences →</button>
+    </div>
+
+    <div class="path-current-band">
+      <div class="path-current-icon">◇</div>
+      <div>
+        <span class="approved-kicker">MY CURRENT APPROACH</span>
+        <h3 id="pathPrimarySummary">Exploring</h3>
+        <p id="pathSupportSummary">Choose a primary approach and any additional pathways that support you.</p>
+      </div>
+      <button class="approved-small-action" id="saveRecoveryPaths">Save My Paths</button>
+    </div>
+
+    <div class="path-section">
+      <div class="path-section-head">
+        <div><span class="approved-kicker">PRIMARY APPROACH</span><h3>What best describes your recovery right now?</h3></div>
+        <span>Choose one</span>
+      </div>
+      <div class="path-choice-grid primary" id="primaryPathChoices">
+        <button type="button" data-path-primary="12_step"><span>12</span><b>12-Step</b><small>Meetings, fellowship, sponsorship, and step work.</small></button>
+        <button type="button" data-path-primary="skills_based"><span>S</span><b>SMART / Skills-Based</b><small>Motivation, coping, thinking, and behavior-change skills.</small></button>
+        <button type="button" data-path-primary="therapy_counseling"><span>♡</span><b>Therapy &amp; Counseling</b><small>Professional behavioral-health support and deeper pattern work.</small></button>
+        <button type="button" data-path-primary="medication_supported"><span>+</span><b>Medication-Supported</b><small>Medication as one part of an individualized recovery plan.</small></button>
+        <button type="button" data-path-primary="peer_support"><span>◎</span><b>Peer Support</b><small>Lived-experience recovery connection and encouragement.</small></button>
+        <button type="button" data-path-primary="mixed"><span>◇</span><b>Mixed Approach</b><small>Use several approaches without forcing one to be the center.</small></button>
+        <button type="button" data-path-primary="exploring"><span>?</span><b>Exploring</b><small>You do not have to decide yet.</small></button>
+      </div>
+    </div>
+
+    <div class="path-section">
+      <div class="path-section-head">
+        <div><span class="approved-kicker">ADDITIONAL SUPPORT PATHS</span><h3>What else belongs in your recovery?</h3></div>
+        <span>Choose any</span>
+      </div>
+      <div class="path-support-grid" id="supportPathChoices">
+        <button type="button" data-path-support="12_step">12-Step</button>
+        <button type="button" data-path-support="skills_based">SMART / Skills</button>
+        <button type="button" data-path-support="therapy_counseling">Therapy / Counseling</button>
+        <button type="button" data-path-support="medication_supported">Medication-Supported</button>
+        <button type="button" data-path-support="peer_support">Peer Support</button>
+        <button type="button" data-path-support="faith_spiritual">Faith / Spiritual Support</button>
+        <button type="button" data-path-support="recovery_community">Recovery Community</button>
+        <button type="button" data-path-support="health_wellness">Health / Wellness</button>
+      </div>
+    </div>
+
+    <div class="approved-two path-belief-row">
+      <article class="approved-wide-module">
+        <div class="approved-icon purple-icon">✦</div>
+        <div>
+          <small>FAITH / SPIRITUALITY</small>
+          <h3 id="pathBeliefTitle">Preference is separate from pathway</h3>
+          <p id="pathBeliefText">Lellee only includes belief-aligned options when you choose them.</p>
+          <button class="approved-link" data-page="settings">Change Belief Preferences →</button>
         </div>
-      </section>
+      </article>
+
+      <article class="approved-wide-module">
+        <div class="approved-icon green-icon">✓</div>
+        <div>
+          <small>WHAT CHANGES IN LELLEE?</small>
+          <h3>Content can adapt; safety standards do not.</h3>
+          <p>Path preferences can influence Learn, Tools, Resources, and optional prompts. They never override urgent medical or safety guidance.</p>
+        </div>
+      </article>
+    </div>
+
+    <div class="path-section">
+      <div class="path-section-head">
+        <div><span class="approved-kicker">EXPLORE A PATH</span><h3>Learn what each approach can contribute</h3></div>
+      </div>
+      <div id="pathExplorer" class="path-explorer"></div>
+    </div>
+  </div>
+</section>
+
 
       
 <section class="page" id="page-meetings">
@@ -1670,43 +1740,92 @@ Includes the approved Lellee consumer experience from early recovery through lif
 
       
 
+
 <section class="page" id="page-resources">
   <div class="approved-inner">
     <div class="approved-inner-head">
-      <div><span class="approved-kicker">RESOURCES • NEWS &amp; LOCAL</span><h2>Useful information without the noise</h2><p>Lellee uses your saved city and state to prioritize nearby recovery support and relevant news.</p></div>
-      <span class="approved-location" id="resourceLocation">Your area</span>
-    </div>
-
-    <div class="approved-resource-tabs">
-      <button class="active" data-resource-tab="local">Local Support</button>
-      <button data-resource-tab="news">Recovery News</button>
-      <button data-resource-tab="saved">Saved</button>
-    </div>
-
-    <div id="resourceLocalPanel">
-      <div class="approved-resource-filter">
-        <button class="active" data-resource-type="all">All</button>
-        <button data-resource-type="meeting">Meetings</button>
-        <button data-resource-type="treatment">Treatment</button>
-        <button data-resource-type="recovery_residence">Recovery Residences</button>
-        <button data-resource-type="peer_support">Peer Support</button>
-        <button data-resource-type="community">Community</button>
+      <div>
+        <span class="approved-kicker">RESOURCES</span>
+        <h2>Find support without the noise</h2>
+        <p>Use location, type, pathway, and access filters. Sponsored listings are always labeled and never determine Lellee safety guidance.</p>
       </div>
-      <div id="localResourceList" class="approved-list"></div>
+      <div class="resource-location-pill">⌂ <span id="resourceLocation">Your area</span></div>
     </div>
 
-    <div id="resourceNewsPanel" class="hidden">
-      <div class="approved-news-intro">
-        <div><span class="approved-kicker">CURATED RECOVERY NEWS</span><h3>National, state, and local</h3><p>Designed for relevance rather than endless scrolling.</p></div>
+    <div class="resource-main-tabs">
+      <button class="active" data-resource-view="finder">Resource Finder</button>
+      <button data-resource-view="news">Recovery News</button>
+      <button data-resource-view="saved">Saved</button>
+    </div>
+
+    <div id="resourceFinderPanel">
+      <div class="resource-search-row">
+        <input id="resourceSearch" placeholder="Search resources">
+        <select id="resourcePathFilter">
+          <option value="">All recovery paths</option>
+          <option value="12_step">12-Step</option>
+          <option value="skills_based">SMART / Skills</option>
+          <option value="therapy_counseling">Therapy / Counseling</option>
+          <option value="medication_supported">Medication-Supported</option>
+          <option value="peer_support">Peer Support</option>
+          <option value="faith_spiritual">Faith / Spiritual</option>
+        </select>
+        <select id="resourceAccessFilter">
+          <option value="">Any access</option>
+          <option value="free">Free</option>
+          <option value="low_cost">Low cost</option>
+          <option value="virtual">Virtual available</option>
+        </select>
       </div>
-      <div id="recoveryNewsList" class="approved-list"></div>
+
+      <div class="resource-type-chips">
+        <button class="active" data-resource-type-v2="all">All</button>
+        <button data-resource-type-v2="meeting">Meetings</button>
+        <button data-resource-type-v2="treatment">Treatment</button>
+        <button data-resource-type-v2="recovery_residence">Recovery Residences</button>
+        <button data-resource-type-v2="peer_support">Peer Support</button>
+        <button data-resource-type-v2="community">Community</button>
+        <button data-resource-type-v2="housing">Housing</button>
+        <button data-resource-type-v2="employment">Employment</button>
+      </div>
+
+      <div id="sponsoredResourceSection" class="sponsored-resource-section hidden">
+        <div class="sponsored-resource-head">
+          <div><span class="approved-kicker">SPONSORED RESOURCE</span><h3>Clearly labeled paid placement</h3></div>
+          <small>Payment does not affect safety or clinical guidance.</small>
+        </div>
+        <div id="sponsoredResourceList" class="resource-card-grid"></div>
+      </div>
+
+      <div class="resource-results-head">
+        <div><span class="approved-kicker">VETTED DIRECTORY</span><h3 id="resourceResultTitle">Resources near you</h3></div>
+        <span id="resourceResultCount">0 results</span>
+      </div>
+      <div id="resourceFinderList" class="resource-card-grid"></div>
     </div>
 
-    <div id="resourceSavedPanel" class="hidden">
-      <div id="savedResourceList" class="approved-list"></div>
+    <div id="resourceNewsPanelV2" class="hidden">
+      <div class="approved-insight-panel">
+        <span class="approved-kicker">CURATED RECOVERY NEWS</span>
+        <h3>Relevant information rather than endless scrolling</h3>
+        <p>Only reviewed and published recovery-related items appear here. News is kept separate from Today so it does not crowd the daily recovery experience.</p>
+      </div>
+      <div id="resourceNewsListV2" class="resource-news-list"></div>
+    </div>
+
+    <div id="resourceSavedPanelV2" class="hidden">
+      <div class="resource-results-head">
+        <div><span class="approved-kicker">SAVED</span><h3>Resources you want to keep close</h3></div>
+      </div>
+      <div id="resourceSavedListV2" class="resource-card-grid"></div>
+    </div>
+
+    <div class="resource-ethics-note">
+      <b>Directory standard:</b> Lellee can accept clearly labeled sponsorship for directory visibility, but sponsored status does not make a provider safer, clinically appropriate, or recommended for a particular person. Treatment referral compensation should not be implemented without legal review.
     </div>
   </div>
 </section>
+
 
 
 
@@ -3232,5 +3351,6 @@ Includes:
 <script src="/group-b-production.js"></script>
 <script src="/guided-reviews.js"></script>
 <script src="/connections-progress.js"></script>
+<script src="/paths-resources.js"></script>
 </body>
 </html>
