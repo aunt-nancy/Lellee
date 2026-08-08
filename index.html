@@ -904,6 +904,15 @@ dialog::backdrop{background:rgba(7,8,21,.55);backdrop-filter:blur(5px)}
 @media(max-width:820px){.lellee-install{bottom:76px}}
 @media(display-mode:standalone){.lellee-install{display:none!important}}
 
+
+/* Notifications / Reminder Center */
+.approved-notification-settings{margin-top:12px;border:1px solid #e6e2e7;border-radius:10px;background:#fff;overflow:hidden}
+.approved-setting-note{font-size:.6rem;color:#777;margin:0 0 10px}
+.approved-setting-actions{display:flex;gap:10px;align-items:center}
+.approved-reminder-actions{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}
+.approved-reminder-actions button{border:1px solid #e0dbe3;background:#fff;border-radius:6px;padding:6px 7px;color:#5f5269;font-size:.55rem;font-weight:800}
+@media(max-width:820px){.approved-reminder-actions{grid-column:2}.approved-list-row{grid-template-columns:28px 1fr}.approved-reminder-actions{margin-top:4px}}
+
 </style>
 <title>Lellee — Approved Interior Rebuild</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -1492,6 +1501,148 @@ Includes the approved Lellee consumer experience from early recovery through lif
     </div>
   </div>
 </section>
+
+<section class="page" id="page-notifications">
+  <div class="approved-inner">
+    <div class="approved-inner-head">
+      <div>
+        <span class="approved-kicker">NOTIFICATIONS &amp; REMINDERS</span>
+        <h2>Helpful, not noisy</h2>
+        <p>Choose what Lellee reminds you about, when it can interrupt you, and what should stay quiet.</p>
+      </div>
+      <button class="approved-link" data-page="today">← Today</button>
+    </div>
+
+    <div class="approved-three">
+      <article class="approved-module tint-purple">
+        <span>◷</span>
+        <div>
+          <small>TODAY</small>
+          <h3>Daily recovery reminder</h3>
+          <p>A gentle nudge to check in or open today's guided recovery.</p>
+          <button class="approved-small-action" id="toggleDailyReminder">Configure</button>
+        </div>
+      </article>
+      <article class="approved-module tint-green">
+        <span>▣</span>
+        <div>
+          <small>MEETINGS</small>
+          <h3>Meeting reminders</h3>
+          <p>Remind me before saved meetings and peer-support events.</p>
+          <button class="approved-small-action" id="toggleMeetingReminder">Configure</button>
+        </div>
+      </article>
+      <article class="approved-module tint-blue">
+        <span>◆</span>
+        <div>
+          <small>MILESTONES</small>
+          <h3>Anniversary reminders</h3>
+          <p>Surface 30/60/90-day, yearly, and long-term milestone reflections.</p>
+          <button class="approved-small-action" id="toggleMilestoneReminder">Configure</button>
+        </div>
+      </article>
+    </div>
+
+    <div class="approved-notification-settings">
+      <div class="approved-setting-section">
+        <h3>Reminder preferences</h3>
+        <div class="approved-field-row">
+          <label>Daily recovery reminder
+            <select id="notifDailyEnabled">
+              <option value="true">On</option>
+              <option value="false">Off</option>
+            </select>
+          </label>
+          <label>Daily reminder time
+            <input type="time" id="notifDailyTime" value="09:00">
+          </label>
+        </div>
+
+        <div class="approved-field-row">
+          <label>Meeting reminders
+            <select id="notifMeetingEnabled">
+              <option value="true">On</option>
+              <option value="false">Off</option>
+            </select>
+          </label>
+          <label>Minutes before meeting
+            <select id="notifMeetingMinutes">
+              <option value="15">15 minutes</option>
+              <option value="30" selected>30 minutes</option>
+              <option value="60">1 hour</option>
+              <option value="120">2 hours</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="approved-field-row">
+          <label>Milestone reminders
+            <select id="notifMilestoneEnabled">
+              <option value="true">On</option>
+              <option value="false">Off</option>
+            </select>
+          </label>
+          <label>Weekly reflection
+            <select id="notifWeeklyEnabled">
+              <option value="true">On</option>
+              <option value="false">Off</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="approved-field-row">
+          <label>Weekly reflection day
+            <select id="notifWeeklyDay">
+              <option value="0">Sunday</option>
+              <option value="1">Monday</option>
+              <option value="2">Tuesday</option>
+              <option value="3">Wednesday</option>
+              <option value="4">Thursday</option>
+              <option value="5">Friday</option>
+              <option value="6">Saturday</option>
+            </select>
+          </label>
+          <label>Weekly reflection time
+            <input type="time" id="notifWeeklyTime" value="19:00">
+          </label>
+        </div>
+      </div>
+
+      <div class="approved-setting-section">
+        <h3>Quiet hours</h3>
+        <p class="approved-setting-note">Lellee should not interrupt sleep or private time.</p>
+        <div class="approved-field-row">
+          <label>Quiet hours start<input type="time" id="notifQuietStart" value="21:00"></label>
+          <label>Quiet hours end<input type="time" id="notifQuietEnd" value="08:00"></label>
+        </div>
+      </div>
+
+      <div class="approved-setting-section">
+        <h3>Browser / phone notifications</h3>
+        <p class="approved-setting-note" id="notificationPermissionStatus">Permission has not been requested.</p>
+        <div class="approved-setting-actions">
+          <button class="approved-small-action" id="requestNotifications">Allow Notifications</button>
+          <button class="approved-link" id="sendTestNotification">Send Test</button>
+        </div>
+      </div>
+
+      <div class="approved-settings-footer">
+        <button class="approved-link" id="resetNotificationPrefs">Reset defaults</button>
+        <button class="approved-small-action" id="saveNotificationPrefs">Save Reminder Settings</button>
+      </div>
+    </div>
+
+    <div class="approved-inner-head approved-planner-sectionhead">
+      <div>
+        <span class="approved-kicker">REMINDER CENTER</span>
+        <h2>Coming up</h2>
+        <p>Snooze, complete, or dismiss reminders without hunting through other pages.</p>
+      </div>
+      <button class="approved-link" id="refreshReminderCenter">Refresh</button>
+    </div>
+    <div id="reminderCenterList" class="approved-list"></div>
+  </div>
+</section>
 <section class="page" id="page-settings">
   <div class="approved-inner">
     <div class="approved-inner-head">
@@ -1527,7 +1678,7 @@ Includes the approved Lellee consumer experience from early recovery through lif
       </div>
 
       <div class="approved-settings-footer">
-        <button class="approved-link" data-page="story">Recovery Story &amp; Hardcopy</button>
+        <button class="approved-link" data-page="notifications">Notifications &amp; Reminders</button><button class="approved-link" data-page="story">Recovery Story &amp; Hardcopy</button>
         <button class="approved-small-action" id="saveSettings">Save Preferences</button>
       </div>
     </div>
