@@ -1048,6 +1048,7 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <link rel="stylesheet" href="/connections-progress.css">
 <link rel="stylesheet" href="/paths-resources.css">
 <link rel="stylesheet" href="/lellee-plus.css">
+<link rel="stylesheet" href="/plus-billing.css">
 </head>
 <body><a class="skip-link" href="#mainContent">Skip to main content</a><a class="lellee-skip" href="#lelleeMain">Skip to main content</a>
 <div id="onboardingOverlay" class="prod-overlay hidden">
@@ -2768,9 +2769,23 @@ Includes the approved Lellee consumer experience from early recovery through lif
       <div class="plus-price-pill"><span id="plusPriceMonthly">$3.99</span><small>/ month</small></div>
     </div>
     <div class="plus-hero">
-      <div class="plus-hero-copy"><span class="approved-kicker">OPTIONAL MEMBERSHIP</span><h3>Keep the core free. Pay only for the extras.</h3><p>Lellee Plus is designed around preservation, convenience, customization, and a deeper look at your own recovery history.</p><div class="plus-hero-actions"><button class="approved-small-action" id="startPlusMembership">Start Lellee Plus</button><button class="approved-link" id="showPlusComparison">Compare Free vs Plus →</button></div><small class="plus-no-pressure">Help Me Right Now and core coping tools remain free.</small></div>
+      <div class="plus-hero-copy"><span class="approved-kicker">OPTIONAL MEMBERSHIP</span><h3>Keep the core free. Pay only for the extras.</h3><p>Lellee Plus is designed around preservation, convenience, customization, and a deeper look at your own recovery history.</p><div class="plus-plan-row">
+          <label>Choose billing
+            <select id="plusPlanChoice">
+              <option value="monthly">Monthly — $3.99</option>
+              <option value="annual">Annual — $39.99</option>
+            </select>
+          </label>
+          <small>Cancel/manage billing through Stripe's secure customer portal.</small>
+        </div>
+        <div class="plus-hero-actions">
+          <button class="approved-small-action" id="startPlusMembership">Start Lellee Plus</button>
+          <button class="approved-link hidden" id="managePlusBilling">Manage Billing</button>
+          <button class="approved-link" id="showPlusComparison">Compare Free vs Plus →</button>
+        </div><small class="plus-no-pressure">Help Me Right Now and core coping tools remain free.</small></div>
       <div class="plus-review-preview"><span class="approved-kicker">PLUS FEATURE</span><h3>Your Recovery Review</h3><p>A weekly/monthly summary built from what you already saved—without diagnosing or grading you.</p><div class="plus-preview-lines"><div><span>✓</span><b>What helped most</b></div><div><span>↗</span><b>What showed up often</b></div><div><span>◇</span><b>What to carry forward</b></div></div></div>
     </div>
+    <div id="plusCheckoutBanner" class="plus-checkout-banner hidden"></div>
     <div id="plusStatusBand" class="plus-status-band"><div><span class="approved-kicker">MEMBERSHIP STATUS</span><h3 id="plusStatusTitle">Free account</h3><p id="plusStatusText">You have the full core recovery experience. Plus features are optional.</p></div><span id="plusStatusBadge">FREE</span></div>
     <div class="plus-feature-grid">
       <article><span class="plus-feature-icon">↗</span><small>RECOVERY REVIEW</small><h3>Weekly & Monthly Summaries</h3><p>Turn your own saved activity into a simple pattern summary and carry-forward plan.</p></article>
@@ -3392,5 +3407,6 @@ Includes:
 <script src="/connections-progress.js"></script>
 <script src="/paths-resources.js"></script>
 <script src="/lellee-plus.js"></script>
+<script src="/plus-billing.js"></script>
 </body>
 </html>
