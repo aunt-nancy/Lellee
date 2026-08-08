@@ -1,0 +1,11 @@
+
+.guided-review-lead{font-size:.59rem;color:#817984;line-height:1.45;margin:4px 0 9px}
+.guided-review-choices{display:flex;flex-wrap:wrap;gap:7px;margin:7px 0 4px}
+.guided-review-choices button{border:1px solid #ded7e2;background:#fff;border-radius:999px;padding:8px 11px;font-size:.6rem;font-weight:760;color:#584f5e;transition:.15s ease}
+.guided-review-choices button:hover{border-color:#bba8ca;background:#faf7fc}
+.guided-review-choices button.selected{background:#65409a;color:#fff;border-color:#65409a;box-shadow:0 4px 10px rgba(101,64,154,.12)}
+.guided-review-note{margin-top:12px}
+.guided-review-note label{display:block;font-size:.57rem;font-weight:820;color:#6f6873;margin-bottom:5px}
+.guided-review-note label span{font-weight:600;color:#99909c}
+.guided-review-note textarea{width:100%;min-height:76px;border:1px solid #e0dae2;border-radius:8px;background:#fcfbfc;padding:10px;font-size:.65rem;line-height:1.5;resize:vertical}
+.guided-review-sheet .approved-review-block{padding-top:17px;padding-bottom:17px}

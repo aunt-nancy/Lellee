@@ -1044,6 +1044,7 @@ Includes the approved Lellee consumer experience from early recovery through lif
       .guided-activity-note textarea{width:100%;min-height:72px;resize:vertical;border:1px solid #ddd7df;border-radius:8px;background:#fcfbfc;padding:9px 10px;font-size:.66rem;line-height:1.5}
       .guided-activity-hint{font-size:.53rem;color:#8a828d;margin-top:5px}
     </style>
+<link rel="stylesheet" href="/guided-reviews.css">
 </head>
 <body><a class="skip-link" href="#mainContent">Skip to main content</a><a class="lellee-skip" href="#lelleeMain">Skip to main content</a>
 <div id="onboardingOverlay" class="prod-overlay hidden">
@@ -1757,7 +1758,20 @@ Includes the approved Lellee consumer experience from early recovery through lif
       <div class="approved-review-block">
         <span class="approved-kicker">WHAT I NOTICE</span>
         <h3>What feels different when you see these responses side by side?</h3>
-        <textarea id="thenNowReflection" placeholder="Optional reflection..."></textarea>
+        <div class="guided-review-choices" id="thenNowObservationChoices">
+          <button type="button">I ask for help sooner</button>
+          <button type="button">I notice things earlier</button>
+          <button type="button">My reactions are different</button>
+          <button type="button">My support has changed</button>
+          <button type="button">My priorities changed</button>
+          <button type="button">Some things have not changed</button>
+          <button type="button">The change is small but real</button>
+          <button type="button">I am not sure yet</button>
+        </div>
+        <div class="guided-review-note">
+          <label for="thenNowReflection">Anything else you notice? <span>Optional</span></label>
+          <textarea id="thenNowReflection" placeholder="Optional reflection..."></textarea>
+        </div>
       </div>
       <div class="approved-settings-footer">
         <label class="approved-story-check"><input type="checkbox" id="thenNowStoryOptIn"> Allow this comparison reflection in My Recovery Story</label>
@@ -2263,9 +2277,150 @@ Includes the approved Lellee consumer experience from early recovery through lif
     <button class="approved-small-action" id="runDiagnostics" style="margin-top:12px">Run Health Check</button>
   </div>
 </section>
-<section class="page" id="page-weekly-review"><div class="approved-inner"><div class="approved-inner-head"><div><span class="approved-kicker">WEEKLY REVIEW</span><h2>Notice the week without grading it</h2><p>A short reflection turns daily check-ins into useful recovery insight.</p></div><button class="approved-link" data-page="today">← Today</button></div><div class="approved-review-sheet"><div class="approved-review-block"><span class="approved-kicker">WHAT HELPED</span><h3>What supported your recovery this week?</h3><textarea id="weeklyHelped" placeholder="Support, meetings, routine, rest, boundaries..."></textarea></div><div class="approved-review-block"><span class="approved-kicker">WHAT WAS HARD</span><h3>What asked the most from you?</h3><textarea id="weeklyHard" placeholder="Cravings, stress, family, money, sleep..."></textarea></div><div class="approved-review-block"><span class="approved-kicker">NEXT WEEK</span><h3>What deserves a little more care?</h3><textarea id="weeklyNext"></textarea></div><div class="approved-settings-footer"><button class="approved-small-action" id="saveWeeklyReview">Save Weekly Review</button></div></div></div></section>
+
+<section class="page" id="page-weekly-review">
+  <div class="approved-inner">
+    <div class="approved-inner-head">
+      <div><span class="approved-kicker">WEEKLY REVIEW</span><h2>Notice the week without grading it</h2><p>A short review helps turn daily recovery activity into useful patterns.</p></div>
+      <button class="approved-link" data-page="today">← Today</button>
+    </div>
+
+    <div class="approved-review-sheet guided-review-sheet">
+      <div class="approved-review-block">
+        <span class="approved-kicker">WHAT HELPED</span>
+        <h3>What supported your recovery this week?</h3>
+        <p class="guided-review-lead">Choose anything that played a useful role.</p>
+        <div class="guided-review-choices" id="weeklyHelpedChoices">
+          <button type="button">Support from someone</button>
+          <button type="button">Meeting / treatment</button>
+          <button type="button">Routine</button>
+          <button type="button">Sleep / rest</button>
+          <button type="button">Coping tools</button>
+          <button type="button">Boundaries</button>
+          <button type="button">Work / responsibilities</button>
+          <button type="button">Faith / spirituality</button>
+          <button type="button">Healthy enjoyment</button>
+          <button type="button">Something else</button>
+        </div>
+      </div>
+
+      <div class="approved-review-block">
+        <span class="approved-kicker">WHAT WAS HARD</span>
+        <h3>What asked the most from you?</h3>
+        <p class="guided-review-lead">This is information, not a score.</p>
+        <div class="guided-review-choices" id="weeklyHardChoices">
+          <button type="button">Cravings</button>
+          <button type="button">Stress</button>
+          <button type="button">Family</button>
+          <button type="button">Relationships</button>
+          <button type="button">Money</button>
+          <button type="button">Work / school</button>
+          <button type="button">Sleep</button>
+          <button type="button">Loneliness</button>
+          <button type="button">Health</button>
+          <button type="button">No major challenge</button>
+        </div>
+      </div>
+
+      <div class="approved-review-block">
+        <span class="approved-kicker">NEXT WEEK</span>
+        <h3>What deserves a little more care?</h3>
+        <div class="guided-review-choices single-preferred" id="weeklyNextChoices">
+          <button type="button">Stay connected</button>
+          <button type="button">Protect sleep</button>
+          <button type="button">Attend support</button>
+          <button type="button">Use coping tools earlier</button>
+          <button type="button">Set a boundary</button>
+          <button type="button">Take care of my health</button>
+          <button type="button">Handle one practical task</button>
+          <button type="button">Make room for enjoyment</button>
+        </div>
+        <div class="guided-review-note">
+          <label for="weeklyNote">Anything else you want to remember? <span>Optional</span></label>
+          <textarea id="weeklyNote" placeholder="A few words is enough..."></textarea>
+        </div>
+      </div>
+
+      <div class="approved-settings-footer">
+        <span class="approved-setting-note">Private to your Lellee account.</span>
+        <button class="approved-small-action" id="saveWeeklyReview">Save Weekly Review</button>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="page" id="page-insights"><div class="approved-inner"><div class="approved-inner-head"><div><span class="approved-kicker">MY INSIGHTS</span><h2>Patterns from your own recovery</h2><p>Lellee summarizes what you entered. It does not diagnose or score you.</p></div><button class="approved-link" data-page="progress">← Progress</button></div><div class="approved-three"><article class="approved-module tint-purple"><span>↗</span><div><small>MOST COMMON SUPPORT</small><h3 id="insightSupport">Still learning</h3><p>What appears most often as helpful.</p></div></article><article class="approved-module tint-blue"><span>◎</span><div><small>COMMON FOCUS</small><h3 id="insightChallenge">Still learning</h3><p>What appears repeatedly as needing care.</p></div></article><article class="approved-module tint-green"><span>✓</span><div><small>REFLECTION RHYTHM</small><h3 id="insightConsistency">Beginning</h3><p>Days with saved reflections—not a recovery grade.</p></div></article></div><div class="approved-insight-panel"><span class="approved-kicker">RECENT PATTERN</span><h3 id="insightNarrative">As you use Lellee, a simple summary will appear here.</h3><p>Insights are descriptive and meant to help you notice what deserves attention.</p></div></div></section>
-<section class="page" id="page-monthly-review"><div class="approved-inner"><div class="approved-inner-head"><div><span class="approved-kicker">MONTHLY REVIEW</span><h2>Look back from a little farther away</h2><p>Monthly reflection can reveal changes that are hard to notice day to day.</p></div><button class="approved-link" data-page="progress">← Progress</button></div><div class="approved-two"><article class="approved-wide-module"><div class="approved-icon purple-icon">◷</div><div><small>THIS MONTH</small><h3 id="monthlyDaysActive">— days reflected</h3><p>Days with saved guided responses.</p></div></article><article class="approved-wide-module"><div class="approved-icon green-icon">◆</div><div><small>RECOVERY DAY</small><h3 id="monthlyRecoveryDay">—</h3><p>Your current place in the long view.</p></div></article></div><div class="approved-review-sheet" style="margin-top:11px"><div class="approved-review-block"><span class="approved-kicker">LOOKING BACK</span><h3>What are you proud you handled differently?</h3><textarea id="monthlyProud"></textarea></div><div class="approved-review-block"><span class="approved-kicker">LOOKING AHEAD</span><h3>What do you want to protect or strengthen next month?</h3><textarea id="monthlyNext"></textarea></div><div class="approved-settings-footer"><button class="approved-small-action" id="saveMonthlyReview">Save Monthly Review</button></div></div></div></section>
+
+<section class="page" id="page-monthly-review">
+  <div class="approved-inner">
+    <div class="approved-inner-head">
+      <div><span class="approved-kicker">MONTHLY REVIEW</span><h2>Look back from a little farther away</h2><p>A monthly view can make quieter changes easier to notice.</p></div>
+      <button class="approved-link" data-page="progress">← Progress</button>
+    </div>
+
+    <div class="approved-two">
+      <article class="approved-wide-module"><div class="approved-icon purple-icon">◷</div><div><small>THIS MONTH</small><h3 id="monthlyDaysActive">— days reflected</h3><p>Days with saved guided responses.</p></div></article>
+      <article class="approved-wide-module"><div class="approved-icon green-icon">◆</div><div><small>RECOVERY DAY</small><h3 id="monthlyRecoveryDay">—</h3><p>Your current place in the long view.</p></div></article>
+    </div>
+
+    <div class="approved-review-sheet guided-review-sheet" style="margin-top:11px">
+      <div class="approved-review-block">
+        <span class="approved-kicker">WHAT CHANGED</span>
+        <h3>What feels stronger or different than a month ago?</h3>
+        <div class="guided-review-choices" id="monthlyGrowthChoices">
+          <button type="button">I ask for help sooner</button>
+          <button type="button">I notice triggers earlier</button>
+          <button type="button">My routines are steadier</button>
+          <button type="button">My boundaries are clearer</button>
+          <button type="button">I cope differently</button>
+          <button type="button">My relationships are changing</button>
+          <button type="button">I trust myself more</button>
+          <button type="button">I am still figuring it out</button>
+        </div>
+      </div>
+
+      <div class="approved-review-block">
+        <span class="approved-kicker">WHAT NEEDS CARE</span>
+        <h3>What deserves more attention next month?</h3>
+        <div class="guided-review-choices" id="monthlyCareChoices">
+          <button type="button">Recovery support</button>
+          <button type="button">Cravings / triggers</button>
+          <button type="button">Sleep / health</button>
+          <button type="button">Relationships</button>
+          <button type="button">Money</button>
+          <button type="button">Work / school</button>
+          <button type="button">Mental health</button>
+          <button type="button">Purpose / enjoyment</button>
+        </div>
+      </div>
+
+      <div class="approved-review-block">
+        <span class="approved-kicker">ONE THING TO PROTECT</span>
+        <h3>What do you want to carry into the next month?</h3>
+        <div class="guided-review-choices single-preferred" id="monthlyProtectChoices">
+          <button type="button">Connection</button>
+          <button type="button">My routine</button>
+          <button type="button">Honesty</button>
+          <button type="button">Boundaries</button>
+          <button type="button">Sleep / health</button>
+          <button type="button">Meetings / treatment</button>
+          <button type="button">Faith / spirituality</button>
+          <button type="button">Healthy enjoyment</button>
+        </div>
+        <div class="guided-review-note">
+          <label for="monthlyNote">What would you tell yourself about this month? <span>Optional</span></label>
+          <textarea id="monthlyNote" placeholder="Optional reflection..."></textarea>
+        </div>
+      </div>
+
+      <div class="approved-settings-footer">
+        <span class="approved-setting-note">No grade. No diagnosis. Just your own recovery history.</span>
+        <button class="approved-small-action" id="saveMonthlyReview">Save Monthly Review</button>
+      </div>
+    </div>
+  </div>
+</section>
+
 
 <section class="page" id="page-learn">
   <div class="approved-inner">
@@ -2956,5 +3111,6 @@ Includes:
 -->
 <script src="/group-a-core.js"></script>
 <script src="/group-b-production.js"></script>
+<script src="/guided-reviews.js"></script>
 </body>
 </html>
