@@ -1050,6 +1050,7 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <link rel="stylesheet" href="/lellee-plus.css">
 <link rel="stylesheet" href="/plus-billing.css">
 <link rel="stylesheet" href="/plus-features.css">
+<link rel="stylesheet" href="/admin-operations.css">
 </head>
 <body><a class="skip-link" href="#mainContent">Skip to main content</a><a class="lellee-skip" href="#lelleeMain">Skip to main content</a>
 <div id="onboardingOverlay" class="prod-overlay hidden">
@@ -1083,6 +1084,7 @@ Includes the approved Lellee consumer experience from early recovery through lif
       <button class="nav-item" data-page="resources"><span class="nav-icon">◇</span>Resources</button>
       <button class="nav-item" data-page="community"><span class="nav-icon">♧</span>Community</button>
       <button class="nav-item" data-page="milestones"><span class="nav-icon">◆</span>Milestones</button><button class="nav-item" data-page="then-now"><span class="nav-icon">↔</span>Then & Now</button><button class="nav-item" data-page="story"><span class="nav-icon">▤</span>My Recovery Story</button><button class="nav-item" data-page="history"><span class="nav-icon">◷</span>My History</button><button class="nav-item" data-page="longterm"><span class="nav-icon">∞</span>Year 3+</button><button class="nav-item" data-page="account"><span class="nav-icon">◉</span>Account & Privacy</button><button class="nav-item" data-page="plus"><span class="nav-icon">✦</span>Lellee Plus</button>
+      <button class="nav-item hidden" id="adminNavItem" data-page="admin"><span class="nav-icon">⚙</span>Admin</button>
       <button class="nav-item" data-page="settings"><span class="nav-icon">⚙</span>Settings</button>
     </nav>
     <div class="side-spacer"></div>
@@ -2903,6 +2905,78 @@ Includes the approved Lellee consumer experience from early recovery through lif
   </div>
 </section>
 
+
+<section class="page" id="page-admin">
+  <div class="approved-inner">
+    <div class="approved-inner-head">
+      <div><span class="approved-kicker">ADMIN</span><h2>Operate Lellee without touching the database directly</h2><p>Manage vetted resources, sponsored placement, recovery news, Plus pricing, and publishing controls.</p></div>
+      <span class="admin-role-pill" id="adminRoleBadge">ADMIN</span>
+    </div>
+
+    <div id="adminUnauthorized" class="admin-unauthorized hidden">
+      <span>🔒</span>
+      <div><h3>Admin access required</h3><p>This page is not available to standard Lellee accounts.</p></div>
+    </div>
+
+    <div id="adminContent">
+      <div class="admin-metric-grid">
+        <article><b id="adminResourceCount">0</b><small>Published resources</small></article>
+        <article><b id="adminSponsoredCount">0</b><small>Sponsored resources</small></article>
+        <article><b id="adminNewsCount">0</b><small>Published news</small></article>
+        <article><b id="adminPlusCount">0</b><small>Active Plus members</small></article>
+      </div>
+
+      <div class="admin-tabs">
+        <button class="active" data-admin-tab="resources">Resources</button>
+        <button data-admin-tab="news">Recovery News</button>
+        <button data-admin-tab="sponsors">Sponsors</button>
+        <button data-admin-tab="settings">App Settings</button>
+      </div>
+
+      <div id="adminResourcesPanel">
+        <div class="admin-panel-head">
+          <div><span class="approved-kicker">RESOURCE DIRECTORY</span><h3>Vetted and sponsored listings</h3></div>
+          <button class="approved-small-action" id="adminNewResource">+ Add Resource</button>
+        </div>
+        <div class="admin-filter-row">
+          <input id="adminResourceSearch" placeholder="Search resources">
+          <select id="adminResourceType"><option value="">All types</option><option value="meeting">Meeting</option><option value="treatment">Treatment</option><option value="recovery_residence">Recovery Residence</option><option value="peer_support">Peer Support</option><option value="community">Community</option><option value="housing">Housing</option><option value="employment">Employment</option></select>
+          <select id="adminResourceStatus"><option value="">Any status</option><option value="published">Published</option><option value="draft">Draft</option><option value="sponsored">Sponsored</option></select>
+        </div>
+        <div id="adminResourceList" class="admin-list"></div>
+      </div>
+
+      <div id="adminNewsPanel" class="hidden">
+        <div class="admin-panel-head">
+          <div><span class="approved-kicker">CURATED RECOVERY NEWS</span><h3>Reviewed items only</h3></div>
+          <button class="approved-small-action" id="adminNewNews">+ Add News Item</button>
+        </div>
+        <div id="adminNewsList" class="admin-list"></div>
+      </div>
+
+      <div id="adminSponsorsPanel" class="hidden">
+        <div class="admin-panel-head">
+          <div><span class="approved-kicker">SPONSORSHIP</span><h3>Clearly labeled paid placement</h3></div>
+          <button class="approved-small-action" id="adminNewSponsor">+ Add Sponsor</button>
+        </div>
+        <div class="admin-ethics-note"><b>Guardrail:</b> Sponsorship can affect directory visibility only. It does not change Help Me Right Now, safety guidance, clinical appropriateness, or user-specific recommendations.</div>
+        <div id="adminSponsorList" class="admin-list"></div>
+      </div>
+
+      <div id="adminSettingsPanel" class="hidden">
+        <div class="admin-panel-head"><div><span class="approved-kicker">APP SETTINGS</span><h3>Operational configuration</h3></div></div>
+        <div class="admin-settings-grid">
+          <label>Plus monthly price<input id="adminPlusMonthly" type="number" step=".01" min="0"></label>
+          <label>Plus annual price<input id="adminPlusAnnual" type="number" step=".01" min="0"></label>
+          <label>Public directory sponsorship<select id="adminSponsorshipEnabled"><option value="true">Enabled</option><option value="false">Disabled</option></select></label>
+          <label>Recovery news<select id="adminNewsEnabled"><option value="true">Enabled</option><option value="false">Disabled</option></select></label>
+        </div>
+        <div class="approved-settings-footer"><span class="approved-setting-note">These controls affect presentation only. Billing secrets and service-role keys remain server-side.</span><button class="approved-small-action" id="adminSaveSettings">Save Settings</button></div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="page" id="page-settings">
   <div class="approved-inner">
     <div class="approved-inner-head">
@@ -3500,5 +3574,61 @@ Includes:
 <script src="/lellee-plus.js"></script>
 <script src="/plus-billing.js"></script>
 <script src="/plus-features.js"></script>
+
+<div class="admin-overlay hidden" id="adminResourceEditor">
+  <div class="admin-editor-card">
+    <div class="admin-editor-head"><div><span class="approved-kicker">RESOURCE</span><h3 id="adminResourceEditorTitle">Add Resource</h3></div><button class="approved-link" data-close-admin-editor="adminResourceEditor">Close</button></div>
+    <div class="admin-editor-grid">
+      <label>Name<input id="arName"></label>
+      <label>Type<select id="arType"><option value="meeting">Meeting</option><option value="treatment">Treatment</option><option value="recovery_residence">Recovery Residence</option><option value="peer_support">Peer Support</option><option value="community">Community</option><option value="housing">Housing</option><option value="employment">Employment</option></select></label>
+      <label>City<input id="arCity"></label>
+      <label>State<input id="arState" maxlength="2"></label>
+      <label>Phone<input id="arPhone"></label>
+      <label>Website<input id="arWebsite"></label>
+      <label>Cost<select id="arCost"><option value="">Not specified</option><option value="free">Free</option><option value="low_cost">Low cost</option><option value="standard">Standard</option><option value="varies">Varies</option></select></label>
+      <label>Virtual<select id="arVirtual"><option value="false">No</option><option value="true">Yes</option></select></label>
+      <label class="admin-wide">Description<textarea id="arDescription"></textarea></label>
+      <label>Published<select id="arPublished"><option value="true">Yes</option><option value="false">No</option></select></label>
+      <label>Sponsored<select id="arSponsored"><option value="false">No</option><option value="true">Yes</option></select></label>
+      <label>Sponsor label<input id="arSponsorLabel" placeholder="Sponsored"></label>
+      <label>Verified date<input id="arVerified" type="date"></label>
+      <label class="admin-wide">Pathways<input id="arPathways" placeholder="12_step, peer_support, faith_spiritual"></label>
+    </div>
+    <div class="approved-settings-footer"><button class="approved-link" id="adminDeleteResource">Delete</button><button class="approved-small-action" id="adminSaveResource">Save Resource</button></div>
+  </div>
+</div>
+
+<div class="admin-overlay hidden" id="adminNewsEditor">
+  <div class="admin-editor-card">
+    <div class="admin-editor-head"><div><span class="approved-kicker">RECOVERY NEWS</span><h3 id="adminNewsEditorTitle">Add News Item</h3></div><button class="approved-link" data-close-admin-editor="adminNewsEditor">Close</button></div>
+    <div class="admin-editor-grid">
+      <label class="admin-wide">Title<input id="anTitle"></label>
+      <label>Source name<input id="anSource"></label>
+      <label>Source URL<input id="anUrl"></label>
+      <label>Published date<input id="anDate" type="date"></label>
+      <label>Published<select id="anPublished"><option value="false">No</option><option value="true">Yes</option></select></label>
+      <label class="admin-wide">Summary<textarea id="anSummary"></textarea></label>
+    </div>
+    <div class="approved-settings-footer"><button class="approved-link" id="adminDeleteNews">Delete</button><button class="approved-small-action" id="adminSaveNews">Save News Item</button></div>
+  </div>
+</div>
+
+<div class="admin-overlay hidden" id="adminSponsorEditor">
+  <div class="admin-editor-card">
+    <div class="admin-editor-head"><div><span class="approved-kicker">SPONSOR</span><h3 id="adminSponsorEditorTitle">Add Sponsor</h3></div><button class="approved-link" data-close-admin-editor="adminSponsorEditor">Close</button></div>
+    <div class="admin-editor-grid">
+      <label>Organization<input id="asName"></label>
+      <label>Contact email<input id="asEmail"></label>
+      <label>Start date<input id="asStart" type="date"></label>
+      <label>End date<input id="asEnd" type="date"></label>
+      <label>Status<select id="asStatus"><option value="prospect">Prospect</option><option value="active">Active</option><option value="paused">Paused</option><option value="ended">Ended</option></select></label>
+      <label>Monthly amount<input id="asAmount" type="number" step=".01" min="0"></label>
+      <label class="admin-wide">Notes<textarea id="asNotes"></textarea></label>
+    </div>
+    <div class="approved-settings-footer"><button class="approved-link" id="adminDeleteSponsor">Delete</button><button class="approved-small-action" id="adminSaveSponsor">Save Sponsor</button></div>
+  </div>
+</div>
+
+<script src="/admin-operations.js"></script>
 </body>
 </html>
