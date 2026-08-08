@@ -978,6 +978,19 @@ button,a{cursor:pointer}
 @media(max-width:850px){.approved-milestone-timeline{grid-template-columns:1fr 1fr}.approved-then-now-grid{grid-template-columns:1fr}.approved-time-arrow{transform:rotate(90deg)}.approved-story-hero{display:block}.approved-story-edition{margin-top:14px}.approved-story-paper{padding:18px}}
 @media print{body *{visibility:hidden!important}.approved-story-paper,.approved-story-paper *{visibility:visible!important}.approved-story-paper{position:absolute;left:0;top:0;width:100%;max-width:none;border:0;box-shadow:none}.story-print-actions{display:none!important}}
 
+
+/* Guided Recovery Journey Engine */
+.approved-journey-hero{display:grid;grid-template-columns:100px 1fr 190px;gap:18px;align-items:center;border:1px solid #ded8e3;background:linear-gradient(135deg,#f3eef7,#fffaf4);border-radius:12px;padding:19px}
+.approved-journey-ring{width:82px;height:82px;border-radius:50%;border:8px solid #dfd3ea;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:inset 0 0 0 1px #f1edf4}.approved-journey-ring span{font-family:Georgia,serif;font-size:1.45rem;color:#4f3d61}.approved-journey-ring small{font-size:.48rem;font-weight:900;letter-spacing:.12em;color:#817889}
+.approved-journey-copy h3{font-family:Georgia,serif;font-size:1.05rem;font-weight:500;margin:4px 0}.approved-journey-copy p{font-size:.62rem;color:#6f6972;line-height:1.5;margin:0 0 9px}.approved-journey-meter{height:6px;background:#e7e1e9;border-radius:20px;overflow:hidden}.approved-journey-meter i{display:block;height:100%;width:0;background:linear-gradient(90deg,#8a70a7,#b59ecb);border-radius:20px}.approved-journey-copy>small{font-size:.53rem;color:#847d87}
+.approved-journey-next{border-left:1px solid #ddd4e0;padding-left:17px}.approved-journey-next small{display:block;font-size:.49rem;font-weight:850;letter-spacing:.1em;color:#7f7582}.approved-journey-next b{display:block;font-family:Georgia,serif;font-size:.83rem;margin:4px 0;color:#4d4650}.approved-journey-next span{font-size:.55rem;line-height:1.4;color:#79717b}
+.approved-phase-roadmap{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}.approved-phase-step{display:grid;grid-template-columns:30px 1fr;gap:9px;border:1px solid #e7e2e8;background:#fff;border-radius:9px;padding:11px}.approved-phase-step>span{width:28px;height:28px;border-radius:8px;background:#f0ebf4;color:#72558e;display:grid;place-items:center;font-size:.62rem;font-weight:900}.approved-phase-step small{font-size:.48rem;color:#8b8490}.approved-phase-step h3{font-size:.66rem;margin:2px 0}.approved-phase-step p{font-size:.53rem;color:#7a747d;margin:0}.approved-phase-step.future{opacity:.48}.approved-phase-step.current{background:#f7f3fa;border-color:#d9c9e5}.approved-phase-step.past{background:#fbfdfb}
+.approved-guided-shell{max-width:800px;margin:auto}.approved-guided-progress{display:grid;grid-template-columns:65px 1fr 90px;gap:10px;align-items:center;margin-bottom:12px}.approved-guided-progress>span{font-size:.56rem;font-weight:900;letter-spacing:.08em;color:#68458d}.approved-guided-progress>div{height:6px;background:#ece7ed;border-radius:30px;overflow:hidden}.approved-guided-progress i{display:block;height:100%;background:linear-gradient(90deg,#8b70a8,#bfaed0);border-radius:30px}.approved-guided-progress small{text-align:right;font-size:.54rem;color:#7b747e}
+.approved-guided-card{border:1px solid #e5e0e7;background:#fff;border-radius:11px;padding:19px;margin:10px 0}.approved-guided-card h3{font-family:Georgia,serif;font-size:.9rem;font-weight:500;margin:5px 0}.approved-guided-card>p{font-size:.62rem;color:#777;line-height:1.5}.approved-guided-card textarea{width:100%;min-height:105px;border:1px solid #e1dce4;background:#fcfbfc;border-radius:8px;padding:11px;font-size:.68rem;line-height:1.5}.approved-next-step-card{background:linear-gradient(135deg,#faf7fc,#fffdf8)}.approved-guided-footer{display:flex;justify-content:space-between;align-items:center;padding:8px 2px}
+.approved-history-list{display:grid;gap:8px}.approved-history-row{border:1px solid #ebe6ec;background:#fcfbfc;border-radius:8px;padding:11px}.approved-history-row small{font-size:.5rem;text-transform:uppercase;color:#857d88}.approved-history-row h3{font-size:.66rem;margin:3px 0}.approved-history-row p{font-size:.58rem;color:#6f6972;line-height:1.5;margin:0}.approved-history-row em{font-family:Georgia,serif;color:#5e565f}
+@media(max-width:850px){.approved-journey-hero{grid-template-columns:78px 1fr}.approved-journey-next{grid-column:1/-1;border-left:0;border-top:1px solid #ddd4e0;padding:12px 0 0}.approved-journey-ring{width:68px;height:68px}.approved-phase-roadmap{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.approved-phase-roadmap{grid-template-columns:1fr}.approved-guided-progress{grid-template-columns:55px 1fr 70px}}
+
 </style>
 <title>Lellee — Approved Interior Rebuild</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -1147,35 +1160,114 @@ Includes the approved Lellee consumer experience from early recovery through lif
 
 
       
+
 <section class="page" id="page-journey">
   <div class="approved-inner">
     <div class="approved-inner-head">
-      <div><span class="approved-kicker">YOUR JOURNEY</span><h2 id="journeyTitle">Phase 2 • Build</h2><p id="journeyIntro">Only your current phase is open. Future phases stay out of sight.</p></div>
-      <button class="approved-link" data-page="recovery">← My Recovery</button>
-    </div>
-
-    <div class="approved-feature-band">
-      <div class="approved-phase-badge" id="journeyPhaseChip">PHASE 2 OF 6</div>
-      <div class="approved-feature-copy">
-        <h3 id="journeyPhaseName">Build</h3>
-        <b id="journeyPhaseDays">Days 31–60</b>
-        <p id="journeyPhaseText">Build coping skills, strengthen connection, and learn what helps you stay steady.</p>
+      <div>
+        <span class="approved-kicker">MY JOURNEY</span>
+        <h2>Your recovery, one relevant step at a time</h2>
+        <p>Lellee opens the current day first. Future phases stay out of the way until you reach them.</p>
       </div>
-      <div class="approved-mini-progress"><span id="weekProgress">3 of 7</span><small>This Week</small></div>
+      <button class="approved-link" data-page="today">← Today</button>
     </div>
 
-    <div class="approved-two">
+    <div class="approved-journey-hero">
+      <div class="approved-journey-ring-wrap">
+        <div class="approved-journey-ring" id="journeyRing"><span id="journeyDayNumber">—</span><small>DAY</small></div>
+      </div>
+      <div class="approved-journey-copy">
+        <span class="approved-kicker" id="journeyPhaseKicker">CURRENT PHASE</span>
+        <h3 id="journeyPhaseTitle">Loading your journey...</h3>
+        <p id="journeyPhaseDescription">Your current recovery phase will appear here.</p>
+        <div class="approved-journey-meter"><i id="journeyPhaseMeter"></i></div>
+        <small id="journeyPhaseProgress">—</small>
+      </div>
+      <div class="approved-journey-next">
+        <small>NEXT TRANSITION</small>
+        <b id="journeyNextTransition">—</b>
+        <span id="journeyNextTransitionText">—</span>
+      </div>
+    </div>
+
+    <div class="approved-two" style="margin-top:12px">
       <article class="approved-wide-module">
-        <div class="approved-icon purple-icon">◉</div>
-        <div><small>THIS WEEK</small><h3 id="weekTitle">Managing Triggers</h3><p id="weekDescription">Notice what raises risk and practice responding earlier.</p></div>
+        <div class="approved-icon purple-icon">✦</div>
+        <div>
+          <small>TODAY'S GUIDANCE</small>
+          <h3 id="journeyTodayTitle">Loading...</h3>
+          <p id="journeyTodaySummary">A small recovery focus for today.</p>
+          <button class="approved-link" id="openJourneyToday">Open Today's Guidance →</button>
+        </div>
       </article>
       <article class="approved-wide-module">
-        <div class="approved-icon green-icon">✓</div>
-        <div><small>TODAY'S STEP</small><h3 id="todayStep">Notice one trigger.</h3><p>One focused step is enough for today.</p><button class="approved-small-action" data-page="day2">Start Today's Guided Recovery</button></div>
+        <div class="approved-icon green-icon">↶</div>
+        <div>
+          <small>REVIEW</small>
+          <h3>Past days remain available</h3>
+          <p>Review what you entered without reopening future phases.</p>
+          <button class="approved-link" id="openJourneyHistory">View Past Days →</button>
+        </div>
       </article>
+    </div>
+
+    <div class="approved-phase-roadmap" id="journeyRoadmap"></div>
+
+    <div id="journeyHistoryPanel" class="approved-review-sheet hidden" style="margin-top:12px">
+      <div class="approved-review-block">
+        <span class="approved-kicker">PAST GUIDED DAYS</span>
+        <h3>Your saved journey history</h3>
+        <div id="journeyHistoryList" class="approved-history-list"></div>
+      </div>
     </div>
   </div>
 </section>
+
+<section class="page" id="page-guided-day">
+  <div class="approved-inner">
+    <div class="approved-inner-head">
+      <div>
+        <span class="approved-kicker" id="guidedDayPhase">GUIDED RECOVERY</span>
+        <h2 id="guidedDayTitle">Today's guidance</h2>
+        <p id="guidedDayLead">One focused step for today.</p>
+      </div>
+      <button class="approved-link" data-page="journey">← My Journey</button>
+    </div>
+
+    <div class="approved-guided-shell">
+      <div class="approved-guided-progress">
+        <span id="guidedDayLabel">DAY —</span>
+        <div><i id="guidedPhaseBar"></i></div>
+        <small id="guidedPhaseLabel">—</small>
+      </div>
+
+      <article class="approved-guided-card">
+        <span class="approved-kicker">NOTICE</span>
+        <h3 id="guidedPromptTitle">What is most true for you right now?</h3>
+        <p id="guidedPromptText">Choose anything that fits. You can skip anything that does not.</p>
+        <div id="guidedChoiceGrid" class="day2-choices"></div>
+      </article>
+
+      <article class="approved-guided-card">
+        <span class="approved-kicker">OPTIONAL REFLECTION</span>
+        <h3 id="guidedReflectionPrompt">A few words is enough.</h3>
+        <textarea id="guidedReflectionText" placeholder="Write only if it feels useful..."></textarea>
+      </article>
+
+      <article class="approved-guided-card approved-next-step-card">
+        <span class="approved-kicker">ONE NEXT STEP</span>
+        <h3 id="guidedActionTitle">Choose one small action for today.</h3>
+        <div id="guidedActionChoices" class="day2-choices"></div>
+      </article>
+
+      <div class="approved-guided-footer">
+        <span class="approved-setting-note">Your response stays private to your account.</span>
+        <button class="approved-small-action" id="saveGuidedDay">Save Today's Guidance</button>
+      </div>
+    </div>
+  </div>
+</section>
+
 
 
       

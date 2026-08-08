@@ -1,25 +1,35 @@
-LELLEE — BIG LONG-TERM RECOVERY STORY STUDIO
+LELLEE — BIG GUIDED RECOVERY JOURNEY ENGINE
 
-THIS BUILD REPLACES THE OLDER BOXY LONG-TERM SCREENS.
+Adds the core progressive-disclosure recovery journey:
 
-Adds:
-- approved-design Milestones screen
-- milestone timeline from 7 days through 2 years
-- annual milestones after Year 2
-- saved milestone reflections
-- Recovery Story opt-in at review level
-- approved-design Then & Now
-- first-vs-most-recent comparison using stable guided prompt keys
-- saved Then & Now reflections
-- approved-design My Recovery Story builder
-- 2-year, 5-year, 10-year, and custom editions
-- milestones, Then & Now, goals, and approved guided responses
-- journal excluded by default
-- printable / Save-as-PDF story preview
-- user data remains private under RLS
+PHASES
+1. Stabilize — Days 1–30
+2. Build — Days 31–60
+3. Understand — Days 61–90
+4. Rebuild — Days 91–120
+5. Strengthen — Days 121–150
+6. Grow — Days 151–183
+7. Maintenance — Days 184–365
+8. Year Two — Days 366–730
+9. Long-Term Recovery — Day 731+ / Year 3+
 
-RUN:
-13_longterm_story_studio.sql
+EXPERIENCE
+- current phase first
+- future phases visually locked/de-emphasized
+- past phases remain reviewable
+- daily guidance through Day 183
+- lighter weekly cadence for Maintenance, Year Two, and Year 3+
+- guided choices + optional reflection + one next action
+- saves to guided_responses
+- selected next step can create a recovery action
+- guided response history
+- phase progress and next transition
+- approved soft Lellee visual system
 
-The previous_10/11/12 SQL files are included only for reference in case a prior step was missed.
-Then upload index.html + PWA assets to GitHub and commit.
+DATABASE
+Run 14_guided_journey_engine.sql once.
+
+Then upload index.html + PWA files to GitHub and commit.
+
+NOTE
+This build does not change or test the postponed push-notification setup.
