@@ -991,8 +991,26 @@ button,a{cursor:pointer}
 @media(max-width:850px){.approved-journey-hero{grid-template-columns:78px 1fr}.approved-journey-next{grid-column:1/-1;border-left:0;border-top:1px solid #ddd4e0;padding:12px 0 0}.approved-journey-ring{width:68px;height:68px}.approved-phase-roadmap{grid-template-columns:1fr 1fr}}
 @media(max-width:560px){.approved-phase-roadmap{grid-template-columns:1fr}.approved-guided-progress{grid-template-columns:55px 1fr 70px}}
 
+
+/* Journal Companion + Collections */
+.approved-head-actions{display:flex;gap:14px;align-items:center}
+.approved-journal-volume-strip{display:grid;grid-template-columns:88px 1fr 170px;gap:15px;align-items:center;border:1px solid #e2dbe6;background:linear-gradient(135deg,#f3eef7,#fffaf4);border-radius:11px;padding:14px 16px;margin-bottom:12px}
+.approved-volume-badge{height:54px;border-radius:9px;background:#62427f;color:#fff;display:grid;place-items:center;font-size:.58rem;font-weight:900;letter-spacing:.11em}.approved-journal-volume-strip h3{font-family:Georgia,serif;font-weight:500;font-size:.86rem;margin:3px 0}.approved-journal-volume-strip p{font-size:.58rem;color:#766f78;margin:0}.approved-volume-progress small{display:block;text-align:right;font-size:.51rem;font-weight:850;color:#6d5a7a}.approved-volume-progress>div{height:6px;background:#e3dce6;border-radius:20px;margin-top:5px;overflow:hidden}.approved-volume-progress i{height:100%;display:block;background:linear-gradient(90deg,#82639e,#b199c7);border-radius:20px}
+.approved-journal-controls{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0 8px}.approved-journal-controls select,.approved-journal-meta-row select,.approved-journal-meta-row input,.approved-library-filters input,.approved-library-filters select,.approved-create-collection input{border:1px solid #e0dae2;background:#fff;border-radius:7px;padding:9px;font-size:.62rem;color:#555}
+.approved-journal-title-input{width:100%;border:0;border-bottom:1px solid #e3dde2;background:transparent;padding:8px 2px;margin-bottom:5px;font-family:Georgia,serif;font-size:.83rem;outline:none}
+.approved-journal-meta-row{display:grid;grid-template-columns:1fr 120px;gap:10px;margin-top:10px}.approved-journal-meta-row label{font-size:.54rem;font-weight:800;color:#6d6570}.approved-journal-meta-row label>*{display:block;width:100%;margin-top:4px}.approved-journal-options{display:flex;flex-wrap:wrap;gap:18px;margin:12px 0}
+.approved-journal-mini{border-top:1px solid #e8e1e9;margin-top:15px;padding-top:12px}.approved-journal-mini small{display:block;font-size:.49rem;color:#8b828d}.approved-journal-mini b{font-size:.62rem;color:#574d5b}
+.approved-journal-library{border:1px solid #e4dfe5;background:#fff;border-radius:10px;margin-top:12px;padding:15px}.approved-journal-library-head{display:flex;justify-content:space-between;gap:15px;align-items:end;border-bottom:1px solid #eee9ef;padding-bottom:12px;margin-bottom:11px}.approved-journal-library-head h3{font-size:.74rem;margin:4px 0}.approved-library-filters{display:flex;gap:7px;flex-wrap:wrap}.approved-library-filters input{min-width:180px}
+#journalEntryCards{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.approved-journal-entry-card{border:1px solid #e7e2e8;border-radius:9px;background:#fcfbfc;padding:13px;min-height:160px;display:flex;flex-direction:column}.approved-entry-top{display:flex;justify-content:space-between;font-size:.49rem;text-transform:uppercase;letter-spacing:.06em;color:#765a8f;font-weight:850}.approved-journal-entry-card>small{font-size:.5rem;color:#8c858d;margin-top:6px}.approved-journal-entry-card h3{font-family:Georgia,serif;font-size:.76rem;font-weight:500;margin:5px 0}.approved-journal-entry-card p{font-size:.58rem;line-height:1.5;color:#6d6770}.approved-journal-entry-card .approved-link{margin-top:auto;align-self:flex-start}
+.approved-volume-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.approved-volume-card{position:relative;border:1px solid #e3dde5;background:#fff;border-radius:11px;padding:18px;overflow:hidden}.approved-volume-card.current{background:linear-gradient(135deg,#f5f0f8,#fffaf4);border-color:#d5c7de}.approved-volume-card>span{position:absolute;right:10px;top:5px;font-family:Georgia,serif;font-size:2.5rem;color:#eee8ef}.approved-volume-card>small{font-size:.5rem;font-weight:900;letter-spacing:.1em;color:#765791}.approved-volume-card h3{font-family:Georgia,serif;font-size:.9rem;font-weight:500;margin:7px 0}.approved-volume-card p{font-size:.59rem;line-height:1.5;color:#716a74;min-height:60px}
+.approved-collection-list{display:grid;gap:7px;margin:10px 0}.approved-collection-row{display:grid;grid-template-columns:26px 1fr auto;align-items:center;gap:8px;border-bottom:1px solid #eee9ef;padding:8px 0}.approved-collection-row>span{color:#76558f}.approved-collection-row b{display:block;font-size:.62rem}.approved-collection-row small{font-size:.5rem;color:#89818b}.approved-create-collection{display:flex;gap:7px;margin-top:12px}.approved-create-collection input{flex:1}
+.approved-prompt-list{display:grid;gap:7px;margin-top:10px}.approved-prompt-list button{border:1px solid #e8e3e9;background:#fcfbfc;border-radius:8px;text-align:left;padding:9px 10px}.approved-prompt-list b{display:block;font-size:.61rem;color:#584c60}.approved-prompt-list small{display:block;font-size:.52rem;color:#817a84;margin-top:2px}
+.approved-entry-paper #journalEntryDetailBody>h3{font-family:Georgia,serif;font-weight:500;font-size:.9rem}.approved-entry-paper #journalEntryDetailBody>p{font-family:Georgia,serif;font-size:.76rem;line-height:1.8;color:#474148;white-space:normal}.approved-entry-detail-actions{border-top:1px solid #e9e1d8;margin-top:22px;padding-top:13px;display:flex;gap:18px;align-items:center}.approved-entry-detail-actions>div{margin-left:auto;display:flex;gap:15px}
+@media(max-width:850px){.approved-journal-volume-strip{grid-template-columns:70px 1fr}.approved-volume-progress{grid-column:1/-1}.approved-volume-grid{grid-template-columns:1fr}.approved-journal-library-head{display:block}.approved-library-filters{margin-top:10px}#journalEntryCards{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.approved-journal-controls,.approved-journal-meta-row{grid-template-columns:1fr}.approved-journal-options{display:grid;gap:8px}#journalEntryCards{grid-template-columns:1fr}.approved-entry-detail-actions{display:grid}.approved-entry-detail-actions>div{margin-left:0}.approved-head-actions{display:grid;gap:6px}}
+
 </style>
-<title>Lellee — Approved Interior Rebuild</title>
+<title>Lellee — Core Product Completion</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <!-- LELLEE CANONICAL MASTER
 This is the consolidated index.html.
@@ -1009,6 +1027,7 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <meta name="application-name" content="Lellee">
 <meta name="theme-color" content="#0d1029">
 
+<link rel="stylesheet" href="/group-a-core.css">
 </head>
 <body><a class="lellee-skip" href="#lelleeMain">Skip to main content</a>
 <div id="onboardingOverlay" class="prod-overlay hidden">
@@ -1033,6 +1052,7 @@ Includes the approved Lellee consumer experience from early recovery through lif
     <nav class="nav-list">
       <button class="nav-item active" data-page="today"><span class="nav-icon">▣</span>Today</button>
       <button class="nav-item" data-page="recovery"><span class="nav-icon">♡</span>My Recovery</button>
+      <button class="nav-item" data-page="learn"><span class="nav-icon">◇</span>Learn</button>
       <button class="nav-item" data-page="tools"><span class="nav-icon">⌁</span>Tools</button>
       <button class="nav-item" data-page="recovery-paths-v2"><span class="nav-icon">⌂</span>Recovery Paths</button>
       <button class="nav-item" data-page="meetings"><span class="nav-icon">▤</span>Meetings</button>
@@ -1091,6 +1111,11 @@ Includes the approved Lellee consumer experience from early recovery through lif
           <button class="mobile-item" data-activity="reflection"><span class="mi" style="background:var(--pink-soft);color:var(--pink)">☾</span><div><h3>Evening Reflection</h3><p>End the day with honesty and hope.</p></div><span class="chev">›</span></button>
         </div>
 
+        <div class="groupa-for-you" id="groupAForYou">
+          <div class="groupa-for-you-icon">✦</div>
+          <div><span>FOR YOU TODAY</span><h3 id="groupAForYouTitle">One useful next step</h3><p id="groupAForYouText">Lellee is learning what is most useful from your own recovery activity.</p></div>
+          <button class="approved-link" id="groupAForYouAction">Open →</button>
+        </div>
         <div class="dashboard-grid">
           <div class="panel rings-panel">
             <h3>Recovery Rings</h3>
@@ -1262,7 +1287,7 @@ Includes the approved Lellee consumer experience from early recovery through lif
 
       <div class="approved-guided-footer">
         <span class="approved-setting-note">Your response stays private to your account.</span>
-        <button class="approved-small-action" id="saveGuidedDay">Save Today's Guidance</button>
+        <button class="approved-small-action" id="saveGuidedJourneyA">Save Today's Guidance</button>
       </div>
     </div>
   </div>
@@ -1303,29 +1328,38 @@ Includes the approved Lellee consumer experience from early recovery through lif
       </section>
 
 
+
 <section class="page" id="page-tools">
   <div class="approved-inner">
     <div class="approved-inner-head">
-      <div><span class="approved-kicker">TOOLS</span><h2>Recommended right now</h2><p>A small set of tools matched to what you may need—not a crowded library.</p></div>
+      <div><span class="approved-kicker">TOOLS &amp; COPING CENTER</span><h2>Use what fits the moment</h2><p>Start with what is most relevant. Browse more only when you want to.</p></div>
+      <button class="approved-link" data-help-open>Help Me Right Now →</button>
     </div>
-
-    <div class="approved-tool-row">
-      <button class="approved-tool-tile soft-lav" data-tool="Craving Reset"><span>◉</span><b>Craving Reset</b><small>Ride out an urge safely.</small></button>
-      <button class="approved-tool-tile soft-sage" data-tool="HALT Check"><span>H</span><b>HALT Check</b><small>Check basic needs first.</small></button>
-      <button class="approved-tool-tile soft-blue" data-tool="Trigger Review"><span>◎</span><b>Trigger Review</b><small>Notice what happened before.</small></button>
+    <div class="groupa-tool-rec">
+      <div><span class="approved-kicker">RECOMMENDED FOR YOU</span><h3 id="groupAToolRecTitle">A small tool for right now</h3><p id="groupAToolRecText">Recommendations use your own recent recovery activity without diagnosing or scoring you.</p></div>
+      <button class="approved-small-action" id="groupAOpenRecommended">Open Tool</button>
     </div>
-
-    <button class="approved-link" id="showAllTools">Browse all recovery tools ↓</button>
-    <div class="approved-list hidden" id="allTools">
-      <button class="approved-list-row" data-tool="Grounding"><span>◌</span><div><b>Grounding</b><small>Come back to the present.</small></div><em>Open</em></button>
-      <button class="approved-list-row" data-tool="Calm & Breathe"><span>≈</span><div><b>Calm &amp; Breathe</b><small>Settle your body with paced breathing.</small></div><em>Open</em></button>
-      <button class="approved-list-row" data-tool="Relapse Prevention"><span>↻</span><div><b>Relapse Prevention</b><small>Review warning signs and next steps.</small></div><em>Open</em></button>
+    <div class="groupa-tool-cats">
+      <button class="active" data-groupa-tool-cat="all">All</button>
+      <button data-groupa-tool-cat="cravings">Cravings</button>
+      <button data-groupa-tool-cat="calming">Calming</button>
+      <button data-groupa-tool-cat="triggers">Triggers</button>
+      <button data-groupa-tool-cat="relationships">Relationships</button>
+      <button data-groupa-tool-cat="sleep">Sleep</button>
+      <button data-groupa-tool-cat="connection">Connection</button>
+      <button data-groupa-tool-cat="planning">Planning</button>
+      <button data-groupa-tool-cat="values">Values</button>
+    </div>
+    <div id="groupAToolGrid" class="groupa-tool-grid"></div>
+    <div id="groupAToolDetail" class="groupa-tool-detail hidden">
+      <div class="groupa-tool-detail-head"><div><span class="approved-kicker" id="groupAToolDetailCat">TOOL</span><h2 id="groupAToolDetailTitle">Recovery Tool</h2><p id="groupAToolDetailSummary"></p></div><button class="approved-link" id="groupACloseTool">Close</button></div>
+      <div id="groupAToolSteps" class="groupa-tool-steps"></div>
+      <div class="groupa-tool-foot"><span class="approved-setting-note">Use what helps. Skip what does not.</span><button class="approved-small-action" id="groupACompleteTool">I Used This Tool</button></div>
     </div>
   </div>
 </section>
 
-
-      <section class="page" id="page-paths">
+<section class="page" id="page-paths">
         <div class="section-shell">
           <div class="section-header"><div class="eyebrow">Recovery Paths</div><h2>Your chosen approach</h2><p>Lellee can support more than one legitimate pathway without forcing one belief system.</p></div>
           <div class="simple-card">
@@ -1353,30 +1387,196 @@ Includes the approved Lellee consumer experience from early recovery through lif
       </section>
 
       
+
 <section class="page" id="page-journal">
   <div class="approved-inner">
     <div class="approved-inner-head">
-      <div><span class="approved-kicker">JOURNAL</span><h2>One prompt for today</h2><p>Write only if you want to. The page opens to today's reflection, not your whole history.</p></div>
-      <button class="approved-link" id="toggleEntries">Review previous entries</button>
+      <div>
+        <span class="approved-kicker">JOURNAL</span>
+        <h2>A private place to notice what is changing</h2>
+        <p>Write digitally, pair your entry with a physical Lellee journal, or save it to a collection for later.</p>
+      </div>
+      <div class="approved-head-actions">
+        <button class="approved-link" id="toggleEntries">Review Entries</button>
+        <button class="approved-link" data-page="journal-companion">Journal Companion →</button>
+      </div>
+    </div>
+
+    <div class="approved-journal-volume-strip">
+      <div class="approved-volume-badge" id="journalVolumeBadge">VOLUME I</div>
+      <div>
+        <span class="approved-kicker">PHYSICAL + DIGITAL</span>
+        <h3 id="journalVolumeTitle">First 90 Days</h3>
+        <p id="journalVolumeText">If you are using the physical journal, you can record the volume and page with this entry.</p>
+      </div>
+      <div class="approved-volume-progress">
+        <small id="journalVolumeDay">DAY —</small>
+        <div><i id="journalVolumeBar"></i></div>
+      </div>
     </div>
 
     <div class="approved-journal-paper">
       <div class="approved-journal-left">
         <span class="approved-kicker">TODAY'S PROMPT</span>
-        <h3>What does my recovery need from me today?</h3>
+        <h3 id="journalPromptTitle">What does my recovery need from me today?</h3>
+        <p class="approved-setting-note" id="journalPromptLead">You can answer the prompt, write about something else, or leave the page blank.</p>
+
+        <div class="approved-journal-controls">
+          <select id="journalPromptSelect" aria-label="Journal prompt">
+            <option value="today_recovery_need">What does my recovery need from me today?</option>
+            <option value="what_helped">What helped me protect my recovery today?</option>
+            <option value="what_was_hard">What was hardest today?</option>
+            <option value="something_i_notice">What am I noticing about myself?</option>
+            <option value="gratitude">What am I grateful for right now?</option>
+            <option value="letter">What do I need to say, even if I never send it?</option>
+            <option value="custom">Write freely</option>
+          </select>
+          <select id="journalCollectionSelect" aria-label="Journal collection">
+            <option value="">Daily Journal</option>
+          </select>
+        </div>
+
+        <input id="journalTitleV2" class="approved-journal-title-input" placeholder="Optional title">
         <textarea id="journalText" placeholder="Write here..."></textarea>
-        <div class="approved-journal-actions"><span id="journalStatus">Private to your Lellee account.</span><button class="approved-small-action" id="saveJournal">Save Entry</button></div>
+
+        <div class="approved-journal-meta-row">
+          <label>Physical journal
+            <select id="journalPhysicalVolume">
+              <option value="">Not linked</option>
+              <option value="volume_1">Volume I</option>
+              <option value="volume_2">Volume II</option>
+              <option value="volume_3">Volume III</option>
+            </select>
+          </label>
+          <label>Page
+            <input id="journalPhysicalPage" inputmode="numeric" placeholder="Optional">
+          </label>
+        </div>
+
+        <div class="approved-journal-options">
+          <label class="approved-story-check"><input type="checkbox" id="journalFavoriteV2"> Favorite this entry</label>
+          <label class="approved-story-check"><input type="checkbox" id="journalStoryOptInV2"> Allow this entry to be selected for My Recovery Story</label>
+        </div>
+
+        <div class="approved-journal-actions">
+          <span id="journalStatus">Private to your Lellee account.</span>
+          <button class="approved-small-action" id="saveJournal">Save Entry</button>
+        </div>
       </div>
+
       <div class="approved-journal-side">
         <div class="approved-journal-icon">▦</div>
-        <h3>Your journal, connected</h3>
-        <p>The physical Lellee journal can connect to digital exercises and milestone reflections without replacing handwriting.</p>
-        <button class="approved-link">Journal Companion →</button>
+        <h3>Journal Companion</h3>
+        <p>Match digital prompts with the physical Lellee journal, create collections, and revisit entries intentionally.</p>
+        <button class="approved-link" data-page="journal-companion">Open Companion →</button>
+        <div class="approved-journal-mini">
+          <small>CURRENT COLLECTION</small>
+          <b id="journalCurrentCollection">Daily Journal</b>
+        </div>
       </div>
     </div>
-    <div class="approved-list hidden" id="entriesList"></div>
+
+    <div id="entriesList" class="approved-journal-library hidden">
+      <div class="approved-journal-library-head">
+        <div>
+          <span class="approved-kicker">YOUR ENTRIES</span>
+          <h3>Review intentionally</h3>
+        </div>
+        <div class="approved-library-filters">
+          <input id="journalSearch" placeholder="Search your journal">
+          <select id="journalFilterCollection"><option value="">All collections</option></select>
+          <select id="journalFilterType">
+            <option value="">All entries</option>
+            <option value="favorites">Favorites</option>
+            <option value="story">Recovery Story approved</option>
+          </select>
+        </div>
+      </div>
+      <div id="journalEntryCards"></div>
+    </div>
   </div>
 </section>
+
+<section class="page" id="page-journal-companion">
+  <div class="approved-inner">
+    <div class="approved-inner-head">
+      <div>
+        <span class="approved-kicker">JOURNAL COMPANION</span>
+        <h2>Keep handwriting and digital recovery connected</h2>
+        <p>The physical journal remains useful on its own. The digital companion adds prompts, organization, and long-term review.</p>
+      </div>
+      <button class="approved-link" data-page="journal">← Journal</button>
+    </div>
+
+    <div class="approved-volume-grid">
+      <article class="approved-volume-card" id="volumeCard1">
+        <span>01</span><small>VOLUME I</small><h3>First 90 Days</h3>
+        <p>Stabilize, Build, and Understand. Daily writing can help capture early recovery without requiring long entries.</p>
+        <button class="approved-link" data-volume-filter="volume_1">View Volume I Entries →</button>
+      </article>
+      <article class="approved-volume-card" id="volumeCard2">
+        <span>02</span><small>VOLUME II</small><h3>90 Days to 6 Months</h3>
+        <p>Rebuild, Strengthen, and Grow. Focus on patterns, repair, relationships, confidence, and a fuller life.</p>
+        <button class="approved-link" data-volume-filter="volume_2">View Volume II Entries →</button>
+      </article>
+      <article class="approved-volume-card" id="volumeCard3">
+        <span>03</span><small>VOLUME III</small><h3>6 Months to 1 Year</h3>
+        <p>Maintenance. Protect recovery through real-life changes while noticing what is becoming more natural.</p>
+        <button class="approved-link" data-volume-filter="volume_3">View Volume III Entries →</button>
+      </article>
+    </div>
+
+    <div class="approved-two" style="margin-top:12px">
+      <article class="approved-story-form">
+        <span class="approved-kicker">MY COLLECTIONS</span>
+        <div id="journalCollectionsList" class="approved-collection-list"></div>
+        <div class="approved-create-collection">
+          <input id="newCollectionName" placeholder="New collection name">
+          <button class="approved-small-action" id="createJournalCollection">Create</button>
+        </div>
+      </article>
+
+      <article class="approved-story-form">
+        <span class="approved-kicker">PROMPT LIBRARY</span>
+        <div class="approved-prompt-list">
+          <button data-use-journal-prompt="today_recovery_need"><b>Today</b><small>What does my recovery need from me today?</small></button>
+          <button data-use-journal-prompt="what_helped"><b>What helped</b><small>What helped me protect my recovery today?</small></button>
+          <button data-use-journal-prompt="what_was_hard"><b>Hard moments</b><small>What was hardest today?</small></button>
+          <button data-use-journal-prompt="something_i_notice"><b>Patterns</b><small>What am I noticing about myself?</small></button>
+          <button data-use-journal-prompt="gratitude"><b>Gratitude</b><small>What am I grateful for right now?</small></button>
+          <button data-use-journal-prompt="letter"><b>Unsent letter</b><small>What do I need to say, even if I never send it?</small></button>
+        </div>
+      </article>
+    </div>
+
+    <div class="approved-insight-panel">
+      <span class="approved-kicker">PRIVACY BY DEFAULT</span>
+      <h3>Your journal is not automatically added to milestones or Recovery Story.</h3>
+      <p>Each entry stays private unless you deliberately allow Recovery Story selection. You can change that permission on individual entries later.</p>
+    </div>
+  </div>
+</section>
+
+<section class="page" id="page-journal-entry">
+  <div class="approved-inner">
+    <div class="approved-inner-head">
+      <div><span class="approved-kicker">JOURNAL ENTRY</span><h2 id="journalEntryDetailTitle">Entry</h2><p id="journalEntryDetailMeta">Private journal entry</p></div>
+      <button class="approved-link" data-page="journal">← Journal</button>
+    </div>
+    <article class="approved-story-paper approved-entry-paper">
+      <div id="journalEntryDetailBody"></div>
+      <div class="approved-entry-detail-actions">
+        <label class="approved-story-check"><input id="detailFavoriteToggle" type="checkbox"> Favorite</label>
+        <label class="approved-story-check"><input id="detailStoryToggle" type="checkbox"> Allow Recovery Story selection</label>
+        <div>
+          <button class="approved-link" id="printJournalEntry">Print / Save as PDF</button>
+          <button class="approved-small-action" id="saveJournalEntryPermissions">Save Changes</button>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
 
 
       
@@ -2182,6 +2382,18 @@ Includes the approved Lellee consumer experience from early recovery through lif
       </div>
 
       <div class="approved-setting-section">
+        <h3>Personalized Experience</h3>
+        <div class="groupa-personal-setting">
+          <div><b>Personalized recommendations</b><p>Use recent check-ins, guided responses, current phase, goals, and preferences to decide what Lellee surfaces first. This does not create a diagnosis or recovery score.</p></div>
+          <select id="groupAPersonalizationEnabled"><option value="true">On</option><option value="false">Off</option></select>
+        </div>
+        <div class="approved-field-row">
+          <label>Recommendation style<select id="groupAPersonalizationStyle"><option value="gentle">Gentle</option><option value="practical">Practical</option><option value="reflective">Reflective</option></select></label>
+          <label>Show belief-aligned options<select id="groupABeliefVariants"><option value="true">Yes, when relevant</option><option value="false">No</option></select></label>
+        </div>
+      </div>
+
+      <div class="approved-setting-section">
         <h3>Local Experience</h3>
         <div class="approved-field-row"><label>City<input id="setCity"></label><label>State<input id="setState"></label></div>
       </div>
@@ -2433,18 +2645,11 @@ $$('[data-tool]').forEach(b=>b.addEventListener('click',()=>{
   $('#toolBody').innerHTML=`<div class="simple-card" style="box-shadow:none"><p class="subtle" style="font-size:.9rem">${content}</p></div>`;
   $('#toolDialog').showModal();
 }));
-$('#showAllTools').addEventListener('click',()=>$('#allTools').classList.toggle('hidden'));
+$('#showAllTools')?.addEventListener('click',()=>$('#allTools')?.classList.toggle('hidden'));
 
-$('#saveJournal').addEventListener('click',async()=>{
-  const text=$('#journalText').value.trim(); if(!text)return;
-  if(currentUser){const {error}=await sb.from('journal_entries').insert({user_id:currentUser.id,entry_date:todayKey(),prompt_key:'today_recovery_need',prompt_text:'What does my recovery need from me today?',phase_key:phase().name.toLowerCase(),content:text});if(error){alert(error.message);return}}
-  data.journalEntries.unshift({date:new Date().toISOString(),text});data.journalEntries=data.journalEntries.slice(0,20);save();$('#journalText').value='';$('#journalStatus').textContent='Saved to Supabase ✓';renderEntries();showSync('Journal saved');
-});
-function renderEntries(){
-  const box=$('#entriesList');
-  box.innerHTML=data.journalEntries.length?data.journalEntries.map(e=>`<div class="list-card"><div><h3>${new Date(e.date).toLocaleDateString()}</h3><p>${escapeHtml(e.text).slice(0,180)}</p></div></div>`).join(''):`<div class="simple-card"><p class="subtle">No previous entries yet.</p></div>`;
-}
-$('#toggleEntries').addEventListener('click',()=>{renderEntries();$('#entriesList').classList.toggle('hidden')});
+$('#saveJournal').addEventListener('click',()=>window.LelleeGroupA?.saveJournal());
+function renderEntries(){ window.LelleeGroupA?.loadJournalEntries(); }
+$('#toggleEntries').addEventListener('click',()=>{window.LelleeGroupA?.loadJournalEntries();$('#entriesList').classList.toggle('hidden')});
 
 $('#saveSettings').addEventListener('click',()=>{
   data.name=$('#setName').value.trim()||'friend';
@@ -2471,7 +2676,7 @@ function setAuthMode(mode,msg=''){authMode=mode;$('#authTitle').textContent=mode
 $('#authToggle').addEventListener('click',()=>setAuthMode(authMode==='signin'?'signup':'signin'));
 $('#authForm').addEventListener('submit',async e=>{e.preventDefault();const email=$('#authEmail').value.trim(),password=$('#authPassword').value;let result;if(authMode==='signin')result=await sb.auth.signInWithPassword({email,password});else result=await sb.auth.signUp({email,password});if(result.error){$('#authMsg').textContent=result.error.message;$('#authMsg').className='auth-msg error';return}if(authMode==='signup'&&!result.data.session){setAuthMode('signin','Account created. Confirm your email, then sign in.');return}await beginSession(result.data.user)});
 $('#signOutBtn').addEventListener('click',async()=>{await sb.auth.signOut();currentUser=null;$('#authOverlay').classList.remove('hidden')});
-async function beginSession(user){currentUser=user;const [p,r,u,l,j,dc,ra]=await Promise.all([sb.from('profiles').select('*').eq('id',user.id).single(),sb.from('recovery_profiles').select('*').eq('user_id',user.id).single(),sb.from('user_preferences').select('*').eq('user_id',user.id).single(),sb.from('local_preferences').select('*').eq('user_id',user.id).single(),sb.from('journal_entries').select('content,created_at').eq('user_id',user.id).order('created_at',{ascending:false}).limit(20),sb.from('daily_checkins').select('*').eq('user_id',user.id).eq('checkin_date',todayKey()),sb.from('recovery_actions').select('*').eq('user_id',user.id).eq('action_date',todayKey())]);data.name=p.data?.display_name||data.name;data.recoveryDate=r.data?.recovery_date||data.recoveryDate;data.goal=r.data?.current_goal||data.goal;data.approach=approachFromDb(u.data?.recovery_approach);data.belief=beliefFromDb(u.data?.belief_preference);data.faith=u.data?.faith_tradition||'';data.denomination=u.data?.denomination||'';data.city=l.data?.city||'';data.state=l.data?.state||'';data.journalEntries=(j.data||[]).map(x=>({date:x.created_at,text:x.content}));data.daily[todayKey()]={};if(dc.data?.length)data.daily[todayKey()].checkin='Checked in';for(const a of (ra.data||[])){const rev={daily_focus:'focus',gratitude:'gratitude',recovery_action:'action',evening_reflection:'reflection'};if(rev[a.action_type])data.daily[todayKey()][rev[a.action_type]]=a.content||'Completed'}localStorage.setItem(STORAGE,JSON.stringify(data));renderBasics();$('#authOverlay').classList.add('hidden');if(!p.data?.display_name||!r.data?.recovery_date){showPage('settings');setTimeout(()=>alert('Complete your Lellee profile and recovery date, then click Save Preferences.'),100)}else if(Number(new URLSearchParams(location.search).get('day'))>=1&&Number(new URLSearchParams(location.search).get('day'))<=730){renderGuidedDay();showPage('day2')}else if(daysInRecovery()<=730){renderGuidedDay();showPage('day2')}else{showPage('longterm');renderLongTermMode()}}
+async function beginSession(user){currentUser=user;const [p,r,u,l,j,dc,ra]=await Promise.all([sb.from('profiles').select('*').eq('id',user.id).single(),sb.from('recovery_profiles').select('*').eq('user_id',user.id).single(),sb.from('user_preferences').select('*').eq('user_id',user.id).single(),sb.from('local_preferences').select('*').eq('user_id',user.id).single(),sb.from('journal_entries').select('content,created_at').eq('user_id',user.id).order('created_at',{ascending:false}).limit(20),sb.from('daily_checkins').select('*').eq('user_id',user.id).eq('checkin_date',todayKey()),sb.from('recovery_actions').select('*').eq('user_id',user.id).eq('action_date',todayKey())]);data.name=p.data?.display_name||data.name;data.recoveryDate=r.data?.recovery_date||data.recoveryDate;data.goal=r.data?.current_goal||data.goal;data.approach=approachFromDb(u.data?.recovery_approach);data.belief=beliefFromDb(u.data?.belief_preference);data.faith=u.data?.faith_tradition||'';data.denomination=u.data?.denomination||'';data.city=l.data?.city||'';data.state=l.data?.state||'';data.journalEntries=(j.data||[]).map(x=>({date:x.created_at,text:x.content}));data.daily[todayKey()]={};if(dc.data?.length)data.daily[todayKey()].checkin='Checked in';for(const a of (ra.data||[])){const rev={daily_focus:'focus',gratitude:'gratitude',recovery_action:'action',evening_reflection:'reflection'};if(rev[a.action_type])data.daily[todayKey()][rev[a.action_type]]=a.content||'Completed'}localStorage.setItem(STORAGE,JSON.stringify(data));renderBasics();$('#authOverlay').classList.add('hidden');if(!p.data?.display_name||!r.data?.recovery_date){showPage('settings');setTimeout(()=>alert('Complete your Lellee profile and recovery date, then click Save Preferences.'),100)}else{showPage('today')}}
 
 const phase1Curriculum = [
 {d:1,t:"Start Here: Safety & Support",lead:"Today is about getting a little steadier. You do not need to solve your whole recovery at once.",focus:"What would help you feel a little safer or steadier today?",choices:["A safe place","Someone I trust","Food / water","Rest","Distance from alcohol / drugs","A meeting or recovery support","Medical / professional help","I'm not sure yet"],actions:["Call or text someone supportive","Eat and hydrate","Rest somewhere safe","Attend a meeting","Create distance from alcohol / drugs","Ask for professional help","Take one hour at a time"]},
@@ -2663,7 +2868,7 @@ function activateGuidedDay(){
 }
 
 
-document.getElementById('openGuidedDay2')?.addEventListener('click',activateGuidedDay);
+// Group A owns the Today Guided Recovery route.
 document.getElementById('guidedBack')?.addEventListener('click',()=>showPage('today'));
 document.getElementById('saveGuidedDay')?.addEventListener('click',saveCurrentGuidedDay);
 
@@ -2688,5 +2893,6 @@ Includes:
 - Guided responses for Then & Now
 - Journal, Tools, Progress, Resources, Settings
 -->
+<script src="/group-a-core.js"></script>
 </body>
 </html>
