@@ -940,6 +940,19 @@ button,a{cursor:pointer}
 }
 
 .approved-review-sheet{border:1px solid #e6e2e7;border-radius:10px;background:#fff;overflow:hidden}.approved-review-block{padding:16px 18px;border-bottom:1px solid #eeeaf0}.approved-review-block h3{font-size:.75rem;margin:5px 0 9px}.approved-review-block textarea{width:100%;min-height:92px;border:1px solid #e4e0e5;border-radius:7px;background:#fcfbfc;padding:10px;font-size:.69rem}.approved-insight-panel{margin-top:11px;border:1px solid #e2dbe7;border-radius:10px;background:linear-gradient(135deg,#f4eff7,#fffaf5);padding:17px}.approved-insight-panel h3{font-size:.78rem;margin:5px 0}.approved-insight-panel p{font-size:.62rem;color:#777;line-height:1.5;margin:0}
+
+/* Learn + Recovery Paths */
+.approved-learning-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.approved-learning-card{border:1px solid #e5e2e7;border-radius:9px;background:linear-gradient(180deg,#fff,#fcfbfc);padding:15px;min-height:150px;display:flex;flex-direction:column}
+.approved-learning-meta{display:flex;justify-content:space-between;gap:8px}.approved-learning-meta span,.approved-learning-meta em{font-size:.53rem;font-style:normal;color:#65409a;text-transform:uppercase;letter-spacing:.07em;font-weight:850}.approved-learning-meta em{color:#85808a}
+.approved-learning-card h3{font-size:.73rem;margin:8px 0 5px}.approved-learning-card p{font-size:.61rem;line-height:1.48;color:#777;margin:0 0 10px}.approved-learning-actions{display:flex;gap:12px;margin-top:auto}
+.approved-topic-grid,.approved-path-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.approved-topic-grid button,.approved-path-grid button{border:1px solid #e5e1e6;background:#fff;border-radius:9px;padding:13px;text-align:left;font-size:.65rem;font-weight:780;color:#514b57}
+.approved-path-grid button{display:grid;grid-template-columns:30px 1fr;column-gap:8px}.approved-path-grid button>span{grid-row:1/3;width:28px;height:28px;border-radius:8px;background:#eee7f4;color:#65409a;display:grid;place-items:center}.approved-path-grid b{font-size:.67rem}.approved-path-grid small{font-size:.56rem;color:#777;line-height:1.4}
+.approved-path-detail{margin-top:11px;border:1px solid #dfd7e5;background:linear-gradient(135deg,#f4eff7,#fffaf5);border-radius:10px;padding:17px}.approved-path-detail h3{font-size:.8rem;margin:5px 0}.approved-path-detail p{font-size:.63rem;color:#706b74;line-height:1.5;margin:0}
+.approved-reading-sheet{background:#fffdf9;border:1px solid #e7e0da;border-radius:10px;padding:24px;box-shadow:0 7px 20px rgba(58,49,43,.04)}.approved-reading-sheet h1,.approved-reading-sheet h2,.approved-reading-sheet h3{font-family:Georgia,serif;font-weight:500}.approved-reading-sheet h2{font-size:1.05rem}.approved-reading-sheet h3{font-size:.85rem}.approved-reading-sheet p{font-size:.69rem;line-height:1.7;color:#4f4a50}.approved-reading-actions{display:flex;justify-content:space-between;align-items:center;border-top:1px solid #eee6df;margin-top:20px;padding-top:12px}
+@media(max-width:820px){.approved-learning-grid{grid-template-columns:1fr}.approved-topic-grid,.approved-path-grid{grid-template-columns:1fr 1fr}.approved-reading-sheet{padding:17px}}
+
 </style>
 <title>Lellee — Approved Interior Rebuild</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -983,7 +996,7 @@ Includes the approved Lellee consumer experience from early recovery through lif
       <button class="nav-item active" data-page="today"><span class="nav-icon">▣</span>Today</button>
       <button class="nav-item" data-page="recovery"><span class="nav-icon">♡</span>My Recovery</button>
       <button class="nav-item" data-page="tools"><span class="nav-icon">⌁</span>Tools</button>
-      <button class="nav-item" data-page="paths"><span class="nav-icon">⌂</span>Recovery Paths</button>
+      <button class="nav-item" data-page="recovery-paths-v2"><span class="nav-icon">⌂</span>Recovery Paths</button>
       <button class="nav-item" data-page="meetings"><span class="nav-icon">▤</span>Meetings</button>
       <button class="nav-item" data-page="journal"><span class="nav-icon">▧</span>Journal</button>
       <button class="nav-item" data-page="progress"><span class="nav-icon">↗</span>Progress</button>
@@ -1791,6 +1804,105 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <section class="page" id="page-weekly-review"><div class="approved-inner"><div class="approved-inner-head"><div><span class="approved-kicker">WEEKLY REVIEW</span><h2>Notice the week without grading it</h2><p>A short reflection turns daily check-ins into useful recovery insight.</p></div><button class="approved-link" data-page="today">← Today</button></div><div class="approved-review-sheet"><div class="approved-review-block"><span class="approved-kicker">WHAT HELPED</span><h3>What supported your recovery this week?</h3><textarea id="weeklyHelped" placeholder="Support, meetings, routine, rest, boundaries..."></textarea></div><div class="approved-review-block"><span class="approved-kicker">WHAT WAS HARD</span><h3>What asked the most from you?</h3><textarea id="weeklyHard" placeholder="Cravings, stress, family, money, sleep..."></textarea></div><div class="approved-review-block"><span class="approved-kicker">NEXT WEEK</span><h3>What deserves a little more care?</h3><textarea id="weeklyNext"></textarea></div><div class="approved-settings-footer"><button class="approved-small-action" id="saveWeeklyReview">Save Weekly Review</button></div></div></div></section>
 <section class="page" id="page-insights"><div class="approved-inner"><div class="approved-inner-head"><div><span class="approved-kicker">MY INSIGHTS</span><h2>Patterns from your own recovery</h2><p>Lellee summarizes what you entered. It does not diagnose or score you.</p></div><button class="approved-link" data-page="progress">← Progress</button></div><div class="approved-three"><article class="approved-module tint-purple"><span>↗</span><div><small>MOST COMMON SUPPORT</small><h3 id="insightSupport">Still learning</h3><p>What appears most often as helpful.</p></div></article><article class="approved-module tint-blue"><span>◎</span><div><small>COMMON FOCUS</small><h3 id="insightChallenge">Still learning</h3><p>What appears repeatedly as needing care.</p></div></article><article class="approved-module tint-green"><span>✓</span><div><small>REFLECTION RHYTHM</small><h3 id="insightConsistency">Beginning</h3><p>Days with saved reflections—not a recovery grade.</p></div></article></div><div class="approved-insight-panel"><span class="approved-kicker">RECENT PATTERN</span><h3 id="insightNarrative">As you use Lellee, a simple summary will appear here.</h3><p>Insights are descriptive and meant to help you notice what deserves attention.</p></div></div></section>
 <section class="page" id="page-monthly-review"><div class="approved-inner"><div class="approved-inner-head"><div><span class="approved-kicker">MONTHLY REVIEW</span><h2>Look back from a little farther away</h2><p>Monthly reflection can reveal changes that are hard to notice day to day.</p></div><button class="approved-link" data-page="progress">← Progress</button></div><div class="approved-two"><article class="approved-wide-module"><div class="approved-icon purple-icon">◷</div><div><small>THIS MONTH</small><h3 id="monthlyDaysActive">— days reflected</h3><p>Days with saved guided responses.</p></div></article><article class="approved-wide-module"><div class="approved-icon green-icon">◆</div><div><small>RECOVERY DAY</small><h3 id="monthlyRecoveryDay">—</h3><p>Your current place in the long view.</p></div></article></div><div class="approved-review-sheet" style="margin-top:11px"><div class="approved-review-block"><span class="approved-kicker">LOOKING BACK</span><h3>What are you proud you handled differently?</h3><textarea id="monthlyProud"></textarea></div><div class="approved-review-block"><span class="approved-kicker">LOOKING AHEAD</span><h3>What do you want to protect or strengthen next month?</h3><textarea id="monthlyNext"></textarea></div><div class="approved-settings-footer"><button class="approved-small-action" id="saveMonthlyReview">Save Monthly Review</button></div></div></div></section>
+
+<section class="page" id="page-learn">
+  <div class="approved-inner">
+    <div class="approved-inner-head">
+      <div>
+        <span class="approved-kicker">LEARN</span>
+        <h2>Understand recovery without getting overwhelmed</h2>
+        <p>Lellee shows a small set of relevant lessons first, based on your current phase and preferences.</p>
+      </div>
+      <button class="approved-link" data-page="today">← Today</button>
+    </div>
+
+    <div class="approved-feature-band">
+      <div class="approved-phase-badge" id="learnPhaseBadge">CURRENT PHASE</div>
+      <div class="approved-feature-copy">
+        <h3 id="learnPhaseTitle">Recommended for where you are now</h3>
+        <p id="learnPhaseLead">Start with what is most relevant. Browse more only when you want to.</p>
+      </div>
+    </div>
+
+    <div class="approved-resource-tabs">
+      <button class="active" data-learn-tab="recommended">Recommended</button>
+      <button data-learn-tab="topics">Topics</button>
+      <button data-learn-tab="saved">Saved</button>
+      <button data-learn-tab="worksheets">Worksheets</button>
+    </div>
+
+    <div id="learnRecommendedPanel">
+      <div id="recommendedLearningList" class="approved-learning-grid"></div>
+    </div>
+
+    <div id="learnTopicsPanel" class="hidden">
+      <div class="approved-topic-grid">
+        <button data-topic="addiction">Addiction & Recovery</button>
+        <button data-topic="cravings">Cravings & Triggers</button>
+        <button data-topic="relapse">Relapse Prevention</button>
+        <button data-topic="mental_health">Mental Health</button>
+        <button data-topic="trauma">Trauma & Recovery</button>
+        <button data-topic="relationships">Relationships</button>
+        <button data-topic="health">Sleep, Nutrition & Health</button>
+        <button data-topic="life">Life in Recovery</button>
+      </div>
+      <div id="topicLearningList" class="approved-learning-grid" style="margin-top:11px"></div>
+    </div>
+
+    <div id="learnSavedPanel" class="hidden">
+      <div id="savedLearningList" class="approved-learning-grid"></div>
+    </div>
+
+    <div id="learnWorksheetsPanel" class="hidden">
+      <div id="worksheetList" class="approved-learning-grid"></div>
+    </div>
+  </div>
+</section>
+
+<section class="page" id="page-recovery-paths-v2">
+  <div class="approved-inner">
+    <div class="approved-inner-head">
+      <div>
+        <span class="approved-kicker">RECOVERY PATHS</span>
+        <h2>Your recovery can use more than one path</h2>
+        <p>Explore legitimate recovery approaches without Lellee forcing one belief system or method.</p>
+      </div>
+      <button class="approved-link" data-page="recovery">← My Recovery</button>
+    </div>
+
+    <div class="approved-path-grid">
+      <button data-path="12_step"><span>12</span><b>12-Step</b><small>Meetings, fellowship, sponsorship, and step work.</small></button>
+      <button data-path="skills_based"><span>S</span><b>SMART / Skills-Based</b><small>Motivation, coping, thinking, and behavior-change skills.</small></button>
+      <button data-path="therapy_counseling"><span>♡</span><b>Therapy & Counseling</b><small>Professional behavioral-health support.</small></button>
+      <button data-path="medication_supported"><span>+</span><b>Medication-Supported</b><small>Medication as one part of an individualized recovery plan.</small></button>
+      <button data-path="peer_support"><span>◎</span><b>Peer Support</b><small>Recovery connection with people who have lived experience.</small></button>
+      <button data-path="faith_spiritual"><span>✦</span><b>Faith & Spirituality</b><small>Optional faith-based or spiritual recovery content.</small></button>
+    </div>
+
+    <div id="pathDetailPanel" class="approved-path-detail hidden"></div>
+  </div>
+</section>
+
+<section class="page" id="page-learning-detail">
+  <div class="approved-inner">
+    <div class="approved-inner-head">
+      <div>
+        <span class="approved-kicker" id="learningDetailType">LEARNING</span>
+        <h2 id="learningDetailTitle">Lesson</h2>
+        <p id="learningDetailSummary"></p>
+      </div>
+      <button class="approved-link" data-page="learn">← Learn</button>
+    </div>
+
+    <article class="approved-reading-sheet">
+      <div id="learningDetailBody"></div>
+      <div class="approved-reading-actions">
+        <button class="approved-link" id="saveLearningItem">Save for Later</button>
+        <button class="approved-small-action" id="markLearningComplete">Mark Complete</button>
+      </div>
+    </article>
+  </div>
+</section>
 <section class="page" id="page-settings">
   <div class="approved-inner">
     <div class="approved-inner-head">
