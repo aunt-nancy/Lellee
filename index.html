@@ -1033,6 +1033,17 @@ Includes the approved Lellee consumer experience from early recovery through lif
       .content > .page.active{margin-top:0!important;padding-top:0}
       .content > .page{min-height:0}
     </style>
+<style id="guided-today-hotfix">
+      .guided-activity-intro{font-size:.66rem;color:#706a73;line-height:1.55;margin:0 0 11px}
+      .guided-activity-choices{display:flex;flex-wrap:wrap;gap:7px;margin:8px 0 13px}
+      .guided-activity-choice{border:1px solid #ddd5e3;background:#fff;border-radius:999px;padding:8px 11px;font-size:.62rem;font-weight:760;color:#574c5f}
+      .guided-activity-choice:hover{border-color:#bdaacc;background:#faf7fc}
+      .guided-activity-choice.selected{background:#65409a;color:#fff;border-color:#65409a}
+      .guided-activity-note{margin-top:12px}
+      .guided-activity-note label{display:block;font-size:.57rem;font-weight:820;color:#716978;margin-bottom:5px}
+      .guided-activity-note textarea{width:100%;min-height:72px;resize:vertical;border:1px solid #ddd7df;border-radius:8px;background:#fcfbfc;padding:9px 10px;font-size:.66rem;line-height:1.5}
+      .guided-activity-hint{font-size:.53rem;color:#8a828d;margin-top:5px}
+    </style>
 </head>
 <body><a class="skip-link" href="#mainContent">Skip to main content</a><a class="lellee-skip" href="#lelleeMain">Skip to main content</a>
 <div id="onboardingOverlay" class="prod-overlay hidden">
@@ -2582,19 +2593,52 @@ const activityMap={
   action:{title:'Recovery Action',prompt:'Choose one small action that supports your recovery today.'},
   reflection:{title:'Evening Reflection',prompt:'What helped you protect your recovery today?'}
 };
+const guidedActivityOptions={
+  focus:{
+    intro:'Choose anything that feels most relevant. You can select more than one.',
+    choices:['Stay present','Protect my recovery','Handle one responsibility','Reach out for support','Slow down','Take care of my health','Set a boundary','Rest','Something else']
+  },
+  gratitude:{
+    intro:'Notice something good without forcing positivity. Small things count.',
+    choices:['A person','My health','A safe place','Another day in recovery','A small win','Something I learned','A peaceful moment','My faith / spirituality','Something else']
+  },
+  action:{
+    intro:'Pick one manageable recovery-supporting action for today.',
+    choices:['Call or text support','Attend a meeting / appointment','Use a coping tool','Move my body','Eat / hydrate','Handle one task','Avoid a high-risk situation','Rest on purpose','Something else']
+  },
+  reflection:{
+    intro:'What helped you protect your recovery today? Choose what fits.',
+    choices:['Support','A coping skill','A boundary','Staying busy','Rest','A meeting / treatment','Faith / spirituality','Leaving a risky situation','I learned something','Today was hard']
+  }
+};
 function openActivity(type){
   activeActivity=type;
   const item=activityMap[type];
-  $('#activityTitle').textContent=item.title; $('#activityPrompt').textContent=item.prompt;
+  $('#activityTitle').textContent=item.title;
+  $('#activityPrompt').textContent=item.prompt;
   if(type==='checkin'){
     $('#activityBody').innerHTML=`<div class="moods">
       <button class="mood" data-mood="Good"><span>🙂</span><small>Good</small></button>
       <button class="mood" data-mood="Okay"><span>😐</span><small>Okay</small></button>
       <button class="mood" data-mood="Struggling"><span>😕</span><small>Struggling</small></button>
       <button class="mood" data-mood="Hard"><span>😞</span><small>Hard</small></button></div>`;
-    $$('#activityBody [data-mood]').forEach(b=>b.addEventListener('click',()=>{$$('#activityBody .mood').forEach(x=>x.classList.remove('selected'));b.classList.add('selected');}));
+    $$('#activityBody [data-mood]').forEach(b=>b.addEventListener('click',()=>{
+      $$('#activityBody .mood').forEach(x=>x.classList.remove('selected'));
+      b.classList.add('selected');
+    }));
   } else {
-    $('#activityBody').innerHTML=`<textarea class="dialog-field" id="activityText" placeholder="Write a few words..."></textarea>`;
+    const cfg=guidedActivityOptions[type];
+    $('#activityBody').innerHTML=`
+      <p class="guided-activity-intro">${cfg.intro}</p>
+      <div class="guided-activity-choices">
+        ${cfg.choices.map(x=>`<button type="button" class="guided-activity-choice" data-guided-choice="${x}">${x}</button>`).join('')}
+      </div>
+      <div class="guided-activity-note">
+        <label for="activityText">Add a few words if you want</label>
+        <textarea id="activityText" placeholder="Optional note..."></textarea>
+        <div class="guided-activity-hint">You can save without typing anything.</div>
+      </div>`;
+    $$('#activityBody [data-guided-choice]').forEach(b=>b.addEventListener('click',()=>b.classList.toggle('selected')));
   }
   activityDialog.showModal();
 }
@@ -2607,8 +2651,23 @@ $('#saveActivity').addEventListener('click',async()=>{
     day.checkin=selected?selected.dataset.mood:'Checked in';
     if(currentUser){const moodMap={Good:8,Okay:6,Struggling:4,Hard:2};await sb.from('daily_checkins').upsert({user_id:currentUser.id,checkin_date:todayKey(),checkin_type:'daily',mood:moodMap[day.checkin]||5},{onConflict:'user_id,checkin_date,checkin_type'})}
   } else {
-    const txt=$('#activityText')?.value.trim()||'Completed';day[activeActivity]=txt;
-    if(currentUser){const typeMap={focus:'daily_focus',gratitude:'gratitude',action:'recovery_action',reflection:'evening_reflection'};await sb.from('recovery_actions').insert({user_id:currentUser.id,action_date:todayKey(),action_type:typeMap[activeActivity],content:txt,completed:true})}
+    const selected=$$('#activityBody .guided-activity-choice.selected').map(x=>x.dataset.guidedChoice);
+    const note=$('#activityText')?.value.trim()||'';
+    const parts=[];
+    if(selected.length)parts.push(selected.join(' • '));
+    if(note)parts.push(note);
+    const txt=parts.join(' — ')||'Completed';
+    day[activeActivity]=txt;
+    if(currentUser){
+      const typeMap={focus:'daily_focus',gratitude:'gratitude',action:'recovery_action',reflection:'evening_reflection'};
+      await sb.from('recovery_actions').insert({
+        user_id:currentUser.id,
+        action_date:todayKey(),
+        action_type:typeMap[activeActivity],
+        content:txt,
+        completed:true
+      });
+    }
   }
   data.daily[todayKey()]=day;save();renderBasics();activityDialog.close();showSync('Saved to Supabase');
 });
