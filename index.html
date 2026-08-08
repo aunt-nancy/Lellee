@@ -2998,13 +2998,13 @@ function renderBasics(){
   if($('#journeyText')) $('#journeyText').textContent=p.text;
   if($('#weekFocus')) $('#weekFocus').textContent=p.week;
   if($('#todayStep')) $('#todayStep').textContent=p.step;
-  $('#progressPhaseLabel').textContent=(phaseIndex()<=5?`Phase ${phaseIndex()+1} • `:'')+p.name;
-  $('#phasePercent').textContent=`${pct}%`;
-  $('#phaseBar').style.width=`${pct}%`;
+  if($('#progressPhaseLabel')) $('#progressPhaseLabel').textContent=(phaseIndex()<=5?`Phase ${phaseIndex()+1} • `:'')+p.name;
+  if($('#phasePercent')) $('#phasePercent').textContent=`${pct}%`;
+  if($('#phaseBar')) $('#phaseBar').style.width=`${pct}%`;
   if($('#weekBar')) $('#weekBar').style.width=`${Math.max(15,Math.min(100,pct))}%`;
   if($('#weekProgress')) $('#weekProgress').textContent=`${Math.max(1,Math.min(7,Math.ceil((pct/100)*7)))} of 7 days`;
-  $('#pathSummary').textContent=`${data.approach} recovery approach`;
-  $('#beliefSummary').textContent=`Faith/spiritual preference: ${data.belief}${data.faith?` • ${data.faith}`:''}${data.denomination?` • ${data.denomination}`:''}`;
+  if($('#pathSummary')) $('#pathSummary').textContent=`${data.approach} recovery approach`;
+  if($('#beliefSummary')) $('#beliefSummary').textContent=`Faith/spiritual preference: ${data.belief}${data.faith?` • ${data.faith}`:''}${data.denomination?` • ${data.denomination}`:''}`;
   if($('#localLocation')) $('#localLocation').textContent=[data.city,data.state].filter(Boolean).join(', ')||'Location not set';
   if($('#localTitle')) $('#localTitle').textContent=data.city?`Recovery around ${data.city}`:'Relevant to your area';
   $('#setName').value=data.name||'';
@@ -3017,7 +3017,7 @@ function renderBasics(){
   $('#setCity').value=data.city||'';
   $('#setState').value=data.state||'';
   const day=data.daily[todayKey()]||{};
-  $('#checkinCount').textContent=Object.values(day).filter(Boolean).length;
+  if($('#checkinCount')) $('#checkinCount').textContent=Object.values(day).filter(Boolean).length;
   ['checkin','focus','gratitude','action','reflection'].forEach(type=>{
     $$(`[data-activity="${type}"]`).forEach(el=>el.classList.toggle('done',!!day[type]));
   });
