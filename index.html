@@ -1010,7 +1010,7 @@ button,a{cursor:pointer}
 @media(max-width:560px){.approved-journal-controls,.approved-journal-meta-row{grid-template-columns:1fr}.approved-journal-options{display:grid;gap:8px}#journalEntryCards{grid-template-columns:1fr}.approved-entry-detail-actions{display:grid}.approved-entry-detail-actions>div{margin-left:0}.approved-head-actions{display:grid;gap:6px}}
 
 </style>
-<title>Lellee — V1 Release Candidate</title>
+<title>Lellee — V1 Final Release Candidate</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <!-- LELLEE CANONICAL MASTER
 This is the consolidated index.html.
@@ -1026,9 +1026,6 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="application-name" content="Lellee">
 <meta name="theme-color" content="#0d1029">
-
-<link rel="stylesheet" href="/group-a-core.css">
-<link rel="stylesheet" href="/group-b-production.css">
 <style id="layout-hotfix">
       .content > .page.active{margin-top:0!important;padding-top:0}
       .content > .page{min-height:0}
@@ -1044,13 +1041,7 @@ Includes the approved Lellee consumer experience from early recovery through lif
       .guided-activity-note textarea{width:100%;min-height:72px;resize:vertical;border:1px solid #ddd7df;border-radius:8px;background:#fcfbfc;padding:9px 10px;font-size:.66rem;line-height:1.5}
       .guided-activity-hint{font-size:.53rem;color:#8a828d;margin-top:5px}
     </style>
-<link rel="stylesheet" href="/guided-reviews.css">
-<link rel="stylesheet" href="/connections-progress.css">
-<link rel="stylesheet" href="/paths-resources.css">
-<link rel="stylesheet" href="/lellee-plus.css">
-<link rel="stylesheet" href="/plus-billing.css">
-<link rel="stylesheet" href="/plus-features.css">
-<link rel="stylesheet" href="/admin-operations.css">
+<link rel="stylesheet" href="/lellee-v1.css">
 </head>
 <body><a class="skip-link" href="#mainContent">Skip to main content</a><a class="lellee-skip" href="#lelleeMain">Skip to main content</a>
 <div id="onboardingOverlay" class="prod-overlay hidden">
@@ -3023,7 +3014,11 @@ Includes the approved Lellee consumer experience from early recovery through lif
         <div class="approved-field-row"><label>City<input id="setCity"></label><label>State<input id="setState"></label></div>
       </div>
 
-      <div class="approved-settings-footer">
+      <div class="final-settings-onboarding">
+          <div><b>First-use setup</b><small>Review your recovery date, path, belief preference, and local experience.</small></div>
+          <button type="button" class="approved-link" id="redoOnboarding">Review Setup →</button>
+        </div>
+        <div class="approved-settings-footer">
         <button class="approved-link" data-page="notifications">Notifications &amp; Reminders</button><button class="approved-link" data-page="privacy-center">Privacy &amp; Data</button><button class="approved-link" data-page="diagnostics">Sync &amp; Diagnostics</button><button class="approved-link" data-page="recovery-date">Recovery Date &amp; History</button><button class="approved-link" data-page="story">Recovery Story &amp; Hardcopy</button>
         <button class="approved-small-action" id="saveSettings">Save Preferences</button>
       </div>
@@ -3349,7 +3344,7 @@ function setAuthMode(mode,msg=''){authMode=mode;$('#authTitle').textContent=mode
 $('#authToggle').addEventListener('click',()=>setAuthMode(authMode==='signin'?'signup':'signin'));
 $('#authForm').addEventListener('submit',async e=>{e.preventDefault();const email=$('#authEmail').value.trim(),password=$('#authPassword').value;let result;if(authMode==='signin')result=await sb.auth.signInWithPassword({email,password});else result=await sb.auth.signUp({email,password});if(result.error){$('#authMsg').textContent=result.error.message;$('#authMsg').className='auth-msg error';return}if(authMode==='signup'&&!result.data.session){setAuthMode('signin','Account created. Confirm your email, then sign in.');return}await beginSession(result.data.user)});
 $('#signOutBtn').addEventListener('click',async()=>{await sb.auth.signOut();currentUser=null;$('#authOverlay').classList.remove('hidden')});
-async function beginSession(user){currentUser=user;const [p,r,u,l,j,dc,ra]=await Promise.all([sb.from('profiles').select('*').eq('id',user.id).single(),sb.from('recovery_profiles').select('*').eq('user_id',user.id).single(),sb.from('user_preferences').select('*').eq('user_id',user.id).single(),sb.from('local_preferences').select('*').eq('user_id',user.id).single(),sb.from('journal_entries').select('content,created_at').eq('user_id',user.id).order('created_at',{ascending:false}).limit(20),sb.from('daily_checkins').select('*').eq('user_id',user.id).eq('checkin_date',todayKey()),sb.from('recovery_actions').select('*').eq('user_id',user.id).eq('action_date',todayKey())]);data.name=p.data?.display_name||data.name;data.recoveryDate=r.data?.recovery_date||data.recoveryDate;data.goal=r.data?.current_goal||data.goal;data.approach=approachFromDb(u.data?.recovery_approach);data.belief=beliefFromDb(u.data?.belief_preference);data.faith=u.data?.faith_tradition||'';data.denomination=u.data?.denomination||'';data.city=l.data?.city||'';data.state=l.data?.state||'';data.journalEntries=(j.data||[]).map(x=>({date:x.created_at,text:x.content}));data.daily[todayKey()]={};if(dc.data?.length)data.daily[todayKey()].checkin='Checked in';for(const a of (ra.data||[])){const rev={daily_focus:'focus',gratitude:'gratitude',recovery_action:'action',evening_reflection:'reflection'};if(rev[a.action_type])data.daily[todayKey()][rev[a.action_type]]=a.content||'Completed'}localStorage.setItem(STORAGE,JSON.stringify(data));renderBasics();$('#authOverlay').classList.add('hidden');if(!p.data?.display_name||!r.data?.recovery_date){showPage('settings');setTimeout(()=>alert('Complete your Lellee profile and recovery date, then click Save Preferences.'),100)}else{showPage('today')}}
+async function beginSession(user){currentUser=user;const [p,r,u,l,j,dc,ra]=await Promise.all([sb.from('profiles').select('*').eq('id',user.id).single(),sb.from('recovery_profiles').select('*').eq('user_id',user.id).single(),sb.from('user_preferences').select('*').eq('user_id',user.id).single(),sb.from('local_preferences').select('*').eq('user_id',user.id).single(),sb.from('journal_entries').select('content,created_at').eq('user_id',user.id).order('created_at',{ascending:false}).limit(20),sb.from('daily_checkins').select('*').eq('user_id',user.id).eq('checkin_date',todayKey()),sb.from('recovery_actions').select('*').eq('user_id',user.id).eq('action_date',todayKey())]);data.name=p.data?.display_name||data.name;data.recoveryDate=r.data?.recovery_date||data.recoveryDate;data.goal=r.data?.current_goal||data.goal;data.approach=approachFromDb(u.data?.recovery_approach);data.belief=beliefFromDb(u.data?.belief_preference);data.faith=u.data?.faith_tradition||'';data.denomination=u.data?.denomination||'';data.city=l.data?.city||'';data.state=l.data?.state||'';data.journalEntries=(j.data||[]).map(x=>({date:x.created_at,text:x.content}));data.daily[todayKey()]={};if(dc.data?.length)data.daily[todayKey()].checkin='Checked in';for(const a of (ra.data||[])){const rev={daily_focus:'focus',gratitude:'gratitude',recovery_action:'action',evening_reflection:'reflection'};if(rev[a.action_type])data.daily[todayKey()][rev[a.action_type]]=a.content||'Completed'}localStorage.setItem(STORAGE,JSON.stringify(data));renderBasics();$('#authOverlay').classList.add('hidden');showPage('today');setTimeout(()=>window.LelleeFinalOnboarding?.check(),60)}
 
 const phase1Curriculum = [
 {d:1,t:"Start Here: Safety & Support",lead:"Today is about getting a little steadier. You do not need to solve your whole recovery at once.",focus:"What would help you feel a little safer or steadier today?",choices:["A safe place","Someone I trust","Food / water","Rest","Distance from alcohol / drugs","A meeting or recovery support","Medical / professional help","I'm not sure yet"],actions:["Call or text someone supportive","Eat and hydrate","Rest somewhere safe","Attend a meeting","Create distance from alcohol / drugs","Ask for professional help","Take one hour at a time"]},
@@ -3566,15 +3561,6 @@ Includes:
 - Guided responses for Then & Now
 - Journal, Tools, Progress, Resources, Settings
 -->
-<script src="/group-a-core.js"></script>
-<script src="/group-b-production.js"></script>
-<script src="/guided-reviews.js"></script>
-<script src="/connections-progress.js"></script>
-<script src="/paths-resources.js"></script>
-<script src="/lellee-plus.js"></script>
-<script src="/plus-billing.js"></script>
-<script src="/plus-features.js"></script>
-
 <div class="admin-overlay hidden" id="adminResourceEditor">
   <div class="admin-editor-card">
     <div class="admin-editor-head"><div><span class="approved-kicker">RESOURCE</span><h3 id="adminResourceEditorTitle">Add Resource</h3></div><button class="approved-link" data-close-admin-editor="adminResourceEditor">Close</button></div>
@@ -3628,7 +3614,63 @@ Includes:
     <div class="approved-settings-footer"><button class="approved-link" id="adminDeleteSponsor">Delete</button><button class="approved-small-action" id="adminSaveSponsor">Save Sponsor</button></div>
   </div>
 </div>
+<div id="finalOnboardingOverlay" class="final-onboarding hidden" role="dialog" aria-modal="true" aria-labelledby="onboardingTitle">
+  <div class="final-onboarding-card">
+    <div class="final-onboarding-brand"><img src="/logo.png" alt="Lellee"><span id="onboardingStepLabel">STEP 1 OF 5</span></div>
+    <div class="final-onboarding-progress"><i id="onboardingProgressBar"></i></div>
 
-<script src="/admin-operations.js"></script>
+    <section class="onboarding-step active" data-onboarding-step="1">
+      <span class="approved-kicker">WELCOME TO LELLEE</span><h2 id="onboardingTitle">Make this feel like your recovery space</h2>
+      <p>Start with a few preferences. You can change all of them later.</p>
+      <label class="onboarding-field">What should Lellee call you?<input id="onboardingName" maxlength="60" placeholder="First name or preferred name"></label>
+      <div class="onboarding-choice-row">
+        <button type="button" data-onboarding-intent="stay_sober">Protect my recovery</button><button type="button" data-onboarding-intent="build_routine">Build stronger routines</button><button type="button" data-onboarding-intent="understand_patterns">Understand my patterns</button><button type="button" data-onboarding-intent="rebuild_life">Rebuild parts of my life</button><button type="button" data-onboarding-intent="long_term">Strengthen long-term recovery</button>
+      </div>
+    </section>
+
+    <section class="onboarding-step" data-onboarding-step="2">
+      <span class="approved-kicker">RECOVERY DATE</span><h2>Where should your Lellee Journey begin?</h2>
+      <p>Your recovery date controls the phase and day Lellee shows you. Changing it later does not erase your history.</p>
+      <label class="onboarding-field">Recovery date<input id="onboardingRecoveryDate" type="date"></label>
+      <button type="button" class="approved-link onboarding-today" id="onboardingUseToday">Use today as my recovery date</button>
+      <label class="onboarding-field">A goal you want to keep in view <span>Optional</span><input id="onboardingGoal" maxlength="120" placeholder="Example: Stay connected and protect my routine"></label>
+    </section>
+
+    <section class="onboarding-step" data-onboarding-step="3">
+      <span class="approved-kicker">RECOVERY PATH</span><h2>Which approach fits you best right now?</h2>
+      <p>This is not permanent. You can use more than one legitimate recovery pathway.</p>
+      <div class="onboarding-path-grid">
+        <button type="button" data-onboarding-path="12_step"><b>12-Step</b><small>Fellowship, meetings, sponsorship, step work.</small></button>
+        <button type="button" data-onboarding-path="skills_based"><b>SMART / Skills</b><small>Practical coping, motivation, and behavior-change skills.</small></button>
+        <button type="button" data-onboarding-path="therapy_counseling"><b>Therapy / Counseling</b><small>Professional behavioral-health support.</small></button>
+        <button type="button" data-onboarding-path="medication_supported"><b>Medication-Supported</b><small>Medication as part of an individualized recovery plan.</small></button>
+        <button type="button" data-onboarding-path="peer_support"><b>Peer Support</b><small>Connection with lived-experience recovery support.</small></button>
+        <button type="button" data-onboarding-path="mixed"><b>Mixed</b><small>Use several approaches together.</small></button>
+        <button type="button" data-onboarding-path="exploring"><b>Exploring</b><small>You do not have to decide yet.</small></button>
+      </div>
+    </section>
+
+    <section class="onboarding-step" data-onboarding-step="4">
+      <span class="approved-kicker">BELIEF PREFERENCE</span><h2>Should belief or spirituality appear in your recovery content?</h2>
+      <p>This preference is separate from your recovery pathway and never changes safety guidance.</p>
+      <div class="onboarding-choice-row belief"><button type="button" data-onboarding-belief="secular">Secular</button><button type="button" data-onboarding-belief="spiritual">Spiritual</button><button type="button" data-onboarding-belief="faith_based">Faith-Based</button><button type="button" data-onboarding-belief="mixed">Mixed</button><button type="button" data-onboarding-belief="exploring">Exploring</button></div>
+      <div id="onboardingFaithFields" class="onboarding-faith-fields hidden">
+        <label class="onboarding-field">Faith tradition <span>Optional</span><select id="onboardingFaith"><option value="">Choose later</option><option>Christian</option><option>Jewish</option><option>Muslim</option><option>Buddhist</option><option>Hindu</option><option>Other</option></select></label>
+        <label class="onboarding-field">Denomination / tradition <span>Optional</span><input id="onboardingDenomination" placeholder="Example: Baptist"></label>
+      </div>
+    </section>
+
+    <section class="onboarding-step" data-onboarding-step="5">
+      <span class="approved-kicker">LOCAL EXPERIENCE</span><h2>Finish with the details that make Resources more useful</h2>
+      <p>City and state are optional. Lellee uses them to prioritize relevant local resources.</p>
+      <div class="onboarding-two"><label class="onboarding-field">City <span>Optional</span><input id="onboardingCity" placeholder="City"></label><label class="onboarding-field">State <span>Optional</span><input id="onboardingState" maxlength="2" placeholder="CA"></label></div>
+      <div class="onboarding-free-promise"><span>✓</span><div><b>Your core recovery experience is free.</b><p>Plus is optional. Help Me Right Now, guided recovery, core coping tools, Journal, Support and Resources are not locked behind payment.</p></div></div>
+    </section>
+
+    <div class="final-onboarding-actions"><button type="button" class="approved-link hidden" id="onboardingBack">Back</button><button type="button" class="approved-link" id="onboardingSkip">Finish later</button><button type="button" class="approved-small-action" id="onboardingNext">Continue</button></div>
+  </div>
+</div>
+
+<script src="/lellee-v1.js"></script>
 </body>
 </html>
