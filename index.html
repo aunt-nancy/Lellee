@@ -2664,8 +2664,8 @@ $('#saveSettings').addEventListener('click',()=>{
   data.state=$('#setState').value.trim();
   save();renderBasics();showPage('today');
 });
-$('#resetDemo').addEventListener('click',()=>{localStorage.removeItem(STORAGE);location.reload()});
-$('#reviewPrevious').addEventListener('click',()=>{
+$('#resetDemo')?.addEventListener('click',()=>{localStorage.removeItem(STORAGE);location.reload()});
+$('#reviewPrevious')?.addEventListener('click',()=>{
   $('#toolTitle').textContent='Previous Work';
   $('#toolBody').innerHTML=`<p class="subtle">Previous completed work will live here. Future phases remain hidden until they become relevant.</p>`;
   $('#toolDialog').showModal();
