@@ -1,0 +1,69 @@
+LELLEE V1 RELEASE-CANDIDATE QA
+
+DATABASE
+[ ] Run 17_GROUP_B_Production_Consolidation.sql successfully
+[ ] Run 18_PRELAUNCH_VERIFY.sql
+[ ] journey_content count is at least 742 (730 source days + 12 Year 3+ weekly themes)
+[ ] published recovery tools count is at least 18
+[ ] RLS shows true for private user tables
+
+AUTH / ACCOUNT
+[ ] Sign up
+[ ] Sign in / sign out
+[ ] Password-reset email
+[ ] New password after recovery link
+[ ] Data export downloads valid JSON
+[ ] Recovery-date change preserves history
+[ ] Account-deletion request records successfully
+
+CORE EXPERIENCE
+[ ] Today dashboard
+[ ] For You Today
+[ ] Journey current phase
+[ ] Daily guidance Day 1–183
+[ ] Weekly cadence Days 184–365
+[ ] Weekly cadence Days 366–730
+[ ] Year 3+ long-term guidance
+[ ] Guided response save + history
+[ ] Tools categories / completion
+[ ] Personalization on/off
+[ ] Learn
+[ ] Journal / collections / story permissions
+[ ] Weekly + monthly reviews
+[ ] Milestones / Then & Now / Recovery Story
+[ ] Planner
+[ ] Support Network
+[ ] Resources / saved resources
+
+PWA / MOBILE
+[ ] Service worker registers
+[ ] Offline app shell
+[ ] Android install
+[ ] iPhone Add to Home Screen
+[ ] Desktop Chrome/Edge
+[ ] 320px mobile width
+[ ] No horizontal overflow
+[ ] Keyboard-only navigation
+[ ] Visible focus
+[ ] Text zoom 200%
+[ ] Skip link works
+
+NOTIFICATIONS
+[ ] Browser permission
+[ ] Local notification test
+[ ] Device push subscription saves
+[ ] Existing Edge Function still returns 200
+[ ] Existing Cron still succeeds
+[ ] Complete PUSH_HARDENING_LATER.txt
+[ ] End-to-end background push reaches device with Lellee closed
+
+LAUNCH BLOCKERS
+[ ] Qualified legal review of privacy.html
+[ ] Qualified legal review of terms.html
+[ ] Clinical/legal review of safety.html and Help Me Right Now language
+[ ] Security review of Supabase RLS and Edge Function secrets
+[ ] No service-role key, VAPID private key, or CRON_SECRET in GitHub/browser code
+[ ] Production auth URLs
+[ ] Production email sender
+[ ] Backup/restore and incident-response process
+[ ] Final end-to-end push test

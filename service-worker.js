@@ -1,72 +1,24 @@
-
-const CACHE='lellee-shell-v1';
-const SHELL=['/','/index.html','/manifest.webmanifest','/icon-192.png','/icon-512.png'];
-
-self.addEventListener('install',event=>{
-  event.waitUntil(caches.open(CACHE).then(c=>c.addAll(SHELL)));
-  self.skipWaiting();
+const CACHE='lellee-v1-rc1-20260807';
+const SHELL=['/app','/index.html','/group-a-core.css','/group-a-core.js','/group-b-production.css','/group-b-production.js','/manifest.webmanifest','/icon-192.png','/icon-512.png','/privacy.html','/terms.html','/safety.html'];
+self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(SHELL).catch(()=>{})));self.skipWaiting()});
+self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))));self.clients.claim()});
+self.addEventListener('fetch',e=>{
+ const u=new URL(e.request.url);
+ if(e.request.method!=='GET')return;
+ if(u.hostname.includes('supabase.co')||u.pathname.includes('/functions/v1/'))return;
+ if(e.request.mode==='navigate'){
+   e.respondWith(fetch(e.request).then(r=>{const copy=r.clone();caches.open(CACHE).then(c=>c.put('/index.html',copy));return r}).catch(()=>caches.match('/index.html')));
+   return;
+ }
+ e.respondWith(caches.match(e.request).then(hit=>hit||fetch(e.request).then(r=>{if(r.ok){const copy=r.clone();caches.open(CACHE).then(c=>c.put(e.request,copy))}return r})));
 });
-self.addEventListener('activate',event=>{
-  event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))));
-  self.clients.claim();
+self.addEventListener('push',e=>{
+ let d={};try{d=e.data?e.data.json():{}}catch(err){d={body:e.data?.text?.()||''}}
+ const page=d.page||'today';
+ const options={body:d.body||'You have a recovery reminder.',icon:'/icon-192.png',badge:'/icon-192.png',tag:d.tag||'lellee-reminder',renotify:false,data:{url:`/app?page=${encodeURIComponent(page)}`}};
+ e.waitUntil(self.registration.showNotification(d.title||'Lellee',options));
 });
-self.addEventListener('fetch',event=>{
-  const req=event.request;
-  const url=new URL(req.url);
-
-  // Never cache Supabase/API/auth traffic.
-  if(url.hostname.includes('supabase.co') || req.method!=='GET') return;
-
-  if(req.mode==='navigate'){
-    event.respondWith(
-      fetch(req).then(res=>{
-        const copy=res.clone();
-        caches.open(CACHE).then(c=>c.put('/index.html',copy));
-        return res;
-      }).catch(()=>caches.match('/index.html'))
-    );
-    return;
-  }
-
-  event.respondWith(
-    caches.match(req).then(cached=>cached || fetch(req).then(res=>{
-      if(url.origin===location.origin){
-        const copy=res.clone();
-        caches.open(CACHE).then(c=>c.put(req,copy));
-      }
-      return res;
-    }))
-  );
-});
-
-
-self.addEventListener('notificationclick',event=>{
-  event.notification.close();
-  const page=event.notification.data?.page||'today';
-  const url='/?page='+encodeURIComponent(page);
-  event.waitUntil(
-    clients.matchAll({type:'window',includeUncontrolled:true}).then(list=>{
-      for(const client of list){
-        if('focus' in client){
-          client.postMessage({type:'LELLEE_OPEN_PAGE',page});
-          return client.focus();
-        }
-      }
-      return clients.openWindow(url);
-    })
-  );
-});
-
-self.addEventListener('push',event=>{
-  let payload={title:'Lellee',body:'You have a recovery reminder.',page:'today',tag:'lellee-push'};
-  try{ if(event.data) payload={...payload,...event.data.json()}; }catch{}
-  event.waitUntil(
-    self.registration.showNotification(payload.title,{
-      body:payload.body,
-      icon:'/icon-192.png',
-      badge:'/icon-192.png',
-      tag:payload.tag||'lellee-push',
-      data:{page:payload.page||'today',reminder_id:payload.reminder_id||null}
-    })
-  );
+self.addEventListener('notificationclick',e=>{
+ e.notification.close();const url=e.notification.data?.url||'/app';
+ e.waitUntil(clients.matchAll({type:'window',includeUncontrolled:true}).then(ws=>{for(const w of ws){if('focus'in w){w.navigate(url);return w.focus()}}return clients.openWindow(url)}));
 });

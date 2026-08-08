@@ -1,0 +1,15 @@
+{
+  "build": "Lellee Big Build B \u2014 Production & Launch",
+  "version": "1.0.0-rc1",
+  "javascript_syntax": {
+    "group-a-core.js": "passed",
+    "group-b-production.js": "passed",
+    "service-worker.js": "passed"
+  },
+  "duplicate_html_ids": 0,
+  "missing_navigation_pages": 0,
+  "manifest_json": "passed",
+  "vercel_json": "passed",
+  "live_database_execution": "not run by build tool; user runs supplied SQL in Supabase",
+  "device_e2e_push": "postponed by user; checklist included"
+}

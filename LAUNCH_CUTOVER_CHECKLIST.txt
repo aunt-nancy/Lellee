@@ -1,0 +1,33 @@
+LELLEE V1 — LAUNCH CUTOVER
+
+BEFORE DOMAIN CUTOVER
+1. Run Build A SQL if not already done.
+2. Run 17_GROUP_B_Production_Consolidation.sql.
+3. Run 18_PRELAUNCH_VERIFY.sql.
+4. Upload Build B application/PWA files to GitHub and allow Vercel to deploy.
+5. Keep vercel.json during preview testing.
+6. Complete QA_RELEASE_CANDIDATE.txt.
+7. Complete the postponed background-push test and PUSH_HARDENING_LATER.txt.
+8. Obtain legal/clinical review of the public launch drafts.
+
+AT LELLEE.COM CUTOVER
+1. Rename vercel.LAUNCH.json to vercel.json and commit.
+2. Point Lellee.com to the Vercel production project.
+3. In Supabase Auth, set the production Site URL / redirect URLs to the Lellee.com app route.
+4. Test:
+   - https://lellee.com/
+   - https://lellee.com/app
+   - sign up/sign in
+   - password reset
+   - privacy / terms / safety
+   - PWA installation
+5. Keep the previous Vercel deployment available for rollback until production is verified.
+
+AFTER CUTOVER
+- Freeze major V1 features.
+- Fix production bugs before adding V2 scope.
+- Add analytics only after privacy review; do not send journal or guided-response text to advertising/behavioral analytics.
+- Lellee.org can later redirect to Lellee.com.
+
+IMPORTANT
+This release-candidate build is technical preparation. It does not itself certify HIPAA, 42 CFR Part 2, FTC Health Breach Notification Rule, California privacy-law, accessibility, medical-device, or other regulatory compliance.

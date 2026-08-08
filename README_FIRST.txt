@@ -1,39 +1,48 @@
-LELLEE — BIG BUILD A: CORE PRODUCT COMPLETION
+LELLEE — BIG BUILD B: PRODUCTION & LAUNCH
+Version 1.0.0-rc1
 
-This combines the first three remaining major builds.
+This combines the final three major builds:
 
-1) FULL RECOVERY CONTENT EXPANSION
-- 730 Day 1–730 source curriculum records moved into Supabase
-- daily guidance through Day 183
-- weekly cadence for Maintenance (Days 184–365)
-- weekly cadence for Year Two (Days 366–730)
-- 12 long-term weekly themes for Year 3+
-- current phase first; future phases de-emphasized
-- past guided work remains reviewable
-- TAP 21 mapping stays internal
+4. DATABASE + ACCOUNT CONSOLIDATION
+- Resolves the user_consents schema conflict by keeping consent history separate from current privacy preferences
+- Correct support_contacts field handling
+- Recovery-date history
+- Data export
+- Account-deletion request workflow
+- Notification/reminder tables
+- Push-subscription compatibility
+- RLS hardening
 
-2) TOOLS & COPING CENTER
-- 18 structured recovery tools
-- cravings, urge surfing, grounding, paced breathing, HALT
-- triggers and high-risk exit planning
-- anger, loneliness, sleep, boundaries
-- support scripts and warning-sign planning
-- return-to-use safety next steps
-- overwhelm, meeting prep, values, and impulse-delay tools
+5. QA + MOBILE + PWA
+- Hardened service worker
+- Offline app shell
+- Install prompt wiring
+- notification/deep-link routing
+- accessibility skip link / visible focus
+- release-candidate QA checklist
+- diagnostics wiring
 
-3) PERSONALIZATION ENGINE
-- For You Today recommendation
-- recommendations from the user's own recent guided/check-in activity
-- phase-aware Journey and Learn
-- optional secular/spiritual/faith-aligned choices
-- explicit optional Christian/Baptist wording support
-- personalization can be turned off
-- no diagnostic scoring
+6. LAUNCH BUILD
+- public landing page
+- privacy / terms drafts for qualified review
+- safety page
+- preview and launch Vercel configurations
+- pre-launch verification SQL
+- Lellee.com cutover checklist
+- secure replacement Edge Function for the postponed push-hardening/test step
 
-INSTALL
-1. Run 16_GROUP_A_Core_Product.sql once in Supabase → SQL Editor.
-2. Upload index.html, group-a-core.js, group-a-core.css, and PWA assets to GitHub.
-3. Commit to main and allow Vercel to deploy.
-4. Verify Today → Guided Recovery, Journey, Tools, Learn, Settings personalization, and Journal saving.
+INSTALL NOW
+1. Run 17_GROUP_B_Production_Consolidation.sql in Supabase SQL Editor.
+2. Run 18_PRELAUNCH_VERIFY.sql and review the results.
+3. Upload the application/PWA files to GitHub and commit.
+4. Keep the included vercel.json while testing. Do NOT switch to vercel.LAUNCH.json yet.
+5. Use QA_RELEASE_CANDIDATE.txt.
 
-BUILD B will handle database/account consolidation, full QA/mobile/PWA validation, postponed end-to-end push testing, and launch cutover.
+PUSH TEST
+The push end-to-end test remains postponed as requested. The secure replacement Edge Function and PUSH_HARDENING_LATER.txt are included for the final pre-launch push session.
+
+DO NOT UPLOAD
+- VAPID private key
+- Supabase service-role key
+- CRON_SECRET
+No secret value is included in this package.

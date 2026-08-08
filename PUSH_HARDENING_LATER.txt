@@ -1,0 +1,16 @@
+LELLEE — PUSH SECURITY HARDENING (DO THIS WHEN WE RETURN TO THE PUSH TEST)
+
+The current Edge Function/Cron already succeeded. Do not change it tonight if you are postponing the end-to-end test.
+
+Before public launch:
+1. In Supabase Edge Function Secrets, add a new random secret named CRON_SECRET.
+2. Replace the deployed send-push-reminders function with the secure version in:
+   supabase/functions/send-push-reminders/index.ts
+3. Keep Verify JWT OFF for the Cron HTTP call.
+4. Edit the existing Cron job so its POST request includes this HTTP header:
+   x-lellee-cron-secret: <the exact CRON_SECRET value>
+5. Keep the request body as {}
+6. Run the Cron job manually once and confirm a 200 response.
+7. Then perform the actual end-to-end device notification test.
+
+Never put CRON_SECRET, VAPID_PRIVATE_KEY, or a Supabase service-role key in GitHub or browser JavaScript.
