@@ -56,3 +56,17 @@ self.addEventListener('notificationclick',event=>{
     })
   );
 });
+
+self.addEventListener('push',event=>{
+  let payload={title:'Lellee',body:'You have a recovery reminder.',page:'today',tag:'lellee-push'};
+  try{ if(event.data) payload={...payload,...event.data.json()}; }catch{}
+  event.waitUntil(
+    self.registration.showNotification(payload.title,{
+      body:payload.body,
+      icon:'/icon-192.png',
+      badge:'/icon-192.png',
+      tag:payload.tag||'lellee-push',
+      data:{page:payload.page||'today',reminder_id:payload.reminder_id||null}
+    })
+  );
+});
