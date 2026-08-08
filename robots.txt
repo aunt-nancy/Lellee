@@ -1,2 +1,4 @@
 User-agent: *
 Allow: /
+Disallow: /app
+Sitemap: https://lellee.com/sitemap.xml

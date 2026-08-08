@@ -1,0 +1,22 @@
+{
+  "public_urls": [
+    "/",
+    "/recovery/",
+    "/tools/",
+    "/learn/",
+    "/learn/first-30-days-recovery/",
+    "/learn/how-to-handle-cravings/",
+    "/learn/understanding-triggers/",
+    "/learn/relapse-prevention-plan/",
+    "/learn/multiple-pathways-to-recovery/",
+    "/learn/recovery-support-network/",
+    "/learn/long-term-recovery/",
+    "/learn/recovery-journal/",
+    "/privacy.html",
+    "/terms.html",
+    "/safety.html"
+  ],
+  "article_count": 8,
+  "hub_count": 3,
+  "private_app": "blocked from crawling"
+}
