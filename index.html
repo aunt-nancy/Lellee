@@ -1049,6 +1049,7 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <link rel="stylesheet" href="/paths-resources.css">
 <link rel="stylesheet" href="/lellee-plus.css">
 <link rel="stylesheet" href="/plus-billing.css">
+<link rel="stylesheet" href="/plus-features.css">
 </head>
 <body><a class="skip-link" href="#mainContent">Skip to main content</a><a class="lellee-skip" href="#lelleeMain">Skip to main content</a>
 <div id="onboardingOverlay" class="prod-overlay hidden">
@@ -1197,6 +1198,7 @@ Includes the approved Lellee consumer experience from early recovery through lif
       <button data-page="then-now">Then &amp; Now</button>
       <button data-page="history">My History</button>
       <button data-page="story">Recovery Story</button>
+      <button data-page="story-editions">Story Editions+</button>
       <button data-page="longterm">Long-Term</button><button data-page="planner">Planner</button><button data-page="support-network">My Support</button>
     </div>
   </div>
@@ -2137,6 +2139,7 @@ Includes the approved Lellee consumer experience from early recovery through lif
       <button data-page="milestones">Milestones</button>
       <button data-page="story">Recovery Story</button>
       <button data-page="journal">Journal</button>
+      <button data-page="journal-plus">Journal+</button>
     </div>
   </div>
 </section>
@@ -2790,9 +2793,9 @@ Includes the approved Lellee consumer experience from early recovery through lif
     <div class="plus-feature-grid">
       <article><span class="plus-feature-icon">↗</span><small>RECOVERY REVIEW</small><h3>Weekly & Monthly Summaries</h3><p>Turn your own saved activity into a simple pattern summary and carry-forward plan.</p></article>
       <article><span class="plus-feature-icon">↔</span><small>THEN & NOW+</small><h3>More Comparison Themes</h3><p>Compare more areas over time without turning them into recovery scores.</p></article>
-      <article><span class="plus-feature-icon">✎</span><small>JOURNAL+</small><h3>Expanded Search & Collections</h3><p>More custom collections, saved filters, favorites, and longer-range journal review.</p></article>
-      <article><span class="plus-feature-icon">◆</span><small>RECOVERY STORY+</small><h3>PDF Story Editions</h3><p>Create enhanced digital 2-, 5-, and 10-year Recovery Story editions for printing or archiving.</p></article>
-      <article><span class="plus-feature-icon">◷</span><small>REMINDERS+</small><h3>Custom Reminder Sets</h3><p>Create more personalized recovery, meeting, journal, and milestone reminders.</p></article>
+      <article class="plus-feature-link" data-page="journal-plus"><span class="plus-feature-icon">✎</span><small>JOURNAL+</small><h3>Expanded Search & Collections</h3><p>More custom collections, saved filters, favorites, and longer-range journal review.</p></article>
+      <article class="plus-feature-link" data-page="story-editions"><span class="plus-feature-icon">◆</span><small>RECOVERY STORY+</small><h3>PDF Story Editions</h3><p>Create enhanced digital 2-, 5-, and 10-year Recovery Story editions for printing or archiving.</p></article>
+      <article class="plus-feature-link" data-page="reminders-plus"><span class="plus-feature-icon">◷</span><small>REMINDERS+</small><h3>Custom Reminder Sets</h3><p>Create more personalized recovery, meeting, journal, and milestone reminders.</p></article>
       <article><span class="plus-feature-icon">✦</span><small>PERSONALIZATION+</small><h3>Deeper “For You” Choices</h3><p>Use more of your own saved preferences and patterns to decide what Lellee surfaces first.</p></article>
     </div>
     <div id="plusComparison" class="plus-comparison hidden"><div class="plus-comparison-head"><div><span class="approved-kicker">FREE VS PLUS</span><h3>Core recovery stays free</h3></div><button class="approved-link" id="closePlusComparison">Close</button></div><div class="plus-comparison-grid"><div class="plus-compare-card"><span class="approved-kicker">LELLEE FREE</span><h3>$0</h3><ul><li>Today dashboard</li><li>Guided Recovery Journey</li><li>Help Me Right Now</li><li>Core recovery tools</li><li>Journal</li><li>Planner & Support Network</li><li>Resources</li><li>Basic progress & milestones</li></ul></div><div class="plus-compare-card featured"><span class="approved-kicker">LELLEE PLUS</span><h3><span id="plusComparePrice">$3.99</span><small>/mo</small></h3><ul><li>Everything in Free</li><li>Recovery Review+</li><li>Expanded Then & Now</li><li>Advanced journal organization</li><li>Enhanced Recovery Story PDFs</li><li>More custom reminders</li><li>Deeper personalization</li><li>Potential physical-journal discounts</li></ul></div></div></div>
@@ -2812,6 +2815,94 @@ Includes the approved Lellee consumer experience from early recovery through lif
     </div>
   </div>
 </section>
+
+<section class="page" id="page-journal-plus">
+  <div class="approved-inner">
+    <div class="approved-inner-head">
+      <div><span class="approved-kicker">JOURNAL+</span><h2>Find the parts of your story you want to revisit</h2><p>Search, filter, favorite, and group journal entries without changing the free writing experience.</p></div>
+      <button class="approved-link" data-page="journal">← Journal</button>
+    </div>
+    <div id="journalPlusLock" class="plus-lock-card hidden"><span>✦</span><div><small>LELLEE PLUS</small><h3>Advanced Journal organization is a Plus feature.</h3><p>Your regular Journal remains fully available on the free plan.</p></div><button class="approved-small-action" data-page="plus">View Plus</button></div>
+    <div id="journalPlusContent">
+      <div class="journal-plus-toolbar">
+        <input id="journalPlusSearch" placeholder="Search your journal">
+        <select id="journalPlusRange"><option value="30">Last 30 days</option><option value="90">Last 90 days</option><option value="365">Last year</option><option value="all" selected>All entries</option></select>
+        <select id="journalPlusCollectionFilter"><option value="">All collections</option></select>
+      </div>
+      <div class="journal-plus-actions"><button class="approved-small-action" id="newJournalCollection">+ New Collection</button><button class="approved-link" id="showJournalFavorites">Favorites only</button></div>
+      <div class="journal-plus-summary"><article><b id="journalPlusCount">0</b><small>Entries</small></article><article><b id="journalPlusFavoriteCount">0</b><small>Favorites</small></article><article><b id="journalPlusCollectionCount">0</b><small>Collections</small></article></div>
+      <div id="journalPlusList" class="journal-plus-list"></div>
+    </div>
+  </div>
+</section>
+
+
+<section class="page" id="page-reminders-plus">
+  <div class="approved-inner">
+    <div class="approved-inner-head">
+      <div><span class="approved-kicker">REMINDERS+</span><h2>Create reminders that fit your recovery—not the other way around</h2><p>Set personalized reminder groups for meetings, support, journaling, health, and milestones.</p></div>
+      <button class="approved-link" data-page="settings">← Settings</button>
+    </div>
+    <div id="reminderPlusLock" class="plus-lock-card hidden"><span>✦</span><div><small>LELLEE PLUS</small><h3>Custom reminder sets are a Plus feature.</h3><p>Basic recovery reminders remain available on Free.</p></div><button class="approved-small-action" data-page="plus">View Plus</button></div>
+    <div id="reminderPlusContent">
+      <div class="reminder-template-grid">
+        <button data-reminder-template="meeting"><span>▣</span><b>Meeting / Appointment</b><small>Remember support you already planned.</small></button>
+        <button data-reminder-template="support"><span>♡</span><b>Reach Out</b><small>Prompt connection before isolation grows.</small></button>
+        <button data-reminder-template="journal"><span>✎</span><b>Journal</b><small>Make a little space to notice the day.</small></button>
+        <button data-reminder-template="health"><span>+</span><b>Health / Routine</b><small>Sleep, movement, food, hydration, medication.</small></button>
+        <button data-reminder-template="milestone"><span>◆</span><b>Milestone / Review</b><small>Mark recovery dates and reflection points.</small></button>
+        <button data-reminder-template="custom"><span>✦</span><b>Custom</b><small>Create your own wording and schedule.</small></button>
+      </div>
+      <div id="reminderEditor" class="reminder-editor hidden">
+        <div class="approved-review-block">
+          <span class="approved-kicker">NEW REMINDER</span><h3 id="reminderEditorTitle">Custom reminder</h3>
+          <div class="reminder-form-grid">
+            <label>Title<input id="reminderPlusTitle" maxlength="90" placeholder="What should Lellee remind you about?"></label>
+            <label>Time<input id="reminderPlusTime" type="time" value="09:00"></label>
+            <label>Days<select id="reminderPlusDays" multiple size="7"><option value="0">Sunday</option><option value="1">Monday</option><option value="2">Tuesday</option><option value="3">Wednesday</option><option value="4">Thursday</option><option value="5">Friday</option><option value="6">Saturday</option></select></label>
+            <label>Message<textarea id="reminderPlusMessage" placeholder="Optional reminder wording..."></textarea></label>
+          </div>
+          <div class="approved-settings-footer"><button class="approved-link" id="cancelReminderPlus">Cancel</button><button class="approved-small-action" id="saveReminderPlus">Save Reminder</button></div>
+        </div>
+      </div>
+      <div class="connection-section-head"><div><span class="approved-kicker">MY CUSTOM REMINDERS</span><h3>Saved Reminder+ set</h3></div><span class="connection-count" id="reminderPlusCount">0 saved</span></div>
+      <div id="reminderPlusList" class="connection-list"></div>
+    </div>
+  </div>
+</section>
+
+
+<section class="page" id="page-story-editions">
+  <div class="approved-inner">
+    <div class="approved-inner-head">
+      <div><span class="approved-kicker">RECOVERY STORY+</span><h2>Prepare your story for the edition you want to keep</h2><p>Choose a milestone edition, preview included sections, and prepare a print-ready digital version.</p></div>
+      <button class="approved-link" data-page="story">← Recovery Story</button>
+    </div>
+    <div id="storyPlusLock" class="plus-lock-card hidden"><span>✦</span><div><small>LELLEE PLUS</small><h3>Enhanced Recovery Story editions are a Plus feature.</h3><p>Your basic Recovery Story remains available on Free.</p></div><button class="approved-small-action" data-page="plus">View Plus</button></div>
+    <div id="storyPlusContent">
+      <div class="story-edition-grid">
+        <button class="selected" data-story-edition="year2"><span>2</span><b>Year 2 Edition</b><small>Early recovery → stability → rebuilding.</small></button>
+        <button data-story-edition="year5"><span>5</span><b>5-Year Edition</b><small>Add long-term identity, relationships, purpose, and maintenance.</small></button>
+        <button data-story-edition="year10"><span>10</span><b>10-Year Edition</b><small>A deeper long-view edition across major life chapters.</small></button>
+      </div>
+      <div class="story-edition-options">
+        <label><input type="checkbox" data-story-section="milestones" checked> Milestones</label>
+        <label><input type="checkbox" data-story-section="then_now" checked> Then &amp; Now</label>
+        <label><input type="checkbox" data-story-section="reviews" checked> Annual / Periodic Reviews</label>
+        <label><input type="checkbox" data-story-section="selected_journal"> Selected Journal Excerpts</label>
+        <label><input type="checkbox" data-story-section="support"> Support &amp; Connection</label>
+        <label><input type="checkbox" data-story-section="closing_reflection" checked> Closing Reflection</label>
+      </div>
+      <div class="approved-review-block">
+        <span class="approved-kicker">EDITION NOTE</span><h3>What do you want this edition to remember?</h3>
+        <textarea id="storyEditionNote" placeholder="Optional note for this edition..."></textarea>
+      </div>
+      <div class="story-edition-preview" id="storyEditionPreview"></div>
+      <div class="approved-settings-footer"><button class="approved-link" id="saveStoryEdition">Save Edition Setup</button><button class="approved-small-action" id="printStoryEdition">Print / Save as PDF</button></div>
+    </div>
+  </div>
+</section>
+
 <section class="page" id="page-settings">
   <div class="approved-inner">
     <div class="approved-inner-head">
@@ -3408,5 +3499,6 @@ Includes:
 <script src="/paths-resources.js"></script>
 <script src="/lellee-plus.js"></script>
 <script src="/plus-billing.js"></script>
+<script src="/plus-features.js"></script>
 </body>
 </html>
