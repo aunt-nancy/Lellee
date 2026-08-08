@@ -1,0 +1,30 @@
+LELLEE SEO PHASE 4 — FINAL CUTOVER CHECKLIST
+
+KEEP CURRENT PREVIEW/TESTING CONFIG UNTIL EVERY "LAUNCH GATE" BELOW IS COMPLETE.
+
+LAUNCH GATES
+[ ] Final private-app QA complete
+[ ] Legal/privacy/safety pages reviewed
+[ ] TAP 21 19/20 handled when ready
+[ ] Push end-to-end test completed/hardened
+[ ] Stripe setup completed last
+[ ] Lellee.com DNS/domain configuration ready
+[ ] Public SEO pages visually reviewed on phone + desktop
+[ ] No sensitive recovery data is sent to public analytics
+[ ] Google Search Console property ready
+[ ] Bing Webmaster Tools property ready/imported
+[ ] sitemap.xml confirmed live
+[ ] robots.txt confirmed live
+[ ] Rich Results / schema validation performed on representative pages
+[ ] Search Console live URL inspection performed
+[ ] Core Web Vitals measured after live traffic/data becomes available
+
+ONLY THEN
+- switch from preview vercel.json to the chosen final launch configuration
+- verify https://lellee.com/
+- submit sitemap
+- submit IndexNow release URLs
+- request indexing for representative pages
+- monitor indexing, CWV, crawl errors and conversions
+
+DO NOT USE vercel.SEO_PHASE4_LAUNCH.json YET.
