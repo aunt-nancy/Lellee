@@ -1,23 +1,13 @@
 {
-  "status": "prelaunch budget",
   "core_web_vitals_targets": {
-    "LCP_seconds": {
-      "target_max": 2.5,
-      "source": "Google Search Central"
-    },
-    "INP_milliseconds": {
-      "target_max": 200,
-      "source": "Google Search Central"
-    },
-    "CLS": {
-      "target_max": 0.1,
-      "source": "Google Search Central"
-    }
+    "LCP_seconds_max": 2.5,
+    "INP_milliseconds_max": 200,
+    "CLS_max": 0.1
   },
-  "lellee_static_budgets": {
-    "public_html_each_kb_max": 100,
-    "seo_min_css_kb_max": 50,
-    "public_analytics_js_kb_max": 20
+  "static_public_page_budgets": {
+    "html_kb_target_max": 100,
+    "css_kb_target_max": 100,
+    "blocking_third_party_scripts_target": 0
   },
-  "measurement_note": "Static file checks cannot establish real-world Core Web Vitals. Confirm with PageSpeed/CrUX/Search Console after launch."
+  "measurement_note": "Real Core Web Vitals require deployed field/lab measurement; this package only validates static build characteristics."
 }

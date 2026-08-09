@@ -1,0 +1,28 @@
+LELLEE PUBLIC ANALYTICS — PREPARED, NOT ACTIVE
+
+Why disabled:
+Public recovery-topic browsing can reveal sensitive interests. Do not activate analytics
+until Privacy/Terms and tracking practices have been reviewed.
+
+Prepared files:
+- public-analytics-config.js
+- public-analytics.js
+
+Current state:
+enabled: false
+measurementId: blank
+advertising/personalization: off
+
+If approved later:
+1. Create ONE GA4 property and ONE web stream for lellee.com.
+2. Put only the G- measurement ID into public-analytics-config.js.
+3. Keep the files on PUBLIC SEO pages only. Never load them in /app.
+4. Implement/approve consent behavior before changing analytics_storage from denied.
+5. Track only minimum necessary public conversion events.
+6. Do not send journal, craving, recovery-day, pathway, support-network, account, or other private app data.
+
+Suggested public conversion events:
+- public_start_free_click
+- public_resource_open
+- public_learning_cta
+No private recovery state should be attached to those events.
