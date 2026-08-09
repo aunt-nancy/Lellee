@@ -1,0 +1,49 @@
+LELLEE — SEO PHASE 4 SEARCH ENGINE SETUP
+PREPARED: 2026-08-08
+
+DO NOT DO THESE STEPS UNTIL LELLEE.COM PUBLIC CUTOVER.
+
+GOOGLE SEARCH CONSOLE
+[ ] Add lellee.com as a Domain property.
+[ ] Verify ownership with DNS.
+[ ] Submit https://lellee.com/sitemap.xml
+[ ] Inspect homepage, /recovery/, /learn/, /resources/, one article, and one city hub.
+[ ] Confirm /app is excluded by X-Robots-Tag noindex after launch.
+[ ] Review Page Indexing and Core Web Vitals reports after data appears.
+[ ] Use URL Inspection for priority pages after major updates.
+
+BING WEBMASTER TOOLS
+[ ] Add/verify lellee.com or import the verified Search Console property.
+[ ] Submit https://lellee.com/sitemap.xml
+[ ] Confirm the IndexNow key file is reachable:
+    https://lellee.com/7128db9e431d3f715783d57c4d3d52d2.txt
+[ ] Run SUBMIT_INDEXNOW_AFTER_LAUNCH.py once after the key file is live.
+[ ] Inspect priority URLs in Bing URL Inspection.
+
+STRUCTURED DATA
+[ ] Validate homepage Organization + WebSite JSON-LD.
+[ ] Validate Article + BreadcrumbList on learning pages.
+[ ] Validate BreadcrumbList on hubs.
+[ ] Review any warnings before requesting indexing.
+
+PERFORMANCE
+[ ] Test representative templates in PageSpeed Insights:
+    homepage
+    article
+    topic hub
+    city resource hub
+[ ] Target LCP <= 2.5s, INP < 200ms, CLS < 0.1.
+[ ] Review Search Console Core Web Vitals once field data exists.
+
+ANALYTICS
+[ ] Keep public analytics disabled until privacy/legal review.
+[ ] If approved, create GA4 and insert only the G- measurement ID.
+[ ] Never load public analytics in /app.
+[ ] Never send private recovery state to analytics.
+
+FINAL INDEXING
+[ ] robots.txt returns 200.
+[ ] sitemap.xml returns 200.
+[ ] Sitemap contains only canonical, indexable URLs.
+[ ] NOINDEX city/category templates stay outside sitemap.
+[ ] /app returns X-Robots-Tag: noindex, nofollow.

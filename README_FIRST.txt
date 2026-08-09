@@ -1,52 +1,66 @@
 LELLEE — SEO PHASE 4: LAUNCH READINESS
-Audit status: PASS
+Prepared 2026-08-08
 
-THIS IS THE FINAL SEO BUILD PHASE.
-It DOES NOT launch Lellee.com and DOES NOT replace the current preview Vercel config.
+STATUS: BUILD COMPLETE / NOT LAUNCHED
 
-COMPLETED
-- WebSite structured data on homepage for site-name signaling
+THIS PACKAGE DOES NOT SWITCH VERCEL TO LAUNCH MODE.
+
+ADDED
 - Organization structured data on homepage
-- normalized Article structured data on learning pages
-- BreadcrumbList structured data across indexable internal pages
-- removed FAQPage markup as a primary SEO tactic; visible FAQs remain
-- minified public CSS
-- favicon/theme/social metadata polish
-- sitemap lastmod values
-- analytics/conversion loader prepared but disabled
-- private /app excluded from public analytics
-- IndexNow key + submission script prepared but NOT submitted
-- Search Console/Bing setup checklist
-- Core Web Vitals performance budget
-- final static technical SEO audit
-- final launch routing file prepared but NOT activated
+- WebSite structured data on homepage
+- BreadcrumbList structured data across canonical public pages
+- sitemap lastmod dates
+- launch-only X-Robots-Tag noindex for /app
+- IndexNow key + one-time post-launch submission script
+- Google Search Console setup checklist
+- Bing Webmaster Tools setup checklist
+- Core Web Vitals launch targets
+- structured-data validation checklist
+- public analytics framework prepared but DISABLED
+- local/static SEO audit script
+- stronger public security/referrer headers in launch-only Vercel config
 
-CURRENT STATIC AUDIT
-- 54 indexable sitemap URLs
-- 36 noindex pages/templates
-- 90 public HTML files checked
-- broken internal links: 0
-- JSON-LD parse errors: 0
-- noindex URLs in sitemap: 0
-- duplicate canonical URLs: 0
-- largest HTML: 12.55 KB
-- minified SEO CSS: 3.96 KB
-- public analytics JS: 1.13 KB
+IMPORTANT PRIVATE APP INDEXING CORRECTION
+For final launch, robots.LAUNCH.txt does NOT block /app from crawling.
+Instead, vercel.SEO_PHASE4_LAUNCH.json sends:
+X-Robots-Tag: noindex, nofollow
+for /app and /index.html.
+
+This lets crawlers see the noindex instruction while keeping private account content protected
+by the application's authentication controls.
 
 ANALYTICS
-analytics-config.js is intentionally blank.
-Do not add GA4/Clarity IDs until you decide to enable public-site measurement.
-Never send private recovery inputs or health-related app data to public analytics/ad systems.
+Public analytics is intentionally disabled.
+Do not activate it until privacy/legal review because recovery-topic browsing can be sensitive.
+Never load public SEO analytics inside the private /app.
 
 INDEXNOW
-The included key file is ready for eventual public launch.
-Run submit_indexnow_after_launch.py ONLY after Lellee.com is serving this public site.
+A public IndexNow ownership key file has been generated.
+It is not a secret.
+Do not submit IndexNow until lellee.com is live and the key file is publicly reachable.
 
-VERCEL
-DO NOT deploy vercel.SEO_PHASE4_LAUNCH.json now.
-Keep the existing preview/testing vercel.json until the full cutover checklist is satisfied.
+CORE WEB VITALS
+Launch targets:
+- LCP <= 2.5 seconds
+- INP < 200 milliseconds
+- CLS < 0.1
 
-AFTER THIS
-There are no more planned SEO build phases.
-Remaining SEO work is live operational work: domain cutover, verification, sitemap submission,
-URL inspection, IndexNow submission, live CWV measurement, indexing monitoring and content performance.
+Real field results cannot be confirmed until pages are deployed and measured.
+
+FILES FOR LATER LAUNCH
+- vercel.SEO_PHASE4_LAUNCH.json
+- robots.LAUNCH.txt
+- 7128db9e431d3f715783d57c4d3d52d2.txt
+- SUBMIT_INDEXNOW_AFTER_LAUNCH.py
+- SEARCH_ENGINE_SETUP_CHECKLIST.txt
+
+DO NOT ACTIVATE LAUNCH CONFIG YET.
+Current preview/testing Vercel configuration remains unchanged.
+
+SEO BUILD PHASES
+Phase 1: complete
+Phase 2: complete
+Phase 3: complete
+Phase 4: complete
+
+Remaining SEO work is operational launch execution and post-launch monitoring, not another SEO build phase.

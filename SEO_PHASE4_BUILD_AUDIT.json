@@ -1,0 +1,13 @@
+{
+  "html_files": 90,
+  "sitemap_urls": 54,
+  "duplicate_canonical_or_indexing_issues": 0,
+  "issues": [],
+  "organization_schema_home": true,
+  "website_schema_home": true,
+  "breadcrumb_schema_prepared": true,
+  "private_app_launch_noindex_header": true,
+  "indexnow_prepared": true,
+  "analytics_active": false,
+  "status": "PASS"
+}
