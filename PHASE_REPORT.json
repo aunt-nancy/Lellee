@@ -1,0 +1,13 @@
+{
+  "phase": "TAP 21 Final Integration + Verification",
+  "combined_runner": "TAP21_FINAL_RUN.sql",
+  "source_files_preserved": [
+    "19_TAP21_Coverage_Strengthening.sql",
+    "20_TAP21_Verify.sql"
+  ],
+  "github_upload_required": false,
+  "stripe_changed": false,
+  "push_changed": false,
+  "vercel_launch_changed": false,
+  "next_phase_after_success": "End-to-end push notification test + hardening"
+}

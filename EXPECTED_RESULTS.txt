@@ -1,0 +1,52 @@
+LELLEE TAP 21 — EXPECTED VERIFICATION RESULTS
+
+After TAP21_FINAL_RUN.sql succeeds:
+
+1. COVERAGE SUMMARY
+You should see all 12 framework elements:
+- TF1 Understanding Addiction
+- TF2 Treatment Knowledge
+- TF3 Application to Practice
+- TF4 Professional Readiness
+- PD1 Clinical Evaluation
+- PD2 Treatment Planning
+- PD3 Referral
+- PD4 Service Coordination
+- PD5 Counseling
+- PD6 Client, Family, and Community Education
+- PD7 Documentation
+- PD8 Professional and Ethical Responsibilities
+
+Each should have at least one mapped item.
+
+2. ZERO-MAPPING QUERY
+The query:
+  select ... where mapped_items=0;
+should return ZERO rows.
+
+3. JOURNEY COVERAGE
+Nine Journey keys should be represented:
+- stabilize
+- build
+- understand
+- rebuild
+- strengthen
+- grow
+- maintenance
+- year_2
+- long_term
+
+4. TOOL LIBRARY CHECK
+The mapped-tool-missing query should return ZERO rows.
+
+5. LEARN LIBRARY CHECK
+The mapped-learning-missing query should return ZERO rows.
+
+6. CONTENT AUDIT
+The final query returns the full internal alignment detail.
+This is expected to return many rows.
+
+WHAT THIS DOES NOT MEAN
+Passing the verification does not certify Lellee, a consumer, or a counselor under TAP 21.
+It documents that Lellee's content/features were intentionally designed with TAP 21-informed
+concepts, analogues, education, feature support, and ethical guardrails.

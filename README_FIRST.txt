@@ -1,66 +1,41 @@
-LELLEE — SEO PHASE 4: LAUNCH READINESS
-Prepared 2026-08-08
+LELLEE — TAP 21 FINAL INTEGRATION + VERIFICATION PHASE
 
-STATUS: BUILD COMPLETE / NOT LAUNCHED
+THIS IS THE NEXT PHASE AFTER THE V1 + SEO BUILD WORK.
 
-THIS PACKAGE DOES NOT SWITCH VERCEL TO LAUNCH MODE.
+FASTEST PATH
+Run only:
+TAP21_FINAL_RUN.sql
 
-ADDED
-- Organization structured data on homepage
-- WebSite structured data on homepage
-- BreadcrumbList structured data across canonical public pages
-- sitemap lastmod dates
-- launch-only X-Robots-Tag noindex for /app
-- IndexNow key + one-time post-launch submission script
-- Google Search Console setup checklist
-- Bing Webmaster Tools setup checklist
-- Core Web Vitals launch targets
-- structured-data validation checklist
-- public analytics framework prepared but DISABLED
-- local/static SEO audit script
-- stronger public security/referrer headers in launch-only Vercel config
+It combines the previously saved:
+- 19_TAP21_Coverage_Strengthening.sql
+- 20_TAP21_Verify.sql
 
-IMPORTANT PRIVATE APP INDEXING CORRECTION
-For final launch, robots.LAUNCH.txt does NOT block /app from crawling.
-Instead, vercel.SEO_PHASE4_LAUNCH.json sends:
-X-Robots-Tag: noindex, nofollow
-for /app and /index.html.
+The original two files are also included unchanged.
 
-This lets crawlers see the noindex instruction while keeping private account content protected
-by the application's authentication controls.
+RUN IN SUPABASE
+1. Open SQL Editor.
+2. Create a new query.
+3. Paste the contents of TAP21_FINAL_RUN.sql.
+4. Confirm the first line begins with:
+   -- LELLEE TAP 21
+   Do not paste a code-fence word such as "sql".
+5. Click Run.
 
-ANALYTICS
-Public analytics is intentionally disabled.
-Do not activate it until privacy/legal review because recovery-topic browsing can be sensitive.
-Never load public SEO analytics inside the private /app.
+NO GITHUB UPLOAD IS NEEDED FOR THIS PHASE.
+This is database/internal framework work only.
 
-INDEXNOW
-A public IndexNow ownership key file has been generated.
-It is not a secret.
-Do not submit IndexNow until lellee.com is live and the key file is publicly reachable.
+NO STRIPE.
+NO VERCEL LAUNCH CONFIG.
+NO PUSH CHANGES.
 
-CORE WEB VITALS
-Launch targets:
-- LCP <= 2.5 seconds
-- INP < 200 milliseconds
-- CLS < 0.1
+WHEN COMPLETE
+Review the results against EXPECTED_RESULTS.txt.
 
-Real field results cannot be confirmed until pages are deployed and measured.
+AFTER THIS PHASE
+Next operational phase:
+- end-to-end push notification test + hardening
 
-FILES FOR LATER LAUNCH
-- vercel.SEO_PHASE4_LAUNCH.json
-- robots.LAUNCH.txt
-- 7128db9e431d3f715783d57c4d3d52d2.txt
-- SUBMIT_INDEXNOW_AFTER_LAUNCH.py
-- SEARCH_ENGINE_SETUP_CHECKLIST.txt
-
-DO NOT ACTIVATE LAUNCH CONFIG YET.
-Current preview/testing Vercel configuration remains unchanged.
-
-SEO BUILD PHASES
-Phase 1: complete
-Phase 2: complete
-Phase 3: complete
-Phase 4: complete
-
-Remaining SEO work is operational launch execution and post-launch monitoring, not another SEO build phase.
+Then:
+- legal/privacy/safety final review
+- Stripe setup last
+- final public-domain cutover
