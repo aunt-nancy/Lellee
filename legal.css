@@ -1,0 +1,11 @@
+
+:root{--ink:#27232b;--muted:#67606b;--paper:#fcfafb;--navy:#0b1028;--purple:#65409a;--lav:#f1ecf5;--line:#e3dde5;--green:#f3faf5;--amber:#fff9ea;--red:#fff3f4}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:Arial,sans-serif}a{color:#65409a}.wrap{max-width:980px;margin:auto;padding:0 22px}
+header,footer{background:var(--navy);color:#fff}.top{min-height:72px;display:flex;align-items:center;justify-content:space-between;gap:18px}.brand{font:1.45rem Georgia,serif;color:#fff;text-decoration:none}.nav{display:flex;gap:14px;flex-wrap:wrap}.nav a{color:#eee;text-decoration:none;font-size:.74rem}
+.hero{padding:48px 0 35px;background:linear-gradient(135deg,#f0eaf5,#fff9f1)}.hero h1{font:500 clamp(2.1rem,5vw,3.5rem)/1.08 Georgia,serif;margin:8px 0 13px}.hero p{max-width:760px;color:var(--muted);line-height:1.7}.kicker{font-size:.68rem;font-weight:900;letter-spacing:.1em;color:#75598a}
+main{max-width:840px;margin:auto;padding:38px 22px 70px}main h2{font:500 1.55rem Georgia,serif;margin:32px 0 8px}main h3{font-size:1rem;margin:25px 0 6px}main p,main li{color:#514b54;line-height:1.72}.version{font-size:.72rem;color:#7b737d}
+.card{border:1px solid var(--line);background:#fff;border-radius:13px;padding:17px;margin:18px 0}.green{background:var(--green);border-color:#d8e8dc}.amber{background:var(--amber);border-color:#eadcae}.red{background:var(--red);border-color:#efced2}
+.badges{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px}.badge{border:1px solid #d9cedf;background:#fff;border-radius:999px;padding:6px 9px;font-size:.7rem;font-weight:800;color:#65546f}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:.79rem}th,td{border-bottom:1px solid var(--line);text-align:left;vertical-align:top;padding:9px}th{color:#574a60}
+footer{padding:30px 0;color:#dad7e1}footer a{color:#dad7e1;margin-right:12px;font-size:.72rem}footer p{font-size:.72rem;line-height:1.5;max-width:650px}.button{display:inline-block;border-radius:999px;background:#65409a;color:#fff!important;text-decoration:none;padding:10px 15px;font-size:.78rem;font-weight:800}
+@media(max-width:700px){.nav a{display:none}table{display:block;overflow:auto}}
