@@ -1041,7 +1041,7 @@ Includes the approved Lellee consumer experience from early recovery through lif
       .guided-activity-hint{font-size:.53rem;color:#8a828d;margin-top:5px}
     </style>
 <link href="/lellee-v1.css" rel="stylesheet"/>
-<link href="/legal-privacy-safety.css" rel="stylesheet"/><link href="/program-coach-core.css" rel="stylesheet"/><link href="/program-builder.css" rel="stylesheet"/><link href="/coach-marketplace.css" rel="stylesheet"/><link href="/inbox-reminders.css" rel="stylesheet"/></head>
+<link href="/legal-privacy-safety.css" rel="stylesheet"/><link href="/program-coach-core.css" rel="stylesheet"/><link href="/program-builder.css" rel="stylesheet"/><link href="/coach-marketplace.css" rel="stylesheet"/><link href="/inbox-reminders.css" rel="stylesheet"/><link href="/welcome-router.css" rel="stylesheet"/></head>
 <body><a class="skip-link" href="#mainContent">Skip to main content</a><a class="lellee-skip" href="#lelleeMain">Skip to main content</a>
 <div class="prod-overlay hidden" id="onboardingOverlay">
 <div class="prod-onboarding">
@@ -1152,7 +1152,6 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <div><h3>Help Me Right Now</h3><p>If you're struggling or having thoughts of using, you are not alone. Open a focused support flow.</p></div>
 <button data-help-open="">Get Help Now →</button>
 </div>
-
 <div class="inbox-today-card">
 <div><span class="approved-kicker">INBOX</span><h3>Messages &amp; reminders</h3><p><span id="todayInboxUnread">0</span> unread</p></div>
 <button class="approved-small-action" data-page="inbox">Open Inbox</button>
@@ -2767,6 +2766,25 @@ Includes the approved Lellee consumer experience from early recovery through lif
 </div>
 </div>
 </section>
+<section class="page" id="page-program-demand">
+<div class="approved-inner">
+<div class="approved-inner-head">
+<div>
+<span class="approved-kicker">ADMIN · PROGRAM DEMAND</span>
+<h2>Which Lellee programs are people asking for?</h2>
+<p>Use real interest signals to help prioritize the next vertical instead of guessing.</p>
+</div>
+<button class="approved-link" data-page="program-builder">← Program Builder</button>
+</div>
+<div class="program-demand-metrics">
+<article><b id="programDemandTotal">0</b><small>Total interest signals</small></article>
+<article><b id="programDemandPeople">0</b><small>Unique people</small></article>
+<article><b id="programDemandTopCount">0</b><small>Top program interest</small></article>
+</div>
+<div class="program-demand-list" id="programDemandList"></div>
+</div>
+</section>
+
 <section class="page" id="page-coach-admin">
 <div class="approved-inner">
 <div class="approved-inner-head">
@@ -2790,7 +2808,7 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <p>Configure terminology, journey structure, modules, safety, resources, coaching and launch readiness for each vertical.</p>
 </div>
 <button class="approved-link" data-page="admin">← Admin</button>
-</div>
+<button class="approved-small-action" data-page="program-demand">View Demand</button></div>
 <div class="program-builder-warning hidden" id="programBuilderUnauthorized">
 <b>Admin access required.</b><p>Program creation and launch controls are restricted to Lellee administrators.</p>
 </div>
@@ -2820,6 +2838,10 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <div class="connection-section-head"><div><span class="approved-kicker">PROGRAM CATALOG</span><h3>Future underserved-program expansion</h3></div><span class="connection-count" id="programCoreCount">0 planned</span></div>
 <div class="program-core-grid" id="programCoreCatalog"></div>
 <div class="program-core-privacy-note"><b>Private by program.</b><p>Using more than one Lellee program does not automatically share one program's private journal, check-ins, contacts or history with another program—or with a coach.</p></div>
+
+<div class="program-interest-explainer" id="programInterestExplainer">
+<div><span class="approved-kicker">HELP CHOOSE WHAT COMES NEXT</span><h3>Interested in a future Lellee program?</h3><p>Open a planned program and tell Lellee you want it. Your interest helps prioritize future development.</p></div>
+</div>
 </div>
 </section>
 <section class="page" id="page-coach-business">
@@ -2993,7 +3015,6 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <div class="coach-list" id="coachCohortList"></div>
 </div>
 </section>
-
 <section class="page" id="page-inbox">
 <div class="approved-inner">
 <div class="approved-inner-head">
@@ -3023,7 +3044,6 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <div class="inbox-list" id="inboxList"></div>
 </div>
 </section>
-
 <section class="page" id="page-notification-settings">
 <div class="approved-inner">
 <div class="approved-inner-head">
@@ -3056,7 +3076,6 @@ Includes the approved Lellee consumer experience from early recovery through lif
 </div>
 </div>
 </section>
-
 <section class="page" id="page-message-thread">
 <div class="approved-inner">
 <div class="approved-inner-head">
@@ -3067,6 +3086,44 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <div class="message-reply-box hidden" id="messageReplyBox">
 <textarea id="messageReplyText" maxlength="4000" placeholder="Write a reply..."></textarea>
 <div class="approved-settings-footer"><span class="approved-setting-note" id="messageReplyMsg"></span><button class="approved-small-action" id="sendMessageReply">Send Reply</button></div>
+</div>
+</div>
+</section>
+
+<section class="page" id="page-program-interest">
+<div class="approved-inner">
+<div class="approved-inner-head">
+<div>
+<span class="approved-kicker">LELLEE PROGRAMS</span>
+<h2 id="programInterestTitle">Tell Lellee what support you need.</h2>
+<p id="programInterestDescription">Your interest helps Lellee decide which future programs to build first.</p>
+</div>
+<button class="approved-link" data-page="programs">← Programs</button>
+</div>
+<div class="program-interest-active hidden" id="programInterestActive">
+<span>✓</span>
+<div><b>This program is available now.</b><p>You can enter the program directly instead of joining an interest list.</p></div>
+<button class="approved-small-action" id="programInterestOpenActive">Open Program</button>
+</div>
+<div id="programInterestPlanned">
+<div class="program-interest-card">
+<span class="program-interest-icon">♡</span>
+<h3 id="programInterestName">Future Lellee Program</h3>
+<p>Joining the interest list does not enroll you in a service or share your private Lellee history. It simply tells Lellee that this type of support matters to you.</p>
+<div class="program-interest-options">
+<label><input checked="" data-program-interest-reason="" type="checkbox" value="personal_use"/> I would use this for myself</label>
+<label><input data-program-interest-reason="" type="checkbox" value="family_or_friend"/> I would use this for a family member or friend</label>
+<label><input data-program-interest-reason="" type="checkbox" value="professional"/> I work with people who need this</label>
+<label><input data-program-interest-reason="" type="checkbox" value="organization"/> My organization may want this</label>
+</div>
+<label class="program-interest-note">What would make this program useful to you? <span>Optional</span>
+<textarea id="programInterestNote" maxlength="700" placeholder="A few words are enough..."></textarea>
+</label>
+<div class="approved-settings-footer">
+<span class="approved-setting-note" id="programInterestMsg"></span>
+<button class="approved-small-action" id="saveProgramInterest">I'm Interested</button>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -3876,5 +3933,5 @@ Transportation"></textarea></label>
 </div>
 </div>
 </div>
-<script src="/program-builder.js"></script><script src="/coach-marketplace.js"></script><script src="/inbox-reminders.js"></script></body>
+<script src="/program-builder.js"></script><script src="/coach-marketplace.js"></script><script src="/inbox-reminders.js"></script><script src="/welcome-router.js"></script></body>
 </html>
