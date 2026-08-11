@@ -1,0 +1,18 @@
+{
+  "build": "Lellee Core + Programs + Coach Business BIG Build",
+  "master_brand": "Lellee",
+  "active_program": "Recovery",
+  "future_programs": 20,
+  "coach_business_creation": true,
+  "one_to_one_coaching": true,
+  "group_coaching": true,
+  "hybrid_coaching": true,
+  "service_pricing_setup": true,
+  "coach_payments_enabled": false,
+  "public_coach_marketplace_enabled": false,
+  "client_controlled_sharing": true,
+  "direct_private_journal_access_for_coaches": false,
+  "stripe_changed": false,
+  "vercel_launch_changed": false,
+  "javascript_syntax": "passed"
+}

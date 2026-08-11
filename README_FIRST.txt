@@ -1,41 +1,57 @@
-LELLEE — TAP 21 FINAL INTEGRATION + VERIFICATION PHASE
+LELLEE CORE + PROGRAMS + COACH BUSINESS — BIG BUILD
 
-THIS IS THE NEXT PHASE AFTER THE V1 + SEO BUILD WORK.
+This replaces the previously planned Core + Programs build. Run THIS build instead.
 
-FASTEST PATH
-Run only:
-TAP21_FINAL_RUN.sql
+MASTER BRAND
+Lellee
 
-It combines the previously saved:
-- 19_TAP21_Coverage_Strengthening.sql
-- 20_TAP21_Verify.sql
+PROGRAM #1
+Recovery — ACTIVE
 
-The original two files are also included unchanged.
+FUTURE PROGRAMS
+20 additional underserved programs — PLANNED
 
-RUN IN SUPABASE
-1. Open SQL Editor.
-2. Create a new query.
-3. Paste the contents of TAP21_FINAL_RUN.sql.
-4. Confirm the first line begins with:
-   -- LELLEE TAP 21
-   Do not paste a code-fence word such as "sql".
-5. Click Run.
+COACH BUSINESS
+Individuals can create a coaching business inside Lellee.
+Approved coaches can manage:
+- clients
+- group coaching
+- services and pricing
+- lead pipeline
+- messages
+- assignments
+- sessions foundation
+- program-specific coaching
 
-NO GITHUB UPLOAD IS NEEDED FOR THIS PHASE.
-This is database/internal framework work only.
+AFFORDABILITY
+Group and hybrid packages are first-class service types so one coach can support several people simultaneously and lower the per-person cost.
 
-NO STRIPE.
-NO VERCEL LAUNCH CONFIG.
-NO PUSH CHANGES.
+PRIVACY
+Coach access is consent-based.
+A coach does NOT automatically see a client's journal, check-ins, support contacts or full private history.
+Only client-selected shared items are coach-visible.
 
-WHEN COMPLETE
-Review the results against EXPECTED_RESULTS.txt.
+PAYMENTS
+Coach payments/payouts are NOT activated in this build.
+Pricing/package setup is included.
+coach_payments_enabled=false
 
-AFTER THIS PHASE
-Next operational phase:
-- end-to-end push notification test + hardening
+PUBLIC COACH MARKETPLACE
+OFF until legal/quality/credential review.
+coach_public_marketplace_enabled=false
 
-Then:
-- legal/privacy/safety final review
-- Stripe setup last
-- final public-domain cutover
+RUN
+1. LELLEE_CORE_PROGRAMS_COACH_BUSINESS.sql
+2. LELLEE_CORE_PROGRAMS_COACH_BUSINESS_VERIFY.sql
+
+UPLOAD TO GITHUB
+- index.html
+- program-coach-core.css
+- program-coach-core.js
+
+Keep all other current Lellee files.
+
+NO STRIPE CHANGE.
+NO VERCEL LAUNCH CHANGE.
+NO LEGAL GATE CHANGE.
+NO DOMAIN CHANGE.
