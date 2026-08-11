@@ -1041,7 +1041,7 @@ Includes the approved Lellee consumer experience from early recovery through lif
       .guided-activity-hint{font-size:.53rem;color:#8a828d;margin-top:5px}
     </style>
 <link href="/lellee-v1.css" rel="stylesheet"/>
-<link href="/legal-privacy-safety.css" rel="stylesheet"/><link href="/program-coach-core.css" rel="stylesheet"/><link href="/program-builder.css" rel="stylesheet"/></head>
+<link href="/legal-privacy-safety.css" rel="stylesheet"/><link href="/program-coach-core.css" rel="stylesheet"/><link href="/program-builder.css" rel="stylesheet"/><link href="/coach-marketplace.css" rel="stylesheet"/></head>
 <body><a class="skip-link" href="#mainContent">Skip to main content</a><a class="lellee-skip" href="#lelleeMain">Skip to main content</a>
 <div class="prod-overlay hidden" id="onboardingOverlay">
 <div class="prod-onboarding">
@@ -2704,7 +2704,7 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <div class="approved-inner-head">
 <div><span class="approved-kicker">ADMIN</span><h2>Operate Lellee without touching the database directly</h2><p>Manage vetted resources, sponsored placement, recovery news, Plus pricing, and publishing controls.</p></div>
 <span class="admin-role-pill" id="adminRoleBadge">ADMIN</span>
-<button class="approved-small-action" data-page="program-builder">Program Builder</button></div>
+<button class="approved-small-action" data-page="program-builder">Program Builder</button><button class="approved-small-action" data-page="coach-admin">Coach Approvals</button></div>
 <div class="admin-unauthorized hidden" id="adminUnauthorized">
 <span>🔒</span>
 <div><h3>Admin access required</h3><p>This page is not available to standard Lellee accounts.</p></div>
@@ -2762,6 +2762,21 @@ Includes the approved Lellee consumer experience from early recovery through lif
 </div>
 </div>
 </section>
+<section class="page" id="page-coach-admin">
+<div class="approved-inner">
+<div class="approved-inner-head">
+<div><span class="approved-kicker">ADMIN · COACHING</span><h2>Review coaching businesses before they reach consumers.</h2><p>Check disclosures, scope, program fit and marketplace readiness.</p></div>
+<button class="approved-link" data-page="admin">← Admin</button>
+</div>
+<div class="coach-admin-metrics">
+<article><b id="coachAdminPending">0</b><small>Pending review</small></article>
+<article><b id="coachAdminApproved">0</b><small>Approved</small></article>
+<article><b id="coachAdminMarketplace">0</b><small>Marketplace visible</small></article>
+</div>
+<div class="coach-list" id="coachAdminList"></div>
+</div>
+</section>
+
 <section class="page" id="page-program-builder">
 <div class="approved-inner">
 <div class="approved-inner-head">
@@ -2790,7 +2805,6 @@ Includes the approved Lellee consumer experience from early recovery through lif
 </div>
 </div>
 </section>
-
 <section class="page" id="page-programs">
 <div class="approved-inner">
 <div class="approved-inner-head">
@@ -2845,7 +2859,7 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <div class="approved-inner-head">
 <div><span class="approved-kicker">COACH DASHBOARD</span><h2 id="coachDashboardBusinessName">My Coaching Business</h2><p>Manage clients, groups, services and communication from one place.</p></div>
 <button class="approved-link" data-page="coach-business">Business Settings</button>
-</div>
+<button class="approved-small-action" data-page="coach-cohorts">Group Programs</button></div>
 <div class="coach-metric-grid">
 <article><b id="coachMetricClients">0</b><small>Active clients</small></article>
 <article><b id="coachMetricGroups">0</b><small>Active groups</small></article>
@@ -2897,6 +2911,85 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <div class="coach-list" id="myCoachInvites"></div>
 <div class="coach-list" id="myCoachRelationships"></div>
 <div class="coach-guardrail"><b>Your private Lellee data is not automatically shared.</b><p>A coach can see only information you explicitly share through the coaching relationship. Your full journal, check-ins, support contacts and private history remain private by default.</p></div>
+</div>
+</section>
+
+<section class="page" id="page-coaches">
+<div class="approved-inner">
+<div class="approved-inner-head">
+<div>
+<span class="approved-kicker">LELLEE COACHES</span>
+<h2>Find structured support that fits your budget and goals.</h2>
+<p>Browse approved coaching businesses, compare 1-to-1, group and hybrid options, and request a consultation without sharing your private Lellee history.</p>
+</div>
+<button class="approved-link" data-page="today">← Today</button>
+</div>
+<div class="coach-marketplace-off hidden" id="coachMarketplaceOff">
+<b>Coach marketplace is not open yet.</b>
+<p>Approved coaching businesses can prepare profiles and services now. Consumer discovery stays closed until Lellee completes marketplace and legal launch review.</p>
+</div>
+<div id="coachMarketplaceContent">
+<div class="coach-market-filters">
+<input id="coachMarketSearch" placeholder="Search coach or business"/>
+<select id="coachMarketProgram"><option value="">All active programs</option></select>
+<select id="coachMarketType"><option value="">All service types</option><option value="one_to_one">1-to-1</option><option value="group">Group</option><option value="hybrid">Hybrid</option></select>
+<select id="coachMarketPrice"><option value="">Any price</option><option value="free">Free</option><option value="under50">Under $50</option><option value="under100">Under $100</option></select>
+</div>
+<div class="coach-market-note"><b>Coaching is not automatically clinical treatment.</b><p>Credentials and scope are shown so you can make an informed choice. Lellee coaching does not replace medical care, detoxification, psychotherapy or emergency services.</p></div>
+<div class="coach-market-grid" id="coachMarketList"></div>
+</div>
+</div>
+</section>
+
+<section class="page" id="page-coach-profile">
+<div class="approved-inner">
+<div class="approved-inner-head">
+<div><span class="approved-kicker">COACH PROFILE</span><h2 id="coachProfileName">Coach</h2><p id="coachProfileBusiness"></p></div>
+<button class="approved-link" data-page="coaches">← Coaches</button>
+</div>
+<div class="coach-profile-hero">
+<div><span class="coach-profile-avatar">◎</span></div>
+<div><h3 id="coachProfilePublicName"></h3><p id="coachProfileBio"></p><div class="coach-profile-credentials" id="coachProfileCredentials"></div></div>
+</div>
+<div class="coach-profile-columns">
+<div>
+<span class="approved-kicker">SERVICES</span>
+<div class="coach-list" id="coachProfileServices"></div>
+</div>
+<div>
+<span class="approved-kicker">GROUPS</span>
+<div class="coach-list" id="coachProfileGroups"></div>
+</div>
+</div>
+<div class="coach-profile-actions">
+<button class="approved-small-action" id="coachRequestConsultation">Request Consultation</button>
+<button class="approved-link" id="coachJoinWaitlist">Join Waitlist</button>
+<span class="approved-setting-note" id="coachProfileMsg"></span>
+</div>
+<div class="coach-market-note">
+<b>Your private Lellee information stays private.</b>
+<p>Requesting a consultation does not give a coach access to your journal, check-ins, triggers, support contacts or history. Sharing happens only after a coaching relationship exists and only when you choose specific items to share.</p>
+</div>
+</div>
+</section>
+
+<section class="page" id="page-coach-cohorts">
+<div class="approved-inner">
+<div class="approved-inner-head">
+<div><span class="approved-kicker">GROUP PROGRAMS</span><h2>Run affordable coaching cohorts.</h2><p>Create structured group programs with a fixed capacity, start date, group price and optional individual touchpoints.</p></div>
+<button class="approved-link" data-page="coach-dashboard">← Coach Dashboard</button>
+</div>
+<div class="coach-cohort-metrics">
+<article><b id="cohortMetricSeats">0</b><small>Open seats</small></article>
+<article><b id="cohortMetricEnrolled">0</b><small>Enrolled</small></article>
+<article><b id="cohortMetricWaitlist">0</b><small>Waitlist</small></article>
+<article><b id="cohortMetricPrograms">0</b><small>Active cohorts</small></article>
+</div>
+<div class="coach-panel-head">
+<div><span class="approved-kicker">COHORTS</span><h3>Current and upcoming group programs</h3></div>
+<button class="approved-small-action" id="coachNewCohort">+ New Cohort</button>
+</div>
+<div class="coach-list" id="coachCohortList"></div>
 </div>
 </section>
 <section class="page" id="page-settings">
@@ -2953,6 +3046,10 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <article><div><b>Lellee Programs</b><small>Recovery is Program #1. Review the future Lellee program architecture.</small></div><button class="approved-link" data-page="programs">View Programs →</button></article>
 <article><div><b>Start a Coaching Business</b><small>Create services, groups and a client workflow inside Lellee.</small></div><button class="approved-link" data-page="coach-business">Start Coaching Business →</button></article>
 <article><div><b>My Coaching</b><small>Manage invitations and information you choose to share with a coach.</small></div><button class="approved-link" data-page="my-coaching">Open My Coaching →</button></article>
+</div>
+
+<div class="program-settings-shortcuts">
+<article><div><b>Find a Coach</b><small>Browse approved coaching businesses and lower-cost group or hybrid programs when the marketplace opens.</small></div><button class="approved-link" data-page="coaches">Browse Coaches →</button></article>
 </div>
 </div>
 </section>
@@ -3702,5 +3799,5 @@ Transportation"></textarea></label>
 </div>
 </div>
 </div>
-<script src="/program-builder.js"></script></body>
+<script src="/program-builder.js"></script><script src="/coach-marketplace.js"></script></body>
 </html>
