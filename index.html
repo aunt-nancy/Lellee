@@ -1041,7 +1041,7 @@ Includes the approved Lellee consumer experience from early recovery through lif
       .guided-activity-hint{font-size:.53rem;color:#8a828d;margin-top:5px}
     </style>
 <link href="/lellee-v1.css" rel="stylesheet"/>
-<link href="/legal-privacy-safety.css" rel="stylesheet"/><link href="/program-coach-core.css" rel="stylesheet"/><link href="/program-builder.css" rel="stylesheet"/><link href="/coach-marketplace.css" rel="stylesheet"/></head>
+<link href="/legal-privacy-safety.css" rel="stylesheet"/><link href="/program-coach-core.css" rel="stylesheet"/><link href="/program-builder.css" rel="stylesheet"/><link href="/coach-marketplace.css" rel="stylesheet"/><link href="/inbox-reminders.css" rel="stylesheet"/></head>
 <body><a class="skip-link" href="#mainContent">Skip to main content</a><a class="lellee-skip" href="#lelleeMain">Skip to main content</a>
 <div class="prod-overlay hidden" id="onboardingOverlay">
 <div class="prod-onboarding">
@@ -1075,7 +1075,7 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <button class="nav-item" data-page="milestones"><span class="nav-icon">◆</span>Milestones</button><button class="nav-item" data-page="then-now"><span class="nav-icon">↔</span>Then &amp; Now</button><button class="nav-item" data-page="story"><span class="nav-icon">▤</span>My Recovery Story</button><button class="nav-item" data-page="history"><span class="nav-icon">◷</span>My History</button><button class="nav-item" data-page="longterm"><span class="nav-icon">∞</span>Year 3+</button><button class="nav-item" data-page="account"><span class="nav-icon">◉</span>Account &amp; Privacy</button><button class="nav-item" data-page="plus"><span class="nav-icon">✦</span>Lellee Plus</button>
 <button class="nav-item hidden" data-page="admin" id="adminNavItem"><span class="nav-icon">⚙</span>Admin</button>
 <button class="nav-item" data-page="settings"><span class="nav-icon">⚙</span>Settings</button>
-<button class="nav-item hidden" data-page="coach-dashboard" id="coachNavItem"><span class="nav-icon">◎</span>Coach Dashboard</button></nav>
+<button class="nav-item hidden" data-page="coach-dashboard" id="coachNavItem"><span class="nav-icon">◎</span>Coach Dashboard</button><button class="nav-item" data-page="inbox" id="inboxNavItem"><span class="nav-icon">✉</span>Inbox <span class="inbox-nav-badge hidden" id="inboxNavBadge">0</span></button></nav>
 <div class="side-spacer"></div>
 <div class="help-card">
 <h4>Need Help Now?</h4>
@@ -1151,6 +1151,11 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <div class="help-banner">
 <div><h3>Help Me Right Now</h3><p>If you're struggling or having thoughts of using, you are not alone. Open a focused support flow.</p></div>
 <button data-help-open="">Get Help Now →</button>
+</div>
+
+<div class="inbox-today-card">
+<div><span class="approved-kicker">INBOX</span><h3>Messages &amp; reminders</h3><p><span id="todayInboxUnread">0</span> unread</p></div>
+<button class="approved-small-action" data-page="inbox">Open Inbox</button>
 </div>
 </section>
 <section class="page" id="page-recovery">
@@ -2776,7 +2781,6 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <div class="coach-list" id="coachAdminList"></div>
 </div>
 </section>
-
 <section class="page" id="page-program-builder">
 <div class="approved-inner">
 <div class="approved-inner-head">
@@ -2913,7 +2917,6 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <div class="coach-guardrail"><b>Your private Lellee data is not automatically shared.</b><p>A coach can see only information you explicitly share through the coaching relationship. Your full journal, check-ins, support contacts and private history remain private by default.</p></div>
 </div>
 </section>
-
 <section class="page" id="page-coaches">
 <div class="approved-inner">
 <div class="approved-inner-head">
@@ -2940,7 +2943,6 @@ Includes the approved Lellee consumer experience from early recovery through lif
 </div>
 </div>
 </section>
-
 <section class="page" id="page-coach-profile">
 <div class="approved-inner">
 <div class="approved-inner-head">
@@ -2972,7 +2974,6 @@ Includes the approved Lellee consumer experience from early recovery through lif
 </div>
 </div>
 </section>
-
 <section class="page" id="page-coach-cohorts">
 <div class="approved-inner">
 <div class="approved-inner-head">
@@ -2990,6 +2991,83 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <button class="approved-small-action" id="coachNewCohort">+ New Cohort</button>
 </div>
 <div class="coach-list" id="coachCohortList"></div>
+</div>
+</section>
+
+<section class="page" id="page-inbox">
+<div class="approved-inner">
+<div class="approved-inner-head">
+<div>
+<span class="approved-kicker">INBOX</span>
+<h2>Messages and reminders in one place.</h2>
+<p>Receive Lellee messages, coaching messages, group announcements, and milestone reminders without exposing private recovery details outside the app.</p>
+</div>
+<button class="approved-link" data-page="today">← Today</button>
+</div>
+<div class="inbox-summary-grid">
+<article><b id="inboxUnreadCount">0</b><small>Unread</small></article>
+<article><b id="inboxMessageCount">0</b><small>Messages</small></article>
+<article><b id="inboxMilestoneCount">0</b><small>Milestone reminders</small></article>
+<article><b id="inboxCoachCount">0</b><small>Coach / group</small></article>
+</div>
+<div class="inbox-tabs">
+<button class="active" data-inbox-tab="all">All</button>
+<button data-inbox-tab="messages">Messages</button>
+<button data-inbox-tab="milestones">Milestones</button>
+<button data-inbox-tab="coaching">Coaching</button>
+</div>
+<div class="inbox-toolbar">
+<button class="approved-link" id="inboxMarkAllRead">Mark all read</button>
+<button class="approved-link" data-page="notification-settings">Notification Settings</button>
+</div>
+<div class="inbox-list" id="inboxList"></div>
+</div>
+</section>
+
+<section class="page" id="page-notification-settings">
+<div class="approved-inner">
+<div class="approved-inner-head">
+<div>
+<span class="approved-kicker">NOTIFICATIONS</span>
+<h2>Choose how Lellee reminds you.</h2>
+<p>In-app reminders stay available even when push is turned off. Lock-screen previews can remain private.</p>
+</div>
+<button class="approved-link" data-page="inbox">← Inbox</button>
+</div>
+<div class="notification-settings-list">
+<label><span><b>In-app messages</b><small>Coach, group and Lellee messages appear in Inbox.</small></span><input checked="" id="prefInAppMessages" type="checkbox"/></label>
+<label><span><b>Milestone reminders</b><small>Reminders before and on important program milestones.</small></span><input checked="" id="prefMilestoneReminders" type="checkbox"/></label>
+<label><span><b>Coaching messages</b><small>Receive coach and group messages in Inbox.</small></span><input checked="" id="prefCoachMessages" type="checkbox"/></label>
+<label><span><b>Push notifications</b><small>Send enabled reminders to this device when possible.</small></span><input id="prefPushEnabled" type="checkbox"/></label>
+<label><span><b>Private lock-screen previews</b><small>Push notifications use generic wording instead of showing sensitive message content.</small></span><input checked="" id="prefPrivatePreviews" type="checkbox"/></label>
+</div>
+<div class="milestone-reminder-window">
+<span class="approved-kicker">MILESTONE TIMING</span>
+<h3>Remind me before a milestone</h3>
+<div class="milestone-window-options">
+<label><input checked="" data-milestone-window="" type="checkbox" value="7"/> 7 days before</label>
+<label><input checked="" data-milestone-window="" type="checkbox" value="1"/> 1 day before</label>
+<label><input checked="" data-milestone-window="" type="checkbox" value="0"/> On the milestone</label>
+</div>
+</div>
+<div class="approved-settings-footer">
+<span class="approved-setting-note" id="notificationSettingsMsg"></span>
+<button class="approved-small-action" id="saveNotificationSettings">Save Notification Settings</button>
+</div>
+</div>
+</section>
+
+<section class="page" id="page-message-thread">
+<div class="approved-inner">
+<div class="approved-inner-head">
+<div><span class="approved-kicker">MESSAGE</span><h2 id="messageThreadTitle">Message</h2><p id="messageThreadMeta"></p></div>
+<button class="approved-link" data-page="inbox">← Inbox</button>
+</div>
+<div class="message-thread-body" id="messageThreadBody"></div>
+<div class="message-reply-box hidden" id="messageReplyBox">
+<textarea id="messageReplyText" maxlength="4000" placeholder="Write a reply..."></textarea>
+<div class="approved-settings-footer"><span class="approved-setting-note" id="messageReplyMsg"></span><button class="approved-small-action" id="sendMessageReply">Send Reply</button></div>
+</div>
 </div>
 </section>
 <section class="page" id="page-settings">
@@ -3047,7 +3125,6 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <article><div><b>Start a Coaching Business</b><small>Create services, groups and a client workflow inside Lellee.</small></div><button class="approved-link" data-page="coach-business">Start Coaching Business →</button></article>
 <article><div><b>My Coaching</b><small>Manage invitations and information you choose to share with a coach.</small></div><button class="approved-link" data-page="my-coaching">Open My Coaching →</button></article>
 </div>
-
 <div class="program-settings-shortcuts">
 <article><div><b>Find a Coach</b><small>Browse approved coaching businesses and lower-cost group or hybrid programs when the marketplace opens.</small></div><button class="approved-link" data-page="coaches">Browse Coaches →</button></article>
 </div>
@@ -3799,5 +3876,5 @@ Transportation"></textarea></label>
 </div>
 </div>
 </div>
-<script src="/program-builder.js"></script><script src="/coach-marketplace.js"></script></body>
+<script src="/program-builder.js"></script><script src="/coach-marketplace.js"></script><script src="/inbox-reminders.js"></script></body>
 </html>
