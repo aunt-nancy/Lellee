@@ -1041,7 +1041,7 @@ Includes the approved Lellee consumer experience from early recovery through lif
       .guided-activity-hint{font-size:.53rem;color:#8a828d;margin-top:5px}
     </style>
 <link href="/lellee-v1.css" rel="stylesheet"/>
-<link href="/legal-privacy-safety.css" rel="stylesheet"/><link href="/program-coach-core.css" rel="stylesheet"/></head>
+<link href="/legal-privacy-safety.css" rel="stylesheet"/><link href="/program-coach-core.css" rel="stylesheet"/><link href="/program-builder.css" rel="stylesheet"/></head>
 <body><a class="skip-link" href="#mainContent">Skip to main content</a><a class="lellee-skip" href="#lelleeMain">Skip to main content</a>
 <div class="prod-overlay hidden" id="onboardingOverlay">
 <div class="prod-onboarding">
@@ -2704,7 +2704,7 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <div class="approved-inner-head">
 <div><span class="approved-kicker">ADMIN</span><h2>Operate Lellee without touching the database directly</h2><p>Manage vetted resources, sponsored placement, recovery news, Plus pricing, and publishing controls.</p></div>
 <span class="admin-role-pill" id="adminRoleBadge">ADMIN</span>
-</div>
+<button class="approved-small-action" data-page="program-builder">Program Builder</button></div>
 <div class="admin-unauthorized hidden" id="adminUnauthorized">
 <span>🔒</span>
 <div><h3>Admin access required</h3><p>This page is not available to standard Lellee accounts.</p></div>
@@ -2762,6 +2762,34 @@ Includes the approved Lellee consumer experience from early recovery through lif
 </div>
 </div>
 </section>
+<section class="page" id="page-program-builder">
+<div class="approved-inner">
+<div class="approved-inner-head">
+<div>
+<span class="approved-kicker">ADMIN · PROGRAM BUILDER</span>
+<h2>Build the next Lellee program without rebuilding Lellee.</h2>
+<p>Configure terminology, journey structure, modules, safety, resources, coaching and launch readiness for each vertical.</p>
+</div>
+<button class="approved-link" data-page="admin">← Admin</button>
+</div>
+<div class="program-builder-warning hidden" id="programBuilderUnauthorized">
+<b>Admin access required.</b><p>Program creation and launch controls are restricted to Lellee administrators.</p>
+</div>
+<div id="programBuilderContent">
+<div class="program-builder-metrics">
+<article><b id="pbMetricActive">0</b><small>Active programs</small></article>
+<article><b id="pbMetricPilot">0</b><small>Pilots</small></article>
+<article><b id="pbMetricPlanned">0</b><small>Planned</small></article>
+<article><b id="pbMetricReady">0</b><small>Launch-ready</small></article>
+</div>
+<div class="program-builder-actions">
+<button class="approved-small-action" id="pbCreateProgram">+ Create Program</button>
+<button class="approved-link" id="pbRefresh">Refresh</button>
+</div>
+<div class="program-builder-list" id="pbProgramList"></div>
+</div>
+</div>
+</section>
 
 <section class="page" id="page-programs">
 <div class="approved-inner">
@@ -2776,7 +2804,6 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <div class="program-core-privacy-note"><b>Private by program.</b><p>Using more than one Lellee program does not automatically share one program's private journal, check-ins, contacts or history with another program—or with a coach.</p></div>
 </div>
 </section>
-
 <section class="page" id="page-coach-business">
 <div class="approved-inner">
 <div class="approved-inner-head">
@@ -2813,7 +2840,6 @@ Includes the approved Lellee consumer experience from early recovery through lif
 </div>
 </div>
 </section>
-
 <section class="page" id="page-coach-dashboard">
 <div class="approved-inner">
 <div class="approved-inner-head">
@@ -2862,7 +2888,6 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <div class="coach-payment-note"><b>Payments are intentionally not activated in this build.</b><p>You can define pricing and packages now. Collecting money on behalf of independent coaches requires a separate payout/marketplace configuration and legal review.</p></div>
 </div>
 </section>
-
 <section class="page" id="page-my-coaching">
 <div class="approved-inner">
 <div class="approved-inner-head">
@@ -2924,7 +2949,6 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <button class="approved-small-action" id="saveSettings">Save Preferences</button>
 </div>
 </div>
-
 <div class="program-settings-shortcuts">
 <article><div><b>Lellee Programs</b><small>Recovery is Program #1. Review the future Lellee program architecture.</small></div><button class="approved-link" data-page="programs">View Programs →</button></article>
 <article><div><b>Start a Coaching Business</b><small>Create services, groups and a client workflow inside Lellee.</small></div><button class="approved-link" data-page="coach-business">Start Coaching Business →</button></article>
@@ -3564,5 +3588,119 @@ Includes:
 </div>
 <script src="/lellee-v1.js"></script>
 <script src="/push-button-hotfix.js"></script>
-<div class="legal-acceptance-overlay hidden" id="legalAcceptanceOverlay"><div class="legal-acceptance-card"><span class="approved-kicker">PRIVACY &amp; SAFETY UPDATE</span><h2>Before continuing</h2><p>Lellee stores sensitive recovery information. Review the current consumer terms and privacy notices.</p><div class="legal-acceptance-links"><a href="/terms.html" target="_blank">Terms</a><a href="/privacy.html" target="_blank">Privacy</a><a href="/consumer-health-privacy.html" target="_blank">Consumer Health Data</a><a href="/safety.html" target="_blank">Safety</a></div><label><input id="legalGateAdult" type="checkbox"/> I confirm I am at least 18.</label><label><input id="legalGateAgree" type="checkbox"/> I agree to the current Terms and acknowledge the Privacy and Consumer Health Data notices.</label><label><input id="legalGateSafety" type="checkbox"/> I understand Lellee is not an emergency service or individualized medical treatment.</label><div class="legal-acceptance-actions"><span id="legalGateStatus"></span><button class="approved-small-action" id="legalAcceptContinue">Accept &amp; Continue</button></div></div></div><script src="/legal-privacy-safety.js"></script><script src="/program-coach-core.js"></script></body>
+<div class="legal-acceptance-overlay hidden" id="legalAcceptanceOverlay"><div class="legal-acceptance-card"><span class="approved-kicker">PRIVACY &amp; SAFETY UPDATE</span><h2>Before continuing</h2><p>Lellee stores sensitive recovery information. Review the current consumer terms and privacy notices.</p><div class="legal-acceptance-links"><a href="/terms.html" target="_blank">Terms</a><a href="/privacy.html" target="_blank">Privacy</a><a href="/consumer-health-privacy.html" target="_blank">Consumer Health Data</a><a href="/safety.html" target="_blank">Safety</a></div><label><input id="legalGateAdult" type="checkbox"/> I confirm I am at least 18.</label><label><input id="legalGateAgree" type="checkbox"/> I agree to the current Terms and acknowledge the Privacy and Consumer Health Data notices.</label><label><input id="legalGateSafety" type="checkbox"/> I understand Lellee is not an emergency service or individualized medical treatment.</label><div class="legal-acceptance-actions"><span id="legalGateStatus"></span><button class="approved-small-action" id="legalAcceptContinue">Accept &amp; Continue</button></div></div></div><script src="/legal-privacy-safety.js"></script><script src="/program-coach-core.js"></script>
+<div class="admin-overlay hidden" id="programBuilderEditor">
+<div class="admin-editor-card program-builder-editor-card">
+<div class="admin-editor-head">
+<div><span class="approved-kicker">LELLEE PROGRAM</span><h3 id="pbEditorTitle">Create Program</h3></div>
+<button class="approved-link" data-close-program-builder="">Close</button>
+</div>
+<div class="program-builder-step-tabs">
+<button class="active" data-pb-step="identity">Identity</button>
+<button data-pb-step="journey">Journey</button>
+<button data-pb-step="modules">Modules</button>
+<button data-pb-step="resources">Resources</button>
+<button data-pb-step="safety">Safety</button>
+<button data-pb-step="coaching">Coaching</button>
+<button data-pb-step="launch">Launch</button>
+</div>
+<div class="pb-step" id="pbStepIdentity">
+<div class="admin-editor-grid">
+<label>Program name<input id="pbName" maxlength="90"/></label>
+<label>Slug<input id="pbSlug" maxlength="80" placeholder="example: caregiver-support"/></label>
+<label>Status<select id="pbStatus"><option value="planned">Planned</option><option value="pilot">Pilot</option><option value="active">Active</option><option value="paused">Paused</option></select></label>
+<label>Audience<input id="pbAudience" maxlength="180"/></label>
+<label class="admin-wide">Short description<textarea id="pbDescription" maxlength="400"></textarea></label>
+<label>Journey label<input id="pbJourneyLabel" placeholder="Example: Caregiving Journey"/></label>
+<label>Story label<input id="pbStoryLabel" placeholder="Example: My Caregiving Story"/></label>
+</div>
+</div>
+<div class="pb-step hidden" id="pbStepJourney">
+<div class="admin-editor-grid">
+<label>Journey mode<select id="pbJourneyMode"><option value="phase_day">Phase + day</option><option value="milestone_stage">Milestone stages</option><option value="adaptive_daily_weekly">Adaptive daily/weekly</option><option value="time_limited_stage">Time-limited stages</option><option value="semester_weekly">Semester/weekly</option><option value="safety_first_stage">Safety-first stages</option></select></label>
+<label>Total guided days<input id="pbJourneyDays" max="3650" min="0" type="number" value="365"/></label>
+<label>Long-term cadence<select id="pbLongCadence"><option value="weekly">Weekly</option><option value="monthly">Monthly</option><option value="adaptive">Adaptive</option><option value="none">None</option></select></label>
+<label>Progressive disclosure<select id="pbProgressive"><option value="true">Yes</option><option value="false">No</option></select></label>
+<label class="admin-wide">Stage labels<textarea id="pbStages" placeholder="One stage per line"></textarea></label>
+</div>
+</div>
+<div class="pb-step hidden" id="pbStepModules">
+<p class="pb-help">Choose which reusable Lellee modules this program uses.</p>
+<div class="pb-checkbox-grid" id="pbModuleChecks">
+<label><input checked="" type="checkbox" value="today"/> Today</label>
+<label><input checked="" type="checkbox" value="journey"/> Journey</label>
+<label><input checked="" type="checkbox" value="help_now"/> Help Me Right Now</label>
+<label><input checked="" type="checkbox" value="journal"/> Journal / Reflection</label>
+<label><input checked="" type="checkbox" value="tools"/> Tools</label>
+<label><input checked="" type="checkbox" value="learn"/> Learn</label>
+<label><input checked="" type="checkbox" value="support"/> Support / Connection</label>
+<label><input checked="" type="checkbox" value="resources"/> Resources</label>
+<label><input checked="" type="checkbox" value="milestones"/> Milestones</label>
+<label><input checked="" type="checkbox" value="history"/> History</label>
+<label><input checked="" type="checkbox" value="story"/> Story</label>
+<label><input type="checkbox" value="documents"/> Documents</label>
+<label><input type="checkbox" value="appointments"/> Appointments</label>
+<label><input type="checkbox" value="benefits"/> Benefits</label>
+<label><input type="checkbox" value="employment"/> Employment</label>
+<label><input type="checkbox" value="housing"/> Housing</label>
+</div>
+</div>
+<div class="pb-step hidden" id="pbStepResources">
+<div class="admin-editor-grid">
+<label class="admin-wide">Resource categories<textarea id="pbResourceCategories" placeholder="One category per line
+Example: Respite care
+Benefits
+Transportation"></textarea></label>
+<label>Local resource search<select id="pbLocalResources"><option value="true">Enabled</option><option value="false">Disabled</option></select></label>
+<label>Sponsored listings<select id="pbSponsored"><option value="false">Disabled</option><option value="true">Enabled</option></select></label>
+</div>
+</div>
+<div class="pb-step hidden" id="pbStepSafety">
+<div class="program-builder-safety">
+<label><input id="pbSensitive" type="checkbox"/> Sensitive program data</label>
+<label><input id="pbCrossShare" type="checkbox"/> Allow automatic cross-program data sharing</label>
+<label><input id="pbQuickExit" type="checkbox"/> Quick-exit / privacy mode required</label>
+<label><input id="pbMinorReview" type="checkbox"/> Minor/youth legal review required</label>
+<label><input id="pbMedicalReview" type="checkbox"/> Medical/clinical review required</label>
+</div>
+<div class="admin-editor-grid">
+<label class="admin-wide">Emergency / escalation notes<textarea id="pbSafetyNotes" maxlength="1200"></textarea></label>
+</div>
+</div>
+<div class="pb-step hidden" id="pbStepCoaching">
+<div class="program-builder-safety">
+<label><input id="pbCoachingAvailable" type="checkbox"/> Coaching available</label>
+<label><input id="pbGroupCoaching" type="checkbox"/> Group coaching allowed</label>
+<label><input id="pbHybridCoaching" type="checkbox"/> Hybrid coaching allowed</label>
+<label><input id="pbCredentialReview" type="checkbox"/> Coach credential/business review required</label>
+</div>
+<div class="admin-editor-grid">
+<label>Default group capacity<input id="pbGroupCapacity" max="50" min="2" type="number" value="8"/></label>
+<label>Coaching terminology<input id="pbCoachLabel" value="Coach"/></label>
+</div>
+</div>
+<div class="pb-step hidden" id="pbStepLaunch">
+<div class="pb-launch-checklist">
+<label><input data-pb-launch="content" type="checkbox"/> Curriculum/content pack complete</label>
+<label><input data-pb-launch="safety" type="checkbox"/> Safety profile reviewed</label>
+<label><input data-pb-launch="privacy" type="checkbox"/> Privacy/legal review complete</label>
+<label><input data-pb-launch="resources" type="checkbox"/> Resource taxonomy ready</label>
+<label><input data-pb-launch="mobile" type="checkbox"/> Mobile/accessibility QA complete</label>
+<label><input data-pb-launch="data" type="checkbox"/> Program data separation tested</label>
+<label><input data-pb-launch="pilot" type="checkbox"/> Pilot feedback reviewed</label>
+</div>
+<div class="pb-launch-score">
+<span>Launch readiness</span><b id="pbLaunchPercent">0%</b>
+</div>
+<div class="pb-launch-bar"><i id="pbLaunchBar"></i></div>
+<p class="pb-help">Active status should be used only after the required launch checks are complete.</p>
+</div>
+<div class="approved-settings-footer">
+<button class="approved-link" id="pbDeleteProgram">Delete</button>
+<span class="approved-setting-note" id="pbEditorMsg"></span>
+<button class="approved-small-action" id="pbSaveProgram">Save Program</button>
+</div>
+</div>
+</div>
+<script src="/program-builder.js"></script></body>
 </html>
