@@ -1041,7 +1041,7 @@ Includes the approved Lellee consumer experience from early recovery through lif
       .guided-activity-hint{font-size:.53rem;color:#8a828d;margin-top:5px}
     </style>
 <link href="/lellee-v1.css" rel="stylesheet"/>
-<link href="/legal-privacy-safety.css" rel="stylesheet"/><link href="/program-coach-core.css" rel="stylesheet"/><link href="/program-builder.css" rel="stylesheet"/><link href="/coach-marketplace.css" rel="stylesheet"/><link href="/inbox-reminders.css" rel="stylesheet"/><link href="/welcome-router.css" rel="stylesheet"/><link href="/organization-licensing.css" rel="stylesheet"/><link href="/life-admin-core.css" rel="stylesheet"/><link href="/resource-navigation.css" rel="stylesheet"/><link href="/progress-core.css" rel="stylesheet"/><link href="/content-studio.css" rel="stylesheet"/><link href="/safety-privacy-core.css" rel="stylesheet"/><link href="/pilot-runtime.css" rel="stylesheet"/><link href="/analytics-insights.css" rel="stylesheet"/><link href="/platform-integration.css" rel="stylesheet"/><link href="/commerce-ops.css" rel="stylesheet"/><link href="/scheduling-crm.css" rel="stylesheet"/></head>
+<link href="/legal-privacy-safety.css" rel="stylesheet"/><link href="/program-coach-core.css" rel="stylesheet"/><link href="/program-builder.css" rel="stylesheet"/><link href="/coach-marketplace.css" rel="stylesheet"/><link href="/inbox-reminders.css" rel="stylesheet"/><link href="/welcome-router.css" rel="stylesheet"/><link href="/organization-licensing.css" rel="stylesheet"/><link href="/life-admin-core.css" rel="stylesheet"/><link href="/resource-navigation.css" rel="stylesheet"/><link href="/progress-core.css" rel="stylesheet"/><link href="/content-studio.css" rel="stylesheet"/><link href="/safety-privacy-core.css" rel="stylesheet"/><link href="/pilot-runtime.css" rel="stylesheet"/><link href="/analytics-insights.css" rel="stylesheet"/><link href="/platform-integration.css" rel="stylesheet"/><link href="/commerce-ops.css" rel="stylesheet"/><link href="/scheduling-crm.css" rel="stylesheet"/><link href="/trust-support.css" rel="stylesheet"/><link href="/automation-workflows.css" rel="stylesheet"/></head>
 <body><a class="skip-link" href="#mainContent">Skip to main content</a><a class="lellee-skip" href="#lelleeMain">Skip to main content</a>
 <div class="prod-overlay hidden" id="onboardingOverlay">
 <div class="prod-onboarding">
@@ -2713,7 +2713,7 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <div class="approved-inner-head">
 <div><span class="approved-kicker">ADMIN</span><h2>Operate Lellee without touching the database directly</h2><p>Manage vetted resources, sponsored placement, recovery news, Plus pricing, and publishing controls.</p></div>
 <span class="admin-role-pill" id="adminRoleBadge">ADMIN</span>
-<button class="approved-small-action" data-page="program-builder">Program Builder</button><button class="approved-small-action" data-page="coach-admin">Coach Approvals</button><button class="approved-small-action" data-page="organization-admin">Organizations</button><button class="approved-small-action" data-page="resource-admin">Resource Quality</button><button class="approved-small-action" data-page="content-studio">Content Studio</button><button class="approved-small-action" data-page="safety-profile-builder">Safety Profiles</button><button class="approved-small-action" data-page="pilot-enrollment-admin">Pilot Enrollment</button><button class="approved-small-action" data-page="analytics">Analytics &amp; Insights</button><button class="approved-small-action" data-page="platform-health">Platform Health</button><button class="approved-small-action" data-page="revenue-ops">Revenue Ops</button><button class="approved-small-action" data-page="communications-admin">Communications</button></div>
+<button class="approved-small-action" data-page="program-builder">Program Builder</button><button class="approved-small-action" data-page="coach-admin">Coach Approvals</button><button class="approved-small-action" data-page="organization-admin">Organizations</button><button class="approved-small-action" data-page="resource-admin">Resource Quality</button><button class="approved-small-action" data-page="content-studio">Content Studio</button><button class="approved-small-action" data-page="safety-profile-builder">Safety Profiles</button><button class="approved-small-action" data-page="pilot-enrollment-admin">Pilot Enrollment</button><button class="approved-small-action" data-page="analytics">Analytics &amp; Insights</button><button class="approved-small-action" data-page="platform-health">Platform Health</button><button class="approved-small-action" data-page="revenue-ops">Revenue Ops</button><button class="approved-small-action" data-page="communications-admin">Communications</button><button class="approved-small-action" data-page="support-ops">Support Ops</button><button class="approved-small-action" data-page="privacy-ops">Privacy Ops</button><button class="approved-small-action" data-page="trust-ops">Trust &amp; Audit</button><button class="approved-small-action" data-page="automation-studio">Automation Studio</button></div>
 <div class="admin-unauthorized hidden" id="adminUnauthorized">
 <span>🔒</span>
 <div><h3>Admin access required</h3><p>This page is not available to standard Lellee accounts.</p></div>
@@ -2771,6 +2771,117 @@ Includes the approved Lellee consumer experience from early recovery through lif
 </div>
 </div>
 </section>
+<section class="page" id="page-automation-studio">
+<div class="approved-inner">
+<div class="approved-inner-head">
+<div>
+<span class="approved-kicker">ADMIN · AUTOMATION STUDIO</span>
+<h2>Build reusable Lellee workflows across programs and operations.</h2>
+<p>Create trigger → condition → action rules for programs, coaching, organizations, reminders, milestones and administrative operations.</p>
+</div>
+<button class="approved-link" data-page="admin">← Admin</button>
+</div>
+<div class="automation-summary-grid">
+<article><b id="automationStudioRules">0</b><small>Rules</small></article>
+<article><b id="automationStudioActive">0</b><small>Active</small></article>
+<article><b id="automationStudioRuns">0</b><small>Runs 30d</small></article>
+<article><b id="automationStudioFailures">0</b><small>Failures 30d</small></article>
+</div>
+<div class="commerce-tabs">
+<button class="active" data-automation-tab="rules">Rules</button>
+<button data-automation-tab="templates">Templates</button>
+<button data-automation-tab="queue">Queue</button>
+<button data-automation-tab="history">History</button>
+<button data-automation-tab="guardrails">Guardrails</button>
+</div>
+<div id="automationPanelRules">
+<div class="commerce-panel-head"><div><span class="approved-kicker">AUTOMATION RULES</span><h3>Program and platform workflows</h3></div><button class="approved-small-action" id="automationAddRule">+ Add Rule</button></div>
+<div class="automation-list" id="automationRuleList"></div>
+</div>
+<div class="hidden" id="automationPanelTemplates">
+<div class="automation-template-grid" id="automationTemplateList"></div>
+</div>
+<div class="hidden" id="automationPanelQueue">
+<div class="automation-list" id="automationQueueList"></div>
+</div>
+<div class="hidden" id="automationPanelHistory">
+<div class="automation-list" id="automationHistoryList"></div>
+</div>
+<div class="hidden" id="automationPanelGuardrails">
+<div class="automation-guardrail-grid" id="automationGuardrailList"></div>
+</div>
+<div class="automation-note"><b>Safety automation is intentionally constrained.</b><p>Rules may create generic supportive reminders or route a user to existing Help Me Right Now tools. They may not infer crisis severity, automatically contact emergency services, expose safety selections, or use sensitive behavioral data for marketing.</p></div>
+</div>
+</section>
+
+<section class="page" id="page-trust-ops">
+<div class="approved-inner">
+<div class="approved-inner-head">
+<div><span class="approved-kicker">ADMIN · TRUST &amp; OPERATIONS</span><h2>Audit configuration changes, releases and incidents.</h2><p>See who changed administrative configuration without storing sensitive user-content snapshots.</p></div>
+<button class="approved-link" data-page="admin">← Admin</button>
+</div>
+<div class="commerce-tabs">
+<button class="active" data-trust-ops-tab="audit">Audit Log</button>
+<button data-trust-ops-tab="releases">Release Notes</button>
+<button data-trust-ops-tab="incidents">Incidents</button>
+</div>
+<div id="trustOpsPanelAudit"><div class="trust-list" id="trustAuditList"></div></div>
+<div class="hidden" id="trustOpsPanelReleases">
+<div class="commerce-panel-head"><div><span class="approved-kicker">RELEASE NOTES</span><h3>What changed in Lellee</h3></div><button class="approved-small-action" id="trustAddRelease">+ Add Release Note</button></div>
+<div class="trust-list" id="trustReleaseList"></div>
+</div>
+<div class="hidden" id="trustOpsPanelIncidents">
+<div class="commerce-panel-head"><div><span class="approved-kicker">OPERATIONS</span><h3>Incidents and service issues</h3></div><button class="approved-small-action" id="trustAddIncident">+ Add Incident</button></div>
+<div class="trust-list" id="trustIncidentList"></div>
+</div>
+<div class="trust-privacy-note"><b>Audit logs are metadata-only.</b><p>They record administrative actions such as status/configuration changes—not journal text, messages, reflections, safety choices or raw health/recovery content.</p></div>
+</div>
+</section>
+<section class="page" id="page-privacy-ops">
+<div class="approved-inner">
+<div class="approved-inner-head">
+<div><span class="approved-kicker">ADMIN · PRIVACY OPERATIONS</span><h2>Process user data-rights requests with an audit trail.</h2><p>Export, correction, restriction and deletion requests are tracked separately from ordinary support.</p></div>
+<button class="approved-link" data-page="admin">← Admin</button>
+</div>
+<div class="trust-summary-grid">
+<article><b id="privacyOpsOpen">0</b><small>Open requests</small></article>
+<article><b id="privacyOpsExport">0</b><small>Exports</small></article>
+<article><b id="privacyOpsDelete">0</b><small>Deletion requests</small></article>
+<article><b id="privacyOpsOverdue">0</b><small>Past target date</small></article>
+</div>
+<div class="trust-list" id="privacyOpsList"></div>
+<div class="trust-privacy-note"><b>Requests are operational records.</b><p>This dashboard does not itself perform deletion or produce an export archive. It tracks workflow, verification, completion and audit history.</p></div>
+</div>
+</section>
+<section class="page" id="page-support-ops">
+<div class="approved-inner">
+<div class="approved-inner-head">
+<div>
+<span class="approved-kicker">ADMIN · SUPPORT OPERATIONS</span>
+<h2>Support users without opening their private content.</h2>
+<p>Manage product support, bug reports, feedback, pilot feedback and operational follow-up.</p>
+</div>
+<button class="approved-link" data-page="admin">← Admin</button>
+</div>
+<div class="trust-summary-grid">
+<article><b id="supportOpsOpen">0</b><small>Open requests</small></article>
+<article><b id="supportOpsBugs">0</b><small>Open bugs</small></article>
+<article><b id="supportOpsPilot">0</b><small>Pilot feedback</small></article>
+<article><b id="supportOpsUrgent">0</b><small>High priority</small></article>
+</div>
+<div class="commerce-tabs">
+<button class="active" data-support-ops-tab="queue">Queue</button>
+<button data-support-ops-tab="bugs">Bugs</button>
+<button data-support-ops-tab="feedback">Feedback</button>
+<button data-support-ops-tab="pilot">Pilot Feedback</button>
+</div>
+<div id="supportOpsPanelQueue"><div class="trust-list" id="supportOpsQueueList"></div></div>
+<div class="hidden" id="supportOpsPanelBugs"><div class="trust-list" id="supportOpsBugList"></div></div>
+<div class="hidden" id="supportOpsPanelFeedback"><div class="trust-list" id="supportOpsFeedbackList"></div></div>
+<div class="hidden" id="supportOpsPanelPilot"><div class="trust-list" id="supportOpsPilotList"></div></div>
+<div class="trust-privacy-note"><b>Support access is intentionally limited.</b><p>Support tickets may contain text the user deliberately submits to support. Support staff do not gain automatic access to journals, coach messages, safety selections, or private program records.</p></div>
+</div>
+</section>
 <section class="page" id="page-communications-admin">
 <div class="approved-inner">
 <div class="approved-inner-head">
@@ -2791,7 +2902,6 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <div class="crm-privacy-note"><b>No sensitive targeting.</b><p>Admin communications may target role, program, or general enrollment status. They should not target users based on cravings, relapse events, journal content, safety choices, or private health details.</p></div>
 </div>
 </section>
-
 <section class="page" id="page-revenue-ops">
 <div class="approved-inner">
 <div class="approved-inner-head">
@@ -3273,7 +3383,7 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <div class="approved-inner-head">
 <div><span class="approved-kicker">COACH DASHBOARD</span><h2 id="coachDashboardBusinessName">My Coaching Business</h2><p>Manage clients, groups, services and communication from one place.</p></div>
 <button class="approved-link" data-page="coach-business">Business Settings</button>
-<button class="approved-small-action" data-page="coach-cohorts">Group Programs</button><button class="approved-small-action" data-page="coach-analytics">Analytics</button><button class="approved-small-action" data-page="coach-revenue">Revenue</button><button class="approved-small-action" data-page="coach-scheduler">Scheduling &amp; CRM</button></div>
+<button class="approved-small-action" data-page="coach-cohorts">Group Programs</button><button class="approved-small-action" data-page="coach-analytics">Analytics</button><button class="approved-small-action" data-page="coach-revenue">Revenue</button><button class="approved-small-action" data-page="coach-scheduler">Scheduling &amp; CRM</button><button class="approved-small-action" data-page="coach-automation">Automation</button></div>
 <div class="coach-metric-grid">
 <article><b id="coachMetricClients">0</b><small>Active clients</small></article>
 <article><b id="coachMetricGroups">0</b><small>Active groups</small></article>
@@ -3546,7 +3656,7 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <div class="approved-inner-head">
 <div><span class="approved-kicker">ORGANIZATION DASHBOARD</span><h2 id="orgDashName">My Organization</h2><p>Manage licenses, sponsored seats, cohorts and aggregate program activity.</p></div>
 <button class="approved-link" data-page="organization-setup">Organization Settings</button>
-<button class="approved-small-action" data-page="organization-analytics">Analytics</button><button class="approved-small-action" data-page="organization-commerce">Licensing &amp; Revenue</button><button class="approved-small-action" data-page="organization-outreach">Outreach</button></div>
+<button class="approved-small-action" data-page="organization-analytics">Analytics</button><button class="approved-small-action" data-page="organization-commerce">Licensing &amp; Revenue</button><button class="approved-small-action" data-page="organization-outreach">Outreach</button><button class="approved-small-action" data-page="organization-automation">Automation</button></div>
 <div class="org-metric-grid">
 <article><b id="orgMetricSeats">0</b><small>Sponsored seats</small></article>
 <article><b id="orgMetricAssigned">0</b><small>Assigned</small></article>
@@ -4046,7 +4156,6 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <div class="commerce-note"><b>Product checkout is not live in this build.</b><p>Catalog and pricing can be configured now. Checkout activation remains separate from the app launch.</p></div>
 </div>
 </section>
-
 <section class="page" id="page-calendar">
 <div class="approved-inner">
 <div class="approved-inner-head">
@@ -4076,7 +4185,6 @@ Includes the approved Lellee consumer experience from early recovery through lif
 </section>
 </div>
 </section>
-
 <section class="page" id="page-coach-scheduler">
 <div class="approved-inner">
 <div class="approved-inner-head">
@@ -4124,7 +4232,6 @@ Includes the approved Lellee consumer experience from early recovery through lif
 </div>
 </div>
 </section>
-
 <section class="page" id="page-organization-outreach">
 <div class="approved-inner">
 <div class="approved-inner-head">
@@ -4158,6 +4265,178 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <div class="crm-list" id="orgContactHistory"></div>
 </div>
 <div class="crm-privacy-note"><b>Outreach stays operational.</b><p>Organization outreach can reference enrollment, invitations, schedules and general program logistics. It does not expose journals, check-ins, cravings, coaching messages or sensitive progress details.</p></div>
+</div>
+</section>
+<section class="page" id="page-trust-center">
+<div class="approved-inner">
+<div class="approved-inner-head">
+<div>
+<span class="approved-kicker">TRUST CENTER</span>
+<h2>See who can access what—and keep control of your Lellee data.</h2>
+<p>Review coaching relationships, organization sponsorships, shared progress snapshots, referrals, privacy requests, and your account access in one place.</p>
+</div>
+<button class="approved-link" data-page="settings">← Settings</button>
+</div>
+<div class="trust-summary-grid">
+<article><b id="trustCoachCount">0</b><small>Coach relationships</small></article>
+<article><b id="trustOrgCount">0</b><small>Organization sponsors</small></article>
+<article><b id="trustSharedCount">0</b><small>Items shared</small></article>
+<article><b id="trustRequestsCount">0</b><small>Data-rights requests</small></article>
+</div>
+<div class="commerce-tabs">
+<button class="active" data-trust-tab="access">Access</button>
+<button data-trust-tab="sharing">Sharing</button>
+<button data-trust-tab="data">My Data</button>
+<button data-trust-tab="consent">Consent History</button>
+</div>
+<div id="trustPanelAccess">
+<section class="trust-card">
+<span class="approved-kicker">CONNECTED ACCESS</span>
+<h3>Coaches, organizations and roles</h3>
+<div class="trust-list" id="trustAccessList"></div>
+</section>
+</div>
+<div class="hidden" id="trustPanelSharing">
+<section class="trust-card">
+<span class="approved-kicker">WHAT YOU SHARED</span>
+<h3>Revocable coaching/resource sharing</h3>
+<div class="trust-list" id="trustSharingList"></div>
+</section>
+</div>
+<div class="hidden" id="trustPanelData">
+<section class="trust-card">
+<span class="approved-kicker">DATA RIGHTS</span>
+<h3>Request a copy, correction, restriction, or deletion</h3>
+<div class="data-rights-actions">
+<button class="approved-small-action" data-data-request="export">Request Data Export</button>
+<button class="approved-small-action" data-data-request="correct">Request Correction</button>
+<button class="approved-small-action" data-data-request="restrict">Request Restriction</button>
+<button class="approved-small-action" data-data-request="delete">Request Account/Data Deletion</button>
+</div>
+<div class="trust-list" id="trustDataRequestList"></div>
+</section>
+</div>
+<div class="hidden" id="trustPanelConsent">
+<section class="trust-card">
+<span class="approved-kicker">CONSENT HISTORY</span>
+<h3>Your recorded choices</h3>
+<div class="trust-list" id="trustConsentList"></div>
+</section>
+</div>
+<div class="trust-privacy-note">
+<b>Private content stays out of this dashboard.</b>
+<p>The Trust Center shows access relationships and sharing records. It does not display or expose journal text, message bodies, safety selections, cravings, triggers or private recovery history to other parties.</p>
+</div>
+</div>
+</section>
+<section class="page" id="page-help-support">
+<div class="approved-inner">
+<div class="approved-inner-head">
+<div>
+<span class="approved-kicker">HELP &amp; SUPPORT</span>
+<h2>Get help with Lellee.</h2>
+<p>Report a problem, ask a question, give feedback, or tell Lellee what would make a pilot program better.</p>
+</div>
+<button class="approved-link" data-page="settings">← Settings</button>
+</div>
+<div class="support-action-grid">
+<button data-support-type="question"><span>?</span><b>Ask a Question</b><small>Account, program, feature or navigation help.</small></button>
+<button data-support-type="bug"><span>!</span><b>Report a Bug</b><small>Something is not working as expected.</small></button>
+<button data-support-type="feedback"><span>♡</span><b>Give Feedback</b><small>Share an idea or suggestion.</small></button>
+<button data-support-type="pilot"><span>P</span><b>Pilot Feedback</b><small>Tell us about a program you are testing.</small></button>
+</div>
+<section class="trust-card">
+<span class="approved-kicker">MY SUPPORT REQUESTS</span>
+<h3>Open and recent requests</h3>
+<div class="trust-list" id="mySupportRequestList"></div>
+</section>
+<section class="trust-card">
+<span class="approved-kicker">WHAT CHANGED</span>
+<h3>Recent Lellee releases</h3>
+<div class="trust-list" id="userReleaseNotes"></div>
+</section>
+</div>
+</section>
+
+<section class="page" id="page-automation-center">
+<div class="approved-inner">
+<div class="approved-inner-head">
+<div>
+<span class="approved-kicker">MY AUTOMATIONS</span>
+<h2>Let Lellee handle the routine follow-up.</h2>
+<p>Manage reminders and workflow preferences for your programs, goals, appointments, milestones, coaching and practical life tasks.</p>
+</div>
+<button class="approved-link" data-page="settings">← Settings</button>
+</div>
+<div class="automation-summary-grid">
+<article><b id="automationActiveCount">0</b><small>Active automations</small></article>
+<article><b id="automationTodayCount">0</b><small>Actions today</small></article>
+<article><b id="automationReminderCount">0</b><small>Upcoming reminders</small></article>
+<article><b id="automationPausedCount">0</b><small>Paused</small></article>
+</div>
+<section class="automation-card">
+<span class="approved-kicker">YOUR WORKFLOWS</span>
+<h3>Program and personal automations</h3>
+<div class="automation-list" id="automationUserRuleList"></div>
+</section>
+<section class="automation-card">
+<span class="approved-kicker">RECENT AUTOMATION</span>
+<h3>What Lellee handled for you</h3>
+<div class="automation-list" id="automationUserRunList"></div>
+</section>
+<div class="automation-note">
+<b>Automation does not replace emergency help.</b>
+<p>Lellee can create routine reminders and next steps. It does not make emergency decisions, contact emergency services automatically, or disclose sensitive safety information through routine workflow automation.</p>
+</div>
+</div>
+</section>
+
+<section class="page" id="page-coach-automation">
+<div class="approved-inner">
+<div class="approved-inner-head">
+<div><span class="approved-kicker">COACH BUSINESS · AUTOMATION</span><h2 id="coachAutomationName">My Coaching Business</h2><p>Automate routine follow-up across leads, consultations, clients, groups and sessions while keeping private client content out of the automation engine.</p></div>
+<button class="approved-link" data-page="coach-dashboard">← Coach Dashboard</button>
+</div>
+<div class="automation-summary-grid">
+<article><b id="coachAutomationRules">0</b><small>Active rules</small></article>
+<article><b id="coachAutomationDue">0</b><small>Follow-ups due</small></article>
+<article><b id="coachAutomationCreated">0</b><small>Tasks created</small></article>
+<article><b id="coachAutomationRuns">0</b><small>Recent runs</small></article>
+</div>
+<section class="automation-card">
+<div class="commerce-panel-head"><div><span class="approved-kicker">BUSINESS RULES</span><h3>Lead, consultation, session and group follow-up</h3></div><button class="approved-small-action" id="coachAutomationAddRule">+ Add Rule</button></div>
+<div class="automation-list" id="coachAutomationRuleList"></div>
+</section>
+<section class="automation-card">
+<span class="approved-kicker">RECENT RUNS</span>
+<h3>Automation history</h3>
+<div class="automation-list" id="coachAutomationRunList"></div>
+</section>
+<div class="automation-note"><b>Business automation only.</b><p>Coach rules may use operational events such as consultation requested, session scheduled, missed follow-up, or group start date. They may not inspect journal text, safety choices, message bodies or private recovery reflections.</p></div>
+</div>
+</section>
+
+<section class="page" id="page-organization-automation">
+<div class="approved-inner">
+<div class="approved-inner-head">
+<div><span class="approved-kicker">ORGANIZATION · AUTOMATION</span><h2 id="orgAutomationName">Organization</h2><p>Automate sponsored-seat invitations, general onboarding, cohort reminders and operational follow-up without exposing individual private program data.</p></div>
+<button class="approved-link" data-page="organization-dashboard">← Organization Dashboard</button>
+</div>
+<div class="automation-summary-grid">
+<article><b id="orgAutomationRules">0</b><small>Active rules</small></article>
+<article><b id="orgAutomationInvites">0</b><small>Pending invites</small></article>
+<article><b id="orgAutomationFollowups">0</b><small>Follow-ups due</small></article>
+<article><b id="orgAutomationRuns">0</b><small>Recent runs</small></article>
+</div>
+<section class="automation-card">
+<div class="commerce-panel-head"><div><span class="approved-kicker">ORGANIZATION RULES</span><h3>Invites, cohorts and administrative follow-up</h3></div><button class="approved-small-action" id="orgAutomationAddRule">+ Add Rule</button></div>
+<div class="automation-list" id="orgAutomationRuleList"></div>
+</section>
+<section class="automation-card">
+<span class="approved-kicker">RECENT RUNS</span>
+<h3>Automation history</h3>
+<div class="automation-list" id="orgAutomationRunList"></div>
+</section>
 </div>
 </section>
 <section class="page" id="page-settings">
@@ -4246,9 +4525,16 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <article><div><b>My Access</b><small>See your Free/Plus tier, sponsored access and program entitlements.</small></div><button class="approved-link" data-page="my-access">Open My Access →</button></article>
 <article><div><b>Lellee Products</b><small>Optional journals, printed stories and other Lellee products.</small></div><button class="approved-link" data-page="lellee-shop">View Products →</button></article>
 </div>
-
 <div class="program-settings-shortcuts">
 <article><div><b>My Calendar</b><small>Appointments, coaching sessions, milestones and reminders together.</small></div><button class="approved-link" data-page="calendar">Open Calendar →</button></article>
+</div>
+<div class="program-settings-shortcuts">
+<article><div><b>Trust Center</b><small>Review sharing, connected access, consent and data-rights requests.</small></div><button class="approved-link" data-page="trust-center">Open Trust Center →</button></article>
+<article><div><b>Help &amp; Support</b><small>Questions, bug reports, feedback and pilot feedback.</small></div><button class="approved-link" data-page="help-support">Get Help →</button></article>
+</div>
+
+<div class="program-settings-shortcuts">
+<article><div><b>My Automations</b><small>Manage reminders and workflow preferences across your Lellee activity.</small></div><button class="approved-link" data-page="automation-center">Open Automations →</button></article>
 </div>
 </div>
 </section>
@@ -5131,5 +5417,22 @@ Transportation"></textarea></label>
 </div>
 </div>
 </div>
-<script src="/safety-privacy-core.js"></script><script src="/pilot-runtime.js"></script><script src="/analytics-insights.js"></script><script src="/platform-integration.js"></script><script src="/commerce-ops.js"></script><script src="/scheduling-crm.js"></script></body>
+<script src="/safety-privacy-core.js"></script><script src="/pilot-runtime.js"></script><script src="/analytics-insights.js"></script><script src="/platform-integration.js"></script><script src="/commerce-ops.js"></script><script src="/scheduling-crm.js"></script>
+<div class="admin-overlay hidden" id="supportRequestEditor">
+<div class="admin-editor-card">
+<div class="admin-editor-head">
+<div><span class="approved-kicker">LELLEE SUPPORT</span><h3 id="supportEditorTitle">Support Request</h3></div>
+<button class="approved-link" id="supportEditorClose">Close</button>
+</div>
+<div class="admin-editor-grid">
+<label>Subject<input id="supportSubject" maxlength="160"/></label>
+<label>Priority<select id="supportPriority"><option value="normal">Normal</option><option value="high">High</option></select></label>
+<label class="admin-wide">What would you like us to know?<textarea id="supportBody" maxlength="5000"></textarea></label>
+<label class="admin-wide">Page or feature <span>Optional</span><input id="supportArea" maxlength="100"/></label>
+</div>
+<div class="trust-form-warning"><b>Do not include emergency information here.</b><p>Support tickets are not monitored as an emergency or crisis service. Avoid pasting private journal entries or unnecessary sensitive health information into a support request.</p></div>
+<div class="approved-settings-footer"><span class="approved-setting-note" id="supportEditorMsg"></span><button class="approved-small-action" id="supportEditorSave">Send Request</button></div>
+</div>
+</div>
+<script src="/trust-support.js"></script><script src="/automation-workflows.js"></script></body>
 </html>
