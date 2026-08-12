@@ -1041,7 +1041,7 @@ Includes the approved Lellee consumer experience from early recovery through lif
       .guided-activity-hint{font-size:.53rem;color:#8a828d;margin-top:5px}
     </style>
 <link href="/lellee-v1.css" rel="stylesheet"/>
-<link href="/legal-privacy-safety.css" rel="stylesheet"/><link href="/program-coach-core.css" rel="stylesheet"/><link href="/program-builder.css" rel="stylesheet"/><link href="/coach-marketplace.css" rel="stylesheet"/><link href="/inbox-reminders.css" rel="stylesheet"/><link href="/welcome-router.css" rel="stylesheet"/><link href="/organization-licensing.css" rel="stylesheet"/><link href="/life-admin-core.css" rel="stylesheet"/></head>
+<link href="/legal-privacy-safety.css" rel="stylesheet"/><link href="/program-coach-core.css" rel="stylesheet"/><link href="/program-builder.css" rel="stylesheet"/><link href="/coach-marketplace.css" rel="stylesheet"/><link href="/inbox-reminders.css" rel="stylesheet"/><link href="/welcome-router.css" rel="stylesheet"/><link href="/organization-licensing.css" rel="stylesheet"/><link href="/life-admin-core.css" rel="stylesheet"/><link href="/resource-navigation.css" rel="stylesheet"/></head>
 <body><a class="skip-link" href="#mainContent">Skip to main content</a><a class="lellee-skip" href="#lelleeMain">Skip to main content</a>
 <div class="prod-overlay hidden" id="onboardingOverlay">
 <div class="prod-onboarding">
@@ -1156,7 +1156,6 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <div><span class="approved-kicker">INBOX</span><h3>Messages &amp; reminders</h3><p><span id="todayInboxUnread">0</span> unread</p></div>
 <button class="approved-small-action" data-page="inbox">Open Inbox</button>
 </div>
-
 <div class="life-today-card"><div><span class="approved-kicker">MY PLAN</span><h3>Practical next steps</h3><p><span id="todayLifeDue">0</span> items due soon</p></div><button class="approved-small-action" data-page="life-admin">Open My Plan</button></div>
 </section>
 <section class="page" id="page-recovery">
@@ -2710,7 +2709,7 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <div class="approved-inner-head">
 <div><span class="approved-kicker">ADMIN</span><h2>Operate Lellee without touching the database directly</h2><p>Manage vetted resources, sponsored placement, recovery news, Plus pricing, and publishing controls.</p></div>
 <span class="admin-role-pill" id="adminRoleBadge">ADMIN</span>
-<button class="approved-small-action" data-page="program-builder">Program Builder</button><button class="approved-small-action" data-page="coach-admin">Coach Approvals</button><button class="approved-small-action" data-page="organization-admin">Organizations</button></div>
+<button class="approved-small-action" data-page="program-builder">Program Builder</button><button class="approved-small-action" data-page="coach-admin">Coach Approvals</button><button class="approved-small-action" data-page="organization-admin">Organizations</button><button class="approved-small-action" data-page="resource-admin">Resource Quality</button></div>
 <div class="admin-unauthorized hidden" id="adminUnauthorized">
 <span>🔒</span>
 <div><h3>Admin access required</h3><p>This page is not available to standard Lellee accounts.</p></div>
@@ -2768,6 +2767,26 @@ Includes the approved Lellee consumer experience from early recovery through lif
 </div>
 </div>
 </section>
+<section class="page" id="page-resource-admin">
+<div class="approved-inner">
+<div class="approved-inner-head">
+<div><span class="approved-kicker">ADMIN · RESOURCE QUALITY</span><h2>Keep Lellee's resource directory useful and trustworthy.</h2><p>Review verification dates, program coverage, sponsorship labels and stale listings.</p></div>
+<button class="approved-link" data-page="admin">← Admin</button>
+</div>
+<div class="resource-admin-metrics">
+<article><b id="resourceAdminPublished">0</b><small>Published</small></article>
+<article><b id="resourceAdminNeedsReview">0</b><small>Needs review</small></article>
+<article><b id="resourceAdminSponsored">0</b><small>Sponsored</small></article>
+<article><b id="resourceAdminPrograms">0</b><small>Programs covered</small></article>
+</div>
+<div class="resource-admin-actions">
+<button class="approved-small-action" id="resourceAdminAdd">+ Add Resource</button>
+<button class="approved-link" id="resourceAdminRefresh">Refresh</button>
+</div>
+<div class="resource-nav-list" id="resourceAdminList"></div>
+</div>
+</section>
+
 <section class="page" id="page-organization-admin">
 <div class="approved-inner">
 <div class="approved-inner-head">
@@ -3218,7 +3237,6 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <div class="org-privacy-card"><b>Your sponsor sees limited information.</b><p>By default, an organization can see that a sponsored seat was assigned/activated and aggregate program use. It cannot read your private journal, check-ins, coach messages or support contacts.</p></div>
 </div>
 </section>
-
 <section class="page" id="page-life-admin"><div class="approved-inner">
 <div class="approved-inner-head"><div><span class="approved-kicker">MY PLAN</span><h2>Keep the practical parts of life in one place.</h2><p>Tasks, appointments, documents, benefits, housing and employment can be turned on by the Lellee program you are using.</p></div><button class="approved-link" data-page="today">← Today</button></div>
 <div class="life-admin-summary"><article><b id="lifeDueSoon">0</b><small>Due soon</small></article><article><b id="lifeAppointments">0</b><small>Upcoming appointments</small></article><article><b id="lifeDocuments">0</b><small>Documents to handle</small></article><article><b id="lifeApplications">0</b><small>Open applications</small></article></div>
@@ -3232,7 +3250,6 @@ Includes the approved Lellee consumer experience from early recovery through lif
 </div>
 <div class="life-admin-privacy"><b>Private by default.</b><p>Your sponsor, organization or coach does not automatically see these records.</p></div>
 </div></section>
-
 <section class="page" id="page-life-tasks"><div class="approved-inner">
 <div class="approved-inner-head"><div><span class="approved-kicker">TASKS</span><h2>My Tasks</h2><p>Break practical goals into clear next steps.</p></div><button class="approved-link" data-page="life-admin">← My Plan</button></div>
 <div class="life-panel-head"><button class="approved-small-action" id="newLifeTask">+ Add</button></div>
@@ -3262,7 +3279,58 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <div class="approved-inner-head"><div><span class="approved-kicker">EMPLOYMENT</span><h2>Employment Plan</h2><p>Track jobs, training opportunities and applications.</p></div><button class="approved-link" data-page="life-admin">← My Plan</button></div>
 <div class="life-panel-head"><button class="approved-small-action" id="newLifeEmployment">+ Add</button></div>
 <div class="life-list" id="lifeEmploymentList"></div>
-</div></section><section class="page" id="page-settings">
+</div></section>
+<section class="page" id="page-resource-navigator">
+<div class="approved-inner">
+<div class="approved-inner-head">
+<div>
+<span class="approved-kicker">RESOURCE NAVIGATOR</span>
+<h2>Find practical help without digging through a giant directory.</h2>
+<p>Search by what you need, where you are, cost, virtual availability and program. Save resources or request a user-controlled referral.</p>
+</div>
+<button class="approved-link" data-page="today">← Today</button>
+</div>
+<div class="resource-nav-filters">
+<input id="resourceNavSearch" placeholder="What do you need help with?"/>
+<select id="resourceNavCategory"><option value="">All categories</option></select>
+<input id="resourceNavCity" placeholder="City"/>
+<select id="resourceNavCost"><option value="">Any cost</option><option value="free">Free</option><option value="low_cost">Low cost</option><option value="varies">Varies</option></select>
+<select id="resourceNavVirtual"><option value="">In-person or virtual</option><option value="true">Virtual available</option><option value="false">In-person</option></select>
+</div>
+<div class="resource-nav-summary">
+<article><b id="resourceNavCount">0</b><small>Matching resources</small></article>
+<article><b id="resourceSavedCount">0</b><small>Saved</small></article>
+<article><b id="resourceReferralCount">0</b><small>Referral requests</small></article>
+</div>
+<div class="resource-nav-note">
+<b>Directory information can change.</b>
+<p>Verify hours, eligibility, cost and services directly. Sponsored placement is labeled and does not mean a resource is clinically appropriate for you.</p>
+</div>
+<div class="resource-nav-list" id="resourceNavList"></div>
+</div>
+</section>
+
+<section class="page" id="page-my-resources">
+<div class="approved-inner">
+<div class="approved-inner-head">
+<div><span class="approved-kicker">MY RESOURCES</span><h2>Keep the help you may actually use.</h2><p>Saved resources, referral requests and suggested resources stay organized here.</p></div>
+<button class="approved-link" data-page="resource-navigator">Find Resources</button>
+</div>
+<div class="resource-plan-tabs">
+<button class="active" data-resource-plan-tab="saved">Saved</button>
+<button data-resource-plan-tab="referrals">Referrals</button>
+<button data-resource-plan-tab="suggestions">Suggestions</button>
+</div>
+<div id="resourcePlanSaved"><div class="resource-nav-list" id="resourceSavedList"></div></div>
+<div class="hidden" id="resourcePlanReferrals"><div class="resource-nav-list" id="resourceReferralList"></div></div>
+<div class="hidden" id="resourcePlanSuggestions"><div class="resource-nav-list" id="resourceSuggestionList"></div></div>
+<div class="resource-nav-note">
+<b>You control referrals.</b>
+<p>A coach or organization may suggest a resource, but Lellee does not automatically send your private journal, check-ins or history to that resource. You decide whether to accept a referral.</p>
+</div>
+</div>
+</section>
+<section class="page" id="page-settings">
 <div class="approved-inner">
 <div class="approved-inner-head">
 <div><span class="approved-kicker">SETTINGS</span><h2>Personalize Lellee</h2><p>Keep the settings you use most visible. Everything else stays one level deeper.</p></div>
@@ -3324,8 +3392,12 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <article><div><b>Lellee for Organizations</b><small>Create or manage sponsored access for a nonprofit, public agency, employer or community program.</small></div><button class="approved-link" data-page="organization-setup">Organization Setup →</button></article>
 <article><div><b>My Sponsored Access</b><small>See programs an organization has made available to you.</small></div><button class="approved-link" data-page="sponsored-access">View Sponsored Access →</button></article>
 </div>
-
 <div class="program-settings-shortcuts"><article><div><b>My Plan</b><small>Tasks, appointments, documents, benefits, housing and employment tools shared across Lellee programs.</small></div><button class="approved-link" data-page="life-admin">Open My Plan →</button></article></div>
+
+<div class="program-settings-shortcuts">
+<article><div><b>Resource Navigator</b><small>Find and save practical support across your active Lellee program.</small></div><button class="approved-link" data-page="resource-navigator">Find Resources →</button></article>
+<article><div><b>My Resources</b><small>Saved resources, referrals and suggestions.</small></div><button class="approved-link" data-page="my-resources">Open My Resources →</button></article>
+</div>
 </div>
 </section>
 </div>
@@ -4080,5 +4152,5 @@ Transportation"></textarea></label>
 <div class="admin-editor-grid" id="lifeEditorFields"></div>
 <div class="approved-settings-footer"><button class="approved-link hidden" id="deleteLifeItem">Delete</button><span class="approved-setting-note" id="lifeEditorMsg"></span><button class="approved-small-action" id="saveLifeItem">Save</button></div>
 </div></div>
-<script src="/life-admin-core.js"></script></body>
+<script src="/life-admin-core.js"></script><script src="/resource-navigation.js"></script></body>
 </html>
