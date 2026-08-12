@@ -1041,7 +1041,7 @@ Includes the approved Lellee consumer experience from early recovery through lif
       .guided-activity-hint{font-size:.53rem;color:#8a828d;margin-top:5px}
     </style>
 <link href="/lellee-v1.css" rel="stylesheet"/>
-<link href="/legal-privacy-safety.css" rel="stylesheet"/><link href="/program-coach-core.css" rel="stylesheet"/><link href="/program-builder.css" rel="stylesheet"/><link href="/coach-marketplace.css" rel="stylesheet"/><link href="/inbox-reminders.css" rel="stylesheet"/><link href="/welcome-router.css" rel="stylesheet"/><link href="/organization-licensing.css" rel="stylesheet"/><link href="/life-admin-core.css" rel="stylesheet"/><link href="/resource-navigation.css" rel="stylesheet"/><link href="/progress-core.css" rel="stylesheet"/><link href="/content-studio.css" rel="stylesheet"/><link href="/safety-privacy-core.css" rel="stylesheet"/></head>
+<link href="/legal-privacy-safety.css" rel="stylesheet"/><link href="/program-coach-core.css" rel="stylesheet"/><link href="/program-builder.css" rel="stylesheet"/><link href="/coach-marketplace.css" rel="stylesheet"/><link href="/inbox-reminders.css" rel="stylesheet"/><link href="/welcome-router.css" rel="stylesheet"/><link href="/organization-licensing.css" rel="stylesheet"/><link href="/life-admin-core.css" rel="stylesheet"/><link href="/resource-navigation.css" rel="stylesheet"/><link href="/progress-core.css" rel="stylesheet"/><link href="/content-studio.css" rel="stylesheet"/><link href="/safety-privacy-core.css" rel="stylesheet"/><link href="/pilot-runtime.css" rel="stylesheet"/><link href="/analytics-insights.css" rel="stylesheet"/></head>
 <body><a class="skip-link" href="#mainContent">Skip to main content</a><a class="lellee-skip" href="#lelleeMain">Skip to main content</a>
 <div class="prod-overlay hidden" id="onboardingOverlay">
 <div class="prod-onboarding">
@@ -2713,7 +2713,7 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <div class="approved-inner-head">
 <div><span class="approved-kicker">ADMIN</span><h2>Operate Lellee without touching the database directly</h2><p>Manage vetted resources, sponsored placement, recovery news, Plus pricing, and publishing controls.</p></div>
 <span class="admin-role-pill" id="adminRoleBadge">ADMIN</span>
-<button class="approved-small-action" data-page="program-builder">Program Builder</button><button class="approved-small-action" data-page="coach-admin">Coach Approvals</button><button class="approved-small-action" data-page="organization-admin">Organizations</button><button class="approved-small-action" data-page="resource-admin">Resource Quality</button><button class="approved-small-action" data-page="content-studio">Content Studio</button><button class="approved-small-action" data-page="safety-profile-builder">Safety Profiles</button></div>
+<button class="approved-small-action" data-page="program-builder">Program Builder</button><button class="approved-small-action" data-page="coach-admin">Coach Approvals</button><button class="approved-small-action" data-page="organization-admin">Organizations</button><button class="approved-small-action" data-page="resource-admin">Resource Quality</button><button class="approved-small-action" data-page="content-studio">Content Studio</button><button class="approved-small-action" data-page="safety-profile-builder">Safety Profiles</button><button class="approved-small-action" data-page="pilot-enrollment-admin">Pilot Enrollment</button><button class="approved-small-action" data-page="analytics">Analytics &amp; Insights</button></div>
 <div class="admin-unauthorized hidden" id="adminUnauthorized">
 <span>🔒</span>
 <div><h3>Admin access required</h3><p>This page is not available to standard Lellee accounts.</p></div>
@@ -2771,6 +2771,113 @@ Includes the approved Lellee consumer experience from early recovery through lif
 </div>
 </div>
 </section>
+<section class="page" id="page-analytics">
+<div class="approved-inner">
+<div class="approved-inner-head">
+<div>
+<span class="approved-kicker">ADMIN · ANALYTICS &amp; INSIGHTS</span>
+<h2>See how Lellee is growing, where people engage, and what needs attention.</h2>
+<p>Privacy-safe product analytics across users, programs, coaching, organizations, content, retention and conversion.</p>
+</div>
+<button class="approved-link" data-page="admin">← Admin</button>
+</div>
+<div class="analytics-range-bar">
+<select id="analyticsRange">
+<option value="7">Last 7 days</option>
+<option selected="" value="30">Last 30 days</option>
+<option value="90">Last 90 days</option>
+<option value="365">Last 12 months</option>
+</select>
+<select id="analyticsProgramFilter"><option value="">All programs</option></select>
+<button class="approved-link" id="analyticsRefresh">Refresh</button>
+</div>
+<div class="analytics-kpi-grid">
+<article><b id="analyticsUsers">0</b><small>Total users</small><em id="analyticsNewUsers">0 new</em></article>
+<article><b id="analyticsDAU">0</b><small>Daily active</small><em id="analyticsWAU">0 weekly active</em></article>
+<article><b id="analyticsMAU">0</b><small>Monthly active</small><em id="analyticsStickiness">0% DAU/MAU</em></article>
+<article><b id="analyticsRetention30">0%</b><small>30-day retention</small><em id="analyticsRetention7">0% at 7 days</em></article>
+<article><b id="analyticsActivePrograms">0</b><small>Programs in use</small><em id="analyticsPilotPrograms">0 pilots</em></article>
+<article><b id="analyticsCoachBusinesses">0</b><small>Coach businesses</small><em id="analyticsCoachClients">0 clients</em></article>
+<article><b id="analyticsOrganizations">0</b><small>Organizations</small><em id="analyticsOrgSeats">0 sponsored seats</em></article>
+<article><b id="analyticsPlus">0</b><small>Plus members</small><em id="analyticsPlusRate">0% conversion</em></article>
+</div>
+<div class="analytics-tabs">
+<button class="active" data-analytics-tab="overview">Overview</button>
+<button data-analytics-tab="funnel">Funnel</button>
+<button data-analytics-tab="programs">Programs</button>
+<button data-analytics-tab="coaching">Coaching</button>
+<button data-analytics-tab="organizations">Organizations</button>
+<button data-analytics-tab="content">Content</button>
+<button data-analytics-tab="retention">Retention</button>
+<button data-analytics-tab="privacy">Privacy</button>
+</div>
+<div id="analyticsPanelOverview">
+<div class="analytics-two-col">
+<section class="analytics-card"><span class="approved-kicker">ACTIVITY</span><h3>Active users</h3><div class="analytics-bar-list" id="analyticsActivityBars"></div></section>
+<section class="analytics-card"><span class="approved-kicker">WHAT PEOPLE USE</span><h3>Top product areas</h3><div class="analytics-rank-list" id="analyticsTopAreas"></div></section>
+</div>
+<section class="analytics-card"><span class="approved-kicker">EXECUTIVE SIGNALS</span><h3>What deserves attention</h3><div class="analytics-signal-grid" id="analyticsSignals"></div></section>
+</div>
+<div class="hidden" id="analyticsPanelFunnel">
+<section class="analytics-card"><span class="approved-kicker">USER FUNNEL</span><h3>From signup to ongoing use</h3><div class="analytics-funnel" id="analyticsFunnel"></div></section>
+<div class="analytics-two-col">
+<section class="analytics-card"><span class="approved-kicker">CONVERSION</span><h3>Free → Plus</h3><div class="analytics-rank-list" id="analyticsConversion"></div></section>
+<section class="analytics-card"><span class="approved-kicker">ONBOARDING</span><h3>Where users stop</h3><div class="analytics-rank-list" id="analyticsOnboarding"></div></section>
+</div>
+</div>
+<div class="hidden" id="analyticsPanelPrograms">
+<section class="analytics-card"><span class="approved-kicker">PROGRAM PERFORMANCE</span><h3>Enrollment, engagement and demand</h3><div class="analytics-table-wrap" id="analyticsProgramTable"></div></section>
+</div>
+<div class="hidden" id="analyticsPanelCoaching">
+<div class="analytics-two-col">
+<section class="analytics-card"><span class="approved-kicker">COACHING SUPPLY</span><h3>Businesses and capacity</h3><div class="analytics-rank-list" id="analyticsCoachSupply"></div></section>
+<section class="analytics-card"><span class="approved-kicker">COACHING DEMAND</span><h3>Leads and consultations</h3><div class="analytics-rank-list" id="analyticsCoachDemand"></div></section>
+</div>
+<section class="analytics-card"><span class="approved-kicker">GROUP AFFORDABILITY</span><h3>Group and hybrid utilization</h3><div class="analytics-table-wrap" id="analyticsGroupUtilization"></div></section>
+</div>
+<div class="hidden" id="analyticsPanelOrganizations">
+<section class="analytics-card"><span class="approved-kicker">INSTITUTIONAL GROWTH</span><h3>Organizations, licenses and seats</h3><div class="analytics-table-wrap" id="analyticsOrganizationTable"></div></section>
+</div>
+<div class="hidden" id="analyticsPanelContent">
+<div class="analytics-two-col">
+<section class="analytics-card"><span class="approved-kicker">CONTENT PIPELINE</span><h3>Draft → Review → Published</h3><div class="analytics-rank-list" id="analyticsContentPipeline"></div></section>
+<section class="analytics-card"><span class="approved-kicker">CONTENT ENGAGEMENT</span><h3>Most-used guided content</h3><div class="analytics-rank-list" id="analyticsContentEngagement"></div></section>
+</div>
+</div>
+<div class="hidden" id="analyticsPanelRetention">
+<section class="analytics-card"><span class="approved-kicker">RETENTION</span><h3>7 / 30 / 90-day return</h3><div class="analytics-retention-grid" id="analyticsRetentionGrid"></div></section>
+<section class="analytics-card"><span class="approved-kicker">RECENT ACTIVITY</span><h3>Engagement trend</h3><div class="analytics-bar-list" id="analyticsRetentionTrend"></div></section>
+</div>
+<div class="hidden" id="analyticsPanelPrivacy">
+<div class="analytics-privacy-banner"><b>Analytics is intentionally content-blind.</b><p>Lellee tracks product usage signals—not journal text, message bodies, safety choices, cravings, reflections, or private coaching content.</p></div>
+<div class="analytics-check-grid" id="analyticsPrivacyChecks"></div>
+</div>
+</div>
+</section>
+
+<section class="page" id="page-pilot-enrollment-admin">
+<div class="approved-inner">
+<div class="approved-inner-head">
+<div>
+<span class="approved-kicker">ADMIN · PILOT ENROLLMENT</span>
+<h2>Invite specific users into a future Lellee program.</h2>
+<p>Pilot enrollment is separate from public launch. Users can test a program before it becomes broadly available.</p>
+</div>
+<button class="approved-link" data-page="program-builder">← Program Builder</button>
+</div>
+<div class="pilot-enrollment-controls">
+<select id="pilotProgramSelect"></select>
+<input id="pilotUserEmail" placeholder="User email" type="email"/>
+<button class="approved-small-action" id="pilotEnrollUser">Enroll User</button>
+</div>
+<div class="pilot-enrollment-metrics">
+<article><b id="pilotMetricUsers">0</b><small>Pilot users</small></article>
+<article><b id="pilotMetricPrograms">0</b><small>Pilot programs</small></article>
+<article><b id="pilotMetricActive">0</b><small>Active pilot sessions</small></article>
+</div>
+<div class="program-switch-list" id="pilotEnrollmentList"></div>
+</div>
+</section>
 <section class="page" id="page-safety-profile-builder">
 <div class="approved-inner">
 <div class="approved-inner-head">
@@ -2817,7 +2924,6 @@ Includes the approved Lellee consumer experience from early recovery through lif
 </div>
 </div>
 </section>
-
 <section class="page" id="page-content-releases">
 <div class="approved-inner">
 <div class="approved-inner-head">
@@ -2979,7 +3085,7 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <p>Configure terminology, journey structure, modules, safety, resources, coaching and launch readiness for each vertical.</p>
 </div>
 <button class="approved-link" data-page="admin">← Admin</button>
-<button class="approved-small-action" data-page="program-demand">View Demand</button><button class="approved-small-action" data-page="outcome-builder">Outcome Builder</button><button class="approved-small-action" data-page="content-studio">Build Content</button><button class="approved-small-action" data-page="safety-profile-builder">Safety Profiles</button></div>
+<button class="approved-small-action" data-page="program-demand">View Demand</button><button class="approved-small-action" data-page="outcome-builder">Outcome Builder</button><button class="approved-small-action" data-page="content-studio">Build Content</button><button class="approved-small-action" data-page="safety-profile-builder">Safety Profiles</button><button class="approved-small-action" data-page="pilot-enrollment-admin">Pilot Enrollment</button></div>
 <div class="program-builder-warning hidden" id="programBuilderUnauthorized">
 <b>Admin access required.</b><p>Program creation and launch controls are restricted to Lellee administrators.</p>
 </div>
@@ -3055,7 +3161,7 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <div class="approved-inner-head">
 <div><span class="approved-kicker">COACH DASHBOARD</span><h2 id="coachDashboardBusinessName">My Coaching Business</h2><p>Manage clients, groups, services and communication from one place.</p></div>
 <button class="approved-link" data-page="coach-business">Business Settings</button>
-<button class="approved-small-action" data-page="coach-cohorts">Group Programs</button></div>
+<button class="approved-small-action" data-page="coach-cohorts">Group Programs</button><button class="approved-small-action" data-page="coach-analytics">Analytics</button></div>
 <div class="coach-metric-grid">
 <article><b id="coachMetricClients">0</b><small>Active clients</small></article>
 <article><b id="coachMetricGroups">0</b><small>Active groups</small></article>
@@ -3328,7 +3434,7 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <div class="approved-inner-head">
 <div><span class="approved-kicker">ORGANIZATION DASHBOARD</span><h2 id="orgDashName">My Organization</h2><p>Manage licenses, sponsored seats, cohorts and aggregate program activity.</p></div>
 <button class="approved-link" data-page="organization-setup">Organization Settings</button>
-</div>
+<button class="approved-small-action" data-page="organization-analytics">Analytics</button></div>
 <div class="org-metric-grid">
 <article><b id="orgMetricSeats">0</b><small>Sponsored seats</small></article>
 <article><b id="orgMetricAssigned">0</b><small>Assigned</small></article>
@@ -3519,7 +3625,6 @@ Includes the approved Lellee consumer experience from early recovery through lif
 </div>
 </div>
 </section>
-
 <section class="page" id="page-safety-center">
 <div class="approved-inner">
 <div class="approved-inner-head">
@@ -3550,7 +3655,6 @@ Includes the approved Lellee consumer experience from early recovery through lif
 </div>
 </div>
 </section>
-
 <section class="page" id="page-privacy-mode">
 <div class="approved-inner">
 <div class="approved-inner-head">
@@ -3567,6 +3671,104 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <span class="approved-setting-note" id="privacyModeMsg"></span>
 <button class="approved-small-action" id="savePrivacyMode">Save Privacy Mode</button>
 </div>
+</div>
+</section>
+<section class="page" id="page-program-switcher">
+<div class="approved-inner">
+<div class="approved-inner-head">
+<div>
+<span class="approved-kicker">MY LELLEE PROGRAMS</span>
+<h2>Choose the program you want to work in.</h2>
+<p>Your account can eventually hold more than one Lellee program while each program keeps its own journey, content and private records.</p>
+</div>
+<button class="approved-link" data-page="settings">← Settings</button>
+</div>
+<div class="program-switch-note">
+<b>Pilot access only for additional programs.</b>
+<p>Recovery remains the live public program. Additional programs appear here only when your account has been explicitly enrolled in a pilot or approved program.</p>
+</div>
+<div class="program-switch-list" id="programSwitcherList"></div>
+</div>
+</section>
+<section class="page" id="page-program-home">
+<div class="approved-inner">
+<div class="program-runtime-hero">
+<div>
+<span class="approved-kicker" id="runtimeProgramKicker">LELLEE PROGRAM</span>
+<h2 id="runtimeProgramName">Program</h2>
+<p id="runtimeProgramDescription"></p>
+</div>
+<button class="approved-link" data-page="program-switcher">Switch Program</button>
+</div>
+<div class="runtime-today-card">
+<div class="runtime-today-head">
+<div><span class="approved-kicker">TODAY</span><h3 id="runtimeTodayTitle">Your next step</h3></div>
+<span class="runtime-stage-pill" id="runtimeStageLabel">Journey</span>
+</div>
+<p id="runtimeTodayIntro"></p>
+<div class="runtime-choice-grid" id="runtimeTodayChoices"></div>
+<div class="runtime-reflection hidden" id="runtimeTodayReflectionWrap">
+<label id="runtimeTodayReflectionLabel">Optional reflection</label>
+<textarea id="runtimeTodayReflection" maxlength="2000"></textarea>
+</div>
+<div class="approved-settings-footer">
+<span class="approved-setting-note" id="runtimeTodayMsg"></span>
+<button class="approved-small-action" id="runtimeSaveToday">Save Today</button>
+</div>
+</div>
+<div class="runtime-module-grid" id="runtimeModuleGrid"></div>
+<div class="runtime-progress-card">
+<div><span class="approved-kicker">YOUR JOURNEY</span><h3 id="runtimeJourneyLabel">Journey</h3></div>
+<div class="runtime-stage-list" id="runtimeStageList"></div>
+</div>
+</div>
+</section>
+<section class="page" id="page-program-journey-runtime">
+<div class="approved-inner">
+<div class="approved-inner-head">
+<div><span class="approved-kicker">JOURNEY</span><h2 id="runtimeJourneyTitle">Your Journey</h2><p id="runtimeJourneyDescription"></p></div>
+<button class="approved-link" data-page="program-home">← Program Home</button>
+</div>
+<div class="runtime-journey-stages" id="runtimeJourneyStages"></div>
+<div class="runtime-journey-content" id="runtimeJourneyContent"></div>
+</div>
+</section>
+
+<section class="page" id="page-coach-analytics">
+<div class="approved-inner">
+<div class="approved-inner-head">
+<div><span class="approved-kicker">COACH BUSINESS ANALYTICS</span><h2 id="coachAnalyticsName">My Coaching Business</h2><p>Understand leads, clients, groups, capacity and service utilization without exposing client journal content.</p></div>
+<button class="approved-link" data-page="coach-dashboard">← Coach Dashboard</button>
+</div>
+<div class="analytics-kpi-grid coach-analytics-kpis">
+<article><b id="coachAnalyticsLeads">0</b><small>Leads</small><em id="coachAnalyticsLeadRate">0% converted</em></article>
+<article><b id="coachAnalyticsClients">0</b><small>Active clients</small><em id="coachAnalyticsNewClients">0 new</em></article>
+<article><b id="coachAnalyticsGroups">0</b><small>Active groups</small><em id="coachAnalyticsSeats">0 open seats</em></article>
+<article><b id="coachAnalyticsConsults">0</b><small>Consultations</small><em id="coachAnalyticsConsultRate">0% converted</em></article>
+</div>
+<div class="analytics-two-col">
+<section class="analytics-card"><span class="approved-kicker">SERVICES</span><h3>Which offers are being used?</h3><div class="analytics-rank-list" id="coachAnalyticsServices"></div></section>
+<section class="analytics-card"><span class="approved-kicker">GROUPS</span><h3>Capacity and enrollment</h3><div class="analytics-rank-list" id="coachAnalyticsGroupList"></div></section>
+</div>
+<div class="analytics-privacy-banner"><b>Client privacy stays intact.</b><p>Coach analytics includes business operations and relationship counts. It does not analyze journal text, check-ins, message content, or private recovery history.</p></div>
+</div>
+</section>
+
+<section class="page" id="page-organization-analytics">
+<div class="approved-inner">
+<div class="approved-inner-head">
+<div><span class="approved-kicker">ORGANIZATION ANALYTICS</span><h2 id="orgAnalyticsName">Organization</h2><p>Seat utilization, program participation and aggregate outcomes—without individual private records.</p></div>
+<button class="approved-link" data-page="organization-dashboard">← Organization Dashboard</button>
+</div>
+<div class="analytics-kpi-grid">
+<article><b id="orgAnalyticsSeats">0</b><small>Licensed seats</small><em id="orgAnalyticsAssigned">0 assigned</em></article>
+<article><b id="orgAnalyticsActive">0</b><small>Active sponsored users</small><em id="orgAnalyticsActivation">0% activation</em></article>
+<article><b id="orgAnalyticsPrograms">0</b><small>Programs in use</small><em id="orgAnalyticsCohorts">0 cohorts</em></article>
+<article><b id="orgAnalyticsMilestones">0</b><small>Aggregate milestones</small><em>Privacy-safe total</em></article>
+</div>
+<section class="analytics-card"><span class="approved-kicker">PROGRAM UTILIZATION</span><h3>Sponsored access by program</h3><div class="analytics-table-wrap" id="orgAnalyticsProgramList"></div></section>
+<section class="analytics-card"><span class="approved-kicker">AGGREGATE OUTCOMES</span><h3>Program outcomes</h3><div class="analytics-rank-list" id="orgAnalyticsOutcomeList"></div></section>
+<div class="analytics-privacy-banner"><b>Small groups are protected.</b><p>Outcome reporting is suppressed when there are too few participants to safely aggregate.</p></div>
 </div>
 </section>
 <section class="page" id="page-settings">
@@ -3639,10 +3841,12 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <div class="program-settings-shortcuts">
 <article><div><b>My Progress</b><small>Goals, milestones and personal progress summaries across your Lellee journey.</small></div><button class="approved-link" data-page="progress-hub">Open My Progress →</button></article>
 </div>
-
 <div class="program-settings-shortcuts">
 <article><div><b>Help Me Right Now</b><small>Immediate support based on your active Lellee program.</small></div><button class="approved-link" data-page="safety-center">Open Safety Center →</button></article>
 <article><div><b>Privacy Mode</b><small>Control notification previews and quick-exit behavior.</small></div><button class="approved-link" data-page="privacy-mode">Privacy Settings →</button></article>
+</div>
+<div class="program-settings-shortcuts">
+<article><div><b>My Lellee Programs</b><small>Switch between Recovery and any additional Lellee programs you have been enrolled in.</small></div><button class="approved-link" data-page="program-switcher">My Programs →</button></article>
 </div>
 </div>
 </section>
@@ -4525,5 +4729,5 @@ Transportation"></textarea></label>
 </div>
 </div>
 </div>
-<script src="/safety-privacy-core.js"></script></body>
+<script src="/safety-privacy-core.js"></script><script src="/pilot-runtime.js"></script><script src="/analytics-insights.js"></script></body>
 </html>
