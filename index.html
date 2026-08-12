@@ -1041,7 +1041,7 @@ Includes the approved Lellee consumer experience from early recovery through lif
       .guided-activity-hint{font-size:.53rem;color:#8a828d;margin-top:5px}
     </style>
 <link href="/lellee-v1.css" rel="stylesheet"/>
-<link href="/legal-privacy-safety.css" rel="stylesheet"/><link href="/program-coach-core.css" rel="stylesheet"/><link href="/program-builder.css" rel="stylesheet"/><link href="/coach-marketplace.css" rel="stylesheet"/><link href="/inbox-reminders.css" rel="stylesheet"/><link href="/welcome-router.css" rel="stylesheet"/></head>
+<link href="/legal-privacy-safety.css" rel="stylesheet"/><link href="/program-coach-core.css" rel="stylesheet"/><link href="/program-builder.css" rel="stylesheet"/><link href="/coach-marketplace.css" rel="stylesheet"/><link href="/inbox-reminders.css" rel="stylesheet"/><link href="/welcome-router.css" rel="stylesheet"/><link href="/organization-licensing.css" rel="stylesheet"/></head>
 <body><a class="skip-link" href="#mainContent">Skip to main content</a><a class="lellee-skip" href="#lelleeMain">Skip to main content</a>
 <div class="prod-overlay hidden" id="onboardingOverlay">
 <div class="prod-onboarding">
@@ -2708,7 +2708,7 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <div class="approved-inner-head">
 <div><span class="approved-kicker">ADMIN</span><h2>Operate Lellee without touching the database directly</h2><p>Manage vetted resources, sponsored placement, recovery news, Plus pricing, and publishing controls.</p></div>
 <span class="admin-role-pill" id="adminRoleBadge">ADMIN</span>
-<button class="approved-small-action" data-page="program-builder">Program Builder</button><button class="approved-small-action" data-page="coach-admin">Coach Approvals</button></div>
+<button class="approved-small-action" data-page="program-builder">Program Builder</button><button class="approved-small-action" data-page="coach-admin">Coach Approvals</button><button class="approved-small-action" data-page="organization-admin">Organizations</button></div>
 <div class="admin-unauthorized hidden" id="adminUnauthorized">
 <span>🔒</span>
 <div><h3>Admin access required</h3><p>This page is not available to standard Lellee accounts.</p></div>
@@ -2766,6 +2766,21 @@ Includes the approved Lellee consumer experience from early recovery through lif
 </div>
 </div>
 </section>
+<section class="page" id="page-organization-admin">
+<div class="approved-inner">
+<div class="approved-inner-head">
+<div><span class="approved-kicker">ADMIN · ORGANIZATIONS</span><h2>Review organizational access and licensing.</h2><p>Approve organizations, program licenses and sponsored-seat allocations.</p></div>
+<button class="approved-link" data-page="admin">← Admin</button>
+</div>
+<div class="org-admin-metrics">
+<article><b id="orgAdminPending">0</b><small>Pending organizations</small></article>
+<article><b id="orgAdminApproved">0</b><small>Approved organizations</small></article>
+<article><b id="orgAdminSeats">0</b><small>Allocated seats</small></article>
+</div>
+<div class="org-list" id="orgAdminList"></div>
+</div>
+</section>
+
 <section class="page" id="page-program-demand">
 <div class="approved-inner">
 <div class="approved-inner-head">
@@ -2784,7 +2799,6 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <div class="program-demand-list" id="programDemandList"></div>
 </div>
 </section>
-
 <section class="page" id="page-coach-admin">
 <div class="approved-inner">
 <div class="approved-inner-head">
@@ -2838,7 +2852,6 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <div class="connection-section-head"><div><span class="approved-kicker">PROGRAM CATALOG</span><h3>Future underserved-program expansion</h3></div><span class="connection-count" id="programCoreCount">0 planned</span></div>
 <div class="program-core-grid" id="programCoreCatalog"></div>
 <div class="program-core-privacy-note"><b>Private by program.</b><p>Using more than one Lellee program does not automatically share one program's private journal, check-ins, contacts or history with another program—or with a coach.</p></div>
-
 <div class="program-interest-explainer" id="programInterestExplainer">
 <div><span class="approved-kicker">HELP CHOOSE WHAT COMES NEXT</span><h3>Interested in a future Lellee program?</h3><p>Open a planned program and tell Lellee you want it. Your interest helps prioritize future development.</p></div>
 </div>
@@ -3089,7 +3102,6 @@ Includes the approved Lellee consumer experience from early recovery through lif
 </div>
 </div>
 </section>
-
 <section class="page" id="page-program-interest">
 <div class="approved-inner">
 <div class="approved-inner-head">
@@ -3125,6 +3137,87 @@ Includes the approved Lellee consumer experience from early recovery through lif
 </div>
 </div>
 </div>
+</div>
+</section>
+
+<section class="page" id="page-organization-setup">
+<div class="approved-inner">
+<div class="approved-inner-head">
+<div>
+<span class="approved-kicker">LELLEE FOR ORGANIZATIONS</span>
+<h2>Support more people without managing their private lives.</h2>
+<p>Create an organization profile, sponsor access, assign programs, and view aggregate engagement while individual Lellee data stays private.</p>
+</div>
+<button class="approved-link" data-page="settings">← Settings</button>
+</div>
+<div class="org-setup-grid">
+<label>Organization name<input id="orgName" maxlength="120"/></label>
+<label>Organization type<select id="orgType"><option value="nonprofit">Nonprofit</option><option value="county_city">County / City</option><option value="community_program">Community Program</option><option value="employer">Employer</option><option value="treatment_recovery">Recovery / Treatment Organization</option><option value="education">Education</option><option value="healthcare">Healthcare</option><option value="other">Other</option></select></label>
+<label>Public display name<input id="orgPublicName" maxlength="120"/></label>
+<label>Primary contact email<input id="orgContactEmail" type="email"/></label>
+<label class="org-wide">Who does your organization serve?<textarea id="orgAudience" maxlength="800"></textarea></label>
+</div>
+<div class="org-privacy-card">
+<b>Organization sponsorship does not equal access to private user data.</b>
+<p>Organizations can see seat usage and aggregate program engagement. They do not automatically receive journals, check-ins, cravings, support contacts, coaching messages, or individual recovery histories.</p>
+</div>
+<div class="approved-settings-footer">
+<span class="approved-setting-note" id="orgSetupMsg"></span>
+<button class="approved-small-action" id="submitOrganization">Create Organization</button>
+</div>
+</div>
+</section>
+
+<section class="page" id="page-organization-dashboard">
+<div class="approved-inner">
+<div class="approved-inner-head">
+<div><span class="approved-kicker">ORGANIZATION DASHBOARD</span><h2 id="orgDashName">My Organization</h2><p>Manage licenses, sponsored seats, cohorts and aggregate program activity.</p></div>
+<button class="approved-link" data-page="organization-setup">Organization Settings</button>
+</div>
+<div class="org-metric-grid">
+<article><b id="orgMetricSeats">0</b><small>Sponsored seats</small></article>
+<article><b id="orgMetricAssigned">0</b><small>Assigned</small></article>
+<article><b id="orgMetricActive">0</b><small>Active users</small></article>
+<article><b id="orgMetricPrograms">0</b><small>Licensed programs</small></article>
+</div>
+<div class="org-tabs">
+<button class="active" data-org-tab="licenses">Licenses</button>
+<button data-org-tab="people">Sponsored Access</button>
+<button data-org-tab="cohorts">Cohorts</button>
+<button data-org-tab="reports">Aggregate Reports</button>
+<button data-org-tab="team">Team</button>
+</div>
+<div id="orgPanelLicenses">
+<div class="org-panel-head"><div><span class="approved-kicker">PROGRAM LICENSES</span><h3>Programs your organization can sponsor</h3></div><button class="approved-small-action" id="orgRequestLicense">+ Request Program</button></div>
+<div class="org-list" id="orgLicenseList"></div>
+</div>
+<div class="hidden" id="orgPanelPeople">
+<div class="org-panel-head"><div><span class="approved-kicker">SPONSORED ACCESS</span><h3>Invite people without seeing their private Lellee data</h3></div><button class="approved-small-action" id="orgInviteUser">+ Invite Person</button></div>
+<div class="org-list" id="orgSponsoredList"></div>
+</div>
+<div class="hidden" id="orgPanelCohorts">
+<div class="org-panel-head"><div><span class="approved-kicker">COHORTS</span><h3>Organize sponsored groups by program, site or funding source</h3></div><button class="approved-small-action" id="orgNewCohort">+ New Cohort</button></div>
+<div class="org-list" id="orgCohortList"></div>
+</div>
+<div class="hidden" id="orgPanelReports">
+<div class="org-report-note"><b>Aggregate only.</b><p>Reports summarize enrollment and general engagement. They are designed not to expose journals, check-ins, cravings, message content or individually identifiable recovery details.</p></div>
+<div class="org-report-grid" id="orgReportCards"></div>
+</div>
+<div class="hidden" id="orgPanelTeam">
+<div class="org-panel-head"><div><span class="approved-kicker">ORGANIZATION TEAM</span><h3>Who can administer sponsored access?</h3></div><button class="approved-small-action" id="orgInviteAdmin">+ Invite Administrator</button></div>
+<div class="org-list" id="orgTeamList"></div>
+</div>
+</div>
+</section>
+
+<section class="page" id="page-sponsored-access">
+<div class="approved-inner">
+<div class="approved-inner-head">
+<div><span class="approved-kicker">SPONSORED ACCESS</span><h2>Programs an organization has made available to you.</h2><p>You keep control of your private Lellee information even when another organization pays for your access.</p></div>
+<button class="approved-link" data-page="settings">← Settings</button>
+</div>
+<div class="org-list" id="mySponsoredAccessList"></div>
+<div class="org-privacy-card"><b>Your sponsor sees limited information.</b><p>By default, an organization can see that a sponsored seat was assigned/activated and aggregate program use. It cannot read your private journal, check-ins, coach messages or support contacts.</p></div>
 </div>
 </section>
 <section class="page" id="page-settings">
@@ -3184,6 +3277,11 @@ Includes the approved Lellee consumer experience from early recovery through lif
 </div>
 <div class="program-settings-shortcuts">
 <article><div><b>Find a Coach</b><small>Browse approved coaching businesses and lower-cost group or hybrid programs when the marketplace opens.</small></div><button class="approved-link" data-page="coaches">Browse Coaches →</button></article>
+</div>
+
+<div class="program-settings-shortcuts">
+<article><div><b>Lellee for Organizations</b><small>Create or manage sponsored access for a nonprofit, public agency, employer or community program.</small></div><button class="approved-link" data-page="organization-setup">Organization Setup →</button></article>
+<article><div><b>My Sponsored Access</b><small>See programs an organization has made available to you.</small></div><button class="approved-link" data-page="sponsored-access">View Sponsored Access →</button></article>
 </div>
 </div>
 </section>
@@ -3933,5 +4031,5 @@ Transportation"></textarea></label>
 </div>
 </div>
 </div>
-<script src="/program-builder.js"></script><script src="/coach-marketplace.js"></script><script src="/inbox-reminders.js"></script><script src="/welcome-router.js"></script></body>
+<script src="/program-builder.js"></script><script src="/coach-marketplace.js"></script><script src="/inbox-reminders.js"></script><script src="/welcome-router.js"></script><script src="/organization-licensing.js"></script></body>
 </html>
