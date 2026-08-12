@@ -1041,7 +1041,7 @@ Includes the approved Lellee consumer experience from early recovery through lif
       .guided-activity-hint{font-size:.53rem;color:#8a828d;margin-top:5px}
     </style>
 <link href="/lellee-v1.css" rel="stylesheet"/>
-<link href="/legal-privacy-safety.css" rel="stylesheet"/><link href="/program-coach-core.css" rel="stylesheet"/><link href="/program-builder.css" rel="stylesheet"/><link href="/coach-marketplace.css" rel="stylesheet"/><link href="/inbox-reminders.css" rel="stylesheet"/><link href="/welcome-router.css" rel="stylesheet"/><link href="/organization-licensing.css" rel="stylesheet"/></head>
+<link href="/legal-privacy-safety.css" rel="stylesheet"/><link href="/program-coach-core.css" rel="stylesheet"/><link href="/program-builder.css" rel="stylesheet"/><link href="/coach-marketplace.css" rel="stylesheet"/><link href="/inbox-reminders.css" rel="stylesheet"/><link href="/welcome-router.css" rel="stylesheet"/><link href="/organization-licensing.css" rel="stylesheet"/><link href="/life-admin-core.css" rel="stylesheet"/></head>
 <body><a class="skip-link" href="#mainContent">Skip to main content</a><a class="lellee-skip" href="#lelleeMain">Skip to main content</a>
 <div class="prod-overlay hidden" id="onboardingOverlay">
 <div class="prod-onboarding">
@@ -1156,6 +1156,8 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <div><span class="approved-kicker">INBOX</span><h3>Messages &amp; reminders</h3><p><span id="todayInboxUnread">0</span> unread</p></div>
 <button class="approved-small-action" data-page="inbox">Open Inbox</button>
 </div>
+
+<div class="life-today-card"><div><span class="approved-kicker">MY PLAN</span><h3>Practical next steps</h3><p><span id="todayLifeDue">0</span> items due soon</p></div><button class="approved-small-action" data-page="life-admin">Open My Plan</button></div>
 </section>
 <section class="page" id="page-recovery">
 <div class="approved-inner">
@@ -2780,7 +2782,6 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <div class="org-list" id="orgAdminList"></div>
 </div>
 </section>
-
 <section class="page" id="page-program-demand">
 <div class="approved-inner">
 <div class="approved-inner-head">
@@ -3139,7 +3140,6 @@ Includes the approved Lellee consumer experience from early recovery through lif
 </div>
 </div>
 </section>
-
 <section class="page" id="page-organization-setup">
 <div class="approved-inner">
 <div class="approved-inner-head">
@@ -3167,7 +3167,6 @@ Includes the approved Lellee consumer experience from early recovery through lif
 </div>
 </div>
 </section>
-
 <section class="page" id="page-organization-dashboard">
 <div class="approved-inner">
 <div class="approved-inner-head">
@@ -3209,7 +3208,6 @@ Includes the approved Lellee consumer experience from early recovery through lif
 </div>
 </div>
 </section>
-
 <section class="page" id="page-sponsored-access">
 <div class="approved-inner">
 <div class="approved-inner-head">
@@ -3220,7 +3218,51 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <div class="org-privacy-card"><b>Your sponsor sees limited information.</b><p>By default, an organization can see that a sponsored seat was assigned/activated and aggregate program use. It cannot read your private journal, check-ins, coach messages or support contacts.</p></div>
 </div>
 </section>
-<section class="page" id="page-settings">
+
+<section class="page" id="page-life-admin"><div class="approved-inner">
+<div class="approved-inner-head"><div><span class="approved-kicker">MY PLAN</span><h2>Keep the practical parts of life in one place.</h2><p>Tasks, appointments, documents, benefits, housing and employment can be turned on by the Lellee program you are using.</p></div><button class="approved-link" data-page="today">← Today</button></div>
+<div class="life-admin-summary"><article><b id="lifeDueSoon">0</b><small>Due soon</small></article><article><b id="lifeAppointments">0</b><small>Upcoming appointments</small></article><article><b id="lifeDocuments">0</b><small>Documents to handle</small></article><article><b id="lifeApplications">0</b><small>Open applications</small></article></div>
+<div class="life-admin-modules" id="lifeAdminModules">
+<button data-life-module="tasks" data-page="life-tasks"><span>✓</span><b>Tasks</b><small>Keep next steps manageable.</small></button>
+<button data-life-module="appointments" data-page="life-appointments"><span>◷</span><b>Appointments</b><small>Track important visits and meetings.</small></button>
+<button data-life-module="documents" data-page="life-documents"><span>▤</span><b>Documents</b><small>Know what you have and still need.</small></button>
+<button data-life-module="benefits" data-page="life-benefits"><span>◇</span><b>Benefits</b><small>Track applications and renewals.</small></button>
+<button data-life-module="housing" data-page="life-housing"><span>⌂</span><b>Housing</b><small>Organize housing goals and applications.</small></button>
+<button data-life-module="employment" data-page="life-employment"><span>▣</span><b>Employment</b><small>Track opportunities and applications.</small></button>
+</div>
+<div class="life-admin-privacy"><b>Private by default.</b><p>Your sponsor, organization or coach does not automatically see these records.</p></div>
+</div></section>
+
+<section class="page" id="page-life-tasks"><div class="approved-inner">
+<div class="approved-inner-head"><div><span class="approved-kicker">TASKS</span><h2>My Tasks</h2><p>Break practical goals into clear next steps.</p></div><button class="approved-link" data-page="life-admin">← My Plan</button></div>
+<div class="life-panel-head"><button class="approved-small-action" id="newLifeTask">+ Add</button></div>
+<div class="life-list" id="lifeTaskList"></div>
+</div></section>
+<section class="page" id="page-life-appointments"><div class="approved-inner">
+<div class="approved-inner-head"><div><span class="approved-kicker">APPOINTMENTS</span><h2>My Appointments</h2><p>Keep important appointments and meetings visible.</p></div><button class="approved-link" data-page="life-admin">← My Plan</button></div>
+<div class="life-panel-head"><button class="approved-small-action" id="newLifeAppointment">+ Add</button></div>
+<div class="life-list" id="lifeAppointmentList"></div>
+</div></section>
+<section class="page" id="page-life-documents"><div class="approved-inner">
+<div class="approved-inner-head"><div><span class="approved-kicker">DOCUMENTS</span><h2>My Documents</h2><p>Track important documents and what still needs attention.</p></div><button class="approved-link" data-page="life-admin">← My Plan</button></div>
+<div class="life-panel-head"><button class="approved-small-action" id="newLifeDocument">+ Add</button></div>
+<div class="life-list" id="lifeDocumentList"></div>
+</div></section>
+<section class="page" id="page-life-benefits"><div class="approved-inner">
+<div class="approved-inner-head"><div><span class="approved-kicker">BENEFITS</span><h2>Benefits &amp; Applications</h2><p>Track benefit applications, renewals and follow-up.</p></div><button class="approved-link" data-page="life-admin">← My Plan</button></div>
+<div class="life-panel-head"><button class="approved-small-action" id="newLifeBenefit">+ Add</button></div>
+<div class="life-list" id="lifeBenefitList"></div>
+</div></section>
+<section class="page" id="page-life-housing"><div class="approved-inner">
+<div class="approved-inner-head"><div><span class="approved-kicker">HOUSING</span><h2>Housing Plan</h2><p>Track housing opportunities, applications and next steps.</p></div><button class="approved-link" data-page="life-admin">← My Plan</button></div>
+<div class="life-panel-head"><button class="approved-small-action" id="newLifeHousing">+ Add</button></div>
+<div class="life-list" id="lifeHousingList"></div>
+</div></section>
+<section class="page" id="page-life-employment"><div class="approved-inner">
+<div class="approved-inner-head"><div><span class="approved-kicker">EMPLOYMENT</span><h2>Employment Plan</h2><p>Track jobs, training opportunities and applications.</p></div><button class="approved-link" data-page="life-admin">← My Plan</button></div>
+<div class="life-panel-head"><button class="approved-small-action" id="newLifeEmployment">+ Add</button></div>
+<div class="life-list" id="lifeEmploymentList"></div>
+</div></section><section class="page" id="page-settings">
 <div class="approved-inner">
 <div class="approved-inner-head">
 <div><span class="approved-kicker">SETTINGS</span><h2>Personalize Lellee</h2><p>Keep the settings you use most visible. Everything else stays one level deeper.</p></div>
@@ -3278,11 +3320,12 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <div class="program-settings-shortcuts">
 <article><div><b>Find a Coach</b><small>Browse approved coaching businesses and lower-cost group or hybrid programs when the marketplace opens.</small></div><button class="approved-link" data-page="coaches">Browse Coaches →</button></article>
 </div>
-
 <div class="program-settings-shortcuts">
 <article><div><b>Lellee for Organizations</b><small>Create or manage sponsored access for a nonprofit, public agency, employer or community program.</small></div><button class="approved-link" data-page="organization-setup">Organization Setup →</button></article>
 <article><div><b>My Sponsored Access</b><small>See programs an organization has made available to you.</small></div><button class="approved-link" data-page="sponsored-access">View Sponsored Access →</button></article>
 </div>
+
+<div class="program-settings-shortcuts"><article><div><b>My Plan</b><small>Tasks, appointments, documents, benefits, housing and employment tools shared across Lellee programs.</small></div><button class="approved-link" data-page="life-admin">Open My Plan →</button></article></div>
 </div>
 </section>
 </div>
@@ -4031,5 +4074,11 @@ Transportation"></textarea></label>
 </div>
 </div>
 </div>
-<script src="/program-builder.js"></script><script src="/coach-marketplace.js"></script><script src="/inbox-reminders.js"></script><script src="/welcome-router.js"></script><script src="/organization-licensing.js"></script></body>
+<script src="/program-builder.js"></script><script src="/coach-marketplace.js"></script><script src="/inbox-reminders.js"></script><script src="/welcome-router.js"></script><script src="/organization-licensing.js"></script>
+<div class="admin-overlay hidden" id="lifeItemEditor"><div class="admin-editor-card life-editor-card">
+<div class="admin-editor-head"><div><span class="approved-kicker" id="lifeEditorKicker">MY PLAN</span><h3 id="lifeEditorTitle">Add Item</h3></div><button class="approved-link" id="closeLifeEditor">Close</button></div>
+<div class="admin-editor-grid" id="lifeEditorFields"></div>
+<div class="approved-settings-footer"><button class="approved-link hidden" id="deleteLifeItem">Delete</button><span class="approved-setting-note" id="lifeEditorMsg"></span><button class="approved-small-action" id="saveLifeItem">Save</button></div>
+</div></div>
+<script src="/life-admin-core.js"></script></body>
 </html>
