@@ -1041,7 +1041,7 @@ Includes the approved Lellee consumer experience from early recovery through lif
       .guided-activity-hint{font-size:.53rem;color:#8a828d;margin-top:5px}
     </style>
 <link href="/lellee-v1.css" rel="stylesheet"/>
-<link href="/legal-privacy-safety.css" rel="stylesheet"/><link href="/program-coach-core.css" rel="stylesheet"/><link href="/program-builder.css" rel="stylesheet"/><link href="/coach-marketplace.css" rel="stylesheet"/><link href="/inbox-reminders.css" rel="stylesheet"/><link href="/welcome-router.css" rel="stylesheet"/><link href="/organization-licensing.css" rel="stylesheet"/><link href="/life-admin-core.css" rel="stylesheet"/><link href="/resource-navigation.css" rel="stylesheet"/><link href="/progress-core.css" rel="stylesheet"/><link href="/content-studio.css" rel="stylesheet"/><link href="/safety-privacy-core.css" rel="stylesheet"/><link href="/pilot-runtime.css" rel="stylesheet"/><link href="/analytics-insights.css" rel="stylesheet"/></head>
+<link href="/legal-privacy-safety.css" rel="stylesheet"/><link href="/program-coach-core.css" rel="stylesheet"/><link href="/program-builder.css" rel="stylesheet"/><link href="/coach-marketplace.css" rel="stylesheet"/><link href="/inbox-reminders.css" rel="stylesheet"/><link href="/welcome-router.css" rel="stylesheet"/><link href="/organization-licensing.css" rel="stylesheet"/><link href="/life-admin-core.css" rel="stylesheet"/><link href="/resource-navigation.css" rel="stylesheet"/><link href="/progress-core.css" rel="stylesheet"/><link href="/content-studio.css" rel="stylesheet"/><link href="/safety-privacy-core.css" rel="stylesheet"/><link href="/pilot-runtime.css" rel="stylesheet"/><link href="/analytics-insights.css" rel="stylesheet"/><link href="/platform-integration.css" rel="stylesheet"/><link href="/commerce-ops.css" rel="stylesheet"/></head>
 <body><a class="skip-link" href="#mainContent">Skip to main content</a><a class="lellee-skip" href="#lelleeMain">Skip to main content</a>
 <div class="prod-overlay hidden" id="onboardingOverlay">
 <div class="prod-onboarding">
@@ -1075,7 +1075,7 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <button class="nav-item" data-page="milestones"><span class="nav-icon">◆</span>Milestones</button><button class="nav-item" data-page="then-now"><span class="nav-icon">↔</span>Then &amp; Now</button><button class="nav-item" data-page="story"><span class="nav-icon">▤</span>My Recovery Story</button><button class="nav-item" data-page="history"><span class="nav-icon">◷</span>My History</button><button class="nav-item" data-page="longterm"><span class="nav-icon">∞</span>Year 3+</button><button class="nav-item" data-page="account"><span class="nav-icon">◉</span>Account &amp; Privacy</button><button class="nav-item" data-page="plus"><span class="nav-icon">✦</span>Lellee Plus</button>
 <button class="nav-item hidden" data-page="admin" id="adminNavItem"><span class="nav-icon">⚙</span>Admin</button>
 <button class="nav-item" data-page="settings"><span class="nav-icon">⚙</span>Settings</button>
-<button class="nav-item hidden" data-page="coach-dashboard" id="coachNavItem"><span class="nav-icon">◎</span>Coach Dashboard</button><button class="nav-item" data-page="inbox" id="inboxNavItem"><span class="nav-icon">✉</span>Inbox <span class="inbox-nav-badge hidden" id="inboxNavBadge">0</span></button></nav>
+<button class="nav-item hidden" data-page="coach-dashboard" id="coachNavItem"><span class="nav-icon">◎</span>Coach Dashboard</button><button class="nav-item" data-page="inbox" id="inboxNavItem"><span class="nav-icon">✉</span>Inbox <span class="inbox-nav-badge hidden" id="inboxNavBadge">0</span></button><button class="nav-item" data-page="workspace-home" id="workspaceNavItem"><span class="nav-icon">◇</span>Workspaces</button><button class="nav-item" data-page="global-search" id="searchNavItem"><span class="nav-icon">⌕</span>Search</button></nav>
 <div class="side-spacer"></div>
 <div class="help-card">
 <h4>Need Help Now?</h4>
@@ -2713,7 +2713,7 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <div class="approved-inner-head">
 <div><span class="approved-kicker">ADMIN</span><h2>Operate Lellee without touching the database directly</h2><p>Manage vetted resources, sponsored placement, recovery news, Plus pricing, and publishing controls.</p></div>
 <span class="admin-role-pill" id="adminRoleBadge">ADMIN</span>
-<button class="approved-small-action" data-page="program-builder">Program Builder</button><button class="approved-small-action" data-page="coach-admin">Coach Approvals</button><button class="approved-small-action" data-page="organization-admin">Organizations</button><button class="approved-small-action" data-page="resource-admin">Resource Quality</button><button class="approved-small-action" data-page="content-studio">Content Studio</button><button class="approved-small-action" data-page="safety-profile-builder">Safety Profiles</button><button class="approved-small-action" data-page="pilot-enrollment-admin">Pilot Enrollment</button><button class="approved-small-action" data-page="analytics">Analytics &amp; Insights</button></div>
+<button class="approved-small-action" data-page="program-builder">Program Builder</button><button class="approved-small-action" data-page="coach-admin">Coach Approvals</button><button class="approved-small-action" data-page="organization-admin">Organizations</button><button class="approved-small-action" data-page="resource-admin">Resource Quality</button><button class="approved-small-action" data-page="content-studio">Content Studio</button><button class="approved-small-action" data-page="safety-profile-builder">Safety Profiles</button><button class="approved-small-action" data-page="pilot-enrollment-admin">Pilot Enrollment</button><button class="approved-small-action" data-page="analytics">Analytics &amp; Insights</button><button class="approved-small-action" data-page="platform-health">Platform Health</button><button class="approved-small-action" data-page="revenue-ops">Revenue Ops</button></div>
 <div class="admin-unauthorized hidden" id="adminUnauthorized">
 <span>🔒</span>
 <div><h3>Admin access required</h3><p>This page is not available to standard Lellee accounts.</p></div>
@@ -2769,6 +2769,99 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <div class="approved-settings-footer"><span class="approved-setting-note">These controls affect presentation only. Billing secrets and service-role keys remain server-side.</span><button class="approved-small-action" id="adminSaveSettings">Save Settings</button></div>
 </div>
 </div>
+</div>
+</section>
+<section class="page" id="page-revenue-ops">
+<div class="approved-inner">
+<div class="approved-inner-head">
+<div>
+<span class="approved-kicker">ADMIN · REVENUE OPERATIONS</span>
+<h2>Manage Lellee's business models without mixing them into safety logic.</h2>
+<p>Plans, entitlements, coach commerce, organization licensing, sponsorships, physical products, discounts and revenue reporting.</p>
+</div>
+<button class="approved-link" data-page="admin">← Admin</button>
+</div>
+<div class="revenue-kpi-grid">
+<article><b id="revenueUsers">0</b><small>Paid / entitled accounts</small></article>
+<article><b id="revenueCoachOrders">0</b><small>Coach commerce records</small></article>
+<article><b id="revenueOrgContracts">0</b><small>Organization quotes</small></article>
+<article><b id="revenueProducts">0</b><small>Catalog products</small></article>
+<article><b id="revenueGross">$0</b><small>Recorded gross value</small></article>
+<article><b id="revenuePending">$0</b><small>Pending / prepared value</small></article>
+</div>
+<div class="commerce-tabs">
+<button class="active" data-commerce-tab="plans">Plans</button>
+<button data-commerce-tab="entitlements">Entitlements</button>
+<button data-commerce-tab="coaching">Coaching</button>
+<button data-commerce-tab="organizations">Organizations</button>
+<button data-commerce-tab="sponsorships">Sponsorships</button>
+<button data-commerce-tab="products">Products</button>
+<button data-commerce-tab="discounts">Discounts &amp; Grants</button>
+<button data-commerce-tab="settings">Payment Readiness</button>
+</div>
+<div id="commercePanelPlans">
+<div class="commerce-panel-head"><div><span class="approved-kicker">PLANS</span><h3>Consumer plan catalog</h3></div><button class="approved-small-action" id="commerceAddPlan">+ Add Plan</button></div>
+<div class="commerce-list" id="revenuePlanList"></div>
+</div>
+<div class="hidden" id="commercePanelEntitlements">
+<div class="commerce-panel-head"><div><span class="approved-kicker">ENTITLEMENTS</span><h3>What features and programs an account can use</h3></div></div>
+<div class="commerce-list" id="revenueEntitlementList"></div>
+</div>
+<div class="hidden" id="commercePanelCoaching">
+<div class="commerce-panel-head"><div><span class="approved-kicker">COACH COMMERCE</span><h3>Services, orders and future payout ledger</h3></div></div>
+<div class="commerce-list" id="revenueCoachList"></div>
+</div>
+<div class="hidden" id="commercePanelOrganizations">
+<div class="commerce-panel-head"><div><span class="approved-kicker">ORGANIZATION COMMERCE</span><h3>Quotes, contracts and licensed seats</h3></div></div>
+<div class="commerce-list" id="revenueOrgList"></div>
+</div>
+<div class="hidden" id="commercePanelSponsorships">
+<div class="commerce-panel-head"><div><span class="approved-kicker">SPONSORSHIPS</span><h3>Clearly labeled sponsored resource packages</h3></div><button class="approved-small-action" id="commerceAddSponsorPackage">+ Add Package</button></div>
+<div class="commerce-list" id="revenueSponsorList"></div>
+</div>
+<div class="hidden" id="commercePanelProducts">
+<div class="commerce-panel-head"><div><span class="approved-kicker">PRODUCT CATALOG</span><h3>Journals, printed stories and giveaways</h3></div><button class="approved-small-action" id="commerceAddProduct">+ Add Product</button></div>
+<div class="commerce-list" id="revenueProductList"></div>
+</div>
+<div class="hidden" id="commercePanelDiscounts">
+<div class="commerce-panel-head"><div><span class="approved-kicker">DISCOUNTS &amp; GRANTS</span><h3>Coupons, scholarships and sponsored access rules</h3></div><button class="approved-small-action" id="commerceAddDiscount">+ Add Rule</button></div>
+<div class="commerce-list" id="revenueDiscountList"></div>
+</div>
+<div class="hidden" id="commercePanelSettings">
+<div class="commerce-list" id="paymentReadinessList"></div>
+<div class="commerce-note"><b>This page is visibility, not activation.</b><p>The build does not change payment keys, webhooks, billing_enabled, coach_payments_enabled, or organization_payments_enabled.</p></div>
+</div>
+</div>
+</section>
+
+<section class="page" id="page-platform-health">
+<div class="approved-inner">
+<div class="approved-inner-head">
+<div>
+<span class="approved-kicker">ADMIN · PLATFORM HEALTH</span>
+<h2>Is the Lellee platform connected end to end?</h2>
+<p>Check major modules, settings, privacy guards, and runtime switches from one place.</p>
+</div>
+<button class="approved-link" data-page="admin">← Admin</button>
+</div>
+<div class="platform-health-summary">
+<article><b id="healthInstalled">0</b><small>Installed modules</small></article>
+<article><b id="healthAttention">0</b><small>Need attention</small></article>
+<article><b id="healthCritical">0</b><small>Critical issues</small></article>
+<article><b id="healthOverall">Checking</b><small>Overall status</small></article>
+</div>
+<div class="platform-health-controls">
+<button class="approved-small-action" id="healthRefresh">Run Health Check</button>
+<button class="approved-link" data-page="analytics">Analytics</button>
+<button class="approved-link" data-page="program-builder">Program Builder</button>
+<button class="approved-link" data-page="content-studio">Content Studio</button>
+</div>
+<div class="platform-health-list" id="platformHealthList"></div>
+<section class="platform-health-switches">
+<span class="approved-kicker">LAUNCH SWITCHES</span>
+<h3>Protected settings</h3>
+<div class="platform-switch-grid" id="platformLaunchSwitches"></div>
+</section>
 </div>
 </section>
 <section class="page" id="page-analytics">
@@ -2854,7 +2947,6 @@ Includes the approved Lellee consumer experience from early recovery through lif
 </div>
 </div>
 </section>
-
 <section class="page" id="page-pilot-enrollment-admin">
 <div class="approved-inner">
 <div class="approved-inner-head">
@@ -3161,7 +3253,7 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <div class="approved-inner-head">
 <div><span class="approved-kicker">COACH DASHBOARD</span><h2 id="coachDashboardBusinessName">My Coaching Business</h2><p>Manage clients, groups, services and communication from one place.</p></div>
 <button class="approved-link" data-page="coach-business">Business Settings</button>
-<button class="approved-small-action" data-page="coach-cohorts">Group Programs</button><button class="approved-small-action" data-page="coach-analytics">Analytics</button></div>
+<button class="approved-small-action" data-page="coach-cohorts">Group Programs</button><button class="approved-small-action" data-page="coach-analytics">Analytics</button><button class="approved-small-action" data-page="coach-revenue">Revenue</button></div>
 <div class="coach-metric-grid">
 <article><b id="coachMetricClients">0</b><small>Active clients</small></article>
 <article><b id="coachMetricGroups">0</b><small>Active groups</small></article>
@@ -3434,7 +3526,7 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <div class="approved-inner-head">
 <div><span class="approved-kicker">ORGANIZATION DASHBOARD</span><h2 id="orgDashName">My Organization</h2><p>Manage licenses, sponsored seats, cohorts and aggregate program activity.</p></div>
 <button class="approved-link" data-page="organization-setup">Organization Settings</button>
-<button class="approved-small-action" data-page="organization-analytics">Analytics</button></div>
+<button class="approved-small-action" data-page="organization-analytics">Analytics</button><button class="approved-small-action" data-page="organization-commerce">Licensing &amp; Revenue</button></div>
 <div class="org-metric-grid">
 <article><b id="orgMetricSeats">0</b><small>Sponsored seats</small></article>
 <article><b id="orgMetricAssigned">0</b><small>Assigned</small></article>
@@ -3733,7 +3825,6 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <div class="runtime-journey-content" id="runtimeJourneyContent"></div>
 </div>
 </section>
-
 <section class="page" id="page-coach-analytics">
 <div class="approved-inner">
 <div class="approved-inner-head">
@@ -3753,7 +3844,6 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <div class="analytics-privacy-banner"><b>Client privacy stays intact.</b><p>Coach analytics includes business operations and relationship counts. It does not analyze journal text, check-ins, message content, or private recovery history.</p></div>
 </div>
 </section>
-
 <section class="page" id="page-organization-analytics">
 <div class="approved-inner">
 <div class="approved-inner-head">
@@ -3769,6 +3859,175 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <section class="analytics-card"><span class="approved-kicker">PROGRAM UTILIZATION</span><h3>Sponsored access by program</h3><div class="analytics-table-wrap" id="orgAnalyticsProgramList"></div></section>
 <section class="analytics-card"><span class="approved-kicker">AGGREGATE OUTCOMES</span><h3>Program outcomes</h3><div class="analytics-rank-list" id="orgAnalyticsOutcomeList"></div></section>
 <div class="analytics-privacy-banner"><b>Small groups are protected.</b><p>Outcome reporting is suppressed when there are too few participants to safely aggregate.</p></div>
+</div>
+</section>
+<section class="page" id="page-workspace-home">
+<div class="approved-inner">
+<div class="approved-inner-head">
+<div>
+<span class="approved-kicker">LELLEE</span>
+<h2>Everything you do in Lellee, organized by role.</h2>
+<p>Use your personal program, run a coaching business, manage an organization, or administer Lellee without mixing private data between those roles.</p>
+</div>
+<button class="approved-link" data-page="today">← Personal Today</button>
+</div>
+<div class="workspace-current-card">
+<div>
+<small>CURRENT WORKSPACE</small>
+<h3 id="workspaceCurrentName">Personal</h3>
+<p id="workspaceCurrentDescription">Your private Lellee programs, tools, messages, resources and progress.</p>
+</div>
+<span id="workspaceCurrentPill">PERSONAL</span>
+</div>
+<div class="workspace-card-grid" id="workspaceCardGrid"></div>
+<section class="workspace-section">
+<div class="workspace-section-head"><div><span class="approved-kicker">CONTINUE</span><h3>Pick up where you left off</h3></div></div>
+<div class="workspace-recent-list" id="workspaceRecentList"></div>
+</section>
+<section class="workspace-section">
+<div class="workspace-section-head"><div><span class="approved-kicker">QUICK ACCESS</span><h3>Common Lellee areas</h3></div></div>
+<div class="workspace-quick-grid" id="workspaceQuickGrid"></div>
+</section>
+<div class="workspace-privacy-note">
+<b>Roles stay separated.</b>
+<p>Switching workspaces changes what tools you see. It does not give a coach or organization access to your private Personal workspace data.</p>
+</div>
+</div>
+</section>
+<section class="page" id="page-global-search">
+<div class="approved-inner">
+<div class="approved-inner-head">
+<div>
+<span class="approved-kicker">SEARCH LELLEE</span>
+<h2>Find the part of Lellee you need.</h2>
+<p>Search programs, published guidance, resources, and your own practical goals/tasks. Journal text, private messages and safety choices are excluded.</p>
+</div>
+<button class="approved-link" data-page="workspace-home">← Workspaces</button>
+</div>
+<div class="global-search-bar">
+<input id="globalSearchInput" maxlength="120" placeholder="Search Lellee"/>
+<button class="approved-small-action" id="globalSearchButton">Search</button>
+</div>
+<div class="global-search-filters">
+<button class="active" data-search-filter="all">All</button>
+<button data-search-filter="program">Programs</button>
+<button data-search-filter="content">Guidance</button>
+<button data-search-filter="resource">Resources</button>
+<button data-search-filter="personal">My Plan &amp; Goals</button>
+</div>
+<div class="workspace-privacy-note">
+<b>Search is privacy-aware.</b>
+<p>Your search terms are not written to Lellee analytics. Search does not query journal entries, coaching-message bodies, support contacts or safety selections.</p>
+</div>
+<div class="global-search-results" id="globalSearchResults"></div>
+</div>
+</section>
+<section class="page" id="page-workspace-access">
+<div class="approved-inner">
+<div class="approved-inner-head">
+<div><span class="approved-kicker">ACCOUNT ACCESS</span><h2>Which Lellee roles are connected to this account?</h2><p>See your available workspaces and the access each role provides.</p></div>
+<button class="approved-link" data-page="settings">← Settings</button>
+</div>
+<div class="workspace-access-list" id="workspaceAccessList"></div>
+<div class="workspace-privacy-note"><b>Access is role-based.</b><p>Having more than one role does not merge Personal, Coaching, Organization, or Admin data.</p></div>
+</div>
+</section>
+
+<section class="page" id="page-my-access">
+<div class="approved-inner">
+<div class="approved-inner-head">
+<div>
+<span class="approved-kicker">MY ACCESS</span>
+<h2>See what is included, sponsored, or optional.</h2>
+<p>Core safety and essential Lellee support remain available without requiring a paid upgrade. Optional plans and sponsored access are shown separately.</p>
+</div>
+<button class="approved-link" data-page="settings">← Settings</button>
+</div>
+<div class="access-summary-grid">
+<article><b id="accessTier">Free</b><small>Current Lellee tier</small></article>
+<article><b id="accessPrograms">0</b><small>Program entitlements</small></article>
+<article><b id="accessSponsored">0</b><small>Sponsored access</small></article>
+<article><b id="accessOrders">0</b><small>Orders / requests</small></article>
+</div>
+<section class="commerce-card">
+<span class="approved-kicker">LELLEE PLUS</span>
+<h3>Optional extras without putting core safety behind a paywall.</h3>
+<div class="commerce-plan-grid" id="accessPlanList"></div>
+</section>
+<section class="commerce-card">
+<span class="approved-kicker">MY ENTITLEMENTS</span>
+<h3>What your account can currently use</h3>
+<div class="commerce-list" id="accessEntitlementList"></div>
+</section>
+<section class="commerce-card">
+<span class="approved-kicker">ORDER &amp; REQUEST HISTORY</span>
+<h3>Your commerce activity</h3>
+<div class="commerce-list" id="accessOrderList"></div>
+</section>
+<div class="commerce-note">
+<b>Payments are not being activated by this build.</b>
+<p>Pricing, entitlements and order records can be prepared now. Existing Stripe and other payment switches remain unchanged until you intentionally finish payment testing.</p>
+</div>
+</div>
+</section>
+
+<section class="page" id="page-coach-revenue">
+<div class="approved-inner">
+<div class="approved-inner-head">
+<div><span class="approved-kicker">COACH BUSINESS · REVENUE</span><h2 id="coachRevenueName">My Coaching Business</h2><p>See service pricing, projected gross value, group capacity and future payout status.</p></div>
+<button class="approved-link" data-page="coach-dashboard">← Coach Dashboard</button>
+</div>
+<div class="access-summary-grid">
+<article><b id="coachRevenueServices">0</b><small>Active services</small></article>
+<article><b id="coachRevenueClients">0</b><small>Active clients</small></article>
+<article><b id="coachRevenueGroups">0</b><small>Active groups</small></article>
+<article><b id="coachRevenueProjected">$0</b><small>Projected gross value</small></article>
+</div>
+<section class="commerce-card">
+<span class="approved-kicker">SERVICES &amp; PACKAGES</span>
+<h3>Pricing across 1-to-1, group and hybrid coaching</h3>
+<div class="commerce-list" id="coachRevenueServiceList"></div>
+</section>
+<section class="commerce-card">
+<span class="approved-kicker">GROUP ECONOMICS</span>
+<h3>Capacity, enrollment and per-person pricing</h3>
+<div class="commerce-list" id="coachRevenueGroupList"></div>
+</section>
+<section class="commerce-card">
+<span class="approved-kicker">PAYOUT STATUS</span>
+<h3>Future coach payment operations</h3>
+<div class="commerce-status-box" id="coachPayoutStatus"></div>
+</section>
+<div class="commerce-note"><b>No earnings guarantee.</b><p>Projected values are operational estimates based on configured prices and enrollment. They are not promises of income and do not account for taxes, refunds, payment fees, expenses or future Lellee platform fees.</p></div>
+</div>
+</section>
+
+<section class="page" id="page-organization-commerce">
+<div class="approved-inner">
+<div class="approved-inner-head">
+<div><span class="approved-kicker">ORGANIZATION · LICENSING</span><h2 id="orgCommerceName">Organization</h2><p>Program licenses, sponsored seats, pilots and future contract pricing in one place.</p></div>
+<button class="approved-link" data-page="organization-dashboard">← Organization Dashboard</button>
+</div>
+<div class="access-summary-grid">
+<article><b id="orgCommerceLicenses">0</b><small>Program licenses</small></article>
+<article><b id="orgCommerceSeats">0</b><small>Seat capacity</small></article>
+<article><b id="orgCommerceAssigned">0</b><small>Assigned seats</small></article>
+<article><b id="orgCommerceValue">$0</b><small>Configured contract value</small></article>
+</div>
+<section class="commerce-card"><span class="approved-kicker">LICENSES</span><h3>Program access and seat allocations</h3><div class="commerce-list" id="orgCommerceLicenseList"></div></section>
+<section class="commerce-card"><span class="approved-kicker">QUOTES &amp; AGREEMENTS</span><h3>Future institutional pricing workflow</h3><div class="commerce-list" id="orgCommerceQuoteList"></div></section>
+<div class="commerce-note"><b>Organization billing stays off.</b><p>This build supports pricing and quote operations but does not activate invoice collection or recurring organization charges.</p></div>
+</div>
+</section>
+
+<section class="page" id="page-lellee-shop">
+<div class="approved-inner">
+<div class="approved-inner-head">
+<div><span class="approved-kicker">LELLEE PRODUCTS</span><h2>Optional products that support the journey.</h2><p>Journals, printed stories, low-cost giveaways and other Lellee products can be prepared here without turning the app into a retail-first experience.</p></div>
+<button class="approved-link" data-page="settings">← Settings</button>
+</div>
+<div class="commerce-product-grid" id="lelleeShopList"></div>
+<div class="commerce-note"><b>Product checkout is not live in this build.</b><p>Catalog and pricing can be configured now. Checkout activation remains separate from the app launch.</p></div>
 </div>
 </section>
 <section class="page" id="page-settings">
@@ -3847,6 +4106,16 @@ Includes the approved Lellee consumer experience from early recovery through lif
 </div>
 <div class="program-settings-shortcuts">
 <article><div><b>My Lellee Programs</b><small>Switch between Recovery and any additional Lellee programs you have been enrolled in.</small></div><button class="approved-link" data-page="program-switcher">My Programs →</button></article>
+</div>
+<div class="program-settings-shortcuts">
+<article><div><b>Lellee Workspaces</b><small>Switch between Personal, Coach, Organization and Admin roles connected to your account.</small></div><button class="approved-link" data-page="workspace-home">Open Workspaces →</button></article>
+<article><div><b>Search Lellee</b><small>Search programs, guidance, resources, goals and practical-plan items.</small></div><button class="approved-link" data-page="global-search">Search →</button></article>
+<article><div><b>Account Access</b><small>Review the roles and workspaces connected to your account.</small></div><button class="approved-link" data-page="workspace-access">Review Access →</button></article>
+</div>
+
+<div class="program-settings-shortcuts">
+<article><div><b>My Access</b><small>See your Free/Plus tier, sponsored access and program entitlements.</small></div><button class="approved-link" data-page="my-access">Open My Access →</button></article>
+<article><div><b>Lellee Products</b><small>Optional journals, printed stories and other Lellee products.</small></div><button class="approved-link" data-page="lellee-shop">View Products →</button></article>
 </div>
 </div>
 </section>
@@ -4729,5 +4998,5 @@ Transportation"></textarea></label>
 </div>
 </div>
 </div>
-<script src="/safety-privacy-core.js"></script><script src="/pilot-runtime.js"></script><script src="/analytics-insights.js"></script></body>
+<script src="/safety-privacy-core.js"></script><script src="/pilot-runtime.js"></script><script src="/analytics-insights.js"></script><script src="/platform-integration.js"></script><script src="/commerce-ops.js"></script></body>
 </html>
