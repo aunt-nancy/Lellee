@@ -1041,7 +1041,7 @@ Includes the approved Lellee consumer experience from early recovery through lif
       .guided-activity-hint{font-size:.53rem;color:#8a828d;margin-top:5px}
     </style>
 <link href="/lellee-v1.css" rel="stylesheet"/>
-<link href="/legal-privacy-safety.css" rel="stylesheet"/><link href="/program-coach-core.css" rel="stylesheet"/><link href="/program-builder.css" rel="stylesheet"/><link href="/coach-marketplace.css" rel="stylesheet"/><link href="/inbox-reminders.css" rel="stylesheet"/><link href="/welcome-router.css" rel="stylesheet"/><link href="/organization-licensing.css" rel="stylesheet"/><link href="/life-admin-core.css" rel="stylesheet"/><link href="/resource-navigation.css" rel="stylesheet"/><link href="/progress-core.css" rel="stylesheet"/><link href="/content-studio.css" rel="stylesheet"/></head>
+<link href="/legal-privacy-safety.css" rel="stylesheet"/><link href="/program-coach-core.css" rel="stylesheet"/><link href="/program-builder.css" rel="stylesheet"/><link href="/coach-marketplace.css" rel="stylesheet"/><link href="/inbox-reminders.css" rel="stylesheet"/><link href="/welcome-router.css" rel="stylesheet"/><link href="/organization-licensing.css" rel="stylesheet"/><link href="/life-admin-core.css" rel="stylesheet"/><link href="/resource-navigation.css" rel="stylesheet"/><link href="/progress-core.css" rel="stylesheet"/><link href="/content-studio.css" rel="stylesheet"/><link href="/safety-privacy-core.css" rel="stylesheet"/></head>
 <body><a class="skip-link" href="#mainContent">Skip to main content</a><a class="lellee-skip" href="#lelleeMain">Skip to main content</a>
 <div class="prod-overlay hidden" id="onboardingOverlay">
 <div class="prod-onboarding">
@@ -2713,7 +2713,7 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <div class="approved-inner-head">
 <div><span class="approved-kicker">ADMIN</span><h2>Operate Lellee without touching the database directly</h2><p>Manage vetted resources, sponsored placement, recovery news, Plus pricing, and publishing controls.</p></div>
 <span class="admin-role-pill" id="adminRoleBadge">ADMIN</span>
-<button class="approved-small-action" data-page="program-builder">Program Builder</button><button class="approved-small-action" data-page="coach-admin">Coach Approvals</button><button class="approved-small-action" data-page="organization-admin">Organizations</button><button class="approved-small-action" data-page="resource-admin">Resource Quality</button><button class="approved-small-action" data-page="content-studio">Content Studio</button></div>
+<button class="approved-small-action" data-page="program-builder">Program Builder</button><button class="approved-small-action" data-page="coach-admin">Coach Approvals</button><button class="approved-small-action" data-page="organization-admin">Organizations</button><button class="approved-small-action" data-page="resource-admin">Resource Quality</button><button class="approved-small-action" data-page="content-studio">Content Studio</button><button class="approved-small-action" data-page="safety-profile-builder">Safety Profiles</button></div>
 <div class="admin-unauthorized hidden" id="adminUnauthorized">
 <span>🔒</span>
 <div><h3>Admin access required</h3><p>This page is not available to standard Lellee accounts.</p></div>
@@ -2771,6 +2771,53 @@ Includes the approved Lellee consumer experience from early recovery through lif
 </div>
 </div>
 </section>
+<section class="page" id="page-safety-profile-builder">
+<div class="approved-inner">
+<div class="approved-inner-head">
+<div>
+<span class="approved-kicker">ADMIN · SAFETY PROFILE BUILDER</span>
+<h2>Give each Lellee program its own safety and privacy rules.</h2>
+<p>Configure immediate-help choices, escalation behavior, quick-exit requirements, notification restrictions and launch blockers.</p>
+</div>
+<button class="approved-link" data-page="program-builder">← Program Builder</button>
+</div>
+<div class="safety-builder-controls">
+<select id="safetyBuilderProgram"></select>
+<button class="approved-small-action" id="safetyAddRoute">+ Add Help Route</button>
+<button class="approved-link" id="safetyBuilderRefresh">Refresh</button>
+</div>
+<div class="safety-builder-metrics">
+<article><b id="safetyMetricRoutes">0</b><small>Help routes</small></article>
+<article><b id="safetyMetricUrgent">0</b><small>Urgent routes</small></article>
+<article><b id="safetyMetricBlocked">0</b><small>Launch blockers</small></article>
+<article><b id="safetyMetricReviewed">No</b><small>Safety reviewed</small></article>
+</div>
+<div class="safety-builder-profile">
+<div class="admin-editor-grid">
+<label>Safety profile status<select id="safetyProfileStatus"><option value="draft">Draft</option><option value="review">Review</option><option value="approved">Approved</option><option value="blocked">Blocked</option></select></label>
+<label>Review level<select id="safetyReviewLevel"><option value="standard">Standard</option><option value="heightened">Heightened</option><option value="specialist">Specialist required</option></select></label>
+<label><span>Quick Exit required</span><select id="safetyQuickExitRequired"><option value="false">No</option><option value="true">Yes</option></select></label>
+<label><span>Private notification text required</span><select id="safetyPrivateNotifications"><option value="true">Yes</option><option value="false">No</option></select></label>
+<label><span>Coach escalation allowed by default</span><select id="safetyCoachEscalation"><option value="false">No</option><option value="true">Yes</option></select></label>
+<label><span>Organization escalation allowed by default</span><select id="safetyOrgEscalation"><option value="false">No</option><option value="true">Yes</option></select></label>
+<label class="admin-wide">Program safety notes<textarea id="safetyProfileNotes" maxlength="2500"></textarea></label>
+</div>
+<div class="approved-settings-footer">
+<span class="approved-setting-note" id="safetyProfileMsg"></span>
+<button class="approved-small-action" id="saveSafetyProfile">Save Safety Profile</button>
+</div>
+</div>
+<div class="safety-builder-section">
+<span class="approved-kicker">HELP ME RIGHT NOW ROUTES</span>
+<div class="safety-route-list" id="safetyRouteList"></div>
+</div>
+<div class="safety-builder-section">
+<span class="approved-kicker">LAUNCH BLOCKERS</span>
+<div class="safety-route-list" id="safetyBlockerList"></div>
+</div>
+</div>
+</section>
+
 <section class="page" id="page-content-releases">
 <div class="approved-inner">
 <div class="approved-inner-head">
@@ -2783,7 +2830,6 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <div class="content-studio-list" id="contentReleaseList"></div>
 </div>
 </section>
-
 <section class="page" id="page-content-preview">
 <div class="approved-inner">
 <div class="approved-inner-head">
@@ -2794,7 +2840,6 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <div class="content-preview-items" id="contentPreviewItems"></div>
 </div>
 </section>
-
 <section class="page" id="page-content-studio">
 <div class="approved-inner">
 <div class="approved-inner-head">
@@ -2842,7 +2887,6 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <div class="content-studio-list" id="contentStudioList"></div>
 </div>
 </section>
-
 <section class="page" id="page-outcome-builder">
 <div class="approved-inner">
 <div class="approved-inner-head">
@@ -2935,7 +2979,7 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <p>Configure terminology, journey structure, modules, safety, resources, coaching and launch readiness for each vertical.</p>
 </div>
 <button class="approved-link" data-page="admin">← Admin</button>
-<button class="approved-small-action" data-page="program-demand">View Demand</button><button class="approved-small-action" data-page="outcome-builder">Outcome Builder</button><button class="approved-small-action" data-page="content-studio">Build Content</button></div>
+<button class="approved-small-action" data-page="program-demand">View Demand</button><button class="approved-small-action" data-page="outcome-builder">Outcome Builder</button><button class="approved-small-action" data-page="content-studio">Build Content</button><button class="approved-small-action" data-page="safety-profile-builder">Safety Profiles</button></div>
 <div class="program-builder-warning hidden" id="programBuilderUnauthorized">
 <b>Admin access required.</b><p>Program creation and launch controls are restricted to Lellee administrators.</p>
 </div>
@@ -3475,6 +3519,56 @@ Includes the approved Lellee consumer experience from early recovery through lif
 </div>
 </div>
 </section>
+
+<section class="page" id="page-safety-center">
+<div class="approved-inner">
+<div class="approved-inner-head">
+<div>
+<span class="approved-kicker">HELP ME RIGHT NOW</span>
+<h2 id="safetyCenterTitle">What would help right now?</h2>
+<p id="safetyCenterDescription">Choose what is closest to what you need. Lellee will keep the next step simple.</p>
+</div>
+<button class="approved-link" data-page="today">← Today</button>
+</div>
+<div class="safety-quick-exit hidden" id="safetyQuickExitWrap">
+<div><b>Need to leave this page quickly?</b><small>Quick Exit leaves Lellee immediately and hides this page from the current view.</small></div>
+<button id="safetyQuickExit">Quick Exit</button>
+</div>
+<div class="safety-action-grid" id="safetyActionGrid"></div>
+<div class="safety-guidance-card hidden" id="safetyGuidanceCard">
+<div class="safety-guidance-head">
+<span id="safetyGuidanceIcon">♡</span>
+<div><small id="safetyGuidanceKicker">RIGHT NOW</small><h3 id="safetyGuidanceTitle">One next step</h3></div>
+</div>
+<p id="safetyGuidanceText"></p>
+<div class="safety-guidance-actions" id="safetyGuidanceActions"></div>
+<button class="approved-link" id="safetyGuidanceBack">Choose something else</button>
+</div>
+<div class="safety-privacy-note">
+<b>Privacy-first safety support.</b>
+<p>Lellee does not automatically tell a coach, sponsor or organization which safety option you selected. Emergency or crisis services operate outside ordinary Lellee coaching workflows.</p>
+</div>
+</div>
+</section>
+
+<section class="page" id="page-privacy-mode">
+<div class="approved-inner">
+<div class="approved-inner-head">
+<div><span class="approved-kicker">PRIVACY MODE</span><h2>Control what Lellee shows outside the app.</h2><p>Use generic notification wording and optional quick-exit behavior for programs where discretion matters.</p></div>
+<button class="approved-link" data-page="settings">← Settings</button>
+</div>
+<div class="privacy-mode-settings">
+<label><span><b>Private notification previews</b><small>Use generic lock-screen wording instead of sensitive message or milestone content.</small></span><input checked="" id="privacyModeNotifications" type="checkbox"/></label>
+<label><span><b>Hide sensitive program name in notifications</b><small>Use “Lellee” instead of the program name where supported.</small></span><input checked="" id="privacyModeProgramName" type="checkbox"/></label>
+<label><span><b>Quick Exit shortcut</b><small>Show a one-tap exit option when the active program supports it.</small></span><input checked="" id="privacyModeQuickExit" type="checkbox"/></label>
+<label><span><b>Auto-clear sensitive screen on inactivity</b><small>Return to a neutral page after a short period of inactivity when required by the program.</small></span><input id="privacyModeAutoClear" type="checkbox"/></label>
+</div>
+<div class="approved-settings-footer">
+<span class="approved-setting-note" id="privacyModeMsg"></span>
+<button class="approved-small-action" id="savePrivacyMode">Save Privacy Mode</button>
+</div>
+</div>
+</section>
 <section class="page" id="page-settings">
 <div class="approved-inner">
 <div class="approved-inner-head">
@@ -3544,6 +3638,11 @@ Includes the approved Lellee consumer experience from early recovery through lif
 </div>
 <div class="program-settings-shortcuts">
 <article><div><b>My Progress</b><small>Goals, milestones and personal progress summaries across your Lellee journey.</small></div><button class="approved-link" data-page="progress-hub">Open My Progress →</button></article>
+</div>
+
+<div class="program-settings-shortcuts">
+<article><div><b>Help Me Right Now</b><small>Immediate support based on your active Lellee program.</small></div><button class="approved-link" data-page="safety-center">Open Safety Center →</button></article>
+<article><div><b>Privacy Mode</b><small>Control notification previews and quick-exit behavior.</small></div><button class="approved-link" data-page="privacy-mode">Privacy Settings →</button></article>
 </div>
 </div>
 </section>
@@ -4381,7 +4480,6 @@ Transportation"></textarea></label>
 </div>
 </div>
 </div>
-
 <div class="admin-overlay hidden" id="contentStageEditor">
 <div class="admin-editor-card">
 <div class="admin-editor-head">
@@ -4403,5 +4501,29 @@ Transportation"></textarea></label>
 </div>
 </div>
 </div>
-<script src="/content-studio.js"></script></body>
+<script src="/content-studio.js"></script>
+<div class="admin-overlay hidden" id="safetyRouteEditor">
+<div class="admin-editor-card">
+<div class="admin-editor-head">
+<div><span class="approved-kicker">SAFETY ROUTE</span><h3 id="safetyRouteEditorTitle">New Help Route</h3></div>
+<button class="approved-link" id="safetyRouteEditorClose">Close</button>
+</div>
+<div class="admin-editor-grid">
+<label>Route key<input id="safetyRouteKey" maxlength="100" placeholder="example: overwhelmed"/></label>
+<label>User label<input id="safetyRouteLabel" maxlength="120" placeholder="I feel overwhelmed"/></label>
+<label>Urgency<select id="safetyRouteUrgency"><option value="routine">Routine</option><option value="elevated">Elevated</option><option value="urgent">Urgent</option><option value="emergency">Emergency</option></select></label>
+<label>Primary action<select id="safetyRouteAction"><option value="in_app_guidance">In-app guidance</option><option value="support_contact">Support contact</option><option value="resource_navigation">Resource navigation</option><option value="crisis_support">Crisis support</option><option value="emergency_care">Emergency care</option><option value="leave_environment">Leave environment</option></select></label>
+<label class="admin-wide">Short guidance<textarea id="safetyRouteGuidance" maxlength="1200"></textarea></label>
+<label class="admin-wide">Action button label<input id="safetyRouteButtonLabel" maxlength="100" placeholder="Open my support contacts"/></label>
+<label>Display order<input id="safetyRouteOrder" min="1" type="number" value="10"/></label>
+<label>Status<select id="safetyRouteStatus"><option value="draft">Draft</option><option value="review">Review</option><option value="published">Published</option><option value="archived">Archived</option></select></label>
+</div>
+<div class="approved-settings-footer">
+<button class="approved-link hidden" id="safetyRouteArchive">Archive</button>
+<span class="approved-setting-note" id="safetyRouteMsg"></span>
+<button class="approved-small-action" id="safetyRouteSave">Save Route</button>
+</div>
+</div>
+</div>
+<script src="/safety-privacy-core.js"></script></body>
 </html>
