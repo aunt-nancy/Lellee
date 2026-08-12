@@ -1041,7 +1041,7 @@ Includes the approved Lellee consumer experience from early recovery through lif
       .guided-activity-hint{font-size:.53rem;color:#8a828d;margin-top:5px}
     </style>
 <link href="/lellee-v1.css" rel="stylesheet"/>
-<link href="/legal-privacy-safety.css" rel="stylesheet"/><link href="/program-coach-core.css" rel="stylesheet"/><link href="/program-builder.css" rel="stylesheet"/><link href="/coach-marketplace.css" rel="stylesheet"/><link href="/inbox-reminders.css" rel="stylesheet"/><link href="/welcome-router.css" rel="stylesheet"/><link href="/organization-licensing.css" rel="stylesheet"/><link href="/life-admin-core.css" rel="stylesheet"/><link href="/resource-navigation.css" rel="stylesheet"/><link href="/progress-core.css" rel="stylesheet"/><link href="/content-studio.css" rel="stylesheet"/><link href="/safety-privacy-core.css" rel="stylesheet"/><link href="/pilot-runtime.css" rel="stylesheet"/><link href="/analytics-insights.css" rel="stylesheet"/><link href="/platform-integration.css" rel="stylesheet"/><link href="/commerce-ops.css" rel="stylesheet"/><link href="/scheduling-crm.css" rel="stylesheet"/><link href="/trust-support.css" rel="stylesheet"/><link href="/automation-workflows.css" rel="stylesheet"/><link href="/personalization-experience.css" rel="stylesheet"/></head>
+<link href="/legal-privacy-safety.css" rel="stylesheet"/><link href="/program-coach-core.css" rel="stylesheet"/><link href="/program-builder.css" rel="stylesheet"/><link href="/coach-marketplace.css" rel="stylesheet"/><link href="/inbox-reminders.css" rel="stylesheet"/><link href="/welcome-router.css" rel="stylesheet"/><link href="/organization-licensing.css" rel="stylesheet"/><link href="/life-admin-core.css" rel="stylesheet"/><link href="/resource-navigation.css" rel="stylesheet"/><link href="/progress-core.css" rel="stylesheet"/><link href="/content-studio.css" rel="stylesheet"/><link href="/safety-privacy-core.css" rel="stylesheet"/><link href="/pilot-runtime.css" rel="stylesheet"/><link href="/analytics-insights.css" rel="stylesheet"/><link href="/platform-integration.css" rel="stylesheet"/><link href="/commerce-ops.css" rel="stylesheet"/><link href="/scheduling-crm.css" rel="stylesheet"/><link href="/trust-support.css" rel="stylesheet"/><link href="/automation-workflows.css" rel="stylesheet"/><link href="/personalization-experience.css" rel="stylesheet"/><link href="/release-reliability.css" rel="stylesheet"/></head>
 <body><a class="skip-link" href="#mainContent">Skip to main content</a><a class="lellee-skip" href="#lelleeMain">Skip to main content</a>
 <div class="prod-overlay hidden" id="onboardingOverlay">
 <div class="prod-onboarding">
@@ -2713,7 +2713,7 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <div class="approved-inner-head">
 <div><span class="approved-kicker">ADMIN</span><h2>Operate Lellee without touching the database directly</h2><p>Manage vetted resources, sponsored placement, recovery news, Plus pricing, and publishing controls.</p></div>
 <span class="admin-role-pill" id="adminRoleBadge">ADMIN</span>
-<button class="approved-small-action" data-page="program-builder">Program Builder</button><button class="approved-small-action" data-page="coach-admin">Coach Approvals</button><button class="approved-small-action" data-page="organization-admin">Organizations</button><button class="approved-small-action" data-page="resource-admin">Resource Quality</button><button class="approved-small-action" data-page="content-studio">Content Studio</button><button class="approved-small-action" data-page="safety-profile-builder">Safety Profiles</button><button class="approved-small-action" data-page="pilot-enrollment-admin">Pilot Enrollment</button><button class="approved-small-action" data-page="analytics">Analytics &amp; Insights</button><button class="approved-small-action" data-page="platform-health">Platform Health</button><button class="approved-small-action" data-page="revenue-ops">Revenue Ops</button><button class="approved-small-action" data-page="communications-admin">Communications</button><button class="approved-small-action" data-page="support-ops">Support Ops</button><button class="approved-small-action" data-page="privacy-ops">Privacy Ops</button><button class="approved-small-action" data-page="trust-ops">Trust &amp; Audit</button><button class="approved-small-action" data-page="automation-studio">Automation Studio</button><button class="approved-small-action" data-page="experience-studio">Experience Studio</button></div>
+<button class="approved-small-action" data-page="program-builder">Program Builder</button><button class="approved-small-action" data-page="coach-admin">Coach Approvals</button><button class="approved-small-action" data-page="organization-admin">Organizations</button><button class="approved-small-action" data-page="resource-admin">Resource Quality</button><button class="approved-small-action" data-page="content-studio">Content Studio</button><button class="approved-small-action" data-page="safety-profile-builder">Safety Profiles</button><button class="approved-small-action" data-page="pilot-enrollment-admin">Pilot Enrollment</button><button class="approved-small-action" data-page="analytics">Analytics &amp; Insights</button><button class="approved-small-action" data-page="platform-health">Platform Health</button><button class="approved-small-action" data-page="revenue-ops">Revenue Ops</button><button class="approved-small-action" data-page="communications-admin">Communications</button><button class="approved-small-action" data-page="support-ops">Support Ops</button><button class="approved-small-action" data-page="privacy-ops">Privacy Ops</button><button class="approved-small-action" data-page="trust-ops">Trust &amp; Audit</button><button class="approved-small-action" data-page="automation-studio">Automation Studio</button><button class="approved-small-action" data-page="experience-studio">Experience Studio</button><button class="approved-small-action" data-page="qa-center">QA Center</button><button class="approved-small-action" data-page="pilot-operations">Pilot Ops</button><button class="approved-small-action" data-page="release-center">Release Center</button><button class="approved-small-action" data-page="reliability-center">Reliability</button></div>
 <div class="admin-unauthorized hidden" id="adminUnauthorized">
 <span>🔒</span>
 <div><h3>Admin access required</h3><p>This page is not available to standard Lellee accounts.</p></div>
@@ -2771,6 +2771,145 @@ Includes the approved Lellee consumer experience from early recovery through lif
 </div>
 </div>
 </section>
+<section class="page" id="page-reliability-center">
+<div class="approved-inner">
+<div class="approved-inner-head">
+<div>
+<span class="approved-kicker">ADMIN · RELIABILITY</span>
+<h2>See operational health without reading private user content.</h2>
+<p>Track failed jobs, stale queues, unresolved incidents and environment/configuration drift from one place.</p>
+</div>
+<button class="approved-link" data-page="platform-health">← Platform Health</button>
+</div>
+<div class="release-summary-grid">
+<article><b id="reliabilityFailures">0</b><small>Recent failures</small></article>
+<article><b id="reliabilityQueue">0</b><small>Stale queued items</small></article>
+<article><b id="reliabilityIncidents">0</b><small>Open incidents</small></article>
+<article><b id="reliabilityDrift">0</b><small>Config drift checks</small></article>
+</div>
+<section class="release-card">
+<span class="approved-kicker">CURRENT SIGNALS</span>
+<div class="release-list" id="reliabilitySignalList"></div>
+</section>
+<section class="release-card">
+<span class="approved-kicker">RECENT HEALTH SNAPSHOTS</span>
+<div class="release-list" id="reliabilitySnapshotList"></div>
+</section>
+</div>
+</section>
+
+<section class="page" id="page-release-center">
+<div class="approved-inner">
+<div class="approved-inner-head">
+<div>
+<span class="approved-kicker">ADMIN · RELEASE CENTER</span>
+<h2>Move Lellee from build → test → pilot → approved release.</h2>
+<p>Release candidates must clear QA, privacy, safety, legal and operational gates before any public-launch setting can be considered.</p>
+</div>
+<button class="approved-link" data-page="admin">← Admin</button>
+</div>
+<div class="release-summary-grid">
+<article><b id="releaseCandidates">0</b><small>Release candidates</small></article>
+<article><b id="releaseBlocked">0</b><small>Blocked</small></article>
+<article><b id="releaseApproved">0</b><small>Approved</small></article>
+<article><b id="releaseReady">0</b><small>Ready to deploy</small></article>
+</div>
+<div class="commerce-tabs">
+<button class="active" data-release-tab="candidates">Candidates</button>
+<button data-release-tab="gates">Release Gates</button>
+<button data-release-tab="environment">Environment</button>
+<button data-release-tab="rollbacks">Rollback Notes</button>
+</div>
+<div id="releasePanelCandidates">
+<div class="commerce-panel-head">
+<div><span class="approved-kicker">RELEASE CANDIDATES</span><h3>Controlled release workflow</h3></div>
+<button class="approved-small-action" id="releaseAddCandidate">+ New Candidate</button>
+</div>
+<div class="release-list" id="releaseCandidateList"></div>
+</div>
+<div class="hidden" id="releasePanelGates"><div class="release-list" id="releaseGateList"></div></div>
+<div class="hidden" id="releasePanelEnvironment"><div class="release-list" id="releaseEnvironmentList"></div></div>
+<div class="hidden" id="releasePanelRollbacks"><div class="release-list" id="releaseRollbackList"></div></div>
+<div class="release-warning">
+<b>Release approval is not the same as public launch.</b>
+<p>This build does not change billing, legal, domain, coach marketplace, public multi-program, or Recovery renderer switches.</p>
+</div>
+</div>
+</section>
+
+<section class="page" id="page-pilot-operations">
+<div class="approved-inner">
+<div class="approved-inner-head">
+<div>
+<span class="approved-kicker">ADMIN · PILOT OPERATIONS</span>
+<h2>Run controlled pilots before public program launch.</h2>
+<p>Group pilot users, define pilot goals, track issues and feedback, and decide whether a vertical is ready to advance.</p>
+</div>
+<button class="approved-link" data-page="program-builder">← Program Builder</button>
+</div>
+<div class="release-summary-grid">
+<article><b id="pilotOpsCohorts">0</b><small>Pilot cohorts</small></article>
+<article><b id="pilotOpsUsers">0</b><small>Active pilot users</small></article>
+<article><b id="pilotOpsFeedback">0</b><small>Feedback items</small></article>
+<article><b id="pilotOpsIssues">0</b><small>Open pilot issues</small></article>
+</div>
+<div class="commerce-tabs">
+<button class="active" data-pilot-ops-tab="cohorts">Cohorts</button>
+<button data-pilot-ops-tab="feedback">Feedback</button>
+<button data-pilot-ops-tab="issues">Issues</button>
+<button data-pilot-ops-tab="readiness">Readiness</button>
+</div>
+<div id="pilotOpsPanelCohorts">
+<div class="commerce-panel-head">
+<div><span class="approved-kicker">PILOT COHORTS</span><h3>Controlled test groups</h3></div>
+<button class="approved-small-action" id="pilotOpsAddCohort">+ Add Cohort</button>
+</div>
+<div class="release-list" id="pilotOpsCohortList"></div>
+</div>
+<div class="hidden" id="pilotOpsPanelFeedback"><div class="release-list" id="pilotOpsFeedbackList"></div></div>
+<div class="hidden" id="pilotOpsPanelIssues"><div class="release-list" id="pilotOpsIssueList"></div></div>
+<div class="hidden" id="pilotOpsPanelReadiness"><div class="release-list" id="pilotOpsReadinessList"></div></div>
+</div>
+</section>
+
+<section class="page" id="page-qa-center">
+<div class="approved-inner">
+<div class="approved-inner-head">
+<div>
+<span class="approved-kicker">ADMIN · QA CENTER</span>
+<h2>Test Lellee before users discover the problem.</h2>
+<p>Run platform checks, record regression results, track failed dependencies and keep release candidates from advancing until critical checks pass.</p>
+</div>
+<button class="approved-link" data-page="admin">← Admin</button>
+</div>
+<div class="release-summary-grid">
+<article><b id="qaSuites">0</b><small>QA suites</small></article>
+<article><b id="qaPassing">0</b><small>Passing checks</small></article>
+<article><b id="qaFailing">0</b><small>Failing checks</small></article>
+<article><b id="qaCritical">0</b><small>Critical failures</small></article>
+</div>
+<div class="release-toolbar">
+<button class="approved-small-action" id="qaRunPlatformChecks">Run Platform Checks</button>
+<button class="approved-link" id="qaRefresh">Refresh</button>
+</div>
+<section class="release-card">
+<span class="approved-kicker">PLATFORM PREFLIGHT</span>
+<h3>Foundation, privacy and protected switches</h3>
+<div class="release-list" id="qaPlatformChecks"></div>
+</section>
+<section class="release-card">
+<span class="approved-kicker">REGRESSION SUITES</span>
+<h3>Feature-by-feature testing</h3>
+<div class="release-list" id="qaSuiteList"></div>
+</section>
+<section class="release-card">
+<span class="approved-kicker">RECENT RESULTS</span>
+<h3>Latest QA activity</h3>
+<div class="release-list" id="qaResultList"></div>
+</section>
+</div>
+</section>
+
 <section class="page" id="page-experience-studio">
 <div class="approved-inner">
 <div class="approved-inner-head">
@@ -2817,7 +2956,6 @@ Includes the approved Lellee consumer experience from early recovery through lif
 </div>
 </div>
 </section>
-
 <section class="page" id="page-automation-studio">
 <div class="approved-inner">
 <div class="approved-inner-head">
@@ -4482,7 +4620,6 @@ Includes the approved Lellee consumer experience from early recovery through lif
 </section>
 </div>
 </section>
-
 <section class="page" id="page-for-you">
 <div class="approved-inner">
 <div class="approved-inner-head">
@@ -4517,7 +4654,6 @@ Includes the approved Lellee consumer experience from early recovery through lif
 </div>
 </div>
 </section>
-
 <section class="page" id="page-experience-preferences">
 <div class="approved-inner">
 <div class="approved-inner-head">
@@ -4664,7 +4800,6 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <div class="program-settings-shortcuts">
 <article><div><b>My Automations</b><small>Manage reminders and workflow preferences across your Lellee activity.</small></div><button class="approved-link" data-page="automation-center">Open Automations →</button></article>
 </div>
-
 <div class="program-settings-shortcuts">
 <article><div><b>For You</b><small>Personalized suggestions using your chosen preferences and program context.</small></div><button class="approved-link" data-page="for-you">Open For You →</button></article>
 <article><div><b>Experience Preferences</b><small>Reading level, accessibility, pathway, tone, language and quiet hours.</small></div><button class="approved-link" data-page="experience-preferences">Personalize Lellee →</button></article>
@@ -5567,5 +5702,5 @@ Transportation"></textarea></label>
 <div class="approved-settings-footer"><span class="approved-setting-note" id="supportEditorMsg"></span><button class="approved-small-action" id="supportEditorSave">Send Request</button></div>
 </div>
 </div>
-<script src="/trust-support.js"></script><script src="/automation-workflows.js"></script><script src="/personalization-experience.js"></script></body>
+<script src="/trust-support.js"></script><script src="/automation-workflows.js"></script><script src="/personalization-experience.js"></script><script src="/release-reliability.js"></script></body>
 </html>
