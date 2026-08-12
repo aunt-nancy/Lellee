@@ -1041,7 +1041,7 @@ Includes the approved Lellee consumer experience from early recovery through lif
       .guided-activity-hint{font-size:.53rem;color:#8a828d;margin-top:5px}
     </style>
 <link href="/lellee-v1.css" rel="stylesheet"/>
-<link href="/legal-privacy-safety.css" rel="stylesheet"/><link href="/program-coach-core.css" rel="stylesheet"/><link href="/program-builder.css" rel="stylesheet"/><link href="/coach-marketplace.css" rel="stylesheet"/><link href="/inbox-reminders.css" rel="stylesheet"/><link href="/welcome-router.css" rel="stylesheet"/><link href="/organization-licensing.css" rel="stylesheet"/><link href="/life-admin-core.css" rel="stylesheet"/><link href="/resource-navigation.css" rel="stylesheet"/><link href="/progress-core.css" rel="stylesheet"/></head>
+<link href="/legal-privacy-safety.css" rel="stylesheet"/><link href="/program-coach-core.css" rel="stylesheet"/><link href="/program-builder.css" rel="stylesheet"/><link href="/coach-marketplace.css" rel="stylesheet"/><link href="/inbox-reminders.css" rel="stylesheet"/><link href="/welcome-router.css" rel="stylesheet"/><link href="/organization-licensing.css" rel="stylesheet"/><link href="/life-admin-core.css" rel="stylesheet"/><link href="/resource-navigation.css" rel="stylesheet"/><link href="/progress-core.css" rel="stylesheet"/><link href="/content-studio.css" rel="stylesheet"/></head>
 <body><a class="skip-link" href="#mainContent">Skip to main content</a><a class="lellee-skip" href="#lelleeMain">Skip to main content</a>
 <div class="prod-overlay hidden" id="onboardingOverlay">
 <div class="prod-onboarding">
@@ -1157,7 +1157,6 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <button class="approved-small-action" data-page="inbox">Open Inbox</button>
 </div>
 <div class="life-today-card"><div><span class="approved-kicker">MY PLAN</span><h3>Practical next steps</h3><p><span id="todayLifeDue">0</span> items due soon</p></div><button class="approved-small-action" data-page="life-admin">Open My Plan</button></div>
-
 <div class="progress-today-card">
 <div><span class="approved-kicker">MY PROGRESS</span><h3>Notice what is changing</h3><p><span id="todayActiveGoals">0</span> active goals</p></div>
 <button class="approved-small-action" data-page="progress-hub">View Progress</button>
@@ -2714,7 +2713,7 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <div class="approved-inner-head">
 <div><span class="approved-kicker">ADMIN</span><h2>Operate Lellee without touching the database directly</h2><p>Manage vetted resources, sponsored placement, recovery news, Plus pricing, and publishing controls.</p></div>
 <span class="admin-role-pill" id="adminRoleBadge">ADMIN</span>
-<button class="approved-small-action" data-page="program-builder">Program Builder</button><button class="approved-small-action" data-page="coach-admin">Coach Approvals</button><button class="approved-small-action" data-page="organization-admin">Organizations</button><button class="approved-small-action" data-page="resource-admin">Resource Quality</button></div>
+<button class="approved-small-action" data-page="program-builder">Program Builder</button><button class="approved-small-action" data-page="coach-admin">Coach Approvals</button><button class="approved-small-action" data-page="organization-admin">Organizations</button><button class="approved-small-action" data-page="resource-admin">Resource Quality</button><button class="approved-small-action" data-page="content-studio">Content Studio</button></div>
 <div class="admin-unauthorized hidden" id="adminUnauthorized">
 <span>🔒</span>
 <div><h3>Admin access required</h3><p>This page is not available to standard Lellee accounts.</p></div>
@@ -2772,6 +2771,78 @@ Includes the approved Lellee consumer experience from early recovery through lif
 </div>
 </div>
 </section>
+<section class="page" id="page-content-releases">
+<div class="approved-inner">
+<div class="approved-inner-head">
+<div><span class="approved-kicker">ADMIN · CONTENT RELEASES</span><h2>Publish program content deliberately.</h2><p>Bundle reviewed content into a release, keep a record of what changed, and avoid silently changing a user's journey.</p></div>
+<button class="approved-link" data-page="content-studio">← Content Studio</button>
+</div>
+<div class="content-release-actions">
+<button class="approved-small-action" id="contentCreateRelease">+ Create Release</button>
+</div>
+<div class="content-studio-list" id="contentReleaseList"></div>
+</div>
+</section>
+
+<section class="page" id="page-content-preview">
+<div class="approved-inner">
+<div class="approved-inner-head">
+<div><span class="approved-kicker">ADMIN · JOURNEY PREVIEW</span><h2 id="contentPreviewTitle">Program Preview</h2><p>Preview the sequence a user would experience before publishing or activating a new Lellee program.</p></div>
+<button class="approved-link" data-page="content-studio">← Content Studio</button>
+</div>
+<div class="content-preview-stages" id="contentPreviewStages"></div>
+<div class="content-preview-items" id="contentPreviewItems"></div>
+</div>
+</section>
+
+<section class="page" id="page-content-studio">
+<div class="approved-inner">
+<div class="approved-inner-head">
+<div>
+<span class="approved-kicker">ADMIN · CONTENT STUDIO</span>
+<h2>Build a Lellee journey without rebuilding the app.</h2>
+<p>Create stages, daily or weekly guidance, tools, learning, milestone reviews and program-specific prompts. Draft first, review, then publish.</p>
+</div>
+<button class="approved-link" data-page="program-builder">← Program Builder</button>
+</div>
+<div class="content-studio-controls">
+<select id="contentStudioProgram"></select>
+<select id="contentStudioType">
+<option value="">All content</option>
+<option value="stage">Stages</option>
+<option value="guided_action">Guided actions</option>
+<option value="prompt">Prompts</option>
+<option value="tool">Tools</option>
+<option value="learn">Learning</option>
+<option value="milestone_review">Milestone reviews</option>
+<option value="support">Support content</option>
+<option value="resource_callout">Resource callouts</option>
+</select>
+<select id="contentStudioStatus">
+<option value="">All statuses</option>
+<option value="draft">Draft</option>
+<option value="review">Review</option>
+<option value="published">Published</option>
+<option value="archived">Archived</option>
+</select>
+<input id="contentStudioSearch" placeholder="Search content"/>
+</div>
+<div class="content-studio-metrics">
+<article><b id="contentMetricDraft">0</b><small>Draft</small></article>
+<article><b id="contentMetricReview">0</b><small>In review</small></article>
+<article><b id="contentMetricPublished">0</b><small>Published</small></article>
+<article><b id="contentMetricScheduled">0</b><small>Scheduled items</small></article>
+</div>
+<div class="content-studio-actions">
+<button class="approved-small-action" id="contentNewItem">+ New Content</button>
+<button class="approved-small-action" id="contentNewStage">+ New Stage</button>
+<button class="approved-link" id="contentPreviewProgram">Preview Program</button>
+<button class="approved-link" id="contentRefresh">Refresh</button>
+</div>
+<div class="content-studio-list" id="contentStudioList"></div>
+</div>
+</section>
+
 <section class="page" id="page-outcome-builder">
 <div class="approved-inner">
 <div class="approved-inner-head">
@@ -2790,7 +2861,6 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <div class="progress-list" id="outcomeDomainList"></div>
 </div>
 </section>
-
 <section class="page" id="page-resource-admin">
 <div class="approved-inner">
 <div class="approved-inner-head">
@@ -2865,7 +2935,7 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <p>Configure terminology, journey structure, modules, safety, resources, coaching and launch readiness for each vertical.</p>
 </div>
 <button class="approved-link" data-page="admin">← Admin</button>
-<button class="approved-small-action" data-page="program-demand">View Demand</button><button class="approved-small-action" data-page="outcome-builder">Outcome Builder</button></div>
+<button class="approved-small-action" data-page="program-demand">View Demand</button><button class="approved-small-action" data-page="outcome-builder">Outcome Builder</button><button class="approved-small-action" data-page="content-studio">Build Content</button></div>
 <div class="program-builder-warning hidden" id="programBuilderUnauthorized">
 <b>Admin access required.</b><p>Program creation and launch controls are restricted to Lellee administrators.</p>
 </div>
@@ -3352,7 +3422,6 @@ Includes the approved Lellee consumer experience from early recovery through lif
 </div>
 </div>
 </section>
-
 <section class="page" id="page-progress-hub">
 <div class="approved-inner">
 <div class="approved-inner-head">
@@ -3388,7 +3457,6 @@ Includes the approved Lellee consumer experience from early recovery through lif
 </div>
 </div>
 </section>
-
 <section class="page" id="page-progress-summary">
 <div class="approved-inner">
 <div class="approved-inner-head">
@@ -3474,7 +3542,6 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <article><div><b>Resource Navigator</b><small>Find and save practical support across your active Lellee program.</small></div><button class="approved-link" data-page="resource-navigator">Find Resources →</button></article>
 <article><div><b>My Resources</b><small>Saved resources, referrals and suggestions.</small></div><button class="approved-link" data-page="my-resources">Open My Resources →</button></article>
 </div>
-
 <div class="program-settings-shortcuts">
 <article><div><b>My Progress</b><small>Goals, milestones and personal progress summaries across your Lellee journey.</small></div><button class="approved-link" data-page="progress-hub">Open My Progress →</button></article>
 </div>
@@ -4247,5 +4314,94 @@ Transportation"></textarea></label>
 </div>
 </div>
 </div>
-<script src="/progress-core.js"></script></body>
+<script src="/progress-core.js"></script>
+<div class="admin-overlay hidden" id="contentStudioEditor">
+<div class="admin-editor-card content-editor-card">
+<div class="admin-editor-head">
+<div><span class="approved-kicker" id="contentEditorKicker">CONTENT</span><h3 id="contentEditorTitle">New Content</h3></div>
+<button class="approved-link" id="contentEditorClose">Close</button>
+</div>
+<div class="content-editor-tabs">
+<button class="active" data-content-editor-tab="content">Content</button>
+<button data-content-editor-tab="schedule">Schedule</button>
+<button data-content-editor-tab="personalization">Personalization</button>
+<button data-content-editor-tab="review">Review</button>
+</div>
+<div class="content-editor-panel" id="contentEditorContent">
+<div class="admin-editor-grid">
+<label>Content type<select id="contentEditType">
+<option value="guided_action">Guided action</option>
+<option value="prompt">Prompt</option>
+<option value="tool">Tool</option>
+<option value="learn">Learning</option>
+<option value="milestone_review">Milestone review</option>
+<option value="support">Support content</option>
+<option value="resource_callout">Resource callout</option>
+</select></label>
+<label>Internal key<input id="contentEditKey" maxlength="120" placeholder="example: day_12_identify_support"/></label>
+<label class="admin-wide">Title<input id="contentEditTitleText" maxlength="180"/></label>
+<label class="admin-wide">Short introduction<textarea id="contentEditIntro" maxlength="800"></textarea></label>
+<label class="admin-wide">Main content<textarea id="contentEditBody" maxlength="8000"></textarea></label>
+<label class="admin-wide">Suggested choices <small>One per line</small><textarea id="contentEditChoices" maxlength="3000"></textarea></label>
+<label class="admin-wide">Optional reflection prompt<textarea id="contentEditReflection" maxlength="1000"></textarea></label>
+</div>
+</div>
+<div class="content-editor-panel hidden" id="contentEditorSchedule">
+<div class="admin-editor-grid">
+<label>Stage<select id="contentEditStage"><option value="">No stage</option></select></label>
+<label>Sequence<input id="contentEditSequence" min="0" type="number" value="10"/></label>
+<label>Day number<input id="contentEditDay" max="3650" min="0" type="number"/></label>
+<label>Week number<input id="contentEditWeek" max="520" min="0" type="number"/></label>
+<label>Milestone day<input id="contentEditMilestoneDay" max="3650" min="0" type="number"/></label>
+<label>Estimated minutes<input id="contentEditMinutes" max="240" min="1" type="number" value="5"/></label>
+</div>
+</div>
+<div class="content-editor-panel hidden" id="contentEditorPersonalization">
+<div class="admin-editor-grid">
+<label>Pathway<select id="contentEditPathway"><option value="all">All</option><option value="secular">Secular</option><option value="spiritual">Spiritual</option><option value="faith">Faith-based</option><option value="mixed">Mixed</option></select></label>
+<label>Belief tradition<input id="contentEditTradition" placeholder="Optional, example: Christian/Baptist"/></label>
+<label>Audience tag<input id="contentEditAudienceTag" placeholder="Optional"/></label>
+<label>Language<input id="contentEditLanguage" value="en"/></label>
+<label class="admin-wide">Content tags <small>Comma separated</small><input id="contentEditTags"/></label>
+</div>
+<div class="content-editor-note"><b>Personalization should broaden relevance, not override safety.</b><p>Faith/pathway variants remain optional and must never replace medical, emergency or safety guidance.</p></div>
+</div>
+<div class="content-editor-panel hidden" id="contentEditorReview">
+<div class="admin-editor-grid">
+<label>Status<select id="contentEditStatus"><option value="draft">Draft</option><option value="review">Ready for review</option><option value="published">Published</option><option value="archived">Archived</option></select></label>
+<label>Version<input id="contentEditVersion" min="1" type="number" value="1"/></label>
+<label class="admin-wide">Editor notes<textarea id="contentEditNotes" maxlength="1500"></textarea></label>
+</div>
+<div class="content-editor-note"><b>Publishing protection.</b><p>New content should move Draft → Review → Published. The Content Studio keeps prior versions in the revision history.</p></div>
+</div>
+<div class="approved-settings-footer">
+<button class="approved-link hidden" id="contentEditorArchive">Archive</button>
+<span class="approved-setting-note" id="contentEditorMsg"></span>
+<button class="approved-small-action" id="contentEditorSave">Save Content</button>
+</div>
+</div>
+</div>
+
+<div class="admin-overlay hidden" id="contentStageEditor">
+<div class="admin-editor-card">
+<div class="admin-editor-head">
+<div><span class="approved-kicker">JOURNEY STAGE</span><h3 id="stageEditorTitle">New Stage</h3></div>
+<button class="approved-link" id="stageEditorClose">Close</button>
+</div>
+<div class="admin-editor-grid">
+<label>Stage key<input id="stageEditKey" maxlength="100" placeholder="example: stabilize"/></label>
+<label>Stage name<input id="stageEditName" maxlength="120"/></label>
+<label>Sequence<input id="stageEditSequence" min="1" type="number" value="1"/></label>
+<label>Start day<input id="stageEditStartDay" min="1" type="number"/></label>
+<label>End day<input id="stageEditEndDay" min="1" type="number"/></label>
+<label>Status<select id="stageEditStatus"><option value="draft">Draft</option><option value="review">Review</option><option value="published">Published</option><option value="archived">Archived</option></select></label>
+<label class="admin-wide">Description<textarea id="stageEditDescription" maxlength="1000"></textarea></label>
+</div>
+<div class="approved-settings-footer">
+<span class="approved-setting-note" id="stageEditorMsg"></span>
+<button class="approved-small-action" id="stageEditorSave">Save Stage</button>
+</div>
+</div>
+</div>
+<script src="/content-studio.js"></script></body>
 </html>
