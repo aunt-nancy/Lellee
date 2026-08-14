@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Lellee | My Lellee</title>
+  <meta name="theme-color" content="#f7f3fb">
+  <link rel="stylesheet" href="/master-app.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <div id="authGate" class="auth-gate">
+    <div class="auth-card">
+      <img src="/lellee-approved-logo-final.jpg" alt="Lellee" class="auth-logo">
+      <span class="eyebrow">WELCOME TO LELLEE</span>
+      <h1 id="authTitle">Log in to continue your journey.</h1>
+      <p id="authCopy">Your Lellee account keeps your support paths, tools and progress together.</p>
+      <form id="authForm">
+        <label>Email<input id="authEmail" type="email" autocomplete="email" required></label>
+        <label>Password<input id="authPassword" type="password" autocomplete="current-password" minlength="6" required></label>
+        <button class="primary" id="authSubmit" type="submit">Log In</button>
+      </form>
+      <p id="authMsg" class="auth-msg"></p>
+      <button class="text-button" id="authToggle" type="button">Create an account</button>
+      <a class="back-home" href="/">← Back to Lellee</a>
+    </div>
+  </div>
+
+  <header class="app-header">
+    <a href="/app" class="brand"><img src="/lellee-approved-logo-final.jpg" alt="Lellee"></a>
+    <nav>
+      <button class="nav-item active" data-section="home">Home</button>
+      <button class="nav-item" data-section="journeys">My Journeys</button>
+      <button class="nav-item" data-section="tools">Tools</button>
+      <button class="nav-item" data-section="support">Support</button>
+    </nav>
+    <div class="header-actions">
+      <span id="userHello">Welcome</span>
+      <button class="outline-button" id="signOutBtn">Log Out</button>
+    </div>
+  </header>
+
+  <main id="main" class="app-shell">
+    <section id="section-home" class="app-section active">
+      <div class="welcome-grid">
+        <article class="welcome-card">
+          <span class="eyebrow">MY LELLEE</span>
+          <h1 id="welcomeTitle">Your support, in one place.</h1>
+          <p id="welcomeCopy">Start with what matters today. Your Lellee can grow as your needs change.</p>
+          <div class="welcome-actions">
+            <a href="/" class="primary">Start / Update My Journey</a>
+            <button class="secondary" data-section-jump="journeys">View My Journeys</button>
+          </div>
+        </article>
+
+        <aside class="today-card">
+          <span class="card-label">TODAY</span>
+          <h2>What would help right now?</h2>
+          <div class="today-actions">
+            <button data-section-jump="journeys"><span class="tile-purple">✦</span><b>My Journey</b><small>Continue where you left off</small></button>
+            <button data-section-jump="tools"><span class="tile-blue">▣</span><b>Tools</b><small>Use something practical</small></button>
+            <button data-section-jump="support"><span class="tile-green">♡</span><b>Support</b><small>Find people or resources</small></button>
+          </div>
+        </aside>
+      </div>
+
+      <section id="recommendationPanel" class="recommendation-panel hidden">
+        <div class="recommendation-color"></div>
+        <div>
+          <span class="card-label">YOUR STARTING POINT</span>
+          <h2 id="recommendationLabel">Recommended Path</h2>
+          <p id="recommendationReason">Based on the answers you gave before logging in.</p>
+          <div class="recommendation-actions">
+            <button class="primary" id="acceptRecommendation">Use This Starting Point</button>
+            <a class="secondary" href="/">Review My Answers</a>
+          </div>
+          <p id="recommendationMsg" class="small-msg"></p>
+        </div>
+      </section>
+
+      <section class="color-block-section">
+        <div class="section-heading">
+          <div><span class="eyebrow">YOUR LELLEE</span><h2>Keep the important pieces connected.</h2></div>
+          <button class="text-button" data-section-jump="journeys">See all →</button>
+        </div>
+        <div class="home-blocks">
+          <button class="home-block block-lavender" data-section-jump="journeys"><span>✦</span><b>Journeys</b><small>Your current and connected support paths</small></button>
+          <button class="home-block block-green" data-section-jump="tools"><span>✓</span><b>Daily Tools</b><small>Small practical actions for real life</small></button>
+          <button class="home-block block-orange" data-section-jump="support"><span>⌂</span><b>Resources</b><small>Find practical support when you need it</small></button>
+          <button class="home-block block-pink" data-section-jump="support"><span>♡</span><b>Coaching</b><small>Optional accountability and human support</small></button>
+        </div>
+      </section>
+    </section>
+
+    <section id="section-journeys" class="app-section">
+      <div class="section-page-heading">
+        <span class="eyebrow">MY JOURNEYS</span>
+        <h1>Support that can change as life changes.</h1>
+        <p>Your active program and any support paths you chose are shown here. Lellee does not automatically switch your program.</p>
+      </div>
+      <div id="activeJourneyGrid" class="journey-grid">
+        <div class="loading-card">Loading your Lellee journeys…</div>
+      </div>
+      <div class="browse-box">
+        <div><b>Need something different?</b><p>Return to Start Your Journey and update what would help now.</p></div>
+        <a class="secondary" href="/">Explore Support Paths</a>
+      </div>
+    </section>
+
+    <section id="section-tools" class="app-section">
+      <div class="section-page-heading">
+        <span class="eyebrow">TOOLS</span>
+        <h1>Practical help between the big moments.</h1>
+        <p>Some tools are shared across Lellee. Program-specific tools appear inside the program experience.</p>
+      </div>
+      <div class="tool-grid">
+        <a class="tool-block block-lavender" href="/app/recovery"><span>▧</span><b>Journal & Reflection</b><small>Open your current program tools</small></a>
+        <a class="tool-block block-blue" href="/app/recovery"><span>◎</span><b>Goals & Planning</b><small>Organize a next step</small></a>
+        <button class="tool-block block-green" data-section-jump="support"><span>♡</span><b>Support & Resources</b><small>Find practical help</small></button>
+        <a class="tool-block block-orange" href="/"><span>✦</span><b>Revisit My Needs</b><small>Update your Lellee starting point</small></a>
+      </div>
+    </section>
+
+    <section id="section-support" class="app-section">
+      <div class="section-page-heading">
+        <span class="eyebrow">SUPPORT</span>
+        <h1>You can add support without giving up control.</h1>
+        <p>Resources, community and coaching can complement your Lellee journey. Private journal and safety information are not automatically shared.</p>
+      </div>
+      <div class="support-grid">
+        <article class="support-block block-green"><span>⌂</span><h2>Resources</h2><p>Browse practical service and support options.</p><a class="secondary" href="/resources">Explore Resources</a></article>
+        <article class="support-block block-pink"><span>♡</span><h2>Coaching</h2><p>Coach matching and coach cards are part of the Lellee architecture and remain controlled until public marketplace launch.</p><button class="secondary" disabled>Marketplace Coming Later</button></article>
+        <article class="support-block block-lavender"><span>◎</span><h2>My Support Paths</h2><p>Review the areas you selected through Start Your Journey.</p><button class="secondary" data-section-jump="journeys">View My Journeys</button></article>
+      </div>
+    </section>
+  </main>
+
+  <script src="/master-app.js"></script>
+</body>
+</html>
