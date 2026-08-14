@@ -10,11 +10,11 @@
     },
     {
       "source": "/app/recovery",
-      "destination": "/index.html"
+      "destination": "/recovery.html"
     },
     {
       "source": "/((?!.*\\.).*)",
-      "destination": "/recovery.html"
+      "destination": "/index.html"
     }
   ],
   "headers": [
