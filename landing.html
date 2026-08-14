@@ -10,6 +10,40 @@
   <meta name="theme-color" content="#f7f3fb">
   <link rel="stylesheet" href="/master-landing.css">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style id="lellee-homepage-size-tuning">
+    /* Homepage size tuning requested 2026-08-14.
+       Desktop only so mobile layout remains untouched. */
+    @media (min-width: 981px) {
+      /* Make the approved Lellee logo more prominent in the top-left header. */
+      .topbar .brand {
+        overflow: visible !important;
+        width: 150px !important;
+        min-width: 150px !important;
+      }
+      .topbar .brand img {
+        width: 100% !important;
+        height: auto !important;
+        object-fit: contain !important;
+        transform: scale(1.22) !important;
+        transform-origin: left center !important;
+      }
+
+      /* Make the main Welcome to Lellee card about 20% narrower. */
+      .hero-panel {
+        width: 80% !important;
+        max-width: 80% !important;
+        justify-self: start !important;
+      }
+
+      /* Make the Your Lellee Journey card 15% wider, growing toward the left. */
+      .journey-panel {
+        width: 115% !important;
+        max-width: 115% !important;
+        justify-self: end !important;
+      }
+    }
+  </style>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to main content</a>
