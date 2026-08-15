@@ -1,16 +1,12 @@
 {
   "rewrites": [
     {
-      "source": "/",
-      "destination": "/landing.html"
+      "source": "/app/recovery",
+      "destination": "/recovery.html"
     },
     {
       "source": "/app",
       "destination": "/home.html"
-    },
-    {
-      "source": "/app/recovery",
-      "destination": "/recovery.html"
     },
     {
       "source": "/((?!.*\\.).*)",
@@ -28,11 +24,20 @@
       ]
     },
     {
-      "source": "/home.html",
+      "source": "/master-landing.js",
       "headers": [
         {
           "key": "Cache-Control",
-          "value": "no-cache, no-store, must-revalidate"
+          "value": "no-cache"
+        }
+      ]
+    },
+    {
+      "source": "/master-landing.css",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache"
         }
       ]
     }

@@ -146,65 +146,73 @@ textarea{width:100%;border:1px solid #ddd4e5;border-radius:12px;padding:13px;col
 }
 
 /* =========================================================
-   LELLEE HOMEPAGE CARD BALANCE — 2026-08-14
-   Desktop:
-   - Welcome and Your Lellee Journey cards render at the same height
-   - Journey card is wider and less tall
-   - Welcome card is taller than the previous reduced version
-   - Small Welcome-card text is easier to read
+   LELLEE BUILD 1 — PUBLIC JOURNEY, ROUTING & ACCOUNT CREATION
+   Uses the approved color-block layout. No transforms are used to
+   force card size; the two hero cards share a true grid-row height.
    ========================================================= */
-@media (min-width:1121px){
-  .hero-layout{
-    grid-template-columns:minmax(0,846px) minmax(0,430px);
-    justify-content:center;
-    align-items:start;
-    gap:16px;
-    padding-bottom:70px;
-  }
+.sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+.language-control{display:flex;align-items:center}
+.language-control select{border:1px solid #d8cee7;background:#fff;color:#3e3159;border-radius:9px;padding:9px 10px;font-size:.78rem;font-weight:750}
 
-  /* Welcome card: increased from the prior 80% size to 95%. */
-  .hero-panel{
-    min-width:0;
-    width:105.2631579%;
-    transform:scale(.95);
-    transform-origin:top left;
-  }
+@media(min-width:1121px){
+  .topbar-inner{height:124px}
+  .brand{width:290px;height:112px;overflow:hidden;flex:0 0 290px}
+  .brand img{width:100%;height:100%;object-fit:contain;transform:none}
+  .hero-layout{grid-template-columns:minmax(0,1fr) minmax(420px,440px);align-items:stretch}
+  .hero-panel,.journey-panel{min-height:448px;height:100%}
+  .journey-panel{display:flex;flex-direction:column}
+  .journey-step{flex:1}
+  .hero-kicker{font-size:.86rem}
+  .hero-content>p:not(.hero-note){font-size:1.10rem;line-height:1.55}
+  .hero-note{font-size:.84rem!important}
+}
 
-  /* Journey card: widened while reducing its prior 115% height. */
-  .journey-panel{
-    min-width:0;
-    width:90.9090909%;
-    transform:scale(1.10);
-    transform-origin:top left;
-  }
+.survey-field{display:grid;gap:7px;margin:15px 0;color:#4f465a;font-size:.78rem;font-weight:800}
+.survey-field>small{font-size:.68rem;line-height:1.45;color:#77707d;font-weight:500}
+.survey-field input,.survey-field select,.path-intake-fields input,.path-intake-fields select{
+  width:100%;border:1px solid #ddd4e5;border-radius:10px;background:#fff;color:#30294b;padding:12px 13px;font-size:.9rem
+}
+.survey-field input:focus,.survey-field select:focus,.path-intake-fields input:focus,.path-intake-fields select:focus{outline:3px solid rgba(91,47,160,.14);border-color:#8c6ab8}
+.voice-field{display:grid;grid-template-columns:1fr 44px;gap:8px;align-items:start}
+.voice-field textarea{min-width:0;margin:0}
+.voice-button{width:44px;height:44px;border-radius:10px;border:1px solid #d8cce4;background:#f7f2fb;color:#5b3598;font-size:1.15rem;display:grid;place-items:center}
+.voice-button.listening{background:#5b3598;color:#fff;box-shadow:0 0 0 4px rgba(91,53,152,.12)}
+.voice-status{position:sticky;bottom:8px;margin-top:10px;padding:9px 11px;border-radius:9px;background:#2f2640;color:#fff;font-size:.72rem}
+.selected-path-summary{display:flex;justify-content:space-between;gap:14px;align-items:center;background:linear-gradient(135deg,#f0e9f8,#fff1f6);border:1px solid #ddcfe8;border-radius:12px;padding:13px 15px;margin:14px 0}
+.selected-path-summary small{font-size:.59rem;letter-spacing:.09em;color:#6d4aa4;font-weight:900}.selected-path-summary b{color:#2b2164}
+.auth-mode-tabs{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:15px 0}
+.auth-mode-tabs button{border:1px solid #ddd4e5;background:#fff;border-radius:9px;padding:10px;font-size:.76rem;font-weight:850;color:#5a4b68}
+.auth-mode-tabs button.active{background:#5b3598;color:#fff;border-color:#5b3598}
+.account-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
+.account-grid .survey-field:first-child{grid-column:1/-1}
+.path-intake{border:1px solid #e4dce9;border-radius:13px;background:#fbf9fc;padding:14px;margin:16px 0}
+.path-intake-head{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:7px}
+.path-intake-head b{font-size:.78rem;color:#33285a}.path-intake-head small{font-size:.64rem;color:#77707d}
+.path-intake-fields{display:grid;grid-template-columns:1fr 1fr;gap:0 11px}
+.intake-field{display:grid;gap:6px;margin:10px 0;font-size:.72rem;font-weight:800;color:#554e5b}
+.intake-other{margin-top:7px}
+.account-legal{display:grid;gap:8px;margin:14px 0;padding:12px 13px;border-radius:11px;background:#f7f5f8;border:1px solid #e8e3eb}
+.account-legal label{display:flex;align-items:flex-start;gap:8px;font-size:.68rem;line-height:1.45;color:#625b68}
+.account-legal input{margin-top:3px}
+.account-legal a{color:#5b3598;font-weight:800}
+.account-actions{margin-top:18px}
+.account-actions .primary-button{min-width:210px}
+.journey-dialog:has([data-step="account"]:not(.hidden)){width:min(820px,calc(100% - 28px))}
+.journey-dialog:has([data-step="need"]:not(.hidden)),.journey-dialog:has([data-step="context"]:not(.hidden)){width:min(690px,calc(100% - 28px))}
 
-  /* Keep the three approved headline lines intact. */
-  .hero-content{
-    width:52%;
-  }
-  .hero-content h1{
-    white-space:nowrap;
-  }
-
-  /* Preserve the approved 25% proportional header-logo enlargement. */
-  .brand{
-    overflow:visible;
-    position:relative;
-    z-index:2;
-  }
-  .brand img{
-    transform:scale(1.25);
-    transform-origin:left center;
-  }
-
-  /* Improve the smaller Welcome-card wording. */
-  .hero-kicker{
-    font-size:.86rem;
-  }
-  .hero-content>p:not(.hero-note){
-    font-size:1.10rem;
-  }
-  .hero-note{
-    font-size:.86rem!important;
-  }
+@media(max-width:1280px){
+  .site-nav{display:none;position:absolute;left:14px;right:14px;top:112px;background:#fff;border:1px solid #e6deeb;border-radius:14px;padding:14px;box-shadow:0 15px 40px rgba(38,26,60,.14);flex-direction:column;align-items:stretch}
+  .site-nav.open{display:flex}.menu-toggle{display:block}.nav-cta{width:100%}.language-control select{width:100%}
+}
+@media(max-width:1120px){
+  .topbar-inner{height:96px}.brand{width:250px;height:88px}
+  .hero-panel,.journey-panel{height:auto}
+}
+@media(max-width:650px){
+  .topbar-inner{height:82px}.brand{width:205px;height:74px}
+  .account-grid,.path-intake-fields{grid-template-columns:1fr}
+  .account-grid .survey-field:first-child{grid-column:auto}
+  .voice-field{grid-template-columns:1fr 42px}
+  .dialog-shell{padding:26px 18px}
+  .survey-step h2{font-size:1.75rem}
 }
