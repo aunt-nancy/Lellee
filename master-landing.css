@@ -146,39 +146,47 @@ textarea{width:100%;border:1px solid #ddd4e5;border-radius:12px;padding:13px;col
 }
 
 /* =========================================================
-   LELLEE HOMEPAGE EXACT PROPORTIONAL SIZE TUNING
-   Desktop only:
-   - Welcome card: 20% smaller in width and height
-   - Your Lellee Journey card: 15% larger in width and height
-   - Header Lellee logo artwork: 25% larger in width and height
+   LELLEE HOMEPAGE CARD BALANCE — 2026-08-14
+   Desktop:
+   - Welcome and Your Lellee Journey cards render at the same height
+   - Journey card is wider and less tall
+   - Welcome card is taller than the previous reduced version
+   - Small Welcome-card text is easier to read
    ========================================================= */
 @media (min-width:1121px){
   .hero-layout{
-    grid-template-columns:minmax(0,calc(80% - 276.8px)) 379.5px;
+    grid-template-columns:minmax(0,846px) minmax(0,430px);
     justify-content:center;
+    align-items:start;
     gap:16px;
-    padding-bottom:85px;
+    padding-bottom:70px;
   }
 
-  /* Preserve the welcome card's original internal proportions and
-     scale the whole card equally in both directions. */
+  /* Welcome card: increased from the prior 80% size to 95%. */
   .hero-panel{
     min-width:0;
-    width:125%;
-    transform:scale(.80);
+    width:105.2631579%;
+    transform:scale(.95);
     transform-origin:top left;
   }
 
-  /* Preserve the journey card's original internal proportions and
-     scale the whole card equally in both directions. */
+  /* Journey card: widened while reducing its prior 115% height. */
   .journey-panel{
     min-width:0;
-    width:86.95652174%;
-    transform:scale(1.15);
+    width:90.9090909%;
+    transform:scale(1.10);
     transform-origin:top left;
   }
 
-  /* Enlarge the actual logo artwork rather than only its container. */
+  /* Keep the three approved headline lines intact. */
+  .hero-content{
+    width:52%;
+  }
+  .hero-content h1{
+    white-space:nowrap;
+  }
+
+  /* Preserve the approved 25% proportional header-logo enlargement. */
   .brand{
     overflow:visible;
     position:relative;
@@ -187,5 +195,16 @@ textarea{width:100%;border:1px solid #ddd4e5;border-radius:12px;padding:13px;col
   .brand img{
     transform:scale(1.25);
     transform-origin:left center;
+  }
+
+  /* Improve the smaller Welcome-card wording. */
+  .hero-kicker{
+    font-size:.86rem;
+  }
+  .hero-content>p:not(.hero-note){
+    font-size:1.10rem;
+  }
+  .hero-note{
+    font-size:.86rem!important;
   }
 }
