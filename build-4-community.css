@@ -1,0 +1,34 @@
+/* LELLEE BUILD 4 — COMMUNITY, COMMUNICATIONS & MEMBERSHIP */
+.b4-toast{position:fixed;right:18px;bottom:18px;z-index:13000;max-width:360px;padding:11px 14px;border-radius:10px;background:#2f2637;color:#fff;font-size:.76rem;box-shadow:0 14px 38px rgba(25,20,36,.22)}
+.b4-toast.error{background:#813c45}
+.b4-row-actions{display:flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.b4-row-actions button{border:1px solid #e2dce5;background:#fff;border-radius:7px;padding:6px 8px;color:#5e4b70;font-size:.67rem;font-weight:800}
+.b4-row-actions button.danger{color:#8a3948;border-color:#eed2d8}
+.b4-primary-badge,.b4-status-badge{display:inline-flex;align-items:center;border-radius:999px;padding:3px 7px;margin-left:6px;font-size:.57rem;font-weight:850;background:#eee7f4;color:#65409a}
+.b4-support-meta,.b4-meeting-meta{display:flex;flex-wrap:wrap;gap:7px;margin-top:4px;color:#6e6872;font-size:.68rem}
+.b4-support-meta a{color:#65409a;text-decoration:none}
+.b4-other-field.hidden,.b4-hidden{display:none!important}
+.b4-form-note{font-size:.66rem;line-height:1.45;color:#77717a;margin:8px 0 0}
+
+.b4-group-section{margin:14px 0;border:1px solid #e4dfe7;border-radius:13px;background:linear-gradient(145deg,#faf8fc,#fffdf9);padding:17px}
+.b4-group-head{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;margin-bottom:12px}
+.b4-group-head h3{margin:4px 0 4px;font-size:1rem}.b4-group-head p{margin:0;color:#726c75;font-size:.73rem;line-height:1.5;max-width:720px}
+.b4-group-limit{background:#eee7f4;color:#65409a;border-radius:999px;padding:6px 9px;font-size:.61rem;font-weight:850;white-space:nowrap}
+.b4-group-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.b4-group-card{border:1px solid #e4dfe7;border-radius:11px;background:#fff;padding:15px;display:flex;flex-direction:column;min-height:190px}
+.b4-group-card.primary{background:linear-gradient(145deg,#f4eff8,#fff);border-color:#d8c9e3}
+.b4-group-card.locked{background:#faf9fb;color:#777}
+.b4-group-card .top{display:flex;justify-content:space-between;gap:8px;align-items:center}.b4-group-card .top span{font-size:.58rem;letter-spacing:.08em;font-weight:850;text-transform:uppercase;color:#65409a}.b4-group-card h4{margin:8px 0 6px;font-size:.86rem}.b4-group-card p{margin:0 0 10px;color:#716b74;font-size:.69rem;line-height:1.5}.b4-group-card small{font-size:.61rem;color:#7f7782}.b4-group-card button{margin-top:auto;align-self:flex-start;border:0;background:#65409a;color:#fff;border-radius:7px;padding:8px 11px;font-size:.67rem;font-weight:850}.b4-group-card.locked button{background:#fff;color:#65409a;border:1px solid #d9cde2}
+
+.b4-calendar-meetings{margin:14px 0;border:1px solid #e6e1e8;border-radius:11px;background:#fff;padding:15px}
+.b4-calendar-meetings h3{font-size:.8rem;margin:4px 0 10px}.b4-calendar-list{display:grid;gap:8px}.b4-calendar-row{display:grid;grid-template-columns:46px 1fr auto;gap:10px;align-items:center;border-top:1px solid #eeeaf0;padding-top:8px}.b4-calendar-row:first-child{border-top:0;padding-top:0}.b4-calendar-date{width:42px;height:42px;border-radius:9px;background:#eee8f4;color:#65409a;display:grid;place-items:center;text-align:center;font-size:.58rem;font-weight:850}.b4-calendar-row b{display:block;font-size:.71rem}.b4-calendar-row small{font-size:.61rem;color:#777}
+
+.b4-inbox-row{width:100%;border:1px solid #e6e2e7;background:#fff;border-radius:10px;padding:13px 14px;display:grid;grid-template-columns:32px 1fr auto;gap:10px;text-align:left;align-items:start}.b4-inbox-row.unread{background:#f8f4fb;border-color:#d9cce4}.b4-inbox-icon{width:30px;height:30px;border-radius:8px;background:#eee7f4;color:#65409a;display:grid;place-items:center}.b4-inbox-row b{display:block;font-size:.73rem}.b4-inbox-row p{font-size:.65rem;line-height:1.45;color:#706a74;margin:4px 0}.b4-inbox-row small{font-size:.57rem;color:#87808a}.b4-inbox-dot{width:8px;height:8px;border-radius:50%;background:#65409a;margin-top:7px}
+
+.b4-membership-catalog{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:13px 0}
+.b4-membership-card{border:1px solid #e4dfe6;border-radius:11px;background:#fff;padding:16px;display:flex;flex-direction:column;min-height:200px}.b4-membership-card.featured{background:linear-gradient(145deg,#f3edf7,#fffaf4);border-color:#d8c8e2}.b4-membership-card span{font-size:.56rem;letter-spacing:.09em;font-weight:850;color:#65409a;text-transform:uppercase}.b4-membership-card h3{font-size:.87rem;margin:7px 0 4px}.b4-membership-price{font-size:1.35rem;color:#3e3150;font-weight:850}.b4-membership-card p{font-size:.66rem;line-height:1.5;color:#706b74}.b4-membership-card ul{padding-left:17px;margin:7px 0 0;color:#625d65;font-size:.63rem;line-height:1.55}.b4-addons{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;border-top:1px solid #e9e4ea;padding-top:10px}.b4-addon{background:#faf9fb;border:1px solid #e8e3e9;border-radius:9px;padding:11px}.b4-addon b{display:block;font-size:.7rem}.b4-addon small{font-size:.61rem;color:#777}
+
+.b4-empty{border:1px dashed #ddd6e1;border-radius:9px;padding:14px;background:#faf8fb;color:#777;font-size:.69rem}
+
+@media(max-width:900px){.b4-membership-catalog{grid-template-columns:1fr}.b4-addons{grid-template-columns:1fr}.b4-group-grid{grid-template-columns:1fr}}
+@media(max-width:820px){.b4-row-actions{grid-column:2;justify-content:flex-start}.b4-calendar-row{grid-template-columns:42px 1fr}.b4-calendar-row>.b4-row-actions{grid-column:2}.b4-group-head{display:block}.b4-group-limit{display:inline-flex;margin-top:8px}.b4-inbox-row{grid-template-columns:30px 1fr}.b4-inbox-row>.b4-inbox-dot{display:none}}

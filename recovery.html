@@ -1044,6 +1044,7 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <link href="/legal-privacy-safety.css" rel="stylesheet"/><link href="/program-coach-core.css" rel="stylesheet"/><link href="/program-builder.css" rel="stylesheet"/><link href="/coach-marketplace.css" rel="stylesheet"/><link href="/inbox-reminders.css" rel="stylesheet"/><link href="/welcome-router.css" rel="stylesheet"/><link href="/organization-licensing.css" rel="stylesheet"/><link href="/life-admin-core.css" rel="stylesheet"/><link href="/resource-navigation.css" rel="stylesheet"/><link href="/progress-core.css" rel="stylesheet"/><link href="/content-studio.css" rel="stylesheet"/><link href="/safety-privacy-core.css" rel="stylesheet"/><link href="/pilot-runtime.css" rel="stylesheet"/><link href="/analytics-insights.css" rel="stylesheet"/><link href="/platform-integration.css" rel="stylesheet"/><link href="/commerce-ops.css" rel="stylesheet"/><link href="/scheduling-crm.css" rel="stylesheet"/><link href="/trust-support.css" rel="stylesheet"/><link href="/automation-workflows.css" rel="stylesheet"/><link href="/personalization-experience.css" rel="stylesheet"/><link href="/release-reliability.css" rel="stylesheet"/><link href="/security-continuity.css" rel="stylesheet"/><link href="/integrations-interop.css" rel="stylesheet"/><link href="/community-peer.css" rel="stylesheet"/><link href="/forms-credentials.css" rel="stylesheet"/><link href="/staff-operations.css" rel="stylesheet"/><link href="/trusted-circle.css" rel="stylesheet"/><link href="/onboarding-help.css" rel="stylesheet"/><link href="/partner-provider-network.css" rel="stylesheet"/><link href="/communications-lifecycle.css" rel="stylesheet"/><link href="/platform-integrity.css" rel="stylesheet"/><link href="/agent-operations.css" rel="stylesheet"/><link href="/growth-partnerships.css" rel="stylesheet"/><link href="/contracts-procurement.css" rel="stylesheet"/><link href="/customer-success.css" rel="stylesheet"/><link href="/finance-revenue-ops.css" rel="stylesheet"/><link href="/executive-intelligence.css" rel="stylesheet"/><link href="/data-governance.css" rel="stylesheet"/><link href="/product-discovery.css" rel="stylesheet"/><link href="/universal-search.css" rel="stylesheet"/><link href="/physical-commerce.css" rel="stylesheet"/><link href="/supply-chain.css" rel="stylesheet"/><link href="/apple-touch-icon.png" rel="apple-touch-icon"/><link href="/pwa.css" rel="stylesheet"/><link href="/search-coverage.css" rel="stylesheet"/><link href="/story-archive.css" rel="stylesheet"/><link href="/personal-plan.css" rel="stylesheet"/><link href="/journal-companion.css" rel="stylesheet"/><link href="/return-path.css" rel="stylesheet"/><link href="/stability-map.css" rel="stylesheet"/><link href="/long-term-maintenance.css" rel="stylesheet"/><link href="/recovery-completion.css" rel="stylesheet"/><link href="/release-candidate.css" rel="stylesheet"/>
 <link href="/build-2-shell.css" rel="stylesheet"/>
 <link href="/build-3-guidance.css" rel="stylesheet"/>
+<link href="/build-4-community.css" rel="stylesheet"/>
 </head>
 <body><a class="skip-link" href="#mainContent">Skip to main content</a><a class="lellee-skip" href="#lelleeMain">Skip to main content</a>
 <div class="prod-overlay hidden" id="onboardingOverlay">
@@ -2373,7 +2374,7 @@ Includes the approved Lellee consumer experience from early recovery through lif
 </div>
 <div class="approved-planner-form hidden" id="supportForm">
 <div class="approved-planner-head"><b>Add support person</b><button class="approved-link" id="closeSupportForm">Close</button></div>
-<div class="approved-field-row"><label>Name<input id="supportName"/></label><label>Relationship<input id="supportRelationship" placeholder="Sponsor, sister, counselor..."/></label></div>
+<div class="approved-field-row"><label>Name<input id="supportName"/></label><label>Relationship<select id="supportRelationship"><option value="friend">Friend</option><option value="family_member">Family Member</option><option value="sponsor">Sponsor</option><option value="lellee_coach">Lellee Coach</option><option value="counselor_therapist">Counselor / Therapist</option><option value="peer_support">Peer Support</option><option value="case_manager">Case Manager</option><option value="faith_spiritual">Faith / Spiritual Support</option><option value="other">Other</option></select><input class="b4-other-field hidden" id="supportRelationshipOther" placeholder="Describe the relationship"/></label></div>
 <div class="approved-field-row"><label>Phone<input id="supportPhone" type="tel"/></label><label>Email<input id="supportEmail" type="email"/></label></div>
 <label><input id="supportPrimary" type="checkbox"/> Primary support person</label>
 <button class="approved-small-action" id="saveSupportPerson">Save Person</button>
@@ -2858,17 +2859,17 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <div class="approved-inner">
 <div class="approved-inner-head">
 <div><span class="approved-kicker">LELLEE PLUS</span><h2>More reflection and convenience—not more access to safety</h2><p>Core recovery support stays free. Plus adds deeper summaries, archive tools, customization, and Recovery Story extras.</p></div>
-<div class="plus-price-pill"><span id="plusPriceMonthly">$3.99</span><small>/ month</small></div>
+<div class="plus-price-pill"><span id="plusPriceMonthly">TBD</span><small>price pending</small></div>
 </div>
 <div class="plus-hero">
 <div class="plus-hero-copy"><span class="approved-kicker">OPTIONAL MEMBERSHIP</span><h3>Keep the core free. Pay only for the extras.</h3><p>Lellee Plus is designed around preservation, convenience, customization, and a deeper look at your own recovery history.</p><div class="plus-plan-row">
 <label>Choose billing
             <select id="plusPlanChoice">
-<option value="monthly">Monthly — $3.99</option>
-<option value="annual">Annual — $39.99</option>
+<option value="monthly">Monthly — price at launch</option>
+<option value="annual">Annual — price at launch</option>
 </select>
 </label>
-<small>Cancel/manage billing through Stripe's secure customer portal.</small>
+<small>Billing remains off until the final Plus price and Stripe launch are approved.</small>
 </div>
 <div class="plus-hero-actions">
 <button class="approved-small-action" id="startPlusMembership">Start Lellee Plus</button>
@@ -2887,7 +2888,7 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <article class="plus-feature-link" data-page="reminders-plus"><span class="plus-feature-icon">◷</span><small>REMINDERS+</small><h3>Custom Reminder Sets</h3><p>Create more personalized recovery, meeting, journal, and milestone reminders.</p></article>
 <article><span class="plus-feature-icon">✦</span><small>PERSONALIZATION+</small><h3>Deeper “For You” Choices</h3><p>Use more of your own saved preferences and patterns to decide what Lellee surfaces first.</p></article>
 </div>
-<div class="plus-comparison hidden" id="plusComparison"><div class="plus-comparison-head"><div><span class="approved-kicker">FREE VS PLUS</span><h3>Core recovery stays free</h3></div><button class="approved-link" id="closePlusComparison">Close</button></div><div class="plus-comparison-grid"><div class="plus-compare-card"><span class="approved-kicker">LELLEE FREE</span><h3>$0</h3><ul><li>Today dashboard</li><li>Guided Recovery Journey</li><li>Help Me Right Now</li><li>Core recovery tools</li><li>Journal</li><li>Planner &amp; Support Network</li><li>Resources</li><li>Basic progress &amp; milestones</li></ul></div><div class="plus-compare-card featured"><span class="approved-kicker">LELLEE PLUS</span><h3><span id="plusComparePrice">$3.99</span><small>/mo</small></h3><ul><li>Everything in Free</li><li>Recovery Review+</li><li>Expanded Then &amp; Now</li><li>Advanced journal organization</li><li>Enhanced Recovery Story PDFs</li><li>More custom reminders</li><li>Deeper personalization</li><li>Potential physical-journal discounts</li></ul></div></div></div>
+<div class="plus-comparison hidden" id="plusComparison"><div class="plus-comparison-head"><div><span class="approved-kicker">FREE VS PLUS</span><h3>Core recovery stays free</h3></div><button class="approved-link" id="closePlusComparison">Close</button></div><div class="plus-comparison-grid"><div class="plus-compare-card"><span class="approved-kicker">LELLEE FREE</span><h3>$0</h3><ul><li>Today dashboard</li><li>Guided Recovery Journey</li><li>Help Me Right Now</li><li>Core recovery tools</li><li>Journal</li><li>Planner &amp; Support Network</li><li>Resources</li><li>Basic progress &amp; milestones</li></ul></div><div class="plus-compare-card featured"><span class="approved-kicker">LELLEE PLUS</span><h3><span id="plusComparePrice">TBD</span><small>/mo</small></h3><ul><li>Everything in Free</li><li>Recovery Review+</li><li>Expanded Then &amp; Now</li><li>Advanced journal organization</li><li>Enhanced Recovery Story PDFs</li><li>More custom reminders</li><li>Deeper personalization</li><li>Potential physical-journal discounts</li></ul></div></div></div>
 <div class="plus-boundary-note"><b>Free-core promise:</b> Plus never controls access to Help Me Right Now, core guided recovery, core coping tools, urgent safety information, or basic support/resource access.</div>
 </div>
 </section>
@@ -7162,10 +7163,9 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <dialog id="toolDialog"><div class="dialog-inner"><div class="dialog-head"><div><h2 id="toolTitle">Recovery Tool</h2><p class="subtle">A short, focused exercise.</p></div><button class="close-x" data-close-tool="">×</button></div><div id="toolBody"></div></div></dialog>
 <script>
 const STORAGE='lellee-v1-site';
-const localDateKey=(value=new Date())=>{const d=new Date(value);return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
-const todayKey=()=>localDateKey();
+const todayKey=()=>new Date().toISOString().slice(0,10);
 const defaultRecoveryDate=()=>{
-  const d=new Date(); d.setDate(d.getDate()-42); return localDateKey(d);
+  const d=new Date(); d.setDate(d.getDate()-42); return d.toISOString().slice(0,10);
 };
 const defaults={
   name:'Alex',
@@ -8028,5 +8028,6 @@ Transportation"></textarea></label>
 <script src="/trust-support.js"></script><script src="/automation-workflows.js"></script><script src="/personalization-experience.js"></script><script src="/release-reliability.js"></script><script src="/security-continuity.js"></script><script src="/integrations-interop.js"></script><script src="/community-peer.js"></script><script src="/forms-credentials.js"></script><script src="/staff-operations.js"></script><script src="/trusted-circle.js"></script><script src="/onboarding-help.js"></script><script src="/partner-provider-network.js"></script><script src="/communications-lifecycle.js"></script><script src="/platform-integrity.js"></script><script src="/agent-operations.js"></script><script src="/growth-partnerships.js"></script><script src="/contracts-procurement.js"></script><script src="/customer-success.js"></script><script src="/finance-revenue-ops.js"></script><script src="/executive-intelligence.js"></script><script src="/data-governance.js"></script><script src="/product-discovery.js"></script><script src="/universal-search.js"></script><script src="/physical-commerce.js"></script><script src="/supply-chain.js"></script><script src="/pwa-runtime.js"></script><script src="/search-coverage.js"></script><script src="/story-archive.js"></script><script src="/personal-plan.js"></script><script src="/journal-companion.js"></script><script src="/return-path.js"></script><script src="/stability-map.js"></script><script src="/long-term-maintenance.js"></script><script src="/recovery-completion.js"></script><script src="/release-candidate.js"></script>
 <script src="/build-2-shell.js"></script>
 <script src="/build-3-guidance.js"></script>
+<script src="/build-4-community.js"></script>
 </body>
 </html>
