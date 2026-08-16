@@ -1,6 +1,6 @@
 (() => {
   'use strict';
-  const VERSION='2026-08-15-r1';
+  const VERSION='2026-08-16-r2-stability';
   const $=(s,r=document)=>r.querySelector(s);
   const $$=(s,r=document)=>[...r.querySelectorAll(s)];
   const client=()=>window.sb||null;
@@ -133,7 +133,13 @@
       host.classList.add('b7-rendered');host.scrollIntoView({behavior:'smooth',block:'start'});toast('Story preview built');
     }catch(err){console.error(err);host.innerHTML=`<div class="b7-safe-state error">${esc(err.message||'The story preview could not be built.')}</div>`}
   }
-  function repairStory(){replaceButton('#buildStoryPreviewV2',()=>buildStorySafe());document.addEventListener('click',e=>{if(e.target.closest('#b7PrintStory'))window.print()},true)}
+  function repairStory(){
+    replaceButton('#buildStoryPreviewV2',()=>buildStorySafe());
+    if(document.documentElement.dataset.b7PrintWired!=='true'){
+      document.documentElement.dataset.b7PrintWired='true';
+      document.addEventListener('click',e=>{if(e.target.closest('#b7PrintStory'))window.print()},true);
+    }
+  }
 
   /* ---------- Lellee Plus Recovery Review routing ---------- */
   function repairRecoveryReview(){
@@ -219,8 +225,16 @@
   function repairDynamic(){if(queued)return;queued=true;requestAnimationFrame(()=>{queued=false;ensureSettingsNav();repairExpertPractices();repairLearning();repairJournal();repairThenNow();repairStory();repairRecoveryReview();repairLanguageButton();patchProfessionalCopy()})}
   function init(){
     ensureSettingsNav();repairExpertPractices();addProfessionalPromo();repairLearning();repairJournal();repairThenNow();repairStory();repairRecoveryReview();interceptSupportNetwork();repairLanguageButton();patchProfessionalCopy();repairRecoveryDay();restoreLanguage();
-    const content=$('.content');if(content)new MutationObserver(repairDynamic).observe(content,{childList:true,subtree:true});
+
+    // Stability fix: do NOT watch the entire Recovery content tree for child-list
+    // mutations. Several Lellee modules legitimately render content after clicks.
+    // A global observer that repairs that same content can feed back into those
+    // renders and starve normal navigation/click handling. Instead, refresh the
+    // small repair hooks after user navigation/actions complete.
+    document.addEventListener('click',()=>setTimeout(repairDynamic,80),false);
+    window.addEventListener('popstate',()=>setTimeout(repairDynamic,80));
     window.addEventListener('online',()=>toast('Back online'));
+    setTimeout(repairDynamic,250);
     console.info(`Lellee consolidated repair ${VERSION} loaded`);
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(init,60));else setTimeout(init,60);
