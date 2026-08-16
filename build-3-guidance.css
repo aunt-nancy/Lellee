@@ -1,0 +1,135 @@
+/* Lellee Build 3 — Guidance, Learning, Journal and Progress */
+
+:root{
+  --b3-purple:#65409a;
+  --b3-purple-dark:#4e326f;
+  --b3-lav:#f2edf7;
+  --b3-cream:#fffaf4;
+  --b3-line:#e4dfe7;
+  --b3-muted:#6f6874;
+  --b3-green:#2f8f56;
+}
+
+.b3-hidden{display:none!important}
+.b3-soft-note{font-size:.76rem;line-height:1.55;color:var(--b3-muted);margin:6px 0 0}
+.b3-status-pill{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:5px 9px;font-size:.68rem;font-weight:800;background:#eee8f4;color:var(--b3-purple-dark)}
+.b3-status-pill.completed{background:#eaf5ed;color:#2d7547}
+.b3-status-pill.saved{background:#f4eff8;color:#65409a}
+.b3-empty{border:1px dashed #dcd4e0;border-radius:10px;padding:18px;background:#fbf9fc;color:#716a76;font-size:.8rem;line-height:1.55}
+
+/* Journal Companion price and entitlement presentation */
+.b3-companion-banner{display:flex;justify-content:space-between;align-items:center;gap:20px;border:1px solid #ded4e6;background:linear-gradient(135deg,#f2ecf7,#fff9f2);border-radius:12px;padding:17px 19px;margin-bottom:13px}
+.b3-companion-banner h3{margin:3px 0 4px;font-size:1rem}
+.b3-companion-banner p{margin:0;color:#6f6874;font-size:.76rem;line-height:1.5}
+.b3-price-stack{text-align:right;white-space:nowrap}
+.b3-price-stack b{display:block;font-size:1.1rem;color:#4f3470}
+.b3-price-stack small{font-size:.67rem;color:#766e7a}
+.b3-companion-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:8px}
+.b3-companion-lock{border:1px solid #ded4e6;background:rgba(255,255,255,.92);border-radius:12px;padding:26px;text-align:center;margin:12px 0 18px}
+.b3-companion-lock h3{font-size:1.05rem;margin:8px 0 6px}
+.b3-companion-lock p{max-width:650px;margin:0 auto 15px;color:#6e6872;font-size:.78rem;line-height:1.55}
+.b3-lock-icon{width:44px;height:44px;margin:auto;border-radius:50%;display:grid;place-items:center;background:#eee7f4;color:#65409a;font-size:1.15rem}
+
+/* Journal history */
+#journalEntryCards.b3-entry-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.b3-journal-card{border:1px solid #e5e0e7;border-radius:10px;background:linear-gradient(180deg,#fff,#fdfcfd);padding:14px;min-height:175px;display:flex;flex-direction:column;gap:7px}
+.b3-journal-card-head{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+.b3-journal-card small{color:#7e7682;font-size:.66rem}
+.b3-journal-card h3{font-family:Georgia,"Times New Roman",serif;font-size:.94rem;font-weight:500;margin:2px 0}
+.b3-journal-card p{font-size:.74rem;line-height:1.55;color:#625c65;margin:0;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+.b3-journal-card .approved-link{margin-top:auto;align-self:flex-start}
+.b3-entry-tags{display:flex;gap:5px;flex-wrap:wrap}
+.b3-entry-tag{font-size:.61rem;border-radius:999px;background:#f1ecf5;color:#664b82;padding:4px 7px}
+.b3-entry-editor{display:grid;gap:10px}
+.b3-entry-editor input,.b3-entry-editor textarea{width:100%;border:1px solid #ddd7e0;border-radius:8px;background:#fffdfd;padding:11px;font-size:.82rem}
+.b3-entry-editor textarea{min-height:260px;line-height:1.65;resize:vertical}
+.b3-entry-edit-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:10px}
+
+/* Learning progress */
+.approved-learning-card.b3-completed{border-color:#cfe1d4!important;background:linear-gradient(180deg,#fbfefc,#f2f8f4)!important}
+.approved-learning-card.b3-saved{border-color:#ddd0e6!important}
+.b3-learning-card-status{margin:7px 0 2px}
+#markLearningComplete.b3-complete{background:#2f8f56!important}
+
+/* Recovery path details */
+.approved-path-grid button.b3-selected{background:#f0e9f6!important;border-color:#c8b6d5!important;box-shadow:inset 0 0 0 1px #c8b6d5}
+.b3-path-detail-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:14px;margin-top:10px}
+.b3-path-detail-grid h3{font-size:.92rem;margin:4px 0 7px}
+.b3-path-detail-grid p,.b3-path-detail-grid li{font-size:.75rem;line-height:1.55;color:#68616c}
+.b3-path-detail-grid ul{margin:7px 0 0;padding-left:18px}
+.b3-path-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+
+/* Expert-guided practices */
+.b3-practice-lead{border:1px solid #dfd6e5;background:linear-gradient(135deg,#f2ecf7,#fffaf4);border-radius:12px;padding:18px;margin-bottom:12px}
+.b3-practice-lead h3{font-size:1rem;margin:4px 0 5px}
+.b3-practice-lead p{font-size:.76rem;line-height:1.55;color:#6c6570;margin:0}
+.b3-practice-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.b3-practice-tier{border:1px solid #e2dce5;background:#fff;border-radius:11px;padding:16px;display:flex;flex-direction:column;min-height:245px}
+.b3-practice-tier[data-tier="plus"]{background:linear-gradient(180deg,#fbf8fd,#fff)}
+.b3-practice-tier[data-tier="premium"]{background:linear-gradient(180deg,#fff9f2,#fff)}
+.b3-practice-tier h3{font-size:.91rem;margin:8px 0 5px}
+.b3-practice-tier p{font-size:.73rem;line-height:1.5;color:#6d6670;margin:0 0 10px}
+.b3-practice-tier ul{margin:0 0 14px;padding-left:18px;display:grid;gap:7px}
+.b3-practice-tier li{font-size:.72rem;line-height:1.4;color:#5f5962}
+.b3-practice-tier button{margin-top:auto;align-self:flex-start}
+
+/* Search */
+.b3-search-result{display:grid;grid-template-columns:38px 1fr auto;gap:11px;align-items:center;border:1px solid #e4dfe6;background:#fff;border-radius:10px;padding:13px 14px;margin-top:8px}
+.b3-search-icon{width:36px;height:36px;border-radius:9px;display:grid;place-items:center;background:#f0eaf5;color:#65409a}
+.b3-search-result h3{font-size:.82rem;margin:0 0 3px}
+.b3-search-result p{font-size:.7rem;line-height:1.45;color:#736c77;margin:0}
+.b3-search-result small{font-size:.62rem;color:#765c8c;text-transform:uppercase;letter-spacing:.06em;font-weight:800}
+
+/* Goals */
+.b3-goal-dialog{width:min(650px,calc(100vw - 28px));border:0;border-radius:17px;padding:0;box-shadow:0 28px 90px rgba(18,14,29,.28)}
+.b3-goal-dialog::backdrop{background:rgba(19,15,31,.48);backdrop-filter:blur(4px)}
+.b3-goal-shell{padding:24px}
+.b3-goal-head{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;border-bottom:1px solid #ece7ed;padding-bottom:12px;margin-bottom:14px}
+.b3-goal-head h2{font-size:1.12rem;margin:3px 0}
+.b3-goal-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.b3-goal-grid label{display:grid;gap:6px;font-size:.72rem;font-weight:760;color:#57515c}
+.b3-goal-grid .b3-wide{grid-column:1/-1}
+.b3-goal-grid select,.b3-goal-grid input,.b3-goal-grid textarea{width:100%;border:1px solid #ded9e0;border-radius:8px;background:#fcfbfc;padding:10px 11px;font-size:.8rem}
+.b3-goal-grid textarea{min-height:90px;resize:vertical}
+.b3-goal-footer{display:flex;justify-content:flex-end;gap:8px;margin-top:15px}
+
+/* Milestones, Then & Now and story */
+#milestoneObservations .day2-choice.selected,#thenNowObservationChoices button.selected{background:#65409a!important;color:#fff!important;border-color:#65409a!important}
+.b3-comparison-card{border:1px solid #e2dce5;border-radius:11px;background:#fff;padding:18px}
+.b3-comparison-card h3{font-size:.86rem;margin:4px 0 7px}
+.b3-comparison-card blockquote{margin:0;border-left:3px solid #c8b5d6;padding:5px 0 5px 12px;font-family:Georgia,"Times New Roman",serif;font-size:.82rem;line-height:1.65;color:#544d56}
+.b3-comparison-date{font-size:.64rem;color:#817982;margin-bottom:8px}
+.b3-comparison-arrow{display:grid;place-items:center;color:#76569a;font-size:1.25rem}
+.b3-story-section{padding:16px 0;border-bottom:1px solid #eee7de}
+.b3-story-section:last-child{border-bottom:0}
+.b3-story-section h3{font-family:Georgia,"Times New Roman",serif;font-weight:500;font-size:1rem;margin:0 0 8px}
+.b3-story-section p,.b3-story-section li{font-family:Georgia,"Times New Roman",serif;font-size:.78rem;line-height:1.7;color:#514a51}
+.b3-story-section ul{padding-left:20px}
+.b3-story-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}
+
+/* Recovery review */
+.b3-evidence-row{display:grid;grid-template-columns:90px 1fr;gap:10px;border-bottom:1px solid #ece8ed;padding:9px 0}
+.b3-evidence-row:last-child{border-bottom:0}
+.b3-evidence-row small{font-size:.62rem;color:#7d7481}
+.b3-evidence-row b{display:block;font-size:.75rem;margin-bottom:2px}
+.b3-evidence-row span{font-size:.7rem;color:#6d6670;line-height:1.45}
+
+/* Improve the prototype wording area without changing crisis routing */
+#toolBody .b3-support-closing{margin-top:12px;padding-top:11px;border-top:1px solid #ece7ed;font-size:.72rem;color:#706976}
+
+@media(max-width:900px){
+  #journalEntryCards.b3-entry-grid{grid-template-columns:1fr 1fr}
+  .b3-practice-grid{grid-template-columns:1fr}
+  .b3-path-detail-grid{grid-template-columns:1fr}
+  .b3-companion-banner{align-items:flex-start}
+}
+@media(max-width:620px){
+  #journalEntryCards.b3-entry-grid{grid-template-columns:1fr}
+  .b3-companion-banner{display:block}
+  .b3-price-stack{text-align:left;margin-top:12px}
+  .b3-companion-actions{justify-content:flex-start}
+  .b3-search-result{grid-template-columns:34px 1fr}.b3-search-result>button{grid-column:2;justify-self:start}
+  .b3-goal-grid{grid-template-columns:1fr}.b3-goal-grid .b3-wide{grid-column:auto}
+}
+.plus-review-preview{cursor:pointer}
+#forYouRhythm>[role="button"]:focus-visible{outline:3px solid rgba(101,64,154,.35);outline-offset:3px}
