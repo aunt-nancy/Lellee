@@ -1,0 +1,127 @@
+/* Lellee Build 5 — W-2 Coach Workforce, Independent Business and Training */
+:root{
+  --b5-navy:#0d1029;
+  --b5-purple:#65409a;
+  --b5-purple-dark:#4c346a;
+  --b5-lav:#f2edf7;
+  --b5-lav-2:#e8dff0;
+  --b5-cream:#fffaf4;
+  --b5-green:#2f8f56;
+  --b5-blue:#2d71bf;
+  --b5-gold:#a46d14;
+  --b5-red:#9b4050;
+  --b5-ink:#24202a;
+  --b5-muted:#6f6873;
+  --b5-line:#e4dee7;
+  --b5-shadow:0 8px 24px rgba(37,30,47,.06);
+}
+
+.b5-hidden{display:none!important}
+.b5-loading{opacity:.62;pointer-events:none}
+.b5-page{max-width:1080px;margin:0 auto}
+.b5-page-head{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;border-bottom:1px solid #e9e5eb;padding-bottom:14px;margin-bottom:16px}
+.b5-page-head h2{font-size:1.35rem;margin:4px 0;color:var(--b5-ink)}
+.b5-page-head p{font-size:.84rem;line-height:1.55;color:var(--b5-muted);margin:0;max-width:760px}
+.b5-kicker{font-size:.7rem;letter-spacing:.11em;font-weight:850;color:var(--b5-purple);text-transform:uppercase}
+.b5-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.b5-primary,.b5-secondary,.b5-link,.b5-danger{font:inherit;cursor:pointer}
+.b5-primary{border:0;border-radius:8px;background:var(--b5-purple);color:#fff;padding:10px 14px;font-size:.78rem;font-weight:850}
+.b5-primary:hover{background:var(--b5-purple-dark)}
+.b5-primary:disabled{opacity:.5;cursor:not-allowed}
+.b5-secondary{border:1px solid #dcd4e1;border-radius:8px;background:#fff;color:#4c4451;padding:9px 13px;font-size:.76rem;font-weight:800}
+.b5-link{border:0;background:transparent;color:var(--b5-purple);font-size:.76rem;font-weight:850;padding:5px}
+.b5-danger{border:1px solid #eccdd3;background:#fff4f5;color:var(--b5-red);border-radius:8px;padding:8px 11px;font-size:.72rem;font-weight:800}
+.b5-message{min-height:19px;font-size:.73rem;color:var(--b5-muted);margin-top:8px}
+.b5-message[data-type="success"]{color:#2f7f4f;font-weight:750}.b5-message[data-type="error"]{color:var(--b5-red);font-weight:750}
+
+/* One low-positioned professional link inside Account. */
+.b5-professional-nav{margin-top:3px!important}
+.b5-professional-nav .nav-icon{color:#dec9ec}
+
+/* Role clarity */
+.b5-role-banner{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+.b5-role-card{border:1px solid var(--b5-line);border-radius:13px;background:#fff;padding:18px;box-shadow:var(--b5-shadow);display:flex;flex-direction:column;min-height:235px}
+.b5-role-card.staff{background:linear-gradient(145deg,#f1ecf7,#fff)}
+.b5-role-card.independent{background:linear-gradient(145deg,#fffaf3,#fff)}
+.b5-role-card .b5-role-icon{width:42px;height:42px;border-radius:11px;background:#eae1f1;color:var(--b5-purple);display:grid;place-items:center;font-size:1.2rem;font-weight:900}
+.b5-role-card.independent .b5-role-icon{background:#fff0d8;color:#906014}
+.b5-role-card h3{font-size:1.02rem;margin:12px 0 5px}
+.b5-role-card p{font-size:.8rem;line-height:1.55;color:var(--b5-muted);margin:0 0 12px}
+.b5-role-card ul{margin:0 0 15px;padding-left:18px;display:grid;gap:5px}
+.b5-role-card li{font-size:.75rem;color:#554e59;line-height:1.4}
+.b5-role-card .b5-actions{margin-top:auto}
+.b5-clarity-note{border:1px solid #dfd5e6;background:linear-gradient(90deg,#f5f0f8,#fffaf5);border-radius:11px;padding:14px 16px;margin-bottom:14px;font-size:.78rem;line-height:1.55;color:#5d5362}
+.b5-clarity-note b{color:#3f314a}
+
+/* Summary modules */
+.b5-metric-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin:12px 0}
+.b5-metric{border:1px solid var(--b5-line);border-radius:10px;background:#fff;padding:14px;text-align:center}
+.b5-metric b{display:block;font-size:1.22rem;color:var(--b5-purple-dark)}
+.b5-metric small{font-size:.67rem;color:var(--b5-muted)}
+.b5-section{border:1px solid var(--b5-line);border-radius:12px;background:#fff;padding:17px;margin-top:12px;box-shadow:0 4px 15px rgba(37,30,47,.035)}
+.b5-section-head{display:flex;justify-content:space-between;align-items:flex-end;gap:14px;margin-bottom:11px}
+.b5-section-head h3{font-size:.94rem;margin:3px 0}.b5-section-head p{font-size:.75rem;color:var(--b5-muted);margin:0;line-height:1.45}
+.b5-empty{border:1px dashed #dcd4e0;border-radius:10px;padding:16px;background:#fbf9fc;font-size:.76rem;line-height:1.55;color:var(--b5-muted)}
+.b5-status{display:inline-flex;align-items:center;padding:4px 8px;border-radius:999px;background:#eee8f4;color:var(--b5-purple-dark);font-size:.61rem;font-weight:850;text-transform:uppercase;letter-spacing:.04em}
+.b5-status.good,.b5-status.active,.b5-status.passed,.b5-status.approved{background:#eaf5ed;color:#2d7547}
+.b5-status.pending,.b5-status.eligible,.b5-status.available{background:#fff2dc;color:#835711}
+.b5-status.locked,.b5-status.paused,.b5-status.draft{background:#f0eff2;color:#77717a}
+.b5-status.error,.b5-status.suspended{background:#fff0f2;color:#943d4d}
+
+/* Training center */
+.b5-training-controls{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0 14px}
+.b5-training-controls button{border:1px solid #ddd6e1;background:#fff;border-radius:999px;padding:7px 11px;font-size:.7rem;font-weight:780;color:#544b59}
+.b5-training-controls button.active{background:var(--b5-purple);border-color:var(--b5-purple);color:#fff}
+.b5-course-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.b5-course-card{border:1px solid var(--b5-line);border-radius:12px;background:linear-gradient(180deg,#fff,#fdfcfd);padding:16px;display:flex;flex-direction:column;min-height:255px}
+.b5-course-card.featured{background:linear-gradient(145deg,#f2edf7,#fffaf4);border-color:#d7cbe0}
+.b5-course-top{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+.b5-course-card h3{font-size:.92rem;margin:10px 0 5px}.b5-course-card p{font-size:.73rem;line-height:1.5;color:var(--b5-muted);margin:0 0 11px}
+.b5-course-meta{display:grid;grid-template-columns:auto 1fr;gap:4px 9px;font-size:.65rem;margin-bottom:12px}.b5-course-meta dt{font-weight:800;color:#5a525f}.b5-course-meta dd{margin:0;color:#766e79}
+.b5-course-card .b5-actions{margin-top:auto}
+.b5-price{font-size:1.14rem;font-weight:900;color:var(--b5-purple-dark)}.b5-price small{font-size:.62rem;color:var(--b5-muted);font-weight:700}
+.b5-enrollment-panel{border:1px solid #dcd3e2;background:linear-gradient(145deg,#f4eff8,#fffaf5);border-radius:12px;padding:17px;margin-top:13px}
+.b5-payment-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:11px 0}
+.b5-installment{border:1px solid #e6e0e8;border-radius:9px;background:#fff;padding:11px}.b5-installment b{display:block;font-size:.78rem}.b5-installment small{display:block;font-size:.63rem;color:var(--b5-muted);margin-top:3px}
+.b5-module-list{display:grid;gap:8px;margin-top:12px}
+.b5-module-row{display:grid;grid-template-columns:36px minmax(0,1fr) auto;gap:11px;align-items:center;border:1px solid var(--b5-line);border-radius:10px;background:#fff;padding:12px 13px}
+.b5-module-number{width:34px;height:34px;border-radius:9px;background:#eee8f4;color:var(--b5-purple);display:grid;place-items:center;font-weight:900;font-size:.72rem}
+.b5-module-row h3{font-size:.82rem;margin:0 0 3px}.b5-module-row p{font-size:.68rem;line-height:1.4;color:var(--b5-muted);margin:0}.b5-module-row.locked{opacity:.7;background:#faf9fb}
+.b5-module-detail{border:1px solid #e2d9e7;background:#fffdf9;border-radius:12px;padding:20px;margin-top:12px}
+.b5-module-detail h3{font-size:1.03rem;margin:5px 0}.b5-module-detail p,.b5-module-detail li{font-size:.78rem;line-height:1.55;color:#5d5660}
+.b5-assessment{border-top:1px solid #ece5e0;margin-top:15px;padding-top:14px}.b5-assessment label{display:flex;gap:8px;align-items:flex-start;border:1px solid #e6e1e7;border-radius:8px;padding:10px;margin-top:7px;font-size:.75rem;background:#fff}
+.b5-assessment textarea{width:100%;min-height:80px;border:1px solid #ddd7e0;border-radius:8px;padding:10px;margin-top:10px;font-size:.78rem}
+
+/* W-2 coach workspace and QA */
+.b5-w2-banner{display:flex;justify-content:space-between;align-items:center;gap:18px;border:1px solid #d9cce2;background:linear-gradient(135deg,#eee7f4,#fff);border-radius:12px;padding:17px}
+.b5-w2-banner h3{font-size:1rem;margin:4px 0}.b5-w2-banner p{font-size:.75rem;color:var(--b5-muted);margin:0;line-height:1.45}
+.b5-work-list{display:grid;gap:8px}.b5-work-row{display:grid;grid-template-columns:36px minmax(0,1fr) auto;gap:10px;align-items:center;border:1px solid var(--b5-line);border-radius:9px;background:#fff;padding:11px 12px}.b5-work-row>span:first-child{width:34px;height:34px;border-radius:9px;background:#eee8f4;color:var(--b5-purple);display:grid;place-items:center}.b5-work-row h3{font-size:.8rem;margin:0 0 2px}.b5-work-row p{font-size:.67rem;color:var(--b5-muted);margin:0;line-height:1.4}
+.b5-qa-card{border:1px solid #d9dfe9;background:linear-gradient(135deg,#eef4fb,#fff);border-radius:12px;padding:16px}.b5-qa-card h3{font-size:.93rem;margin:5px 0}.b5-qa-card p{font-size:.74rem;line-height:1.5;color:#5e6877;margin:0}.b5-qa-recommendation{margin-top:10px;border-left:3px solid var(--b5-blue);padding:8px 10px;background:#f8fbff;font-size:.73rem;line-height:1.5}
+.b5-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.b5-form-grid .b5-wide{grid-column:1/-1}.b5-form-grid label{display:grid;gap:5px;font-size:.7rem;font-weight:800;color:#57505b}.b5-form-grid input,.b5-form-grid select,.b5-form-grid textarea{width:100%;border:1px solid #ded8e1;border-radius:8px;background:#fcfbfc;padding:10px;font-size:.78rem}.b5-form-grid textarea{min-height:95px;resize:vertical}.b5-check{display:flex!important;grid-template-columns:none!important;align-items:flex-start;gap:8px!important;font-weight:650!important;line-height:1.45}.b5-check input{width:auto!important;margin-top:3px}
+
+/* Business Builder */
+.b5-business-hero{display:grid;grid-template-columns:1fr auto;gap:18px;align-items:center;border:1px solid #e2d8e5;border-radius:12px;background:linear-gradient(135deg,#fffaf3,#fff);padding:18px}
+.b5-business-hero h3{font-size:1.02rem;margin:4px 0}.b5-business-hero p{font-size:.75rem;color:var(--b5-muted);line-height:1.5;margin:0}.b5-referral{border:1px dashed #d7c9df;border-radius:10px;background:#faf7fc;padding:11px 13px;text-align:center}.b5-referral small{display:block;font-size:.6rem;color:var(--b5-muted)}.b5-referral b{font-size:1rem;color:var(--b5-purple);letter-spacing:.05em}
+.b5-next-action{border:1px solid #d8dfe7;border-radius:11px;background:linear-gradient(135deg,#eef5fb,#fff);padding:15px;margin-top:12px}.b5-next-action h3{font-size:.86rem;margin:4px 0}.b5-next-action p{font-size:.75rem;line-height:1.5;color:#5f6874;margin:0}
+.b5-channel-grid{display:flex;gap:8px;flex-wrap:wrap}.b5-channel-grid label{display:flex;align-items:center;gap:6px;border:1px solid #dfdae2;border-radius:999px;padding:7px 10px;background:#fff;font-size:.69rem;font-weight:700}.b5-channel-grid input{width:auto}
+
+/* Social Media Agent */
+.b5-social-warning{border:1px solid #e5d3bf;background:#fff8ed;border-radius:11px;padding:14px 16px;font-size:.76rem;line-height:1.55;color:#6c5943;margin-bottom:12px}.b5-social-warning b{color:#533f29}
+.b5-platform-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}.b5-platform-card{border:1px solid var(--b5-line);border-radius:10px;background:#fff;padding:13px}.b5-platform-card h3{font-size:.79rem;margin:5px 0 3px}.b5-platform-card p{font-size:.65rem;color:var(--b5-muted);line-height:1.4;margin:0 0 8px}
+.b5-draft-list{display:grid;gap:9px;margin-top:12px}.b5-draft-card{border:1px solid var(--b5-line);border-radius:11px;background:#fff;padding:14px}.b5-draft-head{display:flex;justify-content:space-between;gap:10px;align-items:center}.b5-draft-card h3{font-size:.8rem;margin:0}.b5-draft-card pre{white-space:pre-wrap;font-family:inherit;font-size:.74rem;line-height:1.5;color:#534d56;background:#faf9fb;border-radius:8px;padding:10px;margin:9px 0}
+
+/* Clarify legacy coaching pages. */
+#page-coaches #coachMarketplaceContent,#page-coaches #coachMarketplaceOff{display:none!important}
+.b5-consumer-coach-panel{border:1px solid #dcd2e2;background:linear-gradient(135deg,#f2ecf7,#fff);border-radius:13px;padding:18px;margin-top:12px}.b5-consumer-coach-panel h3{font-size:1rem;margin:4px 0}.b5-consumer-coach-panel p{font-size:.78rem;line-height:1.55;color:var(--b5-muted);margin:0 0 12px}
+
+@media(max-width:980px){
+  .b5-course-grid{grid-template-columns:1fr 1fr}.b5-platform-grid{grid-template-columns:1fr 1fr}.b5-metric-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:760px){
+  .b5-page-head,.b5-section-head,.b5-w2-banner,.b5-business-hero{display:block}.b5-page-head .b5-actions,.b5-section-head .b5-actions,.b5-w2-banner .b5-actions{margin-top:10px}
+  .b5-role-banner,.b5-course-grid,.b5-form-grid{grid-template-columns:1fr}.b5-form-grid .b5-wide{grid-column:auto}.b5-payment-grid{grid-template-columns:1fr 1fr}
+  .b5-module-row,.b5-work-row{grid-template-columns:34px 1fr}.b5-module-row>.b5-actions,.b5-work-row>.b5-actions{grid-column:2}.b5-platform-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:480px){
+  .b5-metric-grid,.b5-payment-grid,.b5-platform-grid{grid-template-columns:1fr}.b5-role-card{min-height:0}
+}
