@@ -306,3 +306,25 @@ body{background:linear-gradient(180deg,#fcfbfd 0%,#fbfafc 58%,#fdfcfd 100%)}
   .hero-actions{display:grid;grid-template-columns:1fr}
   .hero-actions>*{width:100%}
 }
+
+
+/* =========================================================
+   CONSOLIDATED REPAIR — PUBLIC JOURNEY
+   ========================================================= */
+body:has(#journeyDialog[open]) .topbar{
+  opacity:.42;
+  pointer-events:none;
+  user-select:none;
+}
+body:has(#journeyDialog[open]) .page-shell,
+body:has(#journeyDialog[open]) .footer{filter:saturate(.82)}
+#journeyDialog .survey-step[data-step="account"]{max-width:660px;margin:0 auto}
+#journeyDialog .selected-path-summary{margin-bottom:14px}
+#journeyDialog .auth-mode-tabs{margin:10px 0 16px}
+#journeyDialog .survey-step[data-step="account"] .survey-field{margin-bottom:10px}
+#journeyDialog .survey-step[data-step="account"] .path-intake{margin-top:8px}
+#journeyDialog .survey-step[data-step="account"] .account-legal{margin-top:13px}
+#journeyDialog .account-actions{position:sticky;bottom:-1px;background:linear-gradient(180deg,rgba(255,255,255,0),#fff 28%);padding-top:20px;padding-bottom:2px;z-index:3}
+@media(min-width:700px){
+  #journeyDialog .survey-step[data-step="account"] .path-intake-fields{grid-template-columns:1fr 1fr}
+}

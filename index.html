@@ -316,14 +316,14 @@
         </div>
 
         <form id="journeyAuthForm" novalidate>
-          <div id="signupOnlyFields">
+          <div id="signupOnlyFields" class="account-stage account-stage-credentials">
             <label class="survey-field">
               <span data-i18n="first_name">First name or nickname</span>
               <input id="accountName" autocomplete="name" maxlength="80" data-i18n-placeholder="first_name_placeholder" placeholder="What should Lellee call you?">
             </label>
           </div>
 
-          <div class="account-grid">
+          <div class="account-grid account-stage account-stage-credentials">
             <label class="survey-field">
               <span data-i18n="email">Email</span>
               <input id="accountEmail" type="email" autocomplete="email" required>
@@ -338,7 +338,7 @@
             </label>
           </div>
 
-          <div class="path-intake">
+          <div class="path-intake account-stage account-stage-details">
             <div class="path-intake-head">
               <b data-i18n="a_few_details">A few details for this path</b>
               <small data-i18n="change_later">You can change these later.</small>
@@ -353,14 +353,14 @@
             </label>
           </div>
 
-          <div id="accountLegal" class="account-legal">
+          <div id="accountLegal" class="account-legal account-stage account-stage-details">
             <label><input id="accountAdult" type="checkbox"> <span data-i18n="adult_confirm">I confirm I am at least 18 years old.</span></label>
             <label><input id="accountTerms" type="checkbox"> <span data-i18n-html="terms_confirm">I reviewed the <a href="/terms.html" target="_blank">Terms</a>, <a href="/privacy.html" target="_blank">Privacy Policy</a>, and <a href="/consumer-health-privacy.html" target="_blank">Consumer Health Data Notice</a>.</span></label>
             <label><input id="accountSafety" type="checkbox"> <span data-i18n="safety_confirm">I understand Lellee is support and guidance, not emergency or professional medical treatment.</span></label>
           </div>
 
           <div class="survey-actions split account-actions">
-            <button type="button" class="back-button" data-back="result" data-i18n="back">← Back</button>
+            <button type="button" class="back-button" id="accountBack" data-back="result" data-i18n="back">← Back</button>
             <button type="submit" class="primary-button" id="accountSubmit" data-i18n="create_and_continue">Create Account & Continue</button>
           </div>
           <div id="accountWorking" class="survey-working hidden" data-i18n="saving_account">Saving your starting point…</div>

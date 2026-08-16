@@ -100,6 +100,7 @@
   let topics=fallbackTopics.map(normalizeTopic);
   let locale=storageGet('lellee_language') || (navigator.language?.toLowerCase().startsWith('es')?'es':'en');
   let authMode='signup';
+  let signupStage=1;
   let survey={sessionId:null,token:null,primaryNeed:'',needText:'',context:'',result:null,preview:false};
 
   const dialog=document.getElementById('journeyDialog');
@@ -213,6 +214,26 @@
     }catch(error){console.error(error);showError(locale==='es'?'Lellee no pudo guardar esa respuesta. Inténtalo de nuevo.':'Lellee could not save that answer. Please try again.');return false;}
   }
 
+  function contextPlaceholderForPath(key){
+    const map={
+      recovery:{en:'For example: I am trying to stay steady, avoid triggers, and reconnect with support.',es:'Por ejemplo: Estoy tratando de mantenerme estable, evitar desencadenantes y reconectarme con apoyo.'},
+      reentry:{en:'For example: I need help getting settled, handling requirements, and finding work or housing.',es:'Por ejemplo: Necesito ayuda para establecerme, cumplir requisitos y encontrar trabajo o vivienda.'},
+      caregiving:{en:'For example: I am caring for someone and need help organizing responsibilities and support.',es:'Por ejemplo: Estoy cuidando a alguien y necesito ayuda para organizar responsabilidades y apoyo.'},
+      'housing-stability':{en:'For example: I need stable housing and help organizing the next practical steps.',es:'Por ejemplo: Necesito vivienda estable y ayuda para organizar los próximos pasos prácticos.'},
+      workforce:{en:'For example: I want to return to work and need help with applications, routine, or confidence.',es:'Por ejemplo: Quiero volver al trabajo y necesito ayuda con solicitudes, rutina o confianza.'},
+      grief:{en:'For example: I am adjusting after a loss and need support getting through daily life.',es:'Por ejemplo: Me estoy adaptando después de una pérdida y necesito apoyo para manejar la vida diaria.'},
+      'independent-living':{en:'For example: I need help building routines, managing responsibilities, and becoming more independent.',es:'Por ejemplo: Necesito ayuda para crear rutinas, manejar responsabilidades y ser más independiente.'},
+      family:{en:'For example: My family needs support communicating, setting boundaries, or handling a difficult change.',es:'Por ejemplo: Mi familia necesita apoyo para comunicarse, establecer límites o manejar un cambio difícil.'}
+    };
+    const item=map[normalizeKey(key)]||{en:'Share anything that would help Lellee understand your first step.',es:'Comparte cualquier cosa que ayude a Lellee a entender tu primer paso.'};
+    return locale==='es'?item.es:item.en;
+  }
+
+  function updateContextPlaceholder(){
+    const field=document.getElementById('surveyContext');
+    if(field)field.placeholder=contextPlaceholderForPath(survey.primaryNeed||document.getElementById('primaryNeed')?.value||'');
+  }
+
   async function createRecommendation(){
     if(!(await ensureSurveySession()))return;
     const button=document.getElementById('contextNext');const working=document.getElementById('surveyWorking');
@@ -252,8 +273,12 @@
     const primary=normalizeKey(result.primary_topic_key||survey.primaryNeed||'not-sure');
     survey.result={...result,primary_topic_key:primary};
     document.getElementById('resultPrimary').textContent=result.primary_label&&locale==='en'?result.primary_label:topicLabel(primary);
-    document.getElementById('resultReason').textContent=result.reason||t('fallback_reason');
     const relatedKeys=(Array.isArray(result.related_topic_keys)?result.related_topic_keys:[]).map(normalizeKey).filter(key=>key!==primary).slice(0,1);
+    let reason=result.reason||t('fallback_reason');
+    if(!relatedKeys.length && /other selected needs|other needs|selected needs stay connected/i.test(String(reason))){
+      reason=locale==='es'?'Puedes agregar otra área de apoyo más adelante. Tú decides qué comenzar.':'You can add another support area later. You remain in control of what you start.';
+    }
+    document.getElementById('resultReason').textContent=reason;
     const wrap=document.getElementById('resultRelatedWrap');const related=document.getElementById('resultRelated');related.innerHTML='';
     relatedKeys.forEach(key=>{const pill=document.createElement('span');pill.textContent=topicLabel(key);related.appendChild(pill);});
     wrap.classList.toggle('hidden',relatedKeys.length===0);
@@ -292,12 +317,26 @@
   function updateAuthModeUI(){
     document.querySelectorAll('[data-auth-mode]').forEach(button=>button.classList.toggle('active',button.dataset.authMode===authMode));
     const signup=authMode==='signup';
-    document.getElementById('signupOnlyFields').classList.toggle('hidden',!signup);
-    document.querySelector('.signup-confirm-field').classList.toggle('hidden',!signup);
-    document.getElementById('accountLegal').classList.toggle('hidden',!signup);
-    document.getElementById('accountTitle').textContent=signup?t('account_title'):t('sign_in');
-    document.getElementById('accountSubmit').textContent=signup?t('create_and_continue'):t('sign_in_continue');
+    const credentialBlocks=[document.getElementById('signupOnlyFields'),document.querySelector('.account-grid')].filter(Boolean);
+    const detailBlocks=[document.querySelector('.path-intake'),document.getElementById('accountLegal')].filter(Boolean);
+    if(!signup){
+      credentialBlocks.forEach(el=>el.classList.toggle('hidden',el.id==='signupOnlyFields'||el.classList.contains('signup-confirm-field')));
+      document.getElementById('signupOnlyFields')?.classList.add('hidden');
+      document.querySelector('.signup-confirm-field')?.classList.add('hidden');
+      document.querySelector('.account-grid')?.classList.remove('hidden');
+      detailBlocks.forEach(el=>el.classList.add('hidden'));
+    }else{
+      const credentials=signupStage===1;
+      document.getElementById('signupOnlyFields')?.classList.toggle('hidden',!credentials);
+      document.querySelector('.account-grid')?.classList.toggle('hidden',!credentials);
+      document.querySelector('.signup-confirm-field')?.classList.toggle('hidden',!credentials);
+      detailBlocks.forEach(el=>el.classList.toggle('hidden',credentials));
+    }
+    document.getElementById('accountTitle').textContent=signup?(signupStage===1?t('account_title'):(locale==='es'?'Unos detalles para comenzar.':'A few details to get started.')):t('sign_in');
+    document.getElementById('accountSubmit').textContent=signup?(signupStage===1?t('continue'):t('create_and_continue')):t('sign_in_continue');
     document.getElementById('accountPassword').autocomplete=signup?'new-password':'current-password';
+    const back=document.getElementById('accountBack');
+    if(back)back.textContent=signup&&signupStage===2?(locale==='es'?'← Cuenta':'← Account'):t('back');
   }
 
   function buildAppUrl(){
@@ -325,6 +364,11 @@
     const email=document.getElementById('accountEmail').value.trim();const password=document.getElementById('accountPassword').value;
     const confirm=document.getElementById('accountPasswordConfirm').value;const working=document.getElementById('accountWorking');const submit=document.getElementById('accountSubmit');
     if(authMode==='signup'&&password!==confirm){showError(t('password_mismatch'));return;}
+    if(authMode==='signup'&&signupStage===1){
+      const name=document.getElementById('accountName').value.trim();
+      if(!name||!email||password.length<8){showError(locale==='es'?'Completa tu nombre, correo electrónico y una contraseña de al menos 8 caracteres.':'Complete your name, email, and a password of at least 8 characters.');return;}
+      signupStage=2;updateAuthModeUI();dialog?.scrollTo({top:0,behavior:'smooth'});return;
+    }
     if(authMode==='signup'&&(!document.getElementById('accountAdult').checked||!document.getElementById('accountTerms').checked||!document.getElementById('accountSafety').checked)){showError(t('legal_required'));return;}
     if(!(await ensureSurveySession()))return;
     submit.disabled=true;working.classList.remove('hidden');
@@ -375,11 +419,12 @@
   document.getElementById('surveyBegin')?.addEventListener('click',async()=>{await ensureSurveySession();buildPrimaryNeedSelect(survey.primaryNeed);showStep('need');});
   document.querySelectorAll('[data-back]').forEach(button=>button.addEventListener('click',()=>showStep(button.dataset.back)));
   document.getElementById('primaryNeed')?.addEventListener('change',event=>{survey.primaryNeed=normalizeKey(event.target.value);document.getElementById('needNext').disabled=!event.target.value;});
-  document.getElementById('needNext')?.addEventListener('click',()=>{if(!document.getElementById('primaryNeed').value){showError(t('required_need'));return;}survey.primaryNeed=normalizeKey(document.getElementById('primaryNeed').value);survey.needText=document.getElementById('needText').value.trim();showStep('context');});
+  document.getElementById('needNext')?.addEventListener('click',()=>{if(!document.getElementById('primaryNeed').value){showError(t('required_need'));return;}survey.primaryNeed=normalizeKey(document.getElementById('primaryNeed').value);survey.needText=document.getElementById('needText').value.trim();updateContextPlaceholder();showStep('context');});
   document.getElementById('contextNext')?.addEventListener('click',createRecommendation);
-  document.getElementById('choosePath')?.addEventListener('click',()=>{buildPathIntake();authMode='signup';updateAuthModeUI();showStep('account');});
+  document.getElementById('choosePath')?.addEventListener('click',()=>{buildPathIntake();authMode='signup';signupStage=1;updateAuthModeUI();showStep('account');});
   document.getElementById('exploreAgain')?.addEventListener('click',()=>{buildPrimaryNeedSelect(survey.primaryNeed);showStep('need');});
-  document.querySelectorAll('[data-auth-mode]').forEach(button=>button.addEventListener('click',()=>{authMode=button.dataset.authMode;updateAuthModeUI();clearError();}));
+  document.querySelectorAll('[data-auth-mode]').forEach(button=>button.addEventListener('click',()=>{authMode=button.dataset.authMode;if(authMode==='signup')signupStage=1;updateAuthModeUI();clearError();}));
+  document.getElementById('accountBack')?.addEventListener('click',event=>{if(authMode==='signup'&&signupStage===2){event.preventDefault();event.stopImmediatePropagation();signupStage=1;updateAuthModeUI();dialog?.scrollTo({top:0,behavior:'smooth'});}},true);
   document.getElementById('journeyAuthForm')?.addEventListener('submit',submitAccount);
   document.addEventListener('click',event=>{const button=event.target.closest('[data-voice-target]');if(button)startVoice(button.dataset.voiceTarget,button);});
 
