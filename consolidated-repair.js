@@ -1,11 +1,24 @@
 (() => {
   'use strict';
-  const VERSION='2026-08-16-r2-stability';
+  const VERSION='2026-08-16-r4-auth-bridge';
   const $=(s,r=document)=>r.querySelector(s);
   const $$=(s,r=document)=>[...r.querySelectorAll(s)];
-  const client=()=>window.sb||null;
+  const client=()=>{
+    const bridged=window.LelleeAuthContext?.client;
+    if(bridged?.auth)return bridged;
+    try{if(typeof sb!=='undefined'&&sb?.auth)return sb}catch{}
+    return window.sb||null;
+  };
   const currentUser=async()=>{
+    try{
+      const inMemory=window.LelleeAuthContext?.getCurrentUser?.();
+      if(inMemory?.id)return inMemory;
+    }catch{}
     const c=client(); if(!c)return null;
+    try{
+      const {data:{session}}=await c.auth.getSession();
+      if(session?.user?.id)return session.user;
+    }catch{}
     try{const {data}=await c.auth.getUser();return data?.user||null}catch{return null}
   };
   const timeout=(promise,ms=7000,label='Request')=>Promise.race([promise,new Promise((_,reject)=>setTimeout(()=>reject(new Error(`${label} timed out. Please try again.`)),ms))]);

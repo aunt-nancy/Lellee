@@ -7192,6 +7192,11 @@ const SUPABASE_URL='https://hkrrxscyhtxmbvxevfkw.supabase.co';
 const SUPABASE_PUBLISHABLE_KEY='sb_publishable_QPwVWU-qNnc3GJb_FoFnlQ_kEHa3dtU';
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
 let currentUser=null;
+// Stable bridge for separately loaded Lellee feature scripts.
+window.LelleeAuthContext={
+  client:sb,
+  getCurrentUser:()=>currentUser
+};
 let syncTimer=null;
 const save=()=>{localStorage.setItem(STORAGE,JSON.stringify(data));if(currentUser){clearTimeout(syncTimer);syncTimer=setTimeout(syncCoreProfile,450)}};
 const approachToDb=v=>({'12-Step':'12_step','SMART / skills-based':'skills_based','Therapy / counseling':'therapy_counseling','Medication-supported':'medication_supported','Peer support':'peer_support','Mixed':'mixed','Exploring':'exploring'}[v]||String(v||'exploring').toLowerCase().replaceAll(' ','_'));
@@ -8035,7 +8040,7 @@ Transportation"></textarea></label>
 <script src="/build-4-community.js"></script>
 <script src="/build-5-professional.js"></script>
 <script src="/build-6-platform.js"></script>
-<script src="/consolidated-repair.js?v=20260816-r3-auth-context"></script>
+<script src="/consolidated-repair.js?v=20260816-r4-auth-bridge"></script>
 <script src="/journal-review-hotfix.js?v=20260816-journal-review-r1"></script>
 </body>
 </html>
