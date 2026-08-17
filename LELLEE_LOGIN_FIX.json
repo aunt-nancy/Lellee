@@ -1,0 +1,15 @@
+{
+  "fix": "Login duplication and performance",
+  "auth_owner": "recovery-core-fast-v1",
+  "changes": [
+    "Single capture-phase login handler",
+    "Double-submit protection",
+    "12-second authentication timeout",
+    "Dashboard opens immediately after Supabase authentication",
+    "Profile/journal/check-in hydration runs in background",
+    "Background hydration timeout is 8 seconds",
+    "Existing-session boot no longer waits for seven database queries",
+    "Removed stale lellee-v1.js core reference",
+    "Removed stale consolidated-repair auth-bridge reference"
+  ]
+}

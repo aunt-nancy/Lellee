@@ -1077,6 +1077,9 @@ Includes the approved Lellee consumer experience from early recovery through lif
 .coach-account-count-hidden{filter:blur(7px);user-select:none}
 </style>
 
+<style id="lellee-auth-fast-style">
+#authSubmit:disabled,#authToggle:disabled{opacity:.62;cursor:wait}
+</style>
 </head>
 <body><a class="skip-link" href="#mainContent">Skip to main content</a><a class="lellee-skip" href="#lelleeMain">Skip to main content</a>
 <div class="prod-overlay hidden" id="onboardingOverlay">
@@ -7513,12 +7516,165 @@ $('#reviewPrevious')?.addEventListener('click',()=>{
 });
 function escapeHtml(str){return str.replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
 
+
 let authMode='signin';
-function setAuthMode(mode,msg=''){authMode=mode;$('#authTitle').textContent=mode==='signin'?'Sign in to Lellee':'Create your Lellee account';$('#authSubmit').textContent=mode==='signin'?'Sign in':'Create account';$('#authToggle').textContent=mode==='signin'?'Create account':'Back to sign in';$('#authPassword').autocomplete=mode==='signin'?'current-password':'new-password';$('#authMsg').textContent=msg|| (mode==='signin'?'Use your Lellee account to continue.':'Email confirmation is enabled for new accounts.');$('#authMsg').className='auth-msg'}
-$('#authToggle').addEventListener('click',()=>setAuthMode(authMode==='signin'?'signup':'signin'));
-$('#authForm').addEventListener('submit',async e=>{e.preventDefault();const email=$('#authEmail').value.trim(),password=$('#authPassword').value;let result;if(authMode==='signin')result=await sb.auth.signInWithPassword({email,password});else result=await sb.auth.signUp({email,password});if(result.error){$('#authMsg').textContent=result.error.message;$('#authMsg').className='auth-msg error';return}if(authMode==='signup'&&!result.data.session){setAuthMode('signin','Account created. Confirm your email, then sign in.');return}await beginSession(result.data.user)});
-$('#signOutBtn').addEventListener('click',async()=>{await sb.auth.signOut();currentUser=null;$('#authOverlay').classList.remove('hidden')});
-async function beginSession(user){currentUser=user;const [p,r,u,l,j,dc,ra]=await Promise.all([sb.from('profiles').select('*').eq('id',user.id).single(),sb.from('recovery_profiles').select('*').eq('user_id',user.id).single(),sb.from('user_preferences').select('*').eq('user_id',user.id).single(),sb.from('local_preferences').select('*').eq('user_id',user.id).single(),sb.from('journal_entries').select('content,created_at').eq('user_id',user.id).order('created_at',{ascending:false}).limit(20),sb.from('daily_checkins').select('*').eq('user_id',user.id).eq('checkin_date',todayKey()),sb.from('recovery_actions').select('*').eq('user_id',user.id).eq('action_date',todayKey())]);data.name=p.data?.display_name||data.name;data.recoveryDate=r.data?.recovery_date||data.recoveryDate;data.goal=r.data?.current_goal||data.goal;data.approach=approachFromDb(u.data?.recovery_approach);data.belief=beliefFromDb(u.data?.belief_preference);data.faith=u.data?.faith_tradition||'';data.denomination=u.data?.denomination||'';data.city=l.data?.city||'';data.state=l.data?.state||'';data.journalEntries=(j.data||[]).map(x=>({date:x.created_at,text:x.content}));data.daily[todayKey()]={};if(dc.data?.length)data.daily[todayKey()].checkin='Checked in';for(const a of (ra.data||[])){const rev={daily_focus:'focus',gratitude:'gratitude',recovery_action:'action',evening_reflection:'reflection'};if(rev[a.action_type])data.daily[todayKey()][rev[a.action_type]]=a.content||'Completed'}localStorage.setItem(STORAGE,JSON.stringify(data));renderBasics();$('#authOverlay').classList.add('hidden');showPage('today');setTimeout(()=>window.LelleeFinalOnboarding?.check(),60)}
+let authRequestInFlight=false;
+let sessionHydrationVersion=0;
+window.__LELLEE_AUTH_OWNER__='recovery-core-fast-v1';
+
+function setAuthMode(mode,msg=''){
+  authMode=mode;
+  $('#authTitle').textContent=mode==='signin'?'Sign in to Lellee':'Create your Lellee account';
+  $('#authSubmit').textContent=mode==='signin'?'Sign in':'Create account';
+  $('#authToggle').textContent=mode==='signin'?'Create account':'Back to sign in';
+  $('#authPassword').autocomplete=mode==='signin'?'current-password':'new-password';
+  $('#authMsg').textContent=msg||(mode==='signin'?'Use your Lellee account to continue.':'Email confirmation is enabled for new accounts.');
+  $('#authMsg').className='auth-msg';
+}
+
+function setAuthBusy(busy,message=''){
+  authRequestInFlight=!!busy;
+  const submit=$('#authSubmit');
+  const toggle=$('#authToggle');
+  if(submit){
+    submit.disabled=!!busy;
+    submit.textContent=busy?(authMode==='signin'?'Signing in…':'Creating account…'):(authMode==='signin'?'Sign in':'Create account');
+  }
+  if(toggle)toggle.disabled=!!busy;
+  if(message){
+    $('#authMsg').textContent=message;
+    $('#authMsg').className='auth-msg';
+  }
+}
+
+function withAuthTimeout(promise,ms,message){
+  let timer;
+  const timeout=new Promise((_,reject)=>{
+    timer=setTimeout(()=>reject(new Error(message||'The request took too long. Please try again.')),ms);
+  });
+  return Promise.race([promise,timeout]).finally(()=>clearTimeout(timer));
+}
+
+function enterAuthenticatedShell(user){
+  if(!user)return;
+  currentUser=user;
+  // Use locally cached state immediately. Database refresh happens in the background.
+  try{renderBasics()}catch(e){console.warn('Initial render warning',e)}
+  $('#authOverlay').classList.add('hidden');
+  showPage('today');
+  setTimeout(()=>window.LelleeFinalOnboarding?.check(),60);
+}
+
+async function hydrateSession(user){
+  if(!user?.id)return;
+  const version=++sessionHydrationVersion;
+  const queries=[
+    sb.from('profiles').select('display_name').eq('id',user.id).maybeSingle(),
+    sb.from('recovery_profiles').select('recovery_date,current_goal').eq('user_id',user.id).maybeSingle(),
+    sb.from('user_preferences').select('recovery_approach,belief_preference,faith_tradition,denomination').eq('user_id',user.id).maybeSingle(),
+    sb.from('local_preferences').select('city,state').eq('user_id',user.id).maybeSingle(),
+    sb.from('journal_entries').select('content,created_at').eq('user_id',user.id).order('created_at',{ascending:false}).limit(20),
+    sb.from('daily_checkins').select('id').eq('user_id',user.id).eq('checkin_date',todayKey()),
+    sb.from('recovery_actions').select('action_type,content').eq('user_id',user.id).eq('action_date',todayKey())
+  ];
+
+  let settled;
+  try{
+    settled=await withAuthTimeout(Promise.allSettled(queries),8000,'Background sync timed out.');
+  }catch(e){
+    console.warn('Lellee background session hydration skipped:',e.message);
+    return;
+  }
+
+  if(version!==sessionHydrationVersion||currentUser?.id!==user.id)return;
+
+  const value=i=>settled[i]?.status==='fulfilled'?settled[i].value:{data:null,error:settled[i]?.reason};
+  const p=value(0),r=value(1),u=value(2),l=value(3),j=value(4),dc=value(5),ra=value(6);
+
+  data.name=p.data?.display_name||data.name;
+  data.recoveryDate=r.data?.recovery_date||data.recoveryDate;
+  data.goal=r.data?.current_goal||data.goal;
+  data.approach=approachFromDb(u.data?.recovery_approach);
+  data.belief=beliefFromDb(u.data?.belief_preference);
+  data.faith=u.data?.faith_tradition||'';
+  data.denomination=u.data?.denomination||'';
+  data.city=l.data?.city||'';
+  data.state=l.data?.state||'';
+  if(Array.isArray(j.data))data.journalEntries=j.data.map(x=>({date:x.created_at,text:x.content}));
+
+  data.daily[todayKey()]={};
+  if(dc.data?.length)data.daily[todayKey()].checkin='Checked in';
+  for(const a of (ra.data||[])){
+    const rev={daily_focus:'focus',gratitude:'gratitude',recovery_action:'action',evening_reflection:'reflection'};
+    if(rev[a.action_type])data.daily[todayKey()][rev[a.action_type]]=a.content||'Completed';
+  }
+
+  localStorage.setItem(STORAGE,JSON.stringify(data));
+  try{renderBasics()}catch(e){console.warn('Hydrated render warning',e)}
+}
+
+function beginSession(user){
+  enterAuthenticatedShell(user);
+  hydrateSession(user).catch(e=>console.warn('Background hydration error',e));
+}
+
+// One capture-phase auth owner prevents older scripts from running a second login handler.
+document.addEventListener('submit',async e=>{
+  if(e.target?.id!=='authForm')return;
+  e.preventDefault();
+  e.stopImmediatePropagation();
+  if(authRequestInFlight)return;
+
+  const email=$('#authEmail').value.trim();
+  const password=$('#authPassword').value;
+  if(!email||!password)return;
+
+  setAuthBusy(true,authMode==='signin'?'Checking your account…':'Creating your account…');
+
+  try{
+    const result=authMode==='signin'
+      ? await withAuthTimeout(sb.auth.signInWithPassword({email,password}),12000,'Sign in is taking too long. Please try again.')
+      : await withAuthTimeout(sb.auth.signUp({email,password}),12000,'Account creation is taking too long. Please try again.');
+
+    if(result.error)throw result.error;
+
+    if(authMode==='signup'&&!result.data.session){
+      setAuthMode('signin','Account created. Confirm your email, then sign in.');
+      return;
+    }
+
+    if(!result.data?.user)throw new Error('Your account was verified, but the session did not finish. Please try again.');
+
+    // Do not wait for profile/journal queries before opening the app.
+    beginSession(result.data.user);
+  }catch(error){
+    $('#authMsg').textContent=error?.message||'Unable to sign in. Please try again.';
+    $('#authMsg').className='auth-msg error';
+  }finally{
+    setAuthBusy(false);
+  }
+},true);
+
+document.addEventListener('click',async e=>{
+  const toggle=e.target?.closest?.('#authToggle');
+  if(toggle){
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    if(!authRequestInFlight)setAuthMode(authMode==='signin'?'signup':'signin');
+    return;
+  }
+
+  const signout=e.target?.closest?.('#signOutBtn');
+  if(signout){
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    sessionHydrationVersion++;
+    currentUser=null;
+    $('#authOverlay').classList.remove('hidden');
+    try{await withAuthTimeout(sb.auth.signOut(),6000,'')}catch(error){console.warn('Sign out sync warning',error)}
+  }
+},true);
+
 
 const phase1Curriculum = [
 {d:1,t:"Start Here: Safety & Support",lead:"Today is about getting a little steadier. You do not need to solve your whole recovery at once.",focus:"What would help you feel a little safer or steadier today?",choices:["A safe place","Someone I trust","Food / water","Rest","Distance from alcohol / drugs","A meeting or recovery support","Medical / professional help","I'm not sure yet"],actions:["Call or text someone supportive","Eat and hydrate","Rest somewhere safe","Attend a meeting","Create distance from alcohol / drugs","Ask for professional help","Take one hour at a time"]},
@@ -7721,7 +7877,22 @@ function routeForRecoveryStage(){
   return 'longterm';
 }
 
-async function initSupabase(){const {data:{session}}=await sb.auth.getSession();if(session?.user)await beginSession(session.user);else $('#authOverlay').classList.remove('hidden')}
+async function initSupabase(){
+  try{
+    const result=await withAuthTimeout(sb.auth.getSession(),5000,'Session check timed out.');
+    const session=result?.data?.session;
+    if(session?.user){
+      beginSession(session.user);
+    }else{
+      $('#authOverlay').classList.remove('hidden');
+    }
+  }catch(error){
+    console.warn('Initial session check warning',error);
+    $('#authOverlay').classList.remove('hidden');
+    $('#authMsg').textContent='Sign in to continue.';
+    $('#authMsg').className='auth-msg';
+  }
+}
 initSupabase();
 </script>
 <!-- LELLEE MASTER INDEX
@@ -7835,7 +8006,6 @@ Includes:
 <div class="final-onboarding-actions"><button class="approved-link hidden" id="onboardingBack" type="button">Back</button><button class="approved-link" id="onboardingSkip" type="button">Finish later</button><button class="approved-small-action" id="onboardingNext" type="button">Continue</button></div>
 </div>
 </div>
-<script src="/lellee-v1.js"></script>
 <script src="/push-button-hotfix.js"></script>
 <div class="legal-acceptance-overlay hidden" id="legalAcceptanceOverlay"><div class="legal-acceptance-card"><span class="approved-kicker">PRIVACY &amp; SAFETY UPDATE</span><h2>Before continuing</h2><p>Lellee stores sensitive recovery information. Review the current consumer terms and privacy notices.</p><div class="legal-acceptance-links"><a href="/terms.html" target="_blank">Terms</a><a href="/privacy.html" target="_blank">Privacy</a><a href="/consumer-health-privacy.html" target="_blank">Consumer Health Data</a><a href="/safety.html" target="_blank">Safety</a></div><label><input id="legalGateAdult" type="checkbox"/> I confirm I am at least 18.</label><label><input id="legalGateAgree" type="checkbox"/> I agree to the current Terms and acknowledge the Privacy and Consumer Health Data notices.</label><label><input id="legalGateSafety" type="checkbox"/> I understand Lellee is not an emergency service or individualized medical treatment.</label><div class="legal-acceptance-actions"><span id="legalGateStatus"></span><button class="approved-small-action" id="legalAcceptContinue">Accept &amp; Continue</button></div></div></div><script src="/legal-privacy-safety.js"></script><script src="/program-coach-core.js"></script>
 <div class="admin-overlay hidden" id="programBuilderEditor">
@@ -8107,7 +8277,6 @@ Transportation"></textarea></label>
 <script src="/build-4-community.js"></script>
 <script src="/build-5-professional.js"></script>
 <script src="/build-6-platform.js"></script>
-<script src="/consolidated-repair.js?v=20260816-r4-auth-bridge"></script>
 <script src="/journal-review-hotfix.js?v=20260816-journal-review-r1"></script>
 <script src="/lellee-final-repair.js?v=20260816-final-r3-plus-payments"></script>
 <script src="/lellee-pricing-update.js?v=20260816-pricing-r2"></script>
