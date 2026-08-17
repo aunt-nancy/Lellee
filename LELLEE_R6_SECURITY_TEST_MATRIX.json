@@ -1,0 +1,66 @@
+{
+  "version": "2026-08-16-r6",
+  "status": "pre-enable security gate",
+  "tests": [
+    {
+      "id": "AUTH-01",
+      "name": "Unauthenticated request denied",
+      "expected": "401",
+      "pass_condition": "No agent data returned and denial is audited"
+    },
+    {
+      "id": "AGENT-01",
+      "name": "Disabled agent denied",
+      "expected": "403",
+      "pass_condition": "Agent cannot execute while agent_registry.is_enabled=false"
+    },
+    {
+      "id": "CAP-01",
+      "name": "Disabled capability denied",
+      "expected": "403",
+      "pass_condition": "Capability cannot execute while grant is false"
+    },
+    {
+      "id": "RLS-01",
+      "name": "User A cannot read User B private records",
+      "expected": "0 rows / denied",
+      "pass_condition": "No cross-user data exposure"
+    },
+    {
+      "id": "CONSENT-01",
+      "name": "Sensitive coaching capability denied without consent",
+      "expected": "403",
+      "pass_condition": "No shared-goal data returned"
+    },
+    {
+      "id": "CONSENT-02",
+      "name": "Consent allows only approved capability",
+      "expected": "200",
+      "pass_condition": "Only explicitly shared fields are returned"
+    },
+    {
+      "id": "CONSENT-03",
+      "name": "Revoked consent immediately blocks capability",
+      "expected": "403",
+      "pass_condition": "Previously allowed request fails after revocation"
+    },
+    {
+      "id": "FIELD-01",
+      "name": "Housing response excludes journal/coaching/payment data",
+      "expected": "200 sanitized",
+      "pass_condition": "Forbidden fields absent"
+    },
+    {
+      "id": "AUDIT-01",
+      "name": "Allowed and denied attempts are audited",
+      "expected": "audit rows",
+      "pass_condition": "Audit contains agent, capability, outcome, timestamp; no sensitive payload"
+    },
+    {
+      "id": "SECRET-01",
+      "name": "Service-role key absent from browser bundle",
+      "expected": "no matches",
+      "pass_condition": "No service-role secret in HTML/JS/public assets"
+    }
+  ]
+}

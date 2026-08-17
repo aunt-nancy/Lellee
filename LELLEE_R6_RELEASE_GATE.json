@@ -1,0 +1,7 @@
+{
+  "gate": "agent_security_r6",
+  "required_passes": 10,
+  "agents_must_remain_disabled_until_pass": true,
+  "production_data_for_testing": false,
+  "release_status": "BLOCKED_PENDING_TEST_RESULTS"
+}
