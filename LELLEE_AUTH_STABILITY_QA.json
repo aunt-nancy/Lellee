@@ -1,0 +1,26 @@
+{
+  "release": "LELLEE_AUTH_STABILITY_FULL_REBUILD",
+  "status": "PASS",
+  "checks": {
+    "single_sign_in_owner": "PASS",
+    "external_auth_state_listeners": "PASS",
+    "all_local_assets_present": "PASS",
+    "all_staged_modules_present": "PASS",
+    "approved_logo_locked": "PASS",
+    "pricing_render_loop_removed": "PASS",
+    "coach_visibility_render_loop_removed": "PASS",
+    "modules_staged_after_auth": "PASS",
+    "service_worker_cache_refresh": "PASS",
+    "javascript_syntax": "PASS"
+  },
+  "sign_in_files": [
+    [
+      "recovery.html",
+      1
+    ]
+  ],
+  "external_auth_state_listener_files": [],
+  "missing_local_assets": [],
+  "missing_staged_modules": [],
+  "blocking_issues": []
+}

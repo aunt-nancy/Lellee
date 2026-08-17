@@ -261,8 +261,8 @@
       renderAll();
       return;
     }
-    const {data:{session}} = await client.auth.getSession();
-    state.user = session?.user || null;
+    const sessionUser = window.LelleeAuthContext?.getCurrentUser?.() || null;
+    state.user = sessionUser;
     if (!state.user) {
       renderAll();
       return;
@@ -789,9 +789,6 @@
     let attempts=0;
     const navTimer=setInterval(() => { if (installNav() || ++attempts>30) clearInterval(navTimer); },100);
     await refreshState();
-    client?.auth.onAuthStateChange((_event,session) => {
-      if (session?.user?.id !== state.user?.id || !session?.user) setTimeout(refreshState,40);
-    });
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded',initialize,{once:true});

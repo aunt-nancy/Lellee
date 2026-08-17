@@ -164,7 +164,7 @@
   async function hydrate(){
     try{const cached=JSON.parse(localStorage.getItem(PREF_CACHE)||'null');if(cached)state.preferences={...state.preferences,...cached}}catch(_e){}
     applyPreferenceState();if(!client)return;
-    const {data:{session}}=await client.auth.getSession();state.user=session?.user||null;state.isAdmin=['admin','owner','service_role'].includes(session?.user?.app_metadata?.role||'');installNav();
+    const sessionUser=window.LelleeAuthContext?.getCurrentUser?.()||null;state.user=sessionUser;state.isAdmin=['admin','owner','service_role'].includes(sessionUser?.app_metadata?.role||'');installNav();
     if(!state.user)return;
     const {data,error}=await client.rpc('lellee_get_platform_bootstrap');if(!error&&data){state.preferences={...state.preferences,...(data.preferences||{})};state.membership=data.membership||state.membership;state.entitlements=data.entitlements||[];state.translations=data.translations||{};state.locales=data.locales||[];applyPreferenceState()}
     const readiness=await client.rpc('lellee_build6_release_readiness');if(!readiness.error){state.readiness=readiness.data;renderReadiness()}
@@ -180,7 +180,7 @@
     installNetworkFeedback();installPages();installDoubleClickGuard();watchTranslations();bindEvents();
     let tries=0;const timer=setInterval(()=>{if(installNav()||++tries>40)clearInterval(timer)},100);
     await hydrate();installNav();applyTranslations();
-    client?.auth.onAuthStateChange((_event,session)=>{if(session?.user?.id!==state.user?.id||!session?.user)setTimeout(hydrate,50)});
+    
     window.LelleePlatform={get preferences(){return state.preferences},get membership(){return state.membership},get entitlements(){return state.entitlements},hasFeature,formatDate:(value,options={})=>new Intl.DateTimeFormat(state.preferences.locale_code||'en-US',{timeZone:state.preferences.timezone||'America/Los_Angeles',...options}).format(new Date(value)),navigate,refreshReadiness};
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initialize,{once:true});else initialize();

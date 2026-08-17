@@ -205,21 +205,9 @@
     return activatePage(page);
   }
 
-  function rememberPage(page) {
-    if (!page || !document.getElementById(`page-${page}`)) return;
-    localStorage.setItem(PAGE_KEY, page);
-    localStorage.setItem(CATEGORY_KEY, categoryForPage(page));
-  }
+  function rememberPage(page) { /* Core recovery router owns per-user resume state. */ }
 
-  function restorePage() {
-    if (restoreAttempted) return;
-    const overlay = document.getElementById('authOverlay');
-    if (overlay && !overlay.classList.contains('hidden')) return;
-    restoreAttempted = true;
-    const page = localStorage.getItem(PAGE_KEY);
-    if (!page || page === 'today') return;
-    setTimeout(() => navigateTo(page), 80);
-  }
+  function restorePage() { /* Core recovery router restores the last safe page. */ }
 
   function watchPageState() {
     document.addEventListener('click', event => {
@@ -298,7 +286,7 @@
   function setSidebarLogo() {
     const logo = document.querySelector('.sidebar .approved-logo');
     if (!logo) return;
-    logo.src = '/lellee-sidebar-logo.png';
+    logo.src = '/lellee-approved-logo-locked.png?v=20260817-locked';
     logo.removeAttribute('srcset');
     logo.alt = 'Lellee — Your journey. Your support. Your way.';
   }

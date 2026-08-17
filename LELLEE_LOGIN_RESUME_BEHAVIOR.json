@@ -1,0 +1,12 @@
+{
+  "change": "Post-login resume routing",
+  "behavior": {
+    "returning_user_same_device": "resume last safe page",
+    "no_saved_page": "Today",
+    "missing_or_restricted_saved_page": "Today",
+    "new_device_or_cleared_storage": "Today"
+  },
+  "storage": "per-user localStorage key",
+  "security": "admin/internal operations pages are excluded from automatic resume",
+  "auth": "does not add another login handler"
+}

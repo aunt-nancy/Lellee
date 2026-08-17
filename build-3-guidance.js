@@ -457,28 +457,13 @@
       const progress = state.learningProgress.get(slug(title));
       card.classList.toggle('b3-completed', progress?.status === 'completed');
       card.classList.toggle('b3-saved', progress?.status === 'saved');
-
-      // IMPORTANT: keep this DOM update idempotent. The previous version
-      // removed and recreated the status node every time a MutationObserver
-      // fired. That mutation triggered the same observer again and could
-      // create an endless render loop that froze the Recovery page.
-      let pill = card.querySelector('.b3-learning-card-status');
-      if (!progress) {
-        if (pill) pill.remove();
-        return;
+      card.querySelector('.b3-learning-card-status')?.remove();
+      if (progress) {
+        const status = document.createElement('span');
+        status.className = `b3-learning-card-status b3-status-pill ${progress.status}`;
+        status.textContent = progress.status === 'completed' ? '✓ Completed' : 'Saved for later';
+        card.querySelector('.approved-learning-actions')?.before(status);
       }
-
-      const nextClass = `b3-learning-card-status b3-status-pill ${progress.status}`;
-      const nextText = progress.status === 'completed' ? '✓ Completed' : 'Saved for later';
-      if (!pill) {
-        pill = document.createElement('span');
-        pill.className = nextClass;
-        pill.textContent = nextText;
-        card.querySelector('.approved-learning-actions')?.before(pill);
-        return;
-      }
-      if (pill.className !== nextClass) pill.className = nextClass;
-      if (pill.textContent !== nextText) pill.textContent = nextText;
     });
   }
 
@@ -574,10 +559,7 @@
       const select = event.target.closest('[data-b3-select-path]');
       if (select) { event.preventDefault(); toggleSelectedPath(select.dataset.b3SelectPath); }
     }, true);
-    // Do not observe the whole Learn subtree for child-list mutations here.
-    // annotateLearningCards() itself may add a status pill; observing that same
-    // mutation caused a self-triggering loop. Page activation already refreshes
-    // learning progress, and the save handlers update the detail immediately.
+    new MutationObserver(() => { annotateLearningCards(); updateLearningDetail(); }).observe($('#page-learn') || document.body, { subtree: true, childList: true });
   }
 
   /* ------------------------------------------------------------------
