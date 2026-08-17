@@ -1,0 +1,16 @@
+{
+  "agent": "resources",
+  "mode": "search_only",
+  "observation_gate": {
+    "must_pass": [
+      "no cross-user access",
+      "no forbidden sensitive fields",
+      "all requests audited",
+      "denied requests remain denied",
+      "no unexpected writes",
+      "kill switch tested",
+      "no service-role key in client assets"
+    ],
+    "next_agent_after_pass": "housing"
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "version": "2026-08-16-r7",
+  "activation_order": [
+    "resources",
+    "housing",
+    "reminders",
+    "coaching"
+  ],
+  "currently_approved_for_activation": {
+    "agent": "resources",
+    "mode": "search_only",
+    "capabilities": [
+      "resources.search"
+    ],
+    "writes_enabled": false,
+    "sensitive_context_access": false,
+    "requires_authenticated_user": true,
+    "requires_audit_log": true,
+    "kill_switch_required": true
+  },
+  "blocked_capabilities": [
+    "resources.save",
+    "resources.preferences",
+    "housing.search",
+    "housing.save",
+    "housing.preferences",
+    "reminders.read",
+    "reminders.create",
+    "reminders.update",
+    "coaching.schedule",
+    "coaching.shared_messages",
+    "coaching.shared_goals"
+  ],
+  "release_rule": "Do not activate the next agent until Resources passes the observation gate."
+}
