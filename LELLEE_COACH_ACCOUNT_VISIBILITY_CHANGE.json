@@ -1,0 +1,10 @@
+{
+  "change": "Coaching account-count privacy control",
+  "default_visibility": "hidden",
+  "control": "On/Off switch",
+  "persistence": "session only; resets to Off in a new browser session",
+  "applies_to": [
+    "coach revenue active client/account totals",
+    "coach dashboard account/client totals when matching known selectors/labels"
+  ]
+}

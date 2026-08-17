@@ -1053,6 +1053,30 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <link rel="stylesheet" href="/lellee-agent-control-center.css?v=20260816-r12">
 
 <link rel="stylesheet" href="/lellee-admin-agent-operations.css?v=20260816-r13">
+
+<style id="coach-account-visibility-style">
+.coach-account-visibility-control{
+  display:flex;align-items:center;justify-content:space-between;gap:14px;
+  padding:12px 14px;margin:10px 0 16px;border:1px solid rgba(89,63,120,.14);
+  border-radius:14px;background:rgba(255,255,255,.72)
+}
+.coach-account-visibility-control .copy{display:grid;gap:2px}
+.coach-account-visibility-control small{opacity:.72}
+.coach-visibility-switch{display:inline-flex;align-items:center;gap:8px;cursor:pointer}
+.coach-visibility-switch input{position:absolute;opacity:0;pointer-events:none}
+.coach-visibility-track{
+  width:46px;height:26px;border-radius:999px;background:rgba(90,90,90,.22);
+  position:relative;transition:.2s ease
+}
+.coach-visibility-track:after{
+  content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;
+  border-radius:50%;background:#fff;box-shadow:0 1px 5px rgba(0,0,0,.18);transition:.2s ease
+}
+.coach-visibility-switch input:checked + .coach-visibility-track{background:rgba(89,63,120,.68)}
+.coach-visibility-switch input:checked + .coach-visibility-track:after{transform:translateX(20px)}
+.coach-account-count-hidden{filter:blur(7px);user-select:none}
+</style>
+
 </head>
 <body><a class="skip-link" href="#mainContent">Skip to main content</a><a class="lellee-skip" href="#lelleeMain">Skip to main content</a>
 <div class="prod-overlay hidden" id="onboardingOverlay">
@@ -4978,6 +5002,19 @@ Includes the approved Lellee consumer experience from early recovery through lif
 </section>
 <section class="page" id="page-coach-dashboard">
 <div class="approved-inner">
+
+<div class="coach-account-visibility-control" id="coachAccountVisibilityControl">
+  <div class="copy">
+    <b>Show account count</b>
+    <small>Off by default. Turn on only when you want the account total visible.</small>
+  </div>
+  <label class="coach-visibility-switch" aria-label="Show coaching account count">
+    <input type="checkbox" id="coachAccountVisibilityToggle">
+    <span class="coach-visibility-track" aria-hidden="true"></span>
+    <span id="coachAccountVisibilityLabel">Off</span>
+  </label>
+</div>
+
 <div class="approved-inner-head">
 <div><span class="approved-kicker">COACH DASHBOARD</span><h2 id="coachDashboardBusinessName">My Coaching Business</h2><p>Manage clients, groups, services and communication from one place.</p></div>
 <button class="approved-link" data-page="coach-business">Business Settings</button>
@@ -8083,5 +8120,74 @@ Transportation"></textarea></label>
 <script src="/lellee-agent-control-center.js?v=20260816-r12"></script>
 
 <script src="/lellee-admin-agent-operations.js?v=20260816-r13"></script>
+
+<script id="coach-account-visibility-script">
+(function(){
+  'use strict';
+
+  const STORAGE_KEY = 'lellee_coach_account_count_visible';
+
+  function coachCountNodes(){
+    const selectors = [
+      '#coachRevenueClients',
+      '#coachClientCount',
+      '#coachAccountCount',
+      '[data-coach-account-count]',
+      '[data-coach-client-count]'
+    ];
+    const set = new Set();
+    selectors.forEach(sel => document.querySelectorAll(sel).forEach(el => set.add(el)));
+
+    // Also catch summary cards whose labels clearly identify account/client totals.
+    document.querySelectorAll('#page-coach-dashboard article, #page-coach-revenue article, [data-page="coach-dashboard"] article').forEach(card => {
+      const label = (card.textContent || '').toLowerCase();
+      if (/(active clients|client accounts|accounts|active accounts)/.test(label)) {
+        const value = card.querySelector('b, strong, .value, [data-value]');
+        if (value) set.add(value);
+      }
+    });
+    return Array.from(set);
+  }
+
+  function setVisibility(visible){
+    coachCountNodes().forEach(node => {
+      node.classList.toggle('coach-account-count-hidden', !visible);
+      node.setAttribute('aria-hidden', visible ? 'false' : 'true');
+    });
+
+    const toggle = document.getElementById('coachAccountVisibilityToggle');
+    const label = document.getElementById('coachAccountVisibilityLabel');
+    if (toggle) toggle.checked = !!visible;
+    if (label) label.textContent = visible ? 'On' : 'Off';
+  }
+
+  function init(){
+    // Privacy-first: always start hidden in a fresh browser/session.
+    const saved = sessionStorage.getItem(STORAGE_KEY) === 'true';
+    setVisibility(saved);
+
+    const toggle = document.getElementById('coachAccountVisibilityToggle');
+    if (toggle && !toggle.dataset.bound){
+      toggle.dataset.bound = 'true';
+      toggle.addEventListener('change', () => {
+        const visible = toggle.checked;
+        sessionStorage.setItem(STORAGE_KEY, visible ? 'true' : 'false');
+        setVisibility(visible);
+      });
+    }
+
+    // Re-apply after dynamic dashboard rendering.
+    const observer = new MutationObserver(() => setVisibility(sessionStorage.getItem(STORAGE_KEY) === 'true'));
+    observer.observe(document.body, {childList:true, subtree:true});
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init, {once:true});
+  } else {
+    init();
+  }
+})();
+</script>
+
 </body>
 </html>
