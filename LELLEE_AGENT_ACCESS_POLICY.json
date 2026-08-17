@@ -1,0 +1,110 @@
+{
+  "version": "2026-08-16-r4",
+  "default": "deny",
+  "principles": {
+    "least_privilege": true,
+    "explicit_user_consent_for_sensitive_context": true,
+    "cross_agent_data_sharing": "deny_unless_explicitly_granted",
+    "service_role_in_browser": false,
+    "audit_every_agent_action": true,
+    "user_can_revoke_agent_access": true
+  },
+  "sensitive_domains_never_implicitly_shared": [
+    "journal_entries",
+    "private_messages",
+    "clinical_notes",
+    "substance_use_history",
+    "mental_health_history",
+    "support_network_private_notes",
+    "payment_details",
+    "government_ids",
+    "exact_location_history"
+  ],
+  "agents": {
+    "housing": {
+      "purpose": "Help users find housing, recovery residences, independent living, and housing-related resources.",
+      "read": [
+        "profile.first_name",
+        "profile.city",
+        "profile.state",
+        "profile.zip_code",
+        "housing.preferences",
+        "housing.budget_range",
+        "housing.accessibility_needs",
+        "housing.household_size",
+        "housing.pet_needs",
+        "housing.saved_listings"
+      ],
+      "write": [
+        "housing.saved_listings",
+        "housing.search_preferences",
+        "housing.agent_notes"
+      ],
+      "never_read": [
+        "journal_entries",
+        "coaching.private_messages",
+        "clinical_notes",
+        "payment_details"
+      ]
+    },
+    "resources": {
+      "purpose": "Find relevant community, recovery, employment, education, food, transportation, and social-service resources.",
+      "read": [
+        "profile.city",
+        "profile.state",
+        "profile.zip_code",
+        "resource.preferences",
+        "resource.saved_categories"
+      ],
+      "write": [
+        "resource.saved_items",
+        "resource.preferences",
+        "resource.agent_notes"
+      ],
+      "never_read": [
+        "journal_entries",
+        "coaching.private_messages",
+        "payment_details"
+      ]
+    },
+    "coaching": {
+      "purpose": "Support approved coaching workflows and coach-client coordination.",
+      "read": [
+        "profile.first_name",
+        "coaching.assigned_coach",
+        "coaching.goals_shared_with_coach",
+        "coaching.appointments",
+        "coaching.messages_shared_with_coach",
+        "milestones.user_shared"
+      ],
+      "write": [
+        "coaching.appointments",
+        "coaching.messages_shared_with_coach",
+        "coaching.goal_updates",
+        "coaching.session_metadata"
+      ],
+      "never_read": [
+        "journal_entries_unshared",
+        "payment_details",
+        "housing.private_notes"
+      ]
+    },
+    "reminders": {
+      "purpose": "Create and deliver user-approved reminders, appointments, milestone notices, and follow-up prompts.",
+      "read": [
+        "reminders.user_created",
+        "calendar.user_visible_events",
+        "milestones.reminder_enabled"
+      ],
+      "write": [
+        "reminders.user_created",
+        "reminders.delivery_status"
+      ],
+      "never_read": [
+        "journal_entries",
+        "coaching.message_content",
+        "payment_details"
+      ]
+    }
+  }
+}
