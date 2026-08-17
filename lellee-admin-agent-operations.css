@@ -1,0 +1,28 @@
+.agent-admin-shell{display:grid;gap:20px}
+.agent-admin-emergency{display:flex;justify-content:space-between;gap:20px;align-items:center;padding:20px;border:1px solid rgba(120,65,65,.18);border-radius:20px;background:rgba(255,255,255,.82)}
+.agent-admin-emergency.active{background:rgba(150,55,55,.08);border-color:rgba(150,55,55,.35)}
+.agent-admin-emergency h3{margin:3px 0 6px}
+.agent-admin-emergency p{margin:0}
+.agent-admin-emergency button{border:0;border-radius:12px;padding:10px 14px;cursor:pointer}
+.agent-admin-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.agent-admin-card{padding:18px;border:1px solid rgba(89,63,120,.14);border-radius:20px;background:rgba(255,255,255,.82)}
+.agent-admin-card-head{display:flex;justify-content:space-between;gap:12px;align-items:center}
+.agent-admin-card h3{margin:2px 0}
+.agent-admin-card button{border:0;border-radius:10px;padding:8px 12px;cursor:pointer}
+.agent-admin-status{margin:12px 0;padding:8px 10px;border-radius:10px;background:rgba(89,63,120,.06);font-size:13px}
+.agent-admin-cap-list{display:grid;gap:8px}
+.agent-admin-cap-row{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:8px 0;border-top:1px solid rgba(89,63,120,.08)}
+.agent-admin-alerts,.agent-admin-audit{padding:20px;border:1px solid rgba(89,63,120,.14);border-radius:20px;background:rgba(255,255,255,.78)}
+.agent-admin-alert{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px solid rgba(89,63,120,.08)}
+.agent-admin-alert small{display:block;margin-top:3px;opacity:.7}
+.agent-admin-alert.critical b{font-weight:700}
+.agent-admin-audit-row{display:grid;grid-template-columns:110px 1fr 80px auto;gap:12px;padding:9px 0;border-top:1px solid rgba(89,63,120,.08);align-items:center}
+.agent-admin-audit-row .allowed,.agent-admin-audit-row .denied{text-transform:uppercase;font-size:12px}
+.agent-admin-audit-row time{font-size:12px;opacity:.7}
+.agent-admin-loading{opacity:.7}
+@media(max-width:760px){
+  .agent-admin-grid{grid-template-columns:1fr}
+  .agent-admin-emergency{align-items:flex-start;flex-direction:column}
+  .agent-admin-audit-row{grid-template-columns:1fr auto}
+  .agent-admin-audit-row time{grid-column:1/-1}
+}

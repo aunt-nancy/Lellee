@@ -1,0 +1,27 @@
+{
+  "version": "2026-08-16-r13",
+  "surface": "admin_agent_operations",
+  "admin_only": true,
+  "controls": {
+    "global_emergency_stop": true,
+    "agent_enable_disable": true,
+    "capability_enable_disable": true,
+    "audit_monitoring": true,
+    "security_alerts": true
+  },
+  "security": {
+    "ordinary_users_can_access": false,
+    "browser_service_role_key": false,
+    "all_admin_changes_audited": true,
+    "default_global_stop": false,
+    "default_new_agent_enabled": false,
+    "default_new_capability_allowed": false
+  },
+  "alert_rules": {
+    "denied_requests_15m": 10,
+    "same_user_denials_15m": 5,
+    "same_agent_denials_15m": 8,
+    "cross_user_or_rls_violation": "critical",
+    "service_role_exposure": "critical"
+  }
+}

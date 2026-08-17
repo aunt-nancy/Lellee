@@ -1,0 +1,14 @@
+{
+  "gate": "admin_agent_operations_r13",
+  "status": "BLOCKED_PENDING_TEST_RESULTS",
+  "required": [
+    "admin_auth_pass",
+    "global_stop_pass",
+    "agent_toggle_pass",
+    "capability_toggle_pass",
+    "admin_audit_pass",
+    "alert_generation_pass",
+    "secret_scan_pass"
+  ],
+  "next_after_pass": "final_consolidated_release"
+}
