@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b1028">
+<title>Lellee · Offline</title>
+<style>
+body{margin:0;font-family:Inter,system-ui,sans-serif;background:#f8f6f5;color:#25242a;display:grid;min-height:100vh;place-items:center;padding:22px}
+main{width:min(520px,100%);background:white;border:1px solid #e5e0e6;border-radius:18px;padding:28px;box-shadow:0 20px 50px rgba(25,20,35,.08)}
+img{display:block;width:180px;max-width:70%;margin:0 auto 24px}
+h1{font-family:Georgia,serif;font-weight:500;font-size:1.45rem;margin:0 0 10px}
+p{font-size:.9rem;line-height:1.6;color:#68626d}
+button{border:0;border-radius:10px;background:#5d466f;color:white;padding:11px 16px;font-weight:800;cursor:pointer}
+.note{margin-top:18px;background:#f5faf6;border:1px solid #d8e5dc;border-radius:10px;padding:11px;font-size:.78rem;line-height:1.5}
+</style>
+</head>
+<body>
+<main>
+<img src="/pwa-icon-192.png" alt="Lellee">
+<h1>You’re offline right now.</h1>
+<p>The Lellee app shell can still open, but live account data and actions need an internet connection.</p>
+<button onclick="location.reload()">Try Again</button>
+<div class="note"><b>Privacy first:</b> Lellee does not store journals, private messages, safety activity, or sensitive account data in the offline app cache.</div>
+</main>
+</body>
+</html>

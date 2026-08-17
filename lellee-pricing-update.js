@@ -21,15 +21,15 @@
   function fixPlus(){
     setText('#plusPriceMonthly', money(LELLEE_PRICES.plus.monthly));
     const pricePill=$('#plusPriceMonthly')?.nextElementSibling;
-    if(pricePill && pricePill.tagName==='SMALL') pricePill.textContent='/month';
+    if(pricePill && pricePill.tagName==='SMALL' && pricePill.textContent!=='/month') pricePill.textContent='/month';
     setText('#plusComparePrice', money(LELLEE_PRICES.plus.monthly));
 
     const choice=$('#plusPlanChoice');
     if(choice){
       const monthly=choice.querySelector('option[value="monthly"]');
       const annual=choice.querySelector('option[value="annual"]');
-      if(monthly) monthly.textContent='Monthly — $5.99/month';
-      if(annual) annual.textContent='Annual — $59.99/year';
+      if(monthly && monthly.textContent!=='Monthly — $5.99/month') monthly.textContent='Monthly — $5.99/month';
+      if(annual && annual.textContent!=='Annual — $59.99/year') annual.textContent='Annual — $59.99/year';
     }
 
     const m=$('#adminPlusMonthly'), a=$('#adminPlusAnnual');
@@ -44,8 +44,8 @@
     if(premiumChoice){
       const monthly=premiumChoice.querySelector('option[value="monthly"]');
       const annual=premiumChoice.querySelector('option[value="annual"]');
-      if(monthly) monthly.textContent='Monthly — $14.99/month';
-      if(annual) annual.textContent='Annual — $149/year';
+      if(monthly && monthly.textContent!=='Monthly — $14.99/month') monthly.textContent='Monthly — $14.99/month';
+      if(annual && annual.textContent!=='Annual — $149/year') annual.textContent='Annual — $149/year';
     }
   }
 
@@ -109,17 +109,7 @@
     fixLiteralOldPlusPrices();
     addPricingNote();
   }
-
-  let scheduled=false;
-  function schedule(){
-    if(scheduled) return; scheduled=true;
-    requestAnimationFrame(()=>{ scheduled=false; applyPricing(); });
-  }
-
-  document.addEventListener('DOMContentLoaded', applyPricing, {once:true});
-  window.addEventListener('load', applyPricing, {once:true});
-  const mo=new MutationObserver(schedule);
-  mo.observe(document.documentElement,{subtree:true,childList:true,characterData:true});
+  // Pricing is canonical and finite. Avoid a document-wide MutationObserver that can create a render loop.
   setTimeout(applyPricing,250);
   setTimeout(applyPricing,1000);
 })();

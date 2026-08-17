@@ -387,10 +387,9 @@
         document.getElementById('confirmationMessage').textContent=t('check_email_body');
         showStep('confirmation');
       }else{
-        const {data,error}=await sb.auth.signInWithPassword({email,password});
-        if(error)throw error;
-        if(data?.session){await finalizeSelectedPath();return;}
-        throw new Error('No session returned.');
+        // Recovery owns returning-user authentication. Never create a second login session here.
+        location.assign('/app/recovery');
+        return;
       }
     }catch(error){console.error(error);showError(error?.message||t('account_error'));}
     finally{submit.disabled=false;working.classList.add('hidden');}
@@ -423,7 +422,7 @@
   document.getElementById('contextNext')?.addEventListener('click',createRecommendation);
   document.getElementById('choosePath')?.addEventListener('click',()=>{buildPathIntake();authMode='signup';signupStage=1;updateAuthModeUI();showStep('account');});
   document.getElementById('exploreAgain')?.addEventListener('click',()=>{buildPrimaryNeedSelect(survey.primaryNeed);showStep('need');});
-  document.querySelectorAll('[data-auth-mode]').forEach(button=>button.addEventListener('click',()=>{authMode=button.dataset.authMode;if(authMode==='signup')signupStage=1;updateAuthModeUI();clearError();}));
+  document.querySelectorAll('[data-auth-mode]').forEach(button=>button.addEventListener('click',()=>{if(button.dataset.authMode==='signin'){location.assign('/app/recovery');return;}authMode='signup';signupStage=1;updateAuthModeUI();clearError();}));
   document.getElementById('accountBack')?.addEventListener('click',event=>{if(authMode==='signup'&&signupStage===2){event.preventDefault();event.stopImmediatePropagation();signupStage=1;updateAuthModeUI();dialog?.scrollTo({top:0,behavior:'smooth'});}},true);
   document.getElementById('journeyAuthForm')?.addEventListener('submit',submitAccount);
   document.addEventListener('click',event=>{const button=event.target.closest('[data-voice-target]');if(button)startVoice(button.dataset.voiceTarget,button);});
