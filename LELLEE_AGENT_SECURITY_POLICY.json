@@ -1,0 +1,62 @@
+{
+  "policy_version": "2026-08-16-r1",
+  "default_decision": "deny",
+  "external_ai": {
+    "crawl": "deny",
+    "search": "deny",
+    "training": "deny",
+    "agent_fetch": "deny"
+  },
+  "internal_agent_requirements": {
+    "authenticated_service_identity": true,
+    "active_registry_entry": true,
+    "explicit_capability_grant": true,
+    "least_privilege": true,
+    "audit_log_required": true,
+    "human_review_for_external_action": true
+  },
+  "sensitive_context_default": "deny",
+  "sensitive_fields": [
+    "journal_text",
+    "journal_entries",
+    "private_messages",
+    "message_body",
+    "crisis_activity",
+    "safety_selections",
+    "diagnosis",
+    "diagnoses",
+    "medical_record",
+    "password",
+    "password_hash",
+    "secret",
+    "service_role_key",
+    "access_token",
+    "refresh_token",
+    "payment_credentials",
+    "full_card_number",
+    "cvv",
+    "support_contacts_private"
+  ],
+  "approved_capabilities": [
+    "public_resource_search",
+    "housing_search",
+    "employment_search",
+    "benefits_resource_search",
+    "reminder_assistance",
+    "calendar_assistance",
+    "coach_workflow_draft",
+    "public_business_research",
+    "quality_assurance",
+    "operational_drafting"
+  ],
+  "never_autonomous": [
+    "publish_public_content",
+    "send_cold_outreach",
+    "change_billing",
+    "change_user_permissions",
+    "make_clinical_diagnosis",
+    "make_crisis_decision",
+    "read_private_journal_without_explicit_user_share",
+    "read_private_messages_without_explicit_scope"
+  ]
+}
