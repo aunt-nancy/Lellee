@@ -1,0 +1,30 @@
+{
+  "version": "2026-08-16-r11",
+  "feature": "coaching_message_agent_sharing",
+  "default": "off",
+  "automatic_sharing": false,
+  "sharing_granularity": "explicit_message_or_thread",
+  "requirements": [
+    "signed_in_user",
+    "explicit_user_consent",
+    "message_owned_by_user_or_visible_to_user",
+    "agent_capability_enabled",
+    "share_record_active",
+    "server_side_authorization",
+    "audit_event"
+  ],
+  "never_share_implicitly": [
+    "journal_entries",
+    "clinical_notes",
+    "substance_use_history",
+    "mental_health_history",
+    "payment_details",
+    "government_ids",
+    "housing.private_notes"
+  ],
+  "revocation": {
+    "supported": true,
+    "stops_future_agent_reads": true,
+    "note": "Revocation does not erase information already lawfully included in a prior completed agent response or audit record."
+  }
+}

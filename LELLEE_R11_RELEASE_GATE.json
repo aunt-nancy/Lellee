@@ -1,0 +1,16 @@
+{
+  "gate": "coaching_shared_messages_r11",
+  "status": "BLOCKED_PENDING_TEST_RESULTS",
+  "capability_remains_disabled_until_pass": "coaching.shared_messages",
+  "required": [
+    "explicit_share_only",
+    "cross_user_rls_pass",
+    "revocation_pass",
+    "unshared_thread_denied",
+    "forbidden_data_pass",
+    "audit_pass",
+    "kill_switch_pass",
+    "secret_scan_pass"
+  ],
+  "next_after_pass": "agent_control_center"
+}
