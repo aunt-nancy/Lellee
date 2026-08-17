@@ -131,8 +131,8 @@
       text.textContent='Core recovery is active. Choose a billing option below to continue to secure payment when you are ready.';
       badge.textContent='FREE';
     }
-    const p=$('#plusPriceMonthly'); if(p) p.textContent='TBD';
-    const cp=$('#plusComparePrice'); if(cp) cp.textContent='TBD';
+    const p=$('#plusPriceMonthly'); if(p) p.textContent='$5.99';
+    const cp=$('#plusComparePrice'); if(cp) cp.textContent='$5.99';
     const start=$('#startPlusMembership');
     const manage=$('#managePlusBilling');
     if(start){

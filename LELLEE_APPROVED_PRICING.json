@@ -1,0 +1,24 @@
+{
+  "free": {
+    "monthly": 0
+  },
+  "plus": {
+    "monthly": 5.99,
+    "annual": 59.99
+  },
+  "premium": {
+    "monthly": 14.99,
+    "annual": 149
+  },
+  "journal_companion": {
+    "monthly": 4.99
+  },
+  "coach_add_on": {
+    "monthly": 49.99,
+    "requires": "Lellee Premium"
+  },
+  "additional_coaching": {
+    "price": 19.99,
+    "duration_minutes": 15
+  }
+}
