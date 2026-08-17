@@ -1,0 +1,58 @@
+{
+  "version": "2026-08-16-r12",
+  "surface": "user_agent_control_center",
+  "principles": {
+    "user_controls_only_their_own_consent": true,
+    "global_agent_enablement_not_exposed_to_users": true,
+    "default_consent": false,
+    "revoke_supported": true,
+    "audit_visibility": "user_own_records_only",
+    "sensitive_message_sharing": "explicit_message_or_thread_only"
+  },
+  "agents": {
+    "resources": {
+      "label": "Resources Agent",
+      "description": "Helps find community, recovery, employment, food, transportation, education and support resources.",
+      "capabilities": [
+        "resources.search"
+      ],
+      "user_consent_required": false,
+      "writes": false,
+      "sensitive_data": false
+    },
+    "housing": {
+      "label": "Housing Agent",
+      "description": "Helps search for housing and housing-related resources using only approved housing preferences.",
+      "capabilities": [
+        "housing.search"
+      ],
+      "user_consent_required": false,
+      "writes": false,
+      "sensitive_data": false
+    },
+    "reminders": {
+      "label": "Reminder Agent",
+      "description": "Reads and manages reminders the user has approved.",
+      "capabilities": [
+        "reminders.read",
+        "reminders.create",
+        "reminders.update"
+      ],
+      "user_consent_required": true,
+      "writes": true,
+      "sensitive_data": false
+    },
+    "coaching": {
+      "label": "Coaching Agent",
+      "description": "Supports scheduling and information the user explicitly shares with coaching.",
+      "capabilities": [
+        "coaching.schedule",
+        "coaching.shared_goals",
+        "coaching.shared_messages"
+      ],
+      "user_consent_required": true,
+      "writes": true,
+      "sensitive_data": true
+    }
+  }
+}

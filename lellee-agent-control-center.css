@@ -1,0 +1,31 @@
+.agent-control-shell{display:grid;gap:20px}
+.agent-control-intro{padding:22px;border:1px solid rgba(89,63,120,.14);border-radius:22px;background:rgba(255,255,255,.72)}
+.agent-control-intro h2{margin:6px 0 8px}
+.agent-control-intro p{margin:0;max-width:760px}
+.agent-control-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.agent-control-card{padding:18px;border:1px solid rgba(89,63,120,.14);border-radius:20px;background:rgba(255,255,255,.82);box-shadow:0 8px 28px rgba(62,46,82,.06)}
+.agent-control-card-head{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center}
+.agent-control-icon{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;background:rgba(125,94,156,.1);font-size:20px}
+.agent-control-card h3{margin:2px 0 0}
+.agent-control-card small{letter-spacing:.08em}
+.agent-control-status{font-size:12px;padding:7px 10px;border-radius:999px;background:rgba(90,90,90,.08)}
+.agent-control-status.active{background:rgba(93,122,88,.12)}
+.agent-control-data,.agent-control-capabilities{margin-top:14px;padding-top:14px;border-top:1px solid rgba(89,63,120,.1)}
+.agent-control-capabilities ul{margin:8px 0 0;padding-left:18px}
+.agent-control-revoke{margin-top:16px;border:0;border-radius:12px;padding:10px 14px;cursor:pointer}
+.agent-control-activity{padding:20px;border:1px solid rgba(89,63,120,.14);border-radius:20px;background:rgba(255,255,255,.78)}
+.agent-activity-list{display:grid;gap:8px;margin-top:12px}
+.agent-activity-row{display:grid;grid-template-columns:1fr auto auto;gap:14px;align-items:center;padding:10px 0;border-top:1px solid rgba(89,63,120,.08)}
+.agent-activity-row small{display:block;margin-top:2px}
+.agent-activity-row span{font-size:12px;text-transform:uppercase}
+.agent-activity-row time{font-size:12px;opacity:.7}
+.agent-control-note{padding:16px 18px;border-radius:16px;background:rgba(125,94,156,.08)}
+.agent-control-note p{margin:4px 0 0}
+.agent-control-loading,.agent-control-empty{opacity:.7}
+@media(max-width:760px){
+  .agent-control-grid{grid-template-columns:1fr}
+  .agent-control-card-head{grid-template-columns:auto 1fr}
+  .agent-control-status{grid-column:1/-1;justify-self:start}
+  .agent-activity-row{grid-template-columns:1fr auto}
+  .agent-activity-row time{grid-column:1/-1}
+}

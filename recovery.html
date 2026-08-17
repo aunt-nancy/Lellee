@@ -1049,6 +1049,8 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <link href="/build-5-professional.css" rel="stylesheet"/>
 <link href="/build-6-platform.css" rel="stylesheet"/>
 <link href="/consolidated-repair.css?v=20260815-r1" rel="stylesheet"/>
+
+<link rel="stylesheet" href="/lellee-agent-control-center.css?v=20260816-r12">
 </head>
 <body><a class="skip-link" href="#mainContent">Skip to main content</a><a class="lellee-skip" href="#lelleeMain">Skip to main content</a>
 <div class="prod-overlay hidden" id="onboardingOverlay">
@@ -5737,6 +5739,19 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <div class="commerce-note"><b>Product checkout is not live in this build.</b><p>Catalog and pricing can be configured now. Checkout activation remains separate from the app launch.</p></div>
 </div>
 </section>
+<section class="page" id="page-agent-control-center">
+  <div class="approved-inner">
+    <div class="approved-inner-head">
+      <div>
+        <span class="approved-kicker">PRIVACY &amp; AGENTS</span>
+        <h2>Agent Control Center</h2>
+        <p>See what Lellee agents can use, review consent, revoke access, and view your recent agent activity.</p>
+      </div>
+      <button class="approved-link" data-page="settings">← Settings</button>
+    </div>
+    <div id="agentControlCenterRoot"></div>
+  </div>
+</section>
 <section class="page" id="page-calendar">
 <div class="approved-inner">
 <div class="approved-inner-head">
@@ -6977,7 +6992,7 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <section class="page" id="page-settings">
 <div class="approved-inner">
 <div class="approved-inner-head">
-<div><span class="approved-kicker">SETTINGS</span><h2>Personalize Lellee</h2><p>Keep the settings you use most visible. Everything else stays one level deeper.</p></div>
+<div><span class="approved-kicker">SETTINGS</span><h2>Personalize Lellee</h2><p>Keep the settings you use most visible. Everything else stays one level deeper.</p><button class="approved-small-action" data-page="agent-control-center">Agent Control Center</button></div>
 <button class="approved-link" data-page="account">Account &amp; Privacy →</button>
 </div>
 <div class="approved-settings-sheet">
@@ -8049,5 +8064,7 @@ Transportation"></textarea></label>
 <script src="/lellee-agent-permissions.js?v=20260816-r4"></script>
 
 <script src="/lellee-coaching-message-consent.js?v=20260816-r11"></script>
+
+<script src="/lellee-agent-control-center.js?v=20260816-r12"></script>
 </body>
 </html>

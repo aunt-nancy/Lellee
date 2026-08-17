@@ -1,0 +1,13 @@
+{
+  "gate": "agent_control_center_r12",
+  "status": "BLOCKED_PENDING_TEST_RESULTS",
+  "required": [
+    "user_scoped_status_pass",
+    "user_scoped_audit_pass",
+    "revoke_agent_pass",
+    "coaching_message_revoke_pass",
+    "no_global_controls_exposed_pass",
+    "secret_scan_pass"
+  ],
+  "next_after_pass": "admin_agent_operations_dashboard"
+}
