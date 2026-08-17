@@ -1041,7 +1041,6 @@ Includes the approved Lellee consumer experience from early recovery through lif
       .guided-activity-note textarea{width:100%;min-height:72px;resize:vertical;border:1px solid #ddd7df;border-radius:8px;background:#fcfbfc;padding:9px 10px;font-size:.66rem;line-height:1.5}
       .guided-activity-hint{font-size:.53rem;color:#8a828d;margin-top:5px}
     </style>
-<link href="/lellee-v1.css" rel="stylesheet"/>
 <link href="/legal-privacy-safety.css" rel="stylesheet"/><link href="/program-coach-core.css" rel="stylesheet"/><link href="/program-builder.css" rel="stylesheet"/><link href="/coach-marketplace.css" rel="stylesheet"/><link href="/inbox-reminders.css" rel="stylesheet"/><link href="/welcome-router.css" rel="stylesheet"/><link href="/organization-licensing.css" rel="stylesheet"/><link href="/life-admin-core.css" rel="stylesheet"/><link href="/resource-navigation.css" rel="stylesheet"/><link href="/progress-core.css" rel="stylesheet"/><link href="/content-studio.css" rel="stylesheet"/><link href="/safety-privacy-core.css" rel="stylesheet"/><link href="/pilot-runtime.css" rel="stylesheet"/><link href="/analytics-insights.css" rel="stylesheet"/><link href="/platform-integration.css" rel="stylesheet"/><link href="/commerce-ops.css" rel="stylesheet"/><link href="/scheduling-crm.css" rel="stylesheet"/><link href="/trust-support.css" rel="stylesheet"/><link href="/automation-workflows.css" rel="stylesheet"/><link href="/personalization-experience.css" rel="stylesheet"/><link href="/release-reliability.css" rel="stylesheet"/><link href="/security-continuity.css" rel="stylesheet"/><link href="/integrations-interop.css" rel="stylesheet"/><link href="/community-peer.css" rel="stylesheet"/><link href="/forms-credentials.css" rel="stylesheet"/><link href="/staff-operations.css" rel="stylesheet"/><link href="/trusted-circle.css" rel="stylesheet"/><link href="/onboarding-help.css" rel="stylesheet"/><link href="/partner-provider-network.css" rel="stylesheet"/><link href="/communications-lifecycle.css" rel="stylesheet"/><link href="/platform-integrity.css" rel="stylesheet"/><link href="/agent-operations.css" rel="stylesheet"/><link href="/growth-partnerships.css" rel="stylesheet"/><link href="/contracts-procurement.css" rel="stylesheet"/><link href="/customer-success.css" rel="stylesheet"/><link href="/finance-revenue-ops.css" rel="stylesheet"/><link href="/executive-intelligence.css" rel="stylesheet"/><link href="/data-governance.css" rel="stylesheet"/><link href="/product-discovery.css" rel="stylesheet"/><link href="/universal-search.css" rel="stylesheet"/><link href="/physical-commerce.css" rel="stylesheet"/><link href="/supply-chain.css" rel="stylesheet"/><link href="/apple-touch-icon.png" rel="apple-touch-icon"/><link href="/pwa.css" rel="stylesheet"/><link href="/search-coverage.css" rel="stylesheet"/><link href="/story-archive.css" rel="stylesheet"/><link href="/personal-plan.css" rel="stylesheet"/><link href="/journal-companion.css" rel="stylesheet"/><link href="/return-path.css" rel="stylesheet"/><link href="/stability-map.css" rel="stylesheet"/><link href="/long-term-maintenance.css" rel="stylesheet"/><link href="/recovery-completion.css" rel="stylesheet"/><link href="/release-candidate.css" rel="stylesheet"/>
 <link href="/build-2-shell.css" rel="stylesheet"/>
 <link href="/build-3-guidance.css" rel="stylesheet"/>
@@ -1075,11 +1074,41 @@ Includes the approved Lellee consumer experience from early recovery through lif
 .coach-visibility-switch input:checked + .coach-visibility-track{background:rgba(89,63,120,.68)}
 .coach-visibility-switch input:checked + .coach-visibility-track:after{transform:translateX(20px)}
 .coach-account-count-hidden{filter:blur(7px);user-select:none}
+body:not(.coach-account-count-visible) #coachRevenueClients,
+body:not(.coach-account-count-visible) #coachClientCount,
+body:not(.coach-account-count-visible) #coachAccountCount,
+body:not(.coach-account-count-visible) [data-coach-account-count],
+body:not(.coach-account-count-visible) [data-coach-client-count]{filter:blur(7px);user-select:none}
+body.coach-account-count-visible #coachRevenueClients,
+body.coach-account-count-visible #coachClientCount,
+body.coach-account-count-visible #coachAccountCount,
+body.coach-account-count-visible [data-coach-account-count],
+body.coach-account-count-visible [data-coach-client-count]{filter:none;user-select:auto}
 </style>
 
 <style id="lellee-auth-fast-style">
 #authSubmit:disabled,#authToggle:disabled{opacity:.62;cursor:wait}
 </style>
+
+<script id="lellee-cache-version-reset">
+(function(){
+  'use strict';
+  const BUILD='20260817-auth-stability-1';
+  try{
+    const prior=localStorage.getItem('lellee:asset-build');
+    if(prior!==BUILD){
+      localStorage.setItem('lellee:asset-build',BUILD);
+      if('caches' in window){
+        caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('lellee-app-shell-')).map(k=>caches.delete(k)))).catch(()=>{});
+      }
+      if('serviceWorker' in navigator){
+        navigator.serviceWorker.getRegistrations().then(regs=>regs.forEach(r=>r.update())).catch(()=>{});
+      }
+    }
+  }catch(_){}
+})();
+</script>
+
 </head>
 <body><a class="skip-link" href="#mainContent">Skip to main content</a><a class="lellee-skip" href="#lelleeMain">Skip to main content</a>
 <div class="prod-overlay hidden" id="onboardingOverlay">
@@ -1096,10 +1125,10 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <div><b>Add Lellee to your phone</b><span>Open it from your home screen like an app.</span></div>
 <div><button id="installLellee">Add</button><button id="dismissInstall">Not now</button></div>
 </div>
-<div class="auth-overlay" id="authOverlay"><div class="auth-box"><img alt="Lellee" class="auth-logo" src="/lellee-approved-logo-final.jpg?v=20260814-1"/><h2 id="authTitle">Sign in to Lellee</h2><p class="auth-msg" id="authMsg">Use your Lellee account to continue.</p><form id="authForm"><div class="auth-field"><label>Email</label><input autocomplete="email" id="authEmail" required="" type="email"/></div><div class="auth-field"><label>Password</label><input autocomplete="current-password" id="authPassword" minlength="8" required="" type="password"/></div><div class="legal-signup-notice hidden" id="legalSignupNotice"><label><input id="legalSignupAdult" type="checkbox"/> I confirm I am at least 18 years old.</label><label><input id="legalSignupAgree" type="checkbox"/> I reviewed the <a href="/terms.html" target="_blank">Terms</a>, <a href="/privacy.html" target="_blank">Privacy Policy</a>, and <a href="/consumer-health-privacy.html" target="_blank">Consumer Health Data Notice</a>.</label><label><input id="legalSignupSafety" type="checkbox"/> I understand Lellee is recovery support, not emergency or professional medical treatment.</label></div><div class="auth-actions"><button class="primary" id="authSubmit" type="submit">Sign in</button><button class="secondary" id="authToggle" type="button">Create account</button></div></form><div class="launch-auth-links"><a href="/privacy.html">Privacy</a><a href="/terms.html">Terms</a><a href="/safety.html">Safety</a><a href="/consumer-health-privacy.html">Consumer Health Data</a></div></div></div>
+<div class="auth-overlay" id="authOverlay"><div class="auth-box"><img alt="Lellee" class="auth-logo" src="/lellee-approved-logo-locked.png?v=20260817-locked"/><h2 id="authTitle">Sign in to Lellee</h2><p class="auth-msg" id="authMsg">Use your Lellee account to continue.</p><form id="authForm"><div class="auth-field"><label>Email</label><input autocomplete="email" id="authEmail" required="" type="email"/></div><div class="auth-field"><label>Password</label><input autocomplete="current-password" id="authPassword" minlength="8" required="" type="password"/></div><div class="legal-signup-notice hidden" id="legalSignupNotice"><label><input id="legalSignupAdult" type="checkbox"/> I confirm I am at least 18 years old.</label><label><input id="legalSignupAgree" type="checkbox"/> I reviewed the <a href="/terms.html" target="_blank">Terms</a>, <a href="/privacy.html" target="_blank">Privacy Policy</a>, and <a href="/consumer-health-privacy.html" target="_blank">Consumer Health Data Notice</a>.</label><label><input id="legalSignupSafety" type="checkbox"/> I understand Lellee is recovery support, not emergency or professional medical treatment.</label></div><div class="auth-actions"><button class="primary" id="authSubmit" type="submit">Sign in</button><button class="secondary" id="authToggle" type="button">Create account</button></div></form><div class="launch-auth-links"><a href="/privacy.html">Privacy</a><a href="/terms.html">Terms</a><a href="/safety.html">Safety</a><a href="/consumer-health-privacy.html">Consumer Health Data</a></div></div></div>
 <div class="app-shell">
 <aside class="sidebar">
-<div class="logo-wrap"><img alt="Lellee" class="approved-logo" src="/lellee-approved-logo-final.jpg?v=20260814-1"/></div>
+<div class="logo-wrap"><img alt="Lellee" class="approved-logo" src="/lellee-approved-logo-locked.png?v=20260817-locked"/></div>
 <nav class="nav-list">
 <button class="nav-item active" data-page="today"><span class="nav-icon">▣</span>Today</button>
 <button class="nav-item" data-page="recovery"><span class="nav-icon">♡</span>My Recovery</button>
@@ -7359,12 +7388,57 @@ function renderBasics(){
     $$(`[data-activity="${type}"]`).forEach(el=>el.classList.toggle('done',!!day[type]));
   });
 }
-function showPage(name){
+const LELLEE_RESUME_BLOCKED_PAGES=new Set([
+  'release-candidate','admin-agent-operations','admin','pwa-operations','supply-chain',
+  'physical-commerce','search-taxonomy','search-coverage','product-discovery','data-governance',
+  'executive-intelligence','revenue-operations','customer-success','contract-operations',
+  'growth-center','agent-operations','platform-integrity','communications-ops',
+  'provider-network-ops','knowledge-studio','collaboration-ops','staff-operations',
+  'credentialing-center','forms-studio','community-ops','integration-center',
+  'security-operations','reliability-center','release-center','pilot-operations',
+  'qa-center','experience-studio','automation-studio','trust-ops','privacy-ops',
+  'support-ops','communications-admin','revenue-ops','platform-health','analytics',
+  'pilot-enrollment-admin','safety-profile-builder','content-releases','content-preview',
+  'content-studio','outcome-builder','resource-admin','organization-admin','program-demand',
+  'coach-admin','program-builder'
+]);
+
+function resumeStorageKey(userId){
+  return userId?`lellee:last-page:${userId}`:'';
+}
+
+function canResumePage(name){
+  if(!name||typeof name!=='string')return false;
+  if(LELLEE_RESUME_BLOCKED_PAGES.has(name))return false;
+  const page=document.getElementById(`page-${name}`);
+  return !!page;
+}
+
+function getResumePage(user){
+  if(!user?.id)return 'today';
+  try{
+    const saved=localStorage.getItem(resumeStorageKey(user.id));
+    return canResumePage(saved)?saved:'today';
+  }catch(_){
+    return 'today';
+  }
+}
+
+function rememberResumePage(name){
+  if(!currentUser?.id||!canResumePage(name))return;
+  try{
+    localStorage.setItem(resumeStorageKey(currentUser.id),name);
+  }catch(_){}
+}
+
+function showPage(name,options={}){
+  const requested=canResumePage(name)?name:'today';
   $$('.page').forEach(p=>p.classList.remove('active'));
-  const page=$(`#page-${name}`)||$('#page-today');
+  const page=$(`#page-${requested}`)||$('#page-today');
   page.classList.add('active');
-  $$('.nav-item,.mobile-bottom button[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===name));
-  window.scrollTo({top:0,behavior:'smooth'});
+  $$('.nav-item,.mobile-bottom button[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===requested));
+  if(options.remember!==false)rememberResumePage(requested);
+  window.scrollTo({top:0,behavior:options.instant?'auto':'smooth'});
 }
 $$('[data-page]').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.page)));
 
@@ -7561,7 +7635,14 @@ function enterAuthenticatedShell(user){
   // Use locally cached state immediately. Database refresh happens in the background.
   try{renderBasics()}catch(e){console.warn('Initial render warning',e)}
   $('#authOverlay').classList.add('hidden');
-  showPage('today');
+
+  // Returning users resume where they left off when that page is still safe/available.
+  // First-time/new-device users fall back to Today.
+  const resumePage=getResumePage(user);
+  showPage(resumePage,{remember:true,instant:true});
+
+  // One app-level session signal for feature modules. Modules do not own authentication.
+  window.dispatchEvent(new CustomEvent('lellee:session-ready',{detail:{userId:user.id}}));
   setTimeout(()=>window.LelleeFinalOnboarding?.check(),60);
 }
 
@@ -7958,7 +8039,7 @@ Includes:
 </div>
 <div aria-labelledby="onboardingTitle" aria-modal="true" class="final-onboarding hidden" id="finalOnboardingOverlay" role="dialog">
 <div class="final-onboarding-card">
-<div class="final-onboarding-brand"><img alt="Lellee" src="/logo.png"/><span id="onboardingStepLabel">STEP 1 OF 5</span></div>
+<div class="final-onboarding-brand"><img alt="Lellee" src="/lellee-approved-logo-locked.png?v=20260817-locked"/><span id="onboardingStepLabel">STEP 1 OF 5</span></div>
 <div class="final-onboarding-progress"><i id="onboardingProgressBar"></i></div>
 <section class="onboarding-step active" data-onboarding-step="1">
 <span class="approved-kicker">WELCOME TO LELLEE</span><h2 id="onboardingTitle">Make this feel like your recovery space</h2>
@@ -8006,8 +8087,7 @@ Includes:
 <div class="final-onboarding-actions"><button class="approved-link hidden" id="onboardingBack" type="button">Back</button><button class="approved-link" id="onboardingSkip" type="button">Finish later</button><button class="approved-small-action" id="onboardingNext" type="button">Continue</button></div>
 </div>
 </div>
-<script src="/push-button-hotfix.js"></script>
-<div class="legal-acceptance-overlay hidden" id="legalAcceptanceOverlay"><div class="legal-acceptance-card"><span class="approved-kicker">PRIVACY &amp; SAFETY UPDATE</span><h2>Before continuing</h2><p>Lellee stores sensitive recovery information. Review the current consumer terms and privacy notices.</p><div class="legal-acceptance-links"><a href="/terms.html" target="_blank">Terms</a><a href="/privacy.html" target="_blank">Privacy</a><a href="/consumer-health-privacy.html" target="_blank">Consumer Health Data</a><a href="/safety.html" target="_blank">Safety</a></div><label><input id="legalGateAdult" type="checkbox"/> I confirm I am at least 18.</label><label><input id="legalGateAgree" type="checkbox"/> I agree to the current Terms and acknowledge the Privacy and Consumer Health Data notices.</label><label><input id="legalGateSafety" type="checkbox"/> I understand Lellee is not an emergency service or individualized medical treatment.</label><div class="legal-acceptance-actions"><span id="legalGateStatus"></span><button class="approved-small-action" id="legalAcceptContinue">Accept &amp; Continue</button></div></div></div><script src="/legal-privacy-safety.js"></script><script src="/program-coach-core.js"></script>
+<div class="legal-acceptance-overlay hidden" id="legalAcceptanceOverlay"><div class="legal-acceptance-card"><span class="approved-kicker">PRIVACY &amp; SAFETY UPDATE</span><h2>Before continuing</h2><p>Lellee stores sensitive recovery information. Review the current consumer terms and privacy notices.</p><div class="legal-acceptance-links"><a href="/terms.html" target="_blank">Terms</a><a href="/privacy.html" target="_blank">Privacy</a><a href="/consumer-health-privacy.html" target="_blank">Consumer Health Data</a><a href="/safety.html" target="_blank">Safety</a></div><label><input id="legalGateAdult" type="checkbox"/> I confirm I am at least 18.</label><label><input id="legalGateAgree" type="checkbox"/> I agree to the current Terms and acknowledge the Privacy and Consumer Health Data notices.</label><label><input id="legalGateSafety" type="checkbox"/> I understand Lellee is not an emergency service or individualized medical treatment.</label><div class="legal-acceptance-actions"><span id="legalGateStatus"></span><button class="approved-small-action" id="legalAcceptContinue">Accept &amp; Continue</button></div></div></div>
 <div class="admin-overlay hidden" id="programBuilderEditor">
 <div class="admin-editor-card program-builder-editor-card">
 <div class="admin-editor-head">
@@ -8121,13 +8201,11 @@ Transportation"></textarea></label>
 </div>
 </div>
 </div>
-<script src="/program-builder.js"></script><script src="/coach-marketplace.js"></script><script src="/inbox-reminders.js"></script><script src="/welcome-router.js"></script><script src="/organization-licensing.js"></script>
 <div class="admin-overlay hidden" id="lifeItemEditor"><div class="admin-editor-card life-editor-card">
 <div class="admin-editor-head"><div><span class="approved-kicker" id="lifeEditorKicker">MY PLAN</span><h3 id="lifeEditorTitle">Add Item</h3></div><button class="approved-link" id="closeLifeEditor">Close</button></div>
 <div class="admin-editor-grid" id="lifeEditorFields"></div>
 <div class="approved-settings-footer"><button class="approved-link hidden" id="deleteLifeItem">Delete</button><span class="approved-setting-note" id="lifeEditorMsg"></span><button class="approved-small-action" id="saveLifeItem">Save</button></div>
 </div></div>
-<script src="/life-admin-core.js"></script><script src="/resource-navigation.js"></script>
 <div class="admin-overlay hidden" id="progressCoreEditor">
 <div class="admin-editor-card progress-editor-card">
 <div class="admin-editor-head">
@@ -8142,7 +8220,6 @@ Transportation"></textarea></label>
 </div>
 </div>
 </div>
-<script src="/progress-core.js"></script>
 <div class="admin-overlay hidden" id="contentStudioEditor">
 <div class="admin-editor-card content-editor-card">
 <div class="admin-editor-head">
@@ -8230,7 +8307,6 @@ Transportation"></textarea></label>
 </div>
 </div>
 </div>
-<script src="/content-studio.js"></script>
 <div class="admin-overlay hidden" id="safetyRouteEditor">
 <div class="admin-editor-card">
 <div class="admin-editor-head">
@@ -8254,7 +8330,6 @@ Transportation"></textarea></label>
 </div>
 </div>
 </div>
-<script src="/safety-privacy-core.js"></script><script src="/pilot-runtime.js"></script><script src="/analytics-insights.js"></script><script src="/platform-integration.js"></script><script src="/commerce-ops.js"></script><script src="/scheduling-crm.js"></script>
 <div class="admin-overlay hidden" id="supportRequestEditor">
 <div class="admin-editor-card">
 <div class="admin-editor-head">
@@ -8271,24 +8346,6 @@ Transportation"></textarea></label>
 <div class="approved-settings-footer"><span class="approved-setting-note" id="supportEditorMsg"></span><button class="approved-small-action" id="supportEditorSave">Send Request</button></div>
 </div>
 </div>
-<script src="/trust-support.js"></script><script src="/automation-workflows.js"></script><script src="/personalization-experience.js"></script><script src="/release-reliability.js"></script><script src="/security-continuity.js"></script><script src="/integrations-interop.js"></script><script src="/community-peer.js"></script><script src="/forms-credentials.js"></script><script src="/staff-operations.js"></script><script src="/trusted-circle.js"></script><script src="/onboarding-help.js"></script><script src="/partner-provider-network.js"></script><script src="/communications-lifecycle.js"></script><script src="/platform-integrity.js"></script><script src="/agent-operations.js"></script><script src="/growth-partnerships.js"></script><script src="/contracts-procurement.js"></script><script src="/customer-success.js"></script><script src="/finance-revenue-ops.js"></script><script src="/executive-intelligence.js"></script><script src="/data-governance.js"></script><script src="/product-discovery.js"></script><script src="/universal-search.js"></script><script src="/physical-commerce.js"></script><script src="/supply-chain.js"></script><script src="/pwa-runtime.js"></script><script src="/search-coverage.js"></script><script src="/story-archive.js"></script><script src="/personal-plan.js"></script><script src="/journal-companion.js"></script><script src="/return-path.js"></script><script src="/stability-map.js"></script><script src="/long-term-maintenance.js"></script><script src="/recovery-completion.js"></script><script src="/release-candidate.js"></script>
-<script src="/build-2-shell.js"></script>
-<script src="/build-3-guidance.js?v=20260816-stability1"></script>
-<script src="/build-4-community.js"></script>
-<script src="/build-5-professional.js"></script>
-<script src="/build-6-platform.js"></script>
-<script src="/journal-review-hotfix.js?v=20260816-journal-review-r1"></script>
-<script src="/lellee-final-repair.js?v=20260816-final-r3-plus-payments"></script>
-<script src="/lellee-pricing-update.js?v=20260816-pricing-r2"></script>
-<script src="/lellee-agent-access-control.js?v=20260816-agent-security-r1"></script>
-
-<script src="/lellee-agent-permissions.js?v=20260816-r4"></script>
-
-<script src="/lellee-coaching-message-consent.js?v=20260816-r11"></script>
-
-<script src="/lellee-agent-control-center.js?v=20260816-r12"></script>
-
-<script src="/lellee-admin-agent-operations.js?v=20260816-r13"></script>
 
 <script id="coach-account-visibility-script">
 (function(){
@@ -8319,6 +8376,7 @@ Transportation"></textarea></label>
   }
 
   function setVisibility(visible){
+    document.body.classList.toggle('coach-account-count-visible', !!visible);
     coachCountNodes().forEach(node => {
       node.classList.toggle('coach-account-count-hidden', !visible);
       node.setAttribute('aria-hidden', visible ? 'false' : 'true');
@@ -8345,15 +8403,69 @@ Transportation"></textarea></label>
       });
     }
 
-    // Re-apply after dynamic dashboard rendering.
-    const observer = new MutationObserver(() => setVisibility(sessionStorage.getItem(STORAGE_KEY) === 'true'));
-    observer.observe(document.body, {childList:true, subtree:true});
   }
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init, {once:true});
   } else {
     init();
+  }
+})();
+</script>
+
+
+<script id="lellee-login-resume-bridge">
+(function(){
+  'use strict';
+  try{
+    const requested=new URLSearchParams(location.search).get('resume');
+    if(requested && window.LelleeAuthContext?.getCurrentUser?.()){
+      const user=window.LelleeAuthContext.getCurrentUser();
+      const key=`lellee:last-page:${user.id}`;
+      if(requested==='today') localStorage.setItem(key,'today');
+    }
+  }catch(_){}
+})();
+</script>
+
+
+<script id="lellee-staged-module-loader">
+(function(){
+  'use strict';
+  const modules=["/build-2-shell.js", "/build-3-guidance.js?v=20260816-stability1", "/journal-review-hotfix.js?v=20260816-journal-review-r1", "/build-4-community.js", "/inbox-reminders.js", "/resource-navigation.js", "/progress-core.js", "/legal-privacy-safety.js", "/pwa-runtime.js", "/build-5-professional.js", "/build-6-platform.js", "/push-button-hotfix.js", "/program-coach-core.js", "/program-builder.js", "/coach-marketplace.js", "/welcome-router.js", "/organization-licensing.js", "/life-admin-core.js", "/content-studio.js", "/safety-privacy-core.js", "/pilot-runtime.js", "/analytics-insights.js", "/platform-integration.js", "/commerce-ops.js", "/scheduling-crm.js", "/trust-support.js", "/automation-workflows.js", "/personalization-experience.js", "/release-reliability.js", "/security-continuity.js", "/integrations-interop.js", "/community-peer.js", "/forms-credentials.js", "/staff-operations.js", "/trusted-circle.js", "/onboarding-help.js", "/partner-provider-network.js", "/communications-lifecycle.js", "/platform-integrity.js", "/agent-operations.js", "/growth-partnerships.js", "/contracts-procurement.js", "/customer-success.js", "/finance-revenue-ops.js", "/executive-intelligence.js", "/data-governance.js", "/product-discovery.js", "/universal-search.js", "/physical-commerce.js", "/supply-chain.js", "/search-coverage.js", "/story-archive.js", "/personal-plan.js", "/journal-companion.js", "/return-path.js", "/stability-map.js", "/long-term-maintenance.js", "/recovery-completion.js", "/release-candidate.js", "/lellee-final-repair.js?v=20260816-final-r3-plus-payments", "/lellee-pricing-update.js?v=20260816-pricing-r2", "/lellee-agent-access-control.js?v=20260816-agent-security-r1", "/lellee-agent-permissions.js?v=20260816-r4", "/lellee-coaching-message-consent.js?v=20260816-r11", "/lellee-agent-control-center.js?v=20260816-r12", "/lellee-admin-agent-operations.js?v=20260816-r13"];
+  let started=false;
+  function loadScript(src){
+    return new Promise(resolve=>{
+      const s=document.createElement('script');
+      s.src=src;
+      s.async=false;
+      s.dataset.lelleeStaged='1';
+      s.onload=()=>resolve();
+      s.onerror=()=>{console.warn('Lellee module did not load:',src);resolve();};
+      document.body.appendChild(s);
+    });
+  }
+  function idleTurn(fn){
+    if('requestIdleCallback' in window) requestIdleCallback(fn,{timeout:800});
+    else setTimeout(fn,30);
+  }
+  async function start(){
+    if(started)return;
+    started=true;
+    for(let i=0;i<modules.length;i++){
+      await new Promise(resolve=>idleTurn(()=>loadScript(modules[i]).finally(resolve)));
+      if(i<10) await new Promise(r=>setTimeout(r,20));
+      else if(i%3===2) await new Promise(r=>setTimeout(r,60));
+    }
+    window.dispatchEvent(new CustomEvent('lellee:modules-ready'));
+  }
+  window.addEventListener('lellee:session-ready',()=>start(),{once:true});
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',()=>{
+      if(window.LelleeAuthContext?.getCurrentUser?.())start();
+    },{once:true});
+  }else if(window.LelleeAuthContext?.getCurrentUser?.()){
+    start();
   }
 })();
 </script>
