@@ -1,4 +1,6 @@
 {
+  "version": "final-2026-08-16",
+  "currency": "USD",
   "free": {
     "monthly": 0
   },
@@ -8,7 +10,7 @@
   },
   "premium": {
     "monthly": 14.99,
-    "annual": 149
+    "annual": 149.0
   },
   "journal_companion": {
     "monthly": 4.99

@@ -1,0 +1,13 @@
+{
+  "release": "LELLEE_FINAL_CONSOLIDATED_RELEASE",
+  "status": "PASS",
+  "checks": {
+    "approved_pricing": "PASS",
+    "stale_pricing_scan": "PASS",
+    "required_assets": "PASS",
+    "secret_scan": "PASS",
+    "json_validation": "PASS",
+    "javascript_syntax": "PASS"
+  },
+  "warnings": []
+}

@@ -33,8 +33,8 @@
     }
 
     const m=$('#adminPlusMonthly'), a=$('#adminPlusAnnual');
-    if(m && (!m.value || ['3.99','0'].includes(String(m.value)))) m.value='5.99';
-    if(a && (!a.value || ['39.99','0'].includes(String(a.value)))) a.value='59.99';
+    if(m && (!m.value || String(m.value) !== '5.99')) m.value='5.99';
+    if(a && (!a.value || String(a.value) !== '59.99')) a.value='59.99';
 
     const pm=$('#adminPremiumMonthly'), pa=$('#adminPremiumAnnual');
     if(pm && (!pm.value || String(pm.value)==='0')) pm.value='14.99';
@@ -54,7 +54,7 @@
     const candidates=node.querySelectorAll('b,h3,strong,span,small,p,div');
     for(const el of candidates){
       const t=(el.textContent||'').trim();
-      if(/^\$\d+(?:\.\d{1,2})?(?:\s*\/\s*(?:mo|month|yr|year))?$/i.test(t) || /price at launch|price pending|^TBD$/i.test(t)){
+      if(/^\$\d+(?:\.\d{1,2})?(?:\s*\/\s*(?:mo|month|yr|year))?$/i.test(t) || /price pending|^TBD$/i.test(t)){
         const next=money(amount)+(period ? '/'+period : '');
         if(el.textContent!==next) el.textContent=next;
         return;
@@ -84,10 +84,10 @@
     for(const el of all){
       if(el.children.length) continue;
       const t=(el.textContent||'').trim();
-      if(!['$3.99','$39.99','TBD','Price at launch','price at launch'].includes(t)) continue;
+      if(!['$5.99','$59.99','TBD','unapproved','unapproved'].includes(t)) continue;
       const ctx=el.closest('article,.commerce-plan-card,.plus-compare-card,.pricing-card,.plan-card,section,div');
       if(ctx && /LELLEE\s+PLUS|PLUS\s+MEMBERSHIP|FREE\s+VS\s+PLUS/i.test((ctx.textContent||''))){
-        if(t==='$39.99') el.textContent='$59.99';
+        if(t==='$59.99') el.textContent='$59.99';
         else el.textContent='$5.99';
       }
     }

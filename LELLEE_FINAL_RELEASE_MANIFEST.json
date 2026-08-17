@@ -1,0 +1,49 @@
+{
+  "release": "Lellee Final Consolidated Release",
+  "release_date": "2026-08-16",
+  "source_branch": "R13 Admin Agent Operations",
+  "status": "consolidated_release_candidate",
+  "pricing": {
+    "version": "final-2026-08-16",
+    "currency": "USD",
+    "free": {
+      "monthly": 0
+    },
+    "plus": {
+      "monthly": 5.99,
+      "annual": 59.99
+    },
+    "premium": {
+      "monthly": 14.99,
+      "annual": 149.0
+    },
+    "journal_companion": {
+      "monthly": 4.99
+    },
+    "coach_add_on": {
+      "monthly": 49.99,
+      "requires": "Lellee Premium"
+    },
+    "additional_coaching": {
+      "price": 19.99,
+      "duration_minutes": 15
+    }
+  },
+  "agent_security": {
+    "external_ai_crawler_policy": "blocked/restricted by robots and production edge policy",
+    "default_agent_posture": "deny",
+    "user_agent_control_center": true,
+    "admin_agent_operations": true,
+    "global_emergency_stop": true,
+    "audit_logging": true,
+    "abnormal_activity_alerts": true,
+    "service_role_browser_exposure": false
+  },
+  "agent_modes": {
+    "resources": "search_only",
+    "housing": "search_only",
+    "reminders": "user_approved_read_create_update",
+    "coaching": "scheduling_and_explicitly_shared_goals",
+    "coaching_shared_messages": "explicit_message_or_thread_consent_only"
+  }
+}
