@@ -7,7 +7,7 @@
   'use strict';
 
   const LOCALE_KEY='lellee-locale-v2';
-  const VERSION='20260816-final-r1';
+  const VERSION='20260816-final-r2';
   const $=(s,r=document)=>r.querySelector(s);
   const $$=(s,r=document)=>Array.from(r.querySelectorAll(s));
 
@@ -425,11 +425,22 @@
   }
 
   function isJournalPaymentClick(target){
-    const btn=target.closest('button,a,[role="button"]'); if(!btn) return false;
-    const id=(btn.id||'').toLowerCase();
-    const txt=(btn.textContent||'').trim().toLowerCase();
-    return id.includes('journal')&&(id.includes('unlock')||id.includes('checkout')||id.includes('addon')) ||
-      /unlock companion|unlock journal companion|view add-on options|view addon options/.test(txt);
+    const btn=target?.closest?.('button,a,[role="button"]'); if(!btn) return false;
+    // Never intercept controls on the checkout page itself.
+    if(btn.closest('#page-journal-companion-checkout')) return false;
+    const txt=(btn.textContent||'').replace(/\s+/g,' ').trim().toLowerCase();
+    if(/unlock companion|unlock journal companion|view add-on options|view addon options/.test(txt)) return true;
+    // Some older Journal Companion builds route the locked add-on to Plus with data-page="plus".
+    // Intercept that route only when the button lives inside Journal Companion.
+    if(btn.dataset?.page==='plus' && btn.closest('#page-journal-companion')) return true;
+    return false;
+  }
+
+  function interceptJournalPayment(e){
+    if(!isJournalPaymentClick(e.target)) return;
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    openJournalCheckout();
   }
 
   function init(){
@@ -441,6 +452,10 @@
     refreshRecoveryDay();
     refreshPlusStatus();
     applySavedLocale();
+
+    // Run before older document-level delegated routing. This prevents the legacy
+    // Journal Companion paywall from sending the user to Lellee Plus.
+    window.addEventListener('click',interceptJournalPayment,true);
 
     document.addEventListener('change',e=>{
       if(e.target?.id==='prefLocale') saveLocale(e.target.value);
