@@ -101,33 +101,137 @@
      Plus: server membership is source of truth. No stale browser
      state may display "Plus active" on a Free account.
      --------------------------------------------------------- */
+  let plusMembershipState={active:false,paid:false,status:'free'};
   async function refreshPlusStatus(){
     const title=$('#plusStatusTitle'), text=$('#plusStatusText'), badge=$('#plusStatusBadge');
-    if(!title||!text||!badge) return;
-    let active=false, status='free';
+    if(!title||!text||!badge) return plusMembershipState;
+    let active=false, paid=false, status='free';
     const c=client(), u=await user();
     if(c&&u){
       try{
-        const {data,error}=await c.from('user_memberships').select('tier,status').eq('user_id',u.id).maybeSingle();
+        const {data,error}=await c.from('user_memberships')
+          .select('tier,status,provider_subscription_id,provider_customer_id')
+          .eq('user_id',u.id).maybeSingle();
         if(!error && data){
           status=data.status||'free';
           active=data.tier==='plus' && ['active','trialing'].includes(status);
+          paid=active && Boolean(data.provider_subscription_id);
         }
       }catch(_){ }
     }
+    plusMembershipState={active,paid,status};
     if(active){
-      title.textContent='Lellee Plus';
-      text.textContent=status==='trialing'?'Your Plus trial is active.':'Your Plus membership is active.';
-      badge.textContent=status==='trialing'?'TRIAL':'PLUS';
+      title.textContent=paid?'Lellee Plus':'Lellee Plus access';
+      text.textContent=paid
+        ? (status==='trialing'?'Your paid Plus trial is active.':'Your paid Plus membership is active.')
+        : 'Your Plus features are available. Choose a billing option below when you are ready to connect payment.';
+      badge.textContent=paid?(status==='trialing'?'TRIAL':'PLUS'):'PLUS';
     }else{
       title.textContent='Lellee Free';
-      text.textContent='Core recovery is active. Lellee Plus pricing has not been finalized yet.';
+      text.textContent='Core recovery is active. Choose a billing option below to continue to secure payment when you are ready.';
       badge.textContent='FREE';
     }
     const p=$('#plusPriceMonthly'); if(p) p.textContent='TBD';
     const cp=$('#plusComparePrice'); if(cp) cp.textContent='TBD';
     const start=$('#startPlusMembership');
-    if(start && !active){ start.textContent='Plus pricing coming soon'; }
+    const manage=$('#managePlusBilling');
+    if(start){
+      start.classList.remove('hidden');
+      start.disabled=false;
+      updatePlusCheckoutButton();
+    }
+    // Keep one clear CTA in Optional Membership. Paid members use the same button to manage billing.
+    if(manage) manage.classList.add('hidden');
+    wirePlusComparisonCard();
+    return plusMembershipState;
+  }
+
+  function updatePlusCheckoutButton(){
+    const start=$('#startPlusMembership'); if(!start) return;
+    const plan=$('#plusPlanChoice')?.value==='annual'?'annual':'monthly';
+    start.textContent=plusMembershipState.paid?'Manage Membership':(plan==='annual'?'Continue to Annual Payment':'Continue to Monthly Payment');
+    start.setAttribute('aria-label',start.textContent);
+  }
+
+  function wirePlusComparisonCard(){
+    const card=$('.plus-compare-card.featured'); if(!card) return;
+    card.setAttribute('role','button');
+    card.setAttribute('tabindex','0');
+    card.setAttribute('aria-label','Choose Lellee Plus and continue to secure payment');
+    card.classList.add('final-plus-payment-card');
+    if(!card.querySelector('.final-plus-card-cta')){
+      const cta=document.createElement('span');
+      cta.className='final-plus-card-cta';
+      cta.textContent='Choose Plus →';
+      card.appendChild(cta);
+    }
+  }
+
+  async function openPlusBillingPortal(){
+    const c=client(), u=await user();
+    if(!c||!u) throw new Error('Please sign in before opening billing.');
+    const {data,error}=await c.functions.invoke('create-billing-portal',{body:{return_page:'plus'}});
+    if(error) throw error;
+    if(data?.url){ window.location.assign(data.url); return true; }
+    throw new Error(data?.error||'Billing portal is not configured yet.');
+  }
+
+  async function startPlusCheckout(){
+    const button=$('#startPlusMembership');
+    const banner=$('#plusCheckoutBanner');
+    const plan=$('#plusPlanChoice')?.value==='annual'?'annual':'monthly';
+    if(button) button.disabled=true;
+    if(banner){banner.classList.remove('hidden');banner.textContent='Connecting to secure payment…';}
+    try{
+      const state=await refreshPlusStatus();
+      if(state.paid){
+        await openPlusBillingPortal();
+        return;
+      }
+      const c=client(), u=await user();
+      if(!c||!u) throw new Error('Please sign in before starting payment.');
+
+      // Allow a server-managed Stripe Payment Link when configured.
+      try{
+        const keys=plan==='annual'
+          ? ['plus_payment_link_annual','plus_checkout_url_annual','stripe_plus_payment_link_annual','plus_payment_link','plus_checkout_url']
+          : ['plus_payment_link_monthly','plus_checkout_url_monthly','stripe_plus_payment_link_monthly','plus_payment_link','plus_checkout_url'];
+        const {data}=await c.from('app_public_settings').select('key,value').in('key',keys);
+        const byKey=new Map((data||[]).map(x=>[x.key,x.value]));
+        const url=keys.map(k=>byKey.get(k)).find(v=>/^https:\/\//i.test(String(v||'')));
+        if(url){ window.location.assign(url); return; }
+      }catch(_){ }
+
+      // Preferred path: authenticated Edge Function creates the Stripe-hosted Checkout Session.
+      const {data,error}=await c.functions.invoke('create-plus-checkout',{body:{plan}});
+      if(error) throw error;
+      if(data?.url){ window.location.assign(data.url); return; }
+      if(data?.manage_billing){ await openPlusBillingPortal(); return; }
+      throw new Error(data?.error||'Secure Plus checkout is not configured yet.');
+    }catch(err){
+      const msg=(err?.message||'Secure Plus checkout is not configured yet.');
+      if(banner){banner.classList.remove('hidden');banner.textContent=msg+' The button is connected; the server-side payment route must be available for checkout to open.';}
+      toast('Lellee Plus payment connection needs attention.', 'error');
+    }finally{
+      if(button) button.disabled=false;
+    }
+  }
+
+  function isPlusPaymentClick(target){
+    const el=target?.closest?.('#startPlusMembership,.plus-compare-card.featured,#managePlusBilling');
+    return el||null;
+  }
+
+  function interceptPlusPayment(e){
+    const el=isPlusPaymentClick(e.target); if(!el) return;
+    // Compare Free vs Plus remains a comparison opener; only the featured Plus card pays.
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    if(el.id==='managePlusBilling') openPlusBillingPortal().catch(err=>{
+      const b=$('#plusCheckoutBanner'); if(b){b.classList.remove('hidden');b.textContent=err?.message||'Billing portal is not configured yet.';}
+      toast('Billing portal needs the server-side connection.','error');
+    });
+    else startPlusCheckout();
   }
 
   function wireRecoveryReviewCard(){
@@ -412,6 +516,11 @@
     s.textContent=`
       .plus-review-preview[role="button"]{transition:.15s ease}.plus-review-preview[role="button"]:hover{box-shadow:0 6px 18px rgba(60,40,85,.10)}
       .plus-review-preview[role="button"]:focus-visible{outline:3px solid rgba(101,64,154,.35)}
+      #startPlusMembership{display:inline-flex!important;align-items:center;justify-content:center}
+      .final-plus-payment-card{cursor:pointer;position:relative;padding-bottom:48px!important;transition:.15s ease}
+      .final-plus-payment-card:hover{box-shadow:0 7px 20px rgba(60,40,85,.12)}
+      .final-plus-payment-card:focus-visible{outline:3px solid rgba(101,64,154,.35);outline-offset:3px}
+      .final-plus-card-cta{position:absolute;left:18px;bottom:16px;display:inline-block;background:#65409a;color:#fff;border-radius:6px;padding:8px 11px;font-size:.64rem;font-weight:800}
       .final-story-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
       .final-checkout-card{display:flex;justify-content:space-between;align-items:center;gap:24px;background:linear-gradient(135deg,#f3eef7,#fffaf4);border:1px solid #e2dbe6;border-radius:12px;padding:22px;margin:10px 0 12px}
       .final-checkout-card h3{margin:5px 0;font-size:1rem}.final-checkout-card p{margin:0;color:#706a73;font-size:.72rem;line-height:1.55}
@@ -456,21 +565,16 @@
     // Run before older document-level delegated routing. This prevents the legacy
     // Journal Companion paywall from sending the user to Lellee Plus.
     window.addEventListener('click',interceptJournalPayment,true);
+    window.addEventListener('click',interceptPlusPayment,true);
 
     document.addEventListener('change',e=>{
+      if(e.target?.id==='plusPlanChoice') updatePlusCheckoutButton();
       if(e.target?.id==='prefLocale') saveLocale(e.target.value);
     },true);
 
     document.addEventListener('click',e=>{
       if(isJournalPaymentClick(e.target)){
         e.preventDefault(); e.stopImmediatePropagation(); openJournalCheckout(); return;
-      }
-      const t=e.target.closest?.('#startPlusMembership');
-      if(t){
-        e.preventDefault(); e.stopImmediatePropagation();
-        const banner=$('#plusCheckoutBanner');
-        if(banner){banner.classList.remove('hidden');banner.textContent='Lellee Plus pricing has not been finalized yet. No charge was started.'}
-        toast('Lellee Plus pricing is still pending.'); return;
       }
       if(e.target.closest?.('#saveExperiencePreferences')){
         const locale=$('#prefLocale')?.value||localLocale();
@@ -491,6 +595,12 @@
           if(name==='plus') refreshPlusStatus();
           if(name==='support-network') loadSupportPeople();
         },220);
+      }
+    },true);
+
+    document.addEventListener('keydown',e=>{
+      if((e.key==='Enter'||e.key===' ') && e.target?.matches?.('.plus-compare-card.featured')){
+        e.preventDefault(); startPlusCheckout();
       }
     },true);
 
