@@ -1,0 +1,15 @@
+{
+  "gate": "coaching_agent_r10",
+  "status": "BLOCKED_PENDING_TEST_RESULTS",
+  "required": [
+    "explicit_consent_pass",
+    "cross_user_rls_pass",
+    "shared_goals_only_pass",
+    "private_messages_blocked_pass",
+    "forbidden_data_pass",
+    "audit_pass",
+    "kill_switch_pass",
+    "secret_scan_pass"
+  ],
+  "next_after_pass": "optional_coaching_shared_messages_consent_layer"
+}

@@ -1,0 +1,55 @@
+{
+  "version": "2026-08-16-r10",
+  "active_agents": {
+    "resources": {
+      "mode": "search_only",
+      "capabilities": [
+        "resources.search"
+      ]
+    },
+    "housing": {
+      "mode": "search_only",
+      "capabilities": [
+        "housing.search"
+      ]
+    },
+    "reminders": {
+      "mode": "user_approved_reminders",
+      "capabilities": [
+        "reminders.read",
+        "reminders.create",
+        "reminders.update"
+      ]
+    },
+    "coaching": {
+      "mode": "limited_user_shared",
+      "capabilities": [
+        "coaching.schedule",
+        "coaching.shared_goals"
+      ],
+      "shared_messages_enabled": false,
+      "requires_explicit_user_consent": true,
+      "allowed_context": [
+        "profile.first_name",
+        "coaching.assigned_coach",
+        "coaching.appointments",
+        "coaching.goals_explicitly_shared",
+        "milestones.user_shared"
+      ],
+      "forbidden_context": [
+        "journal_entries_unshared",
+        "private_coaching_messages",
+        "clinical_notes",
+        "substance_use_history_unshared",
+        "mental_health_history_unshared",
+        "payment_details",
+        "government_ids",
+        "housing.private_notes"
+      ]
+    }
+  },
+  "still_disabled": [
+    "coaching.shared_messages"
+  ],
+  "release_rule": "Do not enable coaching.shared_messages until R10 passes and the user explicitly chooses to share message content."
+}
