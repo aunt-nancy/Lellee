@@ -1,0 +1,14 @@
+{
+  "gate": "reminder_agent_r9",
+  "status": "BLOCKED_PENDING_TEST_RESULTS",
+  "required": [
+    "ownership_rls_pass",
+    "consent_pass",
+    "cross_user_denial_pass",
+    "forbidden_data_pass",
+    "audit_pass",
+    "kill_switch_pass",
+    "secret_scan_pass"
+  ],
+  "next_agent_after_pass": "coaching"
+}

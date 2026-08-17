@@ -1,0 +1,53 @@
+{
+  "version": "2026-08-16-r9",
+  "active_agents": {
+    "resources": {
+      "mode": "search_only",
+      "capabilities": [
+        "resources.search"
+      ],
+      "writes_enabled": false
+    },
+    "housing": {
+      "mode": "search_only",
+      "capabilities": [
+        "housing.search"
+      ],
+      "writes_enabled": false
+    },
+    "reminders": {
+      "mode": "user_approved_reminders",
+      "capabilities": [
+        "reminders.read",
+        "reminders.create",
+        "reminders.update"
+      ],
+      "writes_enabled": true,
+      "allowed_context": [
+        "reminders.user_created",
+        "calendar.user_visible_events",
+        "milestones.reminder_enabled"
+      ],
+      "forbidden_context": [
+        "journal_entries",
+        "coaching.message_content",
+        "clinical_notes",
+        "substance_use_history",
+        "mental_health_history",
+        "payment_details",
+        "government_ids"
+      ],
+      "constraints": [
+        "user ownership required",
+        "no hidden reminder creation",
+        "no content inference from journals",
+        "no cross-user access",
+        "all writes audited"
+      ]
+    }
+  },
+  "remain_disabled": [
+    "coaching"
+  ],
+  "promotion_rule": "Do not activate Coaching until Reminder Agent passes the R9 observation gate."
+}
