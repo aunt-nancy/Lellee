@@ -1,0 +1,13 @@
+{
+  "gate": "housing_agent_r8",
+  "status": "BLOCKED_PENDING_TEST_RESULTS",
+  "required": [
+    "field_allowlist_pass",
+    "cross_user_rls_pass",
+    "no_write_pass",
+    "audit_pass",
+    "kill_switch_pass",
+    "secret_scan_pass"
+  ],
+  "next_agent_after_pass": "reminders"
+}

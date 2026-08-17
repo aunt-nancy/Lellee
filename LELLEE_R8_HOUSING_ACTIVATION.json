@@ -1,0 +1,42 @@
+{
+  "version": "2026-08-16-r8",
+  "active_agents": {
+    "resources": {
+      "mode": "search_only",
+      "capabilities": [
+        "resources.search"
+      ],
+      "writes_enabled": false
+    },
+    "housing": {
+      "mode": "search_only",
+      "capabilities": [
+        "housing.search"
+      ],
+      "writes_enabled": false,
+      "allowed_context": [
+        "profile.city",
+        "profile.state",
+        "profile.zip_code",
+        "housing.budget_range",
+        "housing.household_size",
+        "housing.accessibility_needs",
+        "housing.pet_needs"
+      ],
+      "forbidden_context": [
+        "journal_entries",
+        "coaching.private_messages",
+        "clinical_notes",
+        "substance_use_history",
+        "mental_health_history",
+        "payment_details",
+        "government_ids"
+      ]
+    }
+  },
+  "remain_disabled": [
+    "reminders",
+    "coaching"
+  ],
+  "promotion_rule": "Do not activate Reminders until Housing passes the R8 observation gate."
+}
