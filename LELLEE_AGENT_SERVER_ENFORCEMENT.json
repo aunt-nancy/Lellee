@@ -1,0 +1,21 @@
+{
+  "version": "2026-08-16-r5",
+  "default": "deny",
+  "server_authoritative": true,
+  "browser_policy_is_advisory_only": true,
+  "requirements_per_request": [
+    "valid_authenticated_user",
+    "known_enabled_agent",
+    "explicit_allowed_capability",
+    "user_consent_when_required",
+    "user_scoped_RLS_for_private_data",
+    "field_allowlist",
+    "audit_event"
+  ],
+  "server_only_secrets": [
+    "SUPABASE_SERVICE_ROLE_KEY"
+  ],
+  "forbidden_in_browser": [
+    "SUPABASE_SERVICE_ROLE_KEY"
+  ]
+}
