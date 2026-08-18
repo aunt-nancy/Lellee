@@ -328,3 +328,14 @@ body:has(#journeyDialog[open]) .footer{filter:saturate(.82)}
 @media(min-width:700px){
   #journeyDialog .survey-step[data-step="account"] .path-intake-fields{grid-template-columns:1fr 1fr}
 }
+
+/* PUBLIC MASTER BRAND LOGO — 2026-08-18
+   Keep Recovery-specific dark mark out of the light public landing shell. */
+.brand img{
+  object-fit:contain;
+  background:transparent;
+}
+.footer-inner img{
+  object-fit:contain;
+  background:transparent;
+}

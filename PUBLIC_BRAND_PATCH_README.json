@@ -1,0 +1,11 @@
+{
+  "patch": "LELLEE_PUBLIC_MASTER_BRAND_LOGO_PATCH",
+  "public_pages_use_light_master_brand": true,
+  "recovery_page_modified": false,
+  "files_to_upload": [
+    "index.html",
+    "landing.html",
+    "master-landing.css",
+    "lellee-master-brand-light.png"
+  ]
+}
