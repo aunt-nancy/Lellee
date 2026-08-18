@@ -1,0 +1,13 @@
+{
+  "patch": "LELLEE_HEADER_HERO_ALIGNMENT_FIX",
+  "changes": [
+    "Keeps the approved Lellee logo artwork inside the header with no bleed",
+    "Keeps the logo large by using a larger real container instead of CSS transform scaling",
+    "Removes independent hero/journey transforms",
+    "Aligns the hero card and Your Lellee Journey tile to the same 414px desktop height",
+    "Preserves approved colors, wording, artwork, authentication, Recovery, and journey logic"
+  ],
+  "upload": [
+    "master-landing.css"
+  ]
+}
