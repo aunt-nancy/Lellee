@@ -1,0 +1,30 @@
+{
+  "patch": "LELLEE_GROW_AND_LEARN_APPROVED_STABILITY_RESTORE",
+  "purpose": "Restore the previously approved Grow & Learn stability fix that was accidentally reverted in the full auth-stability build.",
+  "root_cause": [
+    "Current build-3-guidance.js recreated/removes learning status pills during Learn rendering.",
+    "Current build also reintroduced a child-list MutationObserver on the Learn subtree.",
+    "The observer sees the DOM changes made by the status renderer and can trigger the renderer again, producing a self-triggering loop/freeze."
+  ],
+  "restored_approved_behavior": [
+    "Learning status rendering is idempotent.",
+    "No child-list MutationObserver watches the Learn subtree.",
+    "Learn progress refreshes on page activation and explicit save/complete actions.",
+    "No redesign or content change."
+  ],
+  "files_to_upload": [
+    "build-3-guidance.js",
+    "recovery.html"
+  ],
+  "not_changed": [
+    "Branding",
+    "Public landing page",
+    "Recovery visual design",
+    "Authentication owner",
+    "Pricing",
+    "Coaching privacy",
+    "Agent permissions",
+    "Supabase schema"
+  ],
+  "sql_required": false
+}
