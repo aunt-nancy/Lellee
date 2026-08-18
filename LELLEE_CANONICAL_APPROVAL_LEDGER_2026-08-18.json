@@ -1,0 +1,1633 @@
+{
+  "audit_name": "Lellee Full Prior-Branch Approval Audit",
+  "audit_date": "2026-08-18",
+  "precedence_rule": "Newest explicit user approval wins when decisions conflict. A technical build is not treated as a user approval unless the user accepted it or it is part of the accepted lineage without later rejection. Latest user corrections override earlier implementation details.",
+  "status_labels": [
+    "ACTIVE APPROVED",
+    "SUPERSEDED",
+    "REJECTED",
+    "PENDING VERIFICATION",
+    "DEFERRED / NOT LIVE YET"
+  ],
+  "decision_count": 185,
+  "entries": [
+    {
+      "category": "Brand",
+      "decision": "Consumer-facing master brand is exactly \u201cLellee.\u201d Do not brand the consumer product as \u201cLellee Recovery.\u201d",
+      "status": "ACTIVE APPROVED",
+      "basis": "Explicit user correction in prior branch; repeated in master-brand architecture.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Brand",
+      "decision": "Recovery is Program #1 under the Lellee master brand; future underserved programs can reuse the shared core while keeping their own journey, terminology, curriculum, resources, privacy, and safety logic.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Master-brand SQL/builds and prior branch decision.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Brand",
+      "decision": "Cross-program private sharing defaults OFF.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Master-brand architecture and program privacy configs.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Brand",
+      "decision": "Consumer Lellee remains calm and consumer-focused; professional/coach-business marketing is secondary/separate commercially even when the technology/back end is shared.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Explicit prior branch product-structure decision: hybrid technically, separate commercially.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Brand",
+      "decision": "Do not place \u201cStart a Coaching Business\u201d inside consumer subscription tiers.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Explicit user constraint from coaching branch.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Brand",
+      "decision": "A small professional/business entry point may exist, but it should not dominate the consumer experience.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Prior coaching/business separation decision.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Visual Design",
+      "decision": "The approved Lellee dashboard/mockup is the visual source of truth; later technical fixes must not casually restyle it.",
+      "status": "ACTIVE APPROVED",
+      "basis": "APPROVED DESIGN LOCK in canonical master files.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Visual Design",
+      "decision": "Recovery interior uses the approved dark navy/purple sidebar, soft cards, lavender/pastel accents, clean premium wellness styling, and constrained primary navigation.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Approved unified/interior rebuild branches.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Visual Design",
+      "decision": "Recovery primary sidebar baseline uses the approved compact proportions (198px sidebar; approved logo around 142px in that interior system).",
+      "status": "ACTIVE APPROVED",
+      "basis": "Approved design lock CSS; applies to Recovery interior, not public header.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Visual Design",
+      "decision": "Approved logo artwork must be used as artwork; do not redraw, approximate, substitute a font, or silently swap logo assets.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Explicit design lock and repeated user corrections.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Visual Design",
+      "decision": "Public/master Lellee pages use the approved public master-brand logo asset; the Recovery-specific dark \u201cRECOVERY. EVERY DAY.\u201d treatment is not the public-page logo.",
+      "status": "ACTIVE APPROVED",
+      "basis": "User correction after Recovery logo was applied to public pages.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Visual Design",
+      "decision": "Latest approved public logo asset lineage is `lellee-approved-logo-final.jpg` / approved public artwork from the Tagline Legibility branch.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Lellee_Tagline_Legibility_Fix and later public visual restore.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Visual Design",
+      "decision": "Public logo must be visually prominent, tagline legible, and fully contained inside the header with no bleed into the hero.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Earlier size/tagline corrections plus latest explicit user complaint/correction.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Visual Design",
+      "decision": "Public hero headline remains \u201cYour journey. Your support. Your way.\u201d",
+      "status": "ACTIVE APPROVED",
+      "basis": "Approved master landing.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Visual Design",
+      "decision": "Public landing primary navigation: Home, How Lellee Works, Support Paths, Tools, Coaching, Resources, Log In; primary CTAs include Start Your Journey and Explore Support.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Approved master landing files.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Visual Design",
+      "decision": "Public hero card and \u201cYour Lellee Journey\u201d card must align cleanly; their top/bottom edges should not visibly drift.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Latest explicit user correction.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Visual Design",
+      "decision": "Earlier public size corrections established a larger logo, relatively smaller Welcome/hero card, and relatively larger Journey panel; later Card Height Balance refined them to equal visual height.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Welcome Size, Homepage Size, Homepage Corrected, Proportional, Exact Proportional, Card Height Balance branches.",
+      "supersedes": "",
+      "notes": "Preserve the intended relative hierarchy; do not blindly restore older transform values."
+    },
+    {
+      "category": "Visual Design",
+      "decision": "Transform-based public logo scaling that spills outside its header is not acceptable.",
+      "status": "SUPERSEDED",
+      "basis": "Earlier proportional implementation caused later bleed.",
+      "supersedes": "Exact transform values from older proportional CSS.",
+      "notes": ""
+    },
+    {
+      "category": "Visual Design",
+      "decision": "Independently scaling the hero and Journey cards with mismatched transforms is not acceptable.",
+      "status": "SUPERSEDED",
+      "basis": "Caused live alignment regression.",
+      "supersedes": "Older .80 / 1.15 transform implementation.",
+      "notes": ""
+    },
+    {
+      "category": "Visual Design",
+      "decision": "The latest Header + Hero Alignment CSS implementation itself still needs user visual confirmation.",
+      "status": "PENDING VERIFICATION",
+      "basis": "Patch distributed after complaint; no explicit user confirmation yet.",
+      "supersedes": "",
+      "notes": "Requirement is approved; exact CSS implementation is not yet confirmed."
+    },
+    {
+      "category": "Master App",
+      "decision": "Logged-in master shell includes Home / My Journeys / Tools / Support.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Approved/implemented logged-in shell and screenshots.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Master App",
+      "decision": "Welcome page includes Welcome, [name], Start / Update My Journey, and View My Journeys.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Approved/implemented master shell.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Master App",
+      "decision": "My Journeys includes Recovery with Continue Recovery and an option to Explore Support Paths.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Approved/implemented My Journeys shell.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Master App",
+      "decision": "One Lellee account may support multiple programs/journeys.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Master-brand program architecture.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Master App",
+      "decision": "My Journeys remains available, but it should not be a forced extra stop for a returning Recovery user.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Latest user efficiency correction.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Master App",
+      "decision": "Returning Recovery user path should be direct: sign in -> last safe Recovery page, or Today as fallback.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Latest explicit user direction; supersedes a forced Welcome -> My Journeys -> Continue chain.",
+      "supersedes": "Forced master-home detour for every returning Recovery session.",
+      "notes": ""
+    },
+    {
+      "category": "Master App",
+      "decision": "Start / Update My Journey is the intentional place to reopen or revise the interview.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Latest explicit user direction plus prior Review Setup behavior.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Master App",
+      "decision": "Start Your Journey routing back to the landing page is a known bug and is deliberately tabled until the consolidated correction.",
+      "status": "PENDING VERIFICATION",
+      "basis": "User explicitly said to table it.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Authentication",
+      "decision": "One coherent login experience only; no duplicate password sign-in paths or competing auth-state owners for the same flow.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Repeated user complaints and login stability fixes.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Authentication",
+      "decision": "Successful login must open the app without waiting for all profile/journal/check-in queries; secondary data hydrates in the background.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Login Duplication & Performance fix.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Authentication",
+      "decision": "Double-submit protection and a bounded login timeout are approved stability behavior.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Login Duplication & Performance fix.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Authentication",
+      "decision": "Returning users resume their last safe page when possible; fallback is Today.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Login Resume Last Page fix and later explicit user direction.",
+      "supersedes": "Older strict 'always Today' behavior except as fallback.",
+      "notes": ""
+    },
+    {
+      "category": "Authentication",
+      "decision": "New device or cleared local state falls back to Today.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Resume fix.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Authentication",
+      "decision": "Admin/internal operations pages are not automatic resume targets.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Resume fix.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Authentication",
+      "decision": "Existing account smoke test must open Today/appropriate resume target without console errors and allow sign out/sign back in.",
+      "status": "ACTIVE APPROVED",
+      "basis": "RC live QA checklist.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Onboarding",
+      "decision": "New accounts use five-step onboarding: name, recovery date, recovery pathway, belief preference separately, optional city/state; completion lands on Today.",
+      "status": "ACTIVE APPROVED",
+      "basis": "RC live QA checklist.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Onboarding",
+      "decision": "Completed onboarding must not restart on refresh.",
+      "status": "ACTIVE APPROVED",
+      "basis": "RC live QA checklist.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Onboarding",
+      "decision": "Settings -> Review Setup may intentionally reopen onboarding.",
+      "status": "ACTIVE APPROVED",
+      "basis": "RC live QA checklist.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Onboarding",
+      "decision": "An existing Recovery user must not restart the interview merely by clicking Continue Recovery.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Latest explicit user complaint and efficiency correction.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Onboarding",
+      "decision": "Recovery onboarding/introduction must not be a gate to safety/support.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Approved onboarding/help branch language.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Onboarding",
+      "decision": "Redundant Recovery intro/onboarding windows should be skipped for an already configured Recovery profile.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Latest explicit user efficiency correction.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Onboarding",
+      "decision": "Checking onboarding state before saved profile/preferences finish loading is not acceptable for returning users.",
+      "status": "REJECTED",
+      "basis": "Observed race: first click restarted interview, second succeeded.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Onboarding",
+      "decision": "Obsolete blank-box modal must not reappear.",
+      "status": "ACTIVE APPROVED",
+      "basis": "RC live QA checklist.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Recovery Journey",
+      "decision": "Recovery uses six phases through roughly the first six months: Stabilize, Build, Understand, Rebuild, Strengthen, Grow.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Approved Recovery Journey structure.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Recovery Journey",
+      "decision": "Months 7\u201312 are Maintenance; Year 1 milestone remains part of the journey.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Approved Recovery Journey structure.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Recovery Journey",
+      "decision": "Year 2 remains supported; Year 3+ becomes a lighter long-term/weekly recovery experience while history and milestones continue.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Long-term recovery approved implementation.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Recovery Journey",
+      "decision": "Current phase is emphasized; future phases remain de-emphasized/hidden until appropriate.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Approved progressive disclosure and RC QA.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Recovery Journey",
+      "decision": "Prior content/history remains intentionally accessible.",
+      "status": "ACTIVE APPROVED",
+      "basis": "RC QA.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Today",
+      "decision": "Today includes guided Check-In, Daily Focus, Gratitude, Recovery Action, and Evening Reflection.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Approved dashboard and live QA.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Today",
+      "decision": "Daily Focus and other guided experiences use choices plus optional reflection/note rather than empty blank-box-only UX.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Guided Today corrections and RC QA.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Progress",
+      "decision": "Progress is descriptive and reflective, not a recovery score.",
+      "status": "ACTIVE APPROVED",
+      "basis": "RC live QA and product philosophy.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Progress",
+      "decision": "Recovery-date changes preserve prior history.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Final QA / data integrity decisions.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Help Me Right Now",
+      "decision": "Persistent Help Me Right Now access remains visible and includes craving, overwhelmed, lonely, around substances, and already-used flows.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Approved Help Now build and RC QA.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Help Me Right Now",
+      "decision": "Help Me Right Now and urgent safety information are never Plus-locked.",
+      "status": "ACTIVE APPROVED",
+      "basis": "RC QA / Free-core promise.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Recovery Paths",
+      "decision": "Recovery pathway is separate from belief preference.",
+      "status": "ACTIVE APPROVED",
+      "basis": "RC QA and onboarding model.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Recovery Paths",
+      "decision": "Supported pathway options include 12-Step, SMART/skills-based, therapy/counseling, medication-supported, peer support, and faith/spiritual options.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Approved Recovery Paths implementation.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Recovery Paths",
+      "decision": "Belief/personalization may be secular, spiritual, faith-based, mixed/exploring, with optional Christian/denomination detail including Baptist.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Prior user/project decisions.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Journal",
+      "decision": "Ordinary Journal remains available on Free.",
+      "status": "ACTIVE APPROVED",
+      "basis": "RC live QA / Free-core promise.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Journal",
+      "decision": "Journal+ / Journal Companion adds organization, collections, search, prompts, and deeper review; it does not replace the Free Journal.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Plus/Journal Companion branches.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Journal",
+      "decision": "Journal Companion price is $4.99/month.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Latest explicit pricing and live product screenshot.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Recovery Story",
+      "decision": "Recovery Story may include milestones, Then & Now, goals, and guided responses the user previously approved.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Approved Recovery Story implementation.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Recovery Story",
+      "decision": "Private journal material is excluded by default and must not be pulled automatically.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Approved Story implementation / privacy QA.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Recovery Story",
+      "decision": "The user reviews included material before print/export; story editions can include 2-year, 5-year, 10-year, and custom versions.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Approved Story editions.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Reviews",
+      "decision": "Weekly/monthly reviews and Then & Now use guided observations plus optional reflection.",
+      "status": "ACTIVE APPROVED",
+      "basis": "RC QA.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Pricing",
+      "decision": "Lellee Free = $0.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Latest explicit pricing.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Pricing",
+      "decision": "Lellee Plus = $5.99/month or $59.99/year.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Latest explicit user-approved pricing.",
+      "supersedes": "$3.99/month, $39.99/year, TBD, and 'price at launch'.",
+      "notes": ""
+    },
+    {
+      "category": "Pricing",
+      "decision": "Lellee Premium = $14.99/month or $149/year.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Latest explicit user-approved pricing.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Pricing",
+      "decision": "Journal Companion = $4.99/month.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Latest explicit pricing.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Pricing",
+      "decision": "Lellee Coach add-on = $49.99/month in addition to/with Premium.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Explicit coaching branch approval.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Pricing",
+      "decision": "Additional coaching = $19.99 per 15-minute session.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Explicit user lock.",
+      "supersedes": "Earlier 20-minute or other duration/price suggestions.",
+      "notes": ""
+    },
+    {
+      "category": "Pricing",
+      "decision": "Higher tiers add depth, organization, personalization, and analytical explanation\u2014not more accurate facts.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Explicit user product rule.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Pricing",
+      "decision": "Core recovery and safety stay free; paid tiers cannot gate Help Me Right Now, core guided recovery, core coping tools, urgent safety info, or basic resource access.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Free-core promise.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Pricing",
+      "decision": "Plus at $3.99/month / $39.99/year is obsolete.",
+      "status": "SUPERSEDED",
+      "basis": "Older Stripe/build state.",
+      "supersedes": "Old Plus pricing.",
+      "notes": ""
+    },
+    {
+      "category": "Pricing",
+      "decision": "Plus price TBD / price at launch is obsolete.",
+      "status": "SUPERSEDED",
+      "basis": "Later explicit pricing approval.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Billing",
+      "decision": "A production Stripe go-live is not considered complete merely because price UI exists; production checkout/webhooks/secrets still require final verification.",
+      "status": "DEFERRED / NOT LIVE YET",
+      "basis": "RC launch sequence and later go-live checklist.",
+      "supersedes": "",
+      "notes": "Older RC branch explicitly kept billing off; later checkout wiring exists, but production readiness remains a gate."
+    },
+    {
+      "category": "Consumer Coaching",
+      "decision": "Lellee Coach remains an optional add-on above the consumer subscription, not part of the core Free experience.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Explicit pricing/product decision.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Consumer Coaching",
+      "decision": "Approved included service structure: first month 30-minute intake + 20-minute follow-up; thereafter two 20-minute check-ins/month, plus messaging, goals, accountability, progress review, and milestones.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Explicit user-approved coaching definition.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Consumer Coaching",
+      "decision": "Private journal access remains off/default private unless the member explicitly shares.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Explicit coaching privacy decision.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Coaching Operations",
+      "decision": "Ideal group size is 6\u20138; hard maximum 10.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Explicit user-approved operating target.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Coaching Operations",
+      "decision": "Daily individual caseload target is about 6 clients/day; normal maximum about 8.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Explicit user-approved operating target.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Coaching Operations",
+      "decision": "Active-user planning model is about 60 per coach, with roughly 50\u201370 practical and ~80 as a hard ceiling discussed.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Explicit coaching branch planning.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Coaching Operations",
+      "decision": "No final W-2 versus 1099 decision is locked in the audited approvals.",
+      "status": "PENDING VERIFICATION",
+      "basis": "Prior audit found no explicit user-approved classification.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Coach Business",
+      "decision": "Independent coaches can run their own businesses using the platform; Lellee members may connect only with permission.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Explicit hybrid/separate-commercial decision.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Coach Business",
+      "decision": "Coach-business workspace supports 1-to-1, group, hybrid, services/packages, scheduling, groups, clients, leads/capacity, and operating metrics.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Implemented/approved coach-business build.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Coach Business",
+      "decision": "Independent-coach payment/payout marketplace behavior requires separate configuration/legal review; do not silently treat it as live.",
+      "status": "DEFERRED / NOT LIVE YET",
+      "basis": "Coach-business build boundary.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Coaching Privacy",
+      "decision": "Clients control what private Lellee information they share with a coach.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Explicit coach-business privacy rule.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Coaching Privacy",
+      "decision": "No blanket coach access to journals, safety history, unrelated program data, or private messages.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Coaching activation/consent branches.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Coaching Privacy",
+      "decision": "Coaching scheduling and explicitly shared goals may be available to the Coaching Agent/workflow.",
+      "status": "ACTIVE APPROVED",
+      "basis": "R10 coaching activation.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Coaching Privacy",
+      "decision": "Private coaching-message access defaults OFF and requires explicit per-message/per-thread sharing; revocation blocks future reads.",
+      "status": "ACTIVE APPROVED",
+      "basis": "R11 coaching message consent.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Coaching Privacy",
+      "decision": "Coaching account/client count is hidden by default with an On/Off control; a fresh browser/session starts Off.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Explicit user request and Coach Account Visibility build.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Coaching Privacy",
+      "decision": "Making the account/client count visible by default is rejected.",
+      "status": "REJECTED",
+      "basis": "Explicit user correction.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Agents",
+      "decision": "Resources Agent is an approved primary Lellee agent.",
+      "status": "ACTIVE APPROVED",
+      "basis": "R7\u2013R10 activation branches.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Agents",
+      "decision": "Housing Agent is an approved primary Lellee agent.",
+      "status": "ACTIVE APPROVED",
+      "basis": "R7\u2013R10 activation branches.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Agents",
+      "decision": "Reminder Agent is an approved primary Lellee agent.",
+      "status": "ACTIVE APPROVED",
+      "basis": "R7\u2013R10 activation branches.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Agents",
+      "decision": "Coaching Agent is an approved primary Lellee agent.",
+      "status": "ACTIVE APPROVED",
+      "basis": "R7\u2013R10 activation branches.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Agents",
+      "decision": "Viral Content Agent is part of the approved Lellee growth/marketing agent architecture.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Later explicit agent architecture discussion.",
+      "supersedes": "",
+      "notes": "Exact production implementation of every named role still requires verification."
+    },
+    {
+      "category": "Agents",
+      "decision": "Social Media Agent is part of the approved Lellee growth/marketing agent architecture.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Later explicit agent architecture discussion.",
+      "supersedes": "",
+      "notes": "Exact production implementation of every named role still requires verification."
+    },
+    {
+      "category": "Agents",
+      "decision": "Marketing/Growth Agent is part of the approved Lellee growth/marketing agent architecture.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Later explicit agent architecture discussion.",
+      "supersedes": "",
+      "notes": "Exact production implementation of every named role still requires verification."
+    },
+    {
+      "category": "Agents",
+      "decision": "Prospecting Agent is part of the approved Lellee growth/marketing agent architecture.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Later explicit agent architecture discussion.",
+      "supersedes": "",
+      "notes": "Exact production implementation of every named role still requires verification."
+    },
+    {
+      "category": "Agents",
+      "decision": "Analytics/Optimization Agent is part of the approved Lellee growth/marketing agent architecture.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Later explicit agent architecture discussion.",
+      "supersedes": "",
+      "notes": "Exact production implementation of every named role still requires verification."
+    },
+    {
+      "category": "Agents",
+      "decision": "Agent Operations, Human Review, Content QA, Agent Workbench, and Workflow Copilot are support/control systems, not counted as primary agents.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Latest agent naming clarification.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Agents",
+      "decision": "Resources Agent begins search/read-only; no autonomous writes.",
+      "status": "ACTIVE APPROVED",
+      "basis": "R7 activation.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Agents",
+      "decision": "Housing Agent begins search-only using minimal authorized location/budget/household/accessibility/pet context; no sensitive-data sweep and no autonomous writes.",
+      "status": "ACTIVE APPROVED",
+      "basis": "R8 activation.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Agents",
+      "decision": "Reminder Agent may perform user-approved reminder read/create/update only; no journal/coaching-message/payment/clinical access.",
+      "status": "ACTIVE APPROVED",
+      "basis": "R9 activation.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Agents",
+      "decision": "Coaching Agent is limited to scheduling and explicitly shared goals; private messages remain separately consented.",
+      "status": "ACTIVE APPROVED",
+      "basis": "R10/R11.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Agents",
+      "decision": "Viral Content = attention/creative engine; Social = platform adaptation/publishing operations; Marketing/Growth = acquisition/conversion; Prospecting = public opportunities; Analytics = performance learning.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Latest agent-role architecture.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Agents",
+      "decision": "Virality is not guaranteed; the system optimizes for reach/engagement/signups without promising viral outcomes.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Viral-agent discussion.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Agents",
+      "decision": "Human approval is required before publishing or outbound outreach.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Agent Operations guardrails.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Agents",
+      "decision": "Autonomous cold email, SMS, DMs, letters, and autonomous publishing are prohibited.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Agent guardrails.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Agents",
+      "decision": "Agents cannot make charges/refunds/transfers/payouts or change account/security permissions.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Agent guardrails.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Agents",
+      "decision": "Agents cannot make clinical diagnoses, treatment prescriptions, or emergency-disposition decisions.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Agent guardrails.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Agents",
+      "decision": "Prospecting is limited to public organization/business research and reviewed outreach drafts.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Agent guardrails.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Agents",
+      "decision": "Private journals, private messages, safety/crisis activity, secrets/API keys, and sensitive Recovery/health data are excluded from prospecting/marketing context.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Agent guardrails.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Agents",
+      "decision": "Per-agent identity, least privilege, capability controls, audit logs, consent/revocation, independent shutdown, and admin emergency stop are approved.",
+      "status": "ACTIVE APPROVED",
+      "basis": "R3\u2013R13.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Agents",
+      "decision": "User Agent Control Center exposes the user's own agent permissions/consents/activity; global kill switches remain admin-only.",
+      "status": "ACTIVE APPROVED",
+      "basis": "R12/R13.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Privacy",
+      "decision": "Private user rows are scoped to the signed-in user with RLS; anonymous access to private user tables is denied.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Supabase foundation and QA.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Privacy",
+      "decision": "Two-user isolation test is required before production: User B must not read/update/delete User A private records.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Supabase setup/QA.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Privacy",
+      "decision": "Service-role/secret keys never belong in browser code or public GitHub; browser uses publishable/anon key with RLS.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Supabase setup and agent security.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Privacy",
+      "decision": "Referral requests do not include journals, private messages, safety selections, cravings, diagnoses, or full program history by default.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Referral build.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Privacy",
+      "decision": "Organization/sponsored access does not automatically transfer ownership of a user's private account data.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Organization architecture.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Privacy",
+      "decision": "Cross-program sharing remains opt-in/default off.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Master program architecture.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Legal/Safety",
+      "decision": "Signup framework is 18+ with Terms, Privacy, Consumer Health Data notice, and safety acknowledgment.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Legal/privacy/safety build.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Legal/Safety",
+      "decision": "Lellee is recovery support, not an emergency service or individualized professional medical treatment.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Legal/safety language.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Legal/Safety",
+      "decision": "Production legal/clinical/regulatory review remains a launch gate; build files do not certify HIPAA/42 CFR Part 2/California compliance.",
+      "status": "DEFERRED / NOT LIVE YET",
+      "basis": "Launch/cutover checklists and Supabase setup.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "AI Access",
+      "decision": "Public marketing pages may remain searchable by ordinary search engines where desired, while AI training/search/agent crawlers are restricted.",
+      "status": "ACTIVE APPROVED",
+      "basis": "AI edge-blocking architecture.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "AI Access",
+      "decision": "robots.txt alone is not treated as a security boundary; production edge/WAF enforcement is required.",
+      "status": "ACTIVE APPROVED",
+      "basis": "AI edge-blocking architecture.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "AI Access",
+      "decision": "Internal Lellee agents authenticate through internal identity/capability controls; they are not identified merely by User-Agent strings.",
+      "status": "ACTIVE APPROVED",
+      "basis": "AI/agent access control.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "AI Access",
+      "decision": "Private journals/messages/coaching/safety/account data remain behind authentication/RLS and are never public crawler content.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Privacy architecture.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "PWA/Mobile",
+      "decision": "Lellee is mobile-first/responsive for iPhone, Android, and desktop, with PWA/add-to-home-screen support.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Approved platform scope.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "PWA/Mobile",
+      "decision": "Phone-width QA includes no horizontal scroll, readable text without zoom, usable touch targets, fitting overlays, and content not cut off.",
+      "status": "ACTIVE APPROVED",
+      "basis": "RC QA.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "PWA/Mobile",
+      "decision": "Private/live account data should not be indiscriminately cached for offline use; offline support is shell-oriented.",
+      "status": "ACTIVE APPROVED",
+      "basis": "PWA/privacy architecture.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "PWA/Mobile",
+      "decision": "Push is opt-in; core in-app reminders still work without push.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Notification/PWA branch.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Cache/Deployment",
+      "decision": "Hard refresh must get the latest deployment; old service workers must not resurrect stale interfaces.",
+      "status": "ACTIVE APPROVED",
+      "basis": "RC QA.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Cache/Deployment",
+      "decision": "A deployable package must include the complete dependency set it references; do not mix new HTML with leftover old JS/CSS.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Auth stability root-cause finding.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Cache/Deployment",
+      "decision": "Vercel preview/current deployment is the QA source of truth until production cutover.",
+      "status": "ACTIVE APPROVED",
+      "basis": "RC/launch checklists.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Cache/Deployment",
+      "decision": "Production cutover requires domain, auth redirect, legal/privacy/safety, security, billing, mobile, rollback, and analytics checks.",
+      "status": "DEFERRED / NOT LIVE YET",
+      "basis": "Launch cutover checklist.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Platform Modules",
+      "decision": "Analytics & Insights is part of the approved/preserved platform architecture unless explicitly superseded later.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Aug. 11\u201312 BIG/SUPER build lineage and later consolidated builds.",
+      "supersedes": "",
+      "notes": "Presence in architecture does not mean every external execution/integration is live."
+    },
+    {
+      "category": "Platform Modules",
+      "decision": "Automation / Workflow Rules is part of the approved/preserved platform architecture unless explicitly superseded later.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Aug. 11\u201312 BIG/SUPER build lineage and later consolidated builds.",
+      "supersedes": "",
+      "notes": "Presence in architecture does not mean every external execution/integration is live."
+    },
+    {
+      "category": "Platform Modules",
+      "decision": "Community / Peer Groups / Events / Moderation is part of the approved/preserved platform architecture unless explicitly superseded later.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Aug. 11\u201312 BIG/SUPER build lineage and later consolidated builds.",
+      "supersedes": "",
+      "notes": "Presence in architecture does not mean every external execution/integration is live."
+    },
+    {
+      "category": "Platform Modules",
+      "decision": "Content Studio is part of the approved/preserved platform architecture unless explicitly superseded later.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Aug. 11\u201312 BIG/SUPER build lineage and later consolidated builds.",
+      "supersedes": "",
+      "notes": "Presence in architecture does not mean every external execution/integration is live."
+    },
+    {
+      "category": "Platform Modules",
+      "decision": "Contracts / Procurement / Vendor Risk is part of the approved/preserved platform architecture unless explicitly superseded later.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Aug. 11\u201312 BIG/SUPER build lineage and later consolidated builds.",
+      "supersedes": "",
+      "notes": "Presence in architecture does not mean every external execution/integration is live."
+    },
+    {
+      "category": "Platform Modules",
+      "decision": "Customer Success is part of the approved/preserved platform architecture unless explicitly superseded later.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Aug. 11\u201312 BIG/SUPER build lineage and later consolidated builds.",
+      "supersedes": "",
+      "notes": "Presence in architecture does not mean every external execution/integration is live."
+    },
+    {
+      "category": "Platform Modules",
+      "decision": "Data Governance is part of the approved/preserved platform architecture unless explicitly superseded later.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Aug. 11\u201312 BIG/SUPER build lineage and later consolidated builds.",
+      "supersedes": "",
+      "notes": "Presence in architecture does not mean every external execution/integration is live."
+    },
+    {
+      "category": "Platform Modules",
+      "decision": "Executive Intelligence is part of the approved/preserved platform architecture unless explicitly superseded later.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Aug. 11\u201312 BIG/SUPER build lineage and later consolidated builds.",
+      "supersedes": "",
+      "notes": "Presence in architecture does not mean every external execution/integration is live."
+    },
+    {
+      "category": "Platform Modules",
+      "decision": "Finance / Revenue Operations is part of the approved/preserved platform architecture unless explicitly superseded later.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Aug. 11\u201312 BIG/SUPER build lineage and later consolidated builds.",
+      "supersedes": "",
+      "notes": "Presence in architecture does not mean every external execution/integration is live."
+    },
+    {
+      "category": "Platform Modules",
+      "decision": "Forms / Assessments / Credentialing is part of the approved/preserved platform architecture unless explicitly superseded later.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Aug. 11\u201312 BIG/SUPER build lineage and later consolidated builds.",
+      "supersedes": "",
+      "notes": "Presence in architecture does not mean every external execution/integration is live."
+    },
+    {
+      "category": "Platform Modules",
+      "decision": "Growth / Partnerships is part of the approved/preserved platform architecture unless explicitly superseded later.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Aug. 11\u201312 BIG/SUPER build lineage and later consolidated builds.",
+      "supersedes": "",
+      "notes": "Presence in architecture does not mean every external execution/integration is live."
+    },
+    {
+      "category": "Platform Modules",
+      "decision": "Integrations / Interoperability / Data Portability is part of the approved/preserved platform architecture unless explicitly superseded later.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Aug. 11\u201312 BIG/SUPER build lineage and later consolidated builds.",
+      "supersedes": "",
+      "notes": "Presence in architecture does not mean every external execution/integration is live."
+    },
+    {
+      "category": "Platform Modules",
+      "decision": "Life Admin is part of the approved/preserved platform architecture unless explicitly superseded later.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Aug. 11\u201312 BIG/SUPER build lineage and later consolidated builds.",
+      "supersedes": "",
+      "notes": "Presence in architecture does not mean every external execution/integration is live."
+    },
+    {
+      "category": "Platform Modules",
+      "decision": "Organization Licensing / Sponsored Access is part of the approved/preserved platform architecture unless explicitly superseded later.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Aug. 11\u201312 BIG/SUPER build lineage and later consolidated builds.",
+      "supersedes": "",
+      "notes": "Presence in architecture does not mean every external execution/integration is live."
+    },
+    {
+      "category": "Platform Modules",
+      "decision": "Partner / Provider Network / Referrals is part of the approved/preserved platform architecture unless explicitly superseded later.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Aug. 11\u201312 BIG/SUPER build lineage and later consolidated builds.",
+      "supersedes": "",
+      "notes": "Presence in architecture does not mean every external execution/integration is live."
+    },
+    {
+      "category": "Platform Modules",
+      "decision": "Personalization / Accessibility / Localization is part of the approved/preserved platform architecture unless explicitly superseded later.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Aug. 11\u201312 BIG/SUPER build lineage and later consolidated builds.",
+      "supersedes": "",
+      "notes": "Presence in architecture does not mean every external execution/integration is live."
+    },
+    {
+      "category": "Platform Modules",
+      "decision": "Physical Products / Journals / Giveaways is part of the approved/preserved platform architecture unless explicitly superseded later.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Aug. 11\u201312 BIG/SUPER build lineage and later consolidated builds.",
+      "supersedes": "",
+      "notes": "Presence in architecture does not mean every external execution/integration is live."
+    },
+    {
+      "category": "Platform Modules",
+      "decision": "Pilot Runtime is part of the approved/preserved platform architecture unless explicitly superseded later.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Aug. 11\u201312 BIG/SUPER build lineage and later consolidated builds.",
+      "supersedes": "",
+      "notes": "Presence in architecture does not mean every external execution/integration is live."
+    },
+    {
+      "category": "Platform Modules",
+      "decision": "Platform Integration is part of the approved/preserved platform architecture unless explicitly superseded later.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Aug. 11\u201312 BIG/SUPER build lineage and later consolidated builds.",
+      "supersedes": "",
+      "notes": "Presence in architecture does not mean every external execution/integration is live."
+    },
+    {
+      "category": "Platform Modules",
+      "decision": "Platform Integrity is part of the approved/preserved platform architecture unless explicitly superseded later.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Aug. 11\u201312 BIG/SUPER build lineage and later consolidated builds.",
+      "supersedes": "",
+      "notes": "Presence in architecture does not mean every external execution/integration is live."
+    },
+    {
+      "category": "Platform Modules",
+      "decision": "Product Discovery is part of the approved/preserved platform architecture unless explicitly superseded later.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Aug. 11\u201312 BIG/SUPER build lineage and later consolidated builds.",
+      "supersedes": "",
+      "notes": "Presence in architecture does not mean every external execution/integration is live."
+    },
+    {
+      "category": "Platform Modules",
+      "decision": "Goals / Outcomes / Progress is part of the approved/preserved platform architecture unless explicitly superseded later.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Aug. 11\u201312 BIG/SUPER build lineage and later consolidated builds.",
+      "supersedes": "",
+      "notes": "Presence in architecture does not mean every external execution/integration is live."
+    },
+    {
+      "category": "Platform Modules",
+      "decision": "QA / Release Reliability is part of the approved/preserved platform architecture unless explicitly superseded later.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Aug. 11\u201312 BIG/SUPER build lineage and later consolidated builds.",
+      "supersedes": "",
+      "notes": "Presence in architecture does not mean every external execution/integration is live."
+    },
+    {
+      "category": "Platform Modules",
+      "decision": "Resource Navigation is part of the approved/preserved platform architecture unless explicitly superseded later.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Aug. 11\u201312 BIG/SUPER build lineage and later consolidated builds.",
+      "supersedes": "",
+      "notes": "Presence in architecture does not mean every external execution/integration is live."
+    },
+    {
+      "category": "Platform Modules",
+      "decision": "Scheduling / Communications / CRM is part of the approved/preserved platform architecture unless explicitly superseded later.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Aug. 11\u201312 BIG/SUPER build lineage and later consolidated builds.",
+      "supersedes": "",
+      "notes": "Presence in architecture does not mean every external execution/integration is live."
+    },
+    {
+      "category": "Platform Modules",
+      "decision": "Search Taxonomy / Coverage is part of the approved/preserved platform architecture unless explicitly superseded later.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Aug. 11\u201312 BIG/SUPER build lineage and later consolidated builds.",
+      "supersedes": "",
+      "notes": "Presence in architecture does not mean every external execution/integration is live."
+    },
+    {
+      "category": "Platform Modules",
+      "decision": "Security / Retention / Continuity is part of the approved/preserved platform architecture unless explicitly superseded later.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Aug. 11\u201312 BIG/SUPER build lineage and later consolidated builds.",
+      "supersedes": "",
+      "notes": "Presence in architecture does not mean every external execution/integration is live."
+    },
+    {
+      "category": "Platform Modules",
+      "decision": "Staff Operations / RBAC / Work Queues is part of the approved/preserved platform architecture unless explicitly superseded later.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Aug. 11\u201312 BIG/SUPER build lineage and later consolidated builds.",
+      "supersedes": "",
+      "notes": "Presence in architecture does not mean every external execution/integration is live."
+    },
+    {
+      "category": "Platform Modules",
+      "decision": "Supply Chain is part of the approved/preserved platform architecture unless explicitly superseded later.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Aug. 11\u201312 BIG/SUPER build lineage and later consolidated builds.",
+      "supersedes": "",
+      "notes": "Presence in architecture does not mean every external execution/integration is live."
+    },
+    {
+      "category": "Platform Modules",
+      "decision": "Trust / Support / Data Rights / Audit is part of the approved/preserved platform architecture unless explicitly superseded later.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Aug. 11\u201312 BIG/SUPER build lineage and later consolidated builds.",
+      "supersedes": "",
+      "notes": "Presence in architecture does not mean every external execution/integration is live."
+    },
+    {
+      "category": "Platform Modules",
+      "decision": "Trusted Circle / Delegated Access is part of the approved/preserved platform architecture unless explicitly superseded later.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Aug. 11\u201312 BIG/SUPER build lineage and later consolidated builds.",
+      "supersedes": "",
+      "notes": "Presence in architecture does not mean every external execution/integration is live."
+    },
+    {
+      "category": "Platform Modules",
+      "decision": "Universal Search is part of the approved/preserved platform architecture unless explicitly superseded later.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Aug. 11\u201312 BIG/SUPER build lineage and later consolidated builds.",
+      "supersedes": "",
+      "notes": "Presence in architecture does not mean every external execution/integration is live."
+    },
+    {
+      "category": "Platform Modules",
+      "decision": "Recovery Story Archive is part of the approved/preserved platform architecture unless explicitly superseded later.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Aug. 11\u201312 BIG/SUPER build lineage and later consolidated builds.",
+      "supersedes": "",
+      "notes": "Presence in architecture does not mean every external execution/integration is live."
+    },
+    {
+      "category": "Platform Modules",
+      "decision": "Personal Recovery Plan is part of the approved/preserved platform architecture unless explicitly superseded later.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Aug. 11\u201312 BIG/SUPER build lineage and later consolidated builds.",
+      "supersedes": "",
+      "notes": "Presence in architecture does not mean every external execution/integration is live."
+    },
+    {
+      "category": "Platform Modules",
+      "decision": "Journal Companion is part of the approved/preserved platform architecture unless explicitly superseded later.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Aug. 11\u201312 BIG/SUPER build lineage and later consolidated builds.",
+      "supersedes": "",
+      "notes": "Presence in architecture does not mean every external execution/integration is live."
+    },
+    {
+      "category": "Platform Modules",
+      "decision": "Return Path is part of the approved/preserved platform architecture unless explicitly superseded later.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Aug. 11\u201312 BIG/SUPER build lineage and later consolidated builds.",
+      "supersedes": "",
+      "notes": "Presence in architecture does not mean every external execution/integration is live."
+    },
+    {
+      "category": "Platform Modules",
+      "decision": "Stability Map is part of the approved/preserved platform architecture unless explicitly superseded later.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Aug. 11\u201312 BIG/SUPER build lineage and later consolidated builds.",
+      "supersedes": "",
+      "notes": "Presence in architecture does not mean every external execution/integration is live."
+    },
+    {
+      "category": "Platform Modules",
+      "decision": "Long-term Maintenance is part of the approved/preserved platform architecture unless explicitly superseded later.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Aug. 11\u201312 BIG/SUPER build lineage and later consolidated builds.",
+      "supersedes": "",
+      "notes": "Presence in architecture does not mean every external execution/integration is live."
+    },
+    {
+      "category": "Platform Modules",
+      "decision": "Recovery Completion is part of the approved/preserved platform architecture unless explicitly superseded later.",
+      "status": "ACTIVE APPROVED",
+      "basis": "Aug. 11\u201312 BIG/SUPER build lineage and later consolidated builds.",
+      "supersedes": "",
+      "notes": "Presence in architecture does not mean every external execution/integration is live."
+    },
+    {
+      "category": "Superseded Decisions",
+      "decision": "Branding the consumer product as \u201cLellee Recovery.\u201d",
+      "status": "REJECTED",
+      "basis": "Explicit user correction.",
+      "supersedes": "Older assistant wording/mockup labels.",
+      "notes": ""
+    },
+    {
+      "category": "Superseded Decisions",
+      "decision": "Public pages using the dark Recovery-specific logo.",
+      "status": "REJECTED",
+      "basis": "Explicit user visual correction.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Superseded Decisions",
+      "decision": "Old Plus pricing $3.99/month or $39.99/year.",
+      "status": "SUPERSEDED",
+      "basis": "Latest pricing branch.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Superseded Decisions",
+      "decision": "Additional coaching at 20 minutes for $19.99.",
+      "status": "SUPERSEDED",
+      "basis": "User changed additional session to 15 minutes at the same $19.99 price.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Superseded Decisions",
+      "decision": "Showing coaching account/client totals by default.",
+      "status": "REJECTED",
+      "basis": "Explicit user privacy correction.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Superseded Decisions",
+      "decision": "Forcing returning users through the interview/onboarding after they already completed it.",
+      "status": "REJECTED",
+      "basis": "RC QA and current user correction.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Superseded Decisions",
+      "decision": "Forcing every returning Recovery session through Welcome -> My Journeys -> Continue Recovery.",
+      "status": "SUPERSEDED",
+      "basis": "Latest efficiency direction; My Journeys remains optional.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Superseded Decisions",
+      "decision": "Autonomous agent outreach/publishing/financial actions.",
+      "status": "REJECTED",
+      "basis": "Agent guardrails.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Superseded Decisions",
+      "decision": "Using sensitive recovery/private content for prospecting or marketing.",
+      "status": "REJECTED",
+      "basis": "Agent/privacy guardrails.",
+      "supersedes": "",
+      "notes": ""
+    },
+    {
+      "category": "Superseded Decisions",
+      "decision": "Treating robots.txt alone as sufficient AI access control.",
+      "status": "SUPERSEDED",
+      "basis": "Edge/WAF architecture.",
+      "supersedes": "",
+      "notes": ""
+    }
+  ],
+  "source_families_reviewed": {
+    "Early foundation / canonical (Aug 6\u20138)": [
+      "Lellee_V1_Interactive_Prototype.zip",
+      "Lellee_V1_Site_Build.zip",
+      "Lellee_V1_Site_Build_LogoCorrected.zip",
+      "Lellee_Comprehensive_Consumer_V1.zip",
+      "Lellee_Deployable_Consumer_V1.zip",
+      "Lellee_Production_Foundation_Sprint.zip",
+      "Lellee_Supabase_Connected_Static_Build.zip",
+      "Lellee_Phases_1-6_Guided_Update.zip",
+      "Lellee_MASTER_Deploy.zip",
+      "Lellee_MASTER_Complete_LongTerm.zip",
+      "Lellee_CANONICAL_MASTER.zip",
+      "Lellee_CANONICAL_MASTER_V2.zip",
+      "Lellee_APPROVED_DESIGN_MASTER.zip",
+      "Lellee_APPROVED_UNIFIED_DESIGN.zip",
+      "Lellee_APPROVED_INTERIOR_REBUILD.zip",
+      "Lellee_APPROVED_MASTER_with_Daily_Inspiration.zip",
+      "Lellee_APPROVED_MASTER_with_Dynamic_Upcoming.zip",
+      "Lellee_APPROVED_MASTER_with_Recovery_Planner.zip",
+      "Lellee_APPROVED_MASTER_with_Resources_News.zip",
+      "Lellee_APPROVED_MASTER_with_Support_Network.zip",
+      "Lellee_APPROVED_MASTER_with_Help_Now.zip",
+      "Lellee_APPROVED_MASTER_PWA.zip"
+    ],
+    "V1 QA / product completion (Aug 8\u201310)": [
+      "Lellee_BIG_BUILD_Production_Readiness.zip",
+      "Lellee_BIG_BUILD_Final_Hardening_QA.zip",
+      "Lellee_BIG_BUILD_Reviews_Insights.zip",
+      "Lellee_BIG_BUILD_Personalized_Learning_Engine.zip",
+      "Lellee_BIG_BUILD_LongTerm_Story_Studio.zip",
+      "Lellee_BIG_BUILD_Guided_Journey_Engine.zip",
+      "Lellee_BIG_BUILD_Journal_Companion_Collections.zip",
+      "Lellee_BIG_BUILD_A_Core_Product_Completion.zip",
+      "Lellee_BIG_BUILD_B_Production_Launch.zip",
+      "Lellee_Build_B_Login_Hotfix.zip",
+      "Lellee_Login_Hotfix_2_RenderBasics.zip",
+      "Lellee_Guided_Today_Activities_Hotfix.zip",
+      "Lellee_Recovery_Paths_Resource_Finder_Build.zip",
+      "Lellee_Plus_Recovery_Review_Build.zip",
+      "Lellee_Plus_Secure_Billing_Integration.zip",
+      "Lellee_FINAL_V1_Combined_Onboarding_Consolidated_Master.zip",
+      "Lellee_Release_Candidate_QA_Package.zip",
+      "Lellee_Legal_Privacy_Safety_BIG_Build.zip"
+    ],
+    "Master brand / business / platform expansion (Aug 11\u201312)": [
+      "Lellee_Core_Programs_Coach_Business_BIG_Build.zip",
+      "Lellee_Program_Builder_Vertical_Launch_BIG_Build.zip",
+      "Lellee_Coach_Marketplace_Group_Programs_BIG_Build.zip",
+      "Lellee_InApp_Messages_Milestone_Reminders_BIG_Build.zip",
+      "Lellee_Master_Welcome_Need_Router_BIG_Build.zip",
+      "Lellee_Organization_Licensing_Sponsored_Access_BIG_Build.zip",
+      "Lellee_Shared_Life_Admin_Core_BIG_Build.zip",
+      "Lellee_Resource_Navigation_Referral_Core_BIG_Build.zip",
+      "Lellee_Goals_Outcomes_Progress_Core_BIG_Build.zip",
+      "Lellee_Content_Studio_Journey_Publishing_BIG_Build.zip",
+      "Lellee_Shared_Safety_Privacy_Profile_Core_BIG_Build.zip",
+      "Lellee_Analytics_Insights_SUPER_Build.zip",
+      "Lellee_Unified_Workspaces_Platform_Integration_SUPER_Build.zip",
+      "Lellee_Revenue_Entitlements_Commerce_SUPER_Build.zip",
+      "Lellee_Scheduling_Communications_CRM_SUPER_Build.zip",
+      "Lellee_Trust_Support_Data_Rights_Audit_SUPER_Build.zip",
+      "Lellee_Automation_Workflow_Rules_Engine_SUPER_Build.zip",
+      "Lellee_Personalization_Accessibility_Localization_Recommendations_SUPER_Build.zip",
+      "Lellee_QA_Pilot_Release_Reliability_SUPER_Build.zip",
+      "Lellee_Security_Access_Retention_Continuity_SUPER_Build.zip",
+      "Lellee_Integrations_Data_Portability_Interop_SUPER_Build.zip",
+      "Lellee_Community_Peer_Support_Groups_Events_Moderation_SUPER_Build.zip",
+      "Lellee_Forms_Assessments_DocumentVault_Credentialing_SUPER_Build.zip",
+      "Lellee_Staff_Operations_RBAC_Work_Queues_Approvals_SUPER_Build.zip",
+      "Lellee_Trusted_Circle_Family_Caregiver_Delegated_Access_SUPER_Build.zip",
+      "Lellee_Onboarding_HelpCenter_Knowledge_GuidedSupport_SUPER_Build.zip",
+      "Lellee_Partner_Provider_Network_Referral_Verification_SUPER_Build.zip",
+      "Lellee_Agent_Operations_Human_Review_Prospecting_SUPER_Build.zip",
+      "Lellee_Growth_Partnerships_Sales_Pipeline_SUPER_Build.zip"
+    ],
+    "Recovery completion / master UI corrections (Aug 12\u201315)": [
+      "Lellee_Recovery_Story_AnnualReview_MilestoneArchive_SUPER_Build.zip",
+      "Lellee_Personal_Recovery_Plan_WarningSigns_Coping_SupportMap_SUPER_Build.zip",
+      "Lellee_Physical_Journal_Companion_QR_Pairing_SUPER_Build.zip",
+      "Lellee_Return_to_Recovery_Lapse_Response_Progress_Preservation_SUPER_Build.zip",
+      "Lellee_Stability_Map_Recovery_Capital_Needs_Routing_SUPER_Build.zip",
+      "Lellee_Long_Term_Maintenance_Year2_Year3_WeeklyCheckins_SUPER_Build.zip",
+      "Lellee_Recovery_Experience_Completion_MEGA_Build_1_of_2.zip",
+      "Lellee_Final_Recovery_Release_Candidate_E2E_QA_MEGA_Build_2_of_2.zip",
+      "Lellee_Approved_Style_Master_Landing.zip",
+      "LELLEE_DRAG_TO_GITHUB.zip",
+      "LELLEE_MASTER_LOGGED_IN_SHELL_DRAG_TO_GITHUB.zip",
+      "LELLEE_MASTER_LOGIN_DRAG_TO_GITHUB.zip",
+      "LELLEE_RECOVERY_GITHUB_UPLOAD.zip",
+      "Lellee_Welcome_Size_Fix.zip",
+      "Lellee_Homepage_Size_Adjustment.zip",
+      "Lellee_Homepage_Corrected.zip",
+      "Lellee_Homepage_Proportional_Fix.zip",
+      "Lellee_Exact_Proportional_Fix.zip",
+      "Lellee_Tagline_Legibility_Fix.zip",
+      "Lellee_Card_Height_Balance.zip"
+    ],
+    "Repair / latest branch / agent security (Aug 15\u201317)": [
+      "LELLEE_BUILD_2_RECOVERY_SHELL.zip",
+      "LELLEE_BUILD_3_GUIDANCE_LEARNING_JOURNAL_PROGRESS.zip",
+      "LELLEE_BUILD_4_COMMUNITY_COMMUNICATIONS_MEMBERSHIP.zip",
+      "LELLEE_BUILD_5_COACH_WORKFORCE_BUSINESS_TRAINING.zip",
+      "LELLEE_BUILD_6_PLATFORM_INTEGRATION_MULTILINGUAL_FINAL_QA.zip",
+      "LELLEE_CONSOLIDATED_REPAIR.zip",
+      "LELLEE_CONSOLIDATED_REPAIR_TIMEZONE_SUPPORT_DEDUPE_FIX.zip",
+      "LELLEE_LEARN_FREEZE_HOTFIX.zip",
+      "LELLEE_NAV_LEARN_STABILITY_HOTFIX.zip",
+      "LELLEE_AUTH_CONTEXT_HOTFIX.zip",
+      "LELLEE_AUTH_BRIDGE_FINAL_HOTFIX.zip",
+      "LELLEE_FINAL_RECOVERY_QA_REPAIR.zip",
+      "LELLEE_LATEST_BRANCH_PRICING_UPDATE_R1.zip",
+      "LELLEE_LATEST_BRANCH_PRICING_UPDATE_R2.zip",
+      "LELLEE_LATEST_BRANCH_AGENT_SECURITY_R3.zip",
+      "LELLEE_LATEST_BRANCH_AGENT_PERMISSIONS_R4.zip",
+      "LELLEE_LATEST_BRANCH_AGENT_ENFORCEMENT_R5.zip",
+      "LELLEE_LATEST_BRANCH_AGENT_SECURITY_TESTS_R6.zip",
+      "LELLEE_LATEST_BRANCH_AGENT_ACTIVATION_R7.zip",
+      "LELLEE_LATEST_BRANCH_HOUSING_ACTIVATION_R8.zip",
+      "LELLEE_LATEST_BRANCH_REMINDERS_ACTIVATION_R9.zip",
+      "LELLEE_LATEST_BRANCH_COACHING_ACTIVATION_R10.zip",
+      "LELLEE_LATEST_BRANCH_COACHING_MESSAGE_CONSENT_R11.zip",
+      "LELLEE_LATEST_BRANCH_AGENT_CONTROL_CENTER_R12.zip",
+      "LELLEE_LATEST_BRANCH_ADMIN_AGENT_OPS_R13.zip",
+      "LELLEE_FINAL_CONSOLIDATED_RELEASE.zip",
+      "LELLEE_FINAL_CONSOLIDATED_RELEASE_COACH_ACCOUNT_VISIBILITY.zip"
+    ],
+    "Recent auth / branding correction lineage (Aug 17\u201318)": [
+      "LELLEE_LOGIN_DUPLICATION_PERFORMANCE_FIX.zip",
+      "LELLEE_LOGIN_RESUME_LAST_PAGE_FIX.zip",
+      "LELLEE_AUTH_STABILITY_FULL_REBUILD.zip",
+      "LELLEE_AUTH_STABILITY_MASTER_LOGO_LOCK.zip",
+      "LELLEE_PUBLIC_MASTER_BRAND_LOGO_PATCH.zip",
+      "LELLEE_APPROVED_PUBLIC_VISUAL_RESTORE.zip",
+      "LELLEE_HEADER_HERO_ALIGNMENT_FIX.zip"
+    ]
+  },
+  "important_audit_note": "The earlier LELLEE_APPROVAL_LOCK_AND_REGRESSION_GATE was provisional. This ledger replaces it as the audit baseline once the user accepts this audit."
+}

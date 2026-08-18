@@ -1,0 +1,175 @@
+{
+  "audit_name": "Lellee Current Build Regression Audit",
+  "audit_date": "2026-08-18",
+  "audited_base": "LELLEE_AUTH_STABILITY_MASTER_LOGO_LOCK.zip",
+  "subsequent_known_patch_lineage": [
+    "LELLEE_PUBLIC_MASTER_BRAND_LOGO_PATCH.zip",
+    "LELLEE_APPROVED_PUBLIC_VISUAL_RESTORE.zip",
+    "LELLEE_HEADER_HERO_ALIGNMENT_FIX.zip"
+  ],
+  "live_repo_warning": "The exact live GitHub repository state was not directly read in this audit. Findings compare the distributed full-build lineage and the user's live observations. Items labeled NEEDS LIVE VERIFY require final visual/runtime confirmation.",
+  "findings": [
+    {
+      "severity": "CRITICAL",
+      "area": "Master /app shell",
+      "status": "FAIL",
+      "canonical_requirement": "The package must contain every local file its Vercel routes reference.",
+      "observed": "`vercel.json` routes `/app` to `/home.html`, but the full package is missing: home.html, master-app.js, master-app.css.",
+      "required_consolidated_action": "Restore the approved master shell (`home.html`, `master-app.js`, `master-app.css`) into the single consolidated release, then version it with the current auth/branding rules.",
+      "evidence": "Programmatic inspection of LELLEE_AUTH_STABILITY_MASTER_LOGO_LOCK.zip"
+    },
+    {
+      "severity": "CRITICAL",
+      "area": "Version consistency",
+      "status": "FAIL",
+      "canonical_requirement": "Do not mix new HTML with leftover older repository JS/CSS.",
+      "observed": "Because `/home.html` and master-app assets are missing from the replacement package, Vercel/GitHub can continue serving older repository copies while Recovery uses newer files.",
+      "required_consolidated_action": "Ship one complete replacement set and remove dependency on leftover repository files.",
+      "evidence": "Current package inventory + Vercel route"
+    },
+    {
+      "severity": "CRITICAL",
+      "area": "Authentication ownership",
+      "status": "FAIL",
+      "canonical_requirement": "One coherent login experience; returning Recovery should not encounter two independent auth boots.",
+      "observed": "Recovery has its optimized auth owner, while the older master shell still contains its own `signInWithPassword`, `getSession`, and blocking `Promise.all(loadProfile/loadTopics/loadEnrollments)` flow.",
+      "required_consolidated_action": "Unify the master shell with the current authenticated session contract; do not make the master shell re-authenticate or block on its own boot.",
+      "evidence": "Old master-app.js counts: {'signInWithPassword': 1, 'getSession': 1, 'Promise.all': 1}"
+    },
+    {
+      "severity": "HIGH",
+      "area": "Login performance",
+      "status": "PARTIAL PASS",
+      "canonical_requirement": "Recovery auth should enter the shell immediately and hydrate secondary data in background.",
+      "observed": "Current Recovery file has one `signInWithPassword`, one `getSession`, no `onAuthStateChange`, and background hydration behavior. The stale master shell can still block on three loads.",
+      "required_consolidated_action": "Preserve Recovery fast-auth behavior and bring the master shell onto the same session contract.",
+      "evidence": "Current recovery.html + prior master-app.js"
+    },
+    {
+      "severity": "CRITICAL",
+      "area": "Returning-user onboarding",
+      "status": "FAIL",
+      "canonical_requirement": "Completed onboarding/interview must not restart for an existing Recovery profile.",
+      "observed": "Current Recovery contains both `onboardingOverlay` (1) and `finalOnboardingOverlay` (1); it calls FinalOnboarding.check 60ms after shell entry.",
+      "required_consolidated_action": "Resolve existing profile/onboarding state before deciding to open onboarding, and skip all intro/interview overlays for a configured returning user.",
+      "evidence": "Current recovery.html"
+    },
+    {
+      "severity": "HIGH",
+      "area": "Navigation efficiency",
+      "status": "FAIL",
+      "canonical_requirement": "Returning Recovery path should be sign in -> last Recovery page or Today; My Journeys is optional.",
+      "observed": "Live behavior reported by user required Welcome -> View My Journeys -> Continue Recovery, and first attempt restarted interview.",
+      "required_consolidated_action": "Make Recovery the direct continuation for an enrolled returning Recovery user; keep Home/My Journeys accessible but not mandatory.",
+      "evidence": "User live test + current architecture"
+    },
+    {
+      "severity": "MEDIUM",
+      "area": "Start Your Journey route",
+      "status": "KNOWN / TABLED",
+      "canonical_requirement": "Start Your Journey should begin the interview once and then proceed into the selected journey.",
+      "observed": "User reported Start Your Journey returned to the landing page.",
+      "required_consolidated_action": "Keep tabled until the consolidated correction, then fix routing after the approval ledger is applied.",
+      "evidence": "User live test"
+    },
+    {
+      "severity": "HIGH",
+      "area": "Public branding",
+      "status": "PARTIAL / NEEDS LIVE VERIFY",
+      "canonical_requirement": "Public pages use master Lellee artwork; Recovery-specific dark mark stays inside Recovery.",
+      "observed": "The full master-logo build over-applied a Recovery-specific asset; later Public Visual Restore corrected public `index.html`/`landing.html` to approved public artwork.",
+      "required_consolidated_action": "Consolidate the corrected public asset split into the final release rather than relying on layered patches.",
+      "evidence": "Master Logo Lock + Public Visual Restore lineage"
+    },
+    {
+      "severity": "HIGH",
+      "area": "Public header logo",
+      "status": "NEEDS LIVE VERIFY",
+      "canonical_requirement": "Logo must be prominent and tagline legible but contained fully inside header.",
+      "observed": "Earlier exact proportional CSS used transform scaling and later bled into the hero; latest alignment patch removed transform bleed but has not been explicitly user-approved in live view.",
+      "required_consolidated_action": "Use real container sizing, no overflow bleed, and verify visually at desktop/tablet/mobile before release.",
+      "evidence": "Exact Proportional -> Card Height Balance -> latest user correction"
+    },
+    {
+      "severity": "HIGH",
+      "area": "Public hero / Journey alignment",
+      "status": "NEEDS LIVE VERIFY",
+      "canonical_requirement": "Hero card and Your Lellee Journey tile align cleanly in the approved hierarchy.",
+      "observed": "User reported live misalignment after prior proportional restore. Latest alignment CSS is distributed but not user-confirmed.",
+      "required_consolidated_action": "Verify and lock final top/bottom alignment after applying the canonical visual hierarchy.",
+      "evidence": "User screenshot + latest alignment patch"
+    },
+    {
+      "severity": "MEDIUM",
+      "area": "Home cache policy",
+      "status": "FAIL",
+      "canonical_requirement": "Master app shell should not be held stale after replacement.",
+      "observed": "Current `vercel.json` does not include a specific `/home.html` no-cache/no-store header: False.",
+      "required_consolidated_action": "Add explicit no-cache/no-store for `/home.html` and `/app` in the consolidated deploy.",
+      "evidence": "Current vercel.json"
+    },
+    {
+      "severity": "PASS",
+      "area": "Pricing",
+      "status": "PASS",
+      "canonical_requirement": "Use only latest pricing.",
+      "observed": "Current full package contains all latest price markers: {'$5.99': True, '$59.99': True, '$14.99': True, '$149': True, '$4.99': True, '$49.99': True, '$19.99': True}; stale $3.99/$39.99 scan: none.",
+      "required_consolidated_action": "Preserve exact pricing; do not reintroduce old Stripe sandbox amounts.",
+      "evidence": "Programmatic full-package scan"
+    },
+    {
+      "severity": "PASS",
+      "area": "Coaching account count privacy",
+      "status": "PASS IN RECOVERY BUILD",
+      "canonical_requirement": "Account/client count hidden by default with On/Off switch.",
+      "observed": "`recovery.html` includes the Show account count control and Off-by-default wording; latest visibility implementation was designed to start hidden per session.",
+      "required_consolidated_action": "Preserve; verify in production coach dashboard.",
+      "evidence": "Current recovery.html / Coach Account Visibility lineage"
+    },
+    {
+      "severity": "PASS",
+      "area": "Agent security files",
+      "status": "PASS IN PACKAGE",
+      "canonical_requirement": "R3\u2013R13 access control, permissions, consent, user control center, and admin operations remain present.",
+      "observed": "Required latest agent control files present: {'lellee-agent-access-control.js': True, 'lellee-agent-permissions.js': True, 'lellee-agent-control-center.js': True, 'lellee-admin-agent-operations.js': True, 'lellee-coaching-message-consent.js': True}.",
+      "required_consolidated_action": "Preserve and verify production DB/functions/kill switches separately.",
+      "evidence": "Programmatic package inventory"
+    },
+    {
+      "severity": "MEDIUM",
+      "area": "Growth-agent implementation",
+      "status": "PENDING",
+      "canonical_requirement": "Latest architecture names Viral, Social, Marketing/Growth, Prospecting, Analytics/Optimization distinctly.",
+      "observed": "The architecture is approved, but not every named growth role has been verified as a distinct production agent in the current package/database.",
+      "required_consolidated_action": "During consolidated correction, preserve existing agent security and verify which named roles are actually instantiated before claiming them live.",
+      "evidence": "Prior conversation architecture + current agent files"
+    },
+    {
+      "severity": "MEDIUM",
+      "area": "Stripe production",
+      "status": "DEFERRED",
+      "canonical_requirement": "Paid plans may only be treated live after production Stripe/webhook/entitlement verification.",
+      "observed": "Pricing/checkout code exists, but prior QA/cutover gates require final production verification.",
+      "required_consolidated_action": "Run Stripe production gate after UI/auth regression correction; do not infer readiness from UI alone.",
+      "evidence": "RC QA + later checkout branches"
+    },
+    {
+      "severity": "MEDIUM",
+      "area": "AI crawler edge enforcement",
+      "status": "DEFERRED",
+      "canonical_requirement": "AI crawler blocking must be enforced at edge/WAF, not robots alone.",
+      "observed": "Architecture and documentation are present; actual production edge configuration has not been verified in this audit.",
+      "required_consolidated_action": "Verify Cloudflare/WAF/edge controls at go-live gate.",
+      "evidence": "AI edge-blocking architecture"
+    },
+    {
+      "severity": "MEDIUM",
+      "area": "Legal / regulatory launch gate",
+      "status": "DEFERRED",
+      "canonical_requirement": "Qualified legal/privacy/clinical review remains a production gate.",
+      "observed": "Build includes legal/privacy/safety notices, but that does not certify compliance.",
+      "required_consolidated_action": "Complete review before public production launch.",
+      "evidence": "Launch/cutover checklist"
+    }
+  ]
+}
