@@ -1,0 +1,24 @@
+{
+  "patch": "LELLEE_APPROVED_PUBLIC_VISUAL_RESTORE",
+  "restored": [
+    "Exact previously approved Lellee public logo artwork",
+    "25% larger desktop logo artwork treatment",
+    "Approved three-line hero statement behavior",
+    "Welcome card 20% proportional reduction on desktop",
+    "Your Lellee Journey panel 15% proportional enlargement on desktop"
+  ],
+  "not_changed": [
+    "Recovery dashboard",
+    "Recovery-specific logo",
+    "Authentication",
+    "Supabase",
+    "Pricing",
+    "Journey logic"
+  ],
+  "upload_files": [
+    "index.html",
+    "landing.html",
+    "master-landing.css",
+    "lellee-approved-logo-final.jpg"
+  ]
+}
