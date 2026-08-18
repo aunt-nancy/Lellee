@@ -1,0 +1,30 @@
+{
+  "patch": "LELLEE_LANGUAGE_PERSISTENCE_RESUME_RESTORE",
+  "supersedes": "LELLEE_CONSUMER_PROGRESS_HISTORY_RESTORE.zip",
+  "fixes": [
+    "Espa\u00f1ol is applied immediately when Save Language & Accessibility is clicked.",
+    "Language/accessibility preferences are cached locally before the network save.",
+    "Account save uses the approved RPC with a direct user-owned table fallback.",
+    "Spanish translation catalog is reloaded after save and after bootstrap.",
+    "Refresh preserves Language & Accessibility instead of overwriting the saved destination with Today while staged modules are still loading.",
+    "Dynamic safe pages retry their approved resume destination after the page mounts."
+  ],
+  "preserves": [
+    "Grow & Learn stability correction",
+    "Expert-Guided Practices navigation",
+    "Consumer/professional business separation",
+    "Progress and Recovery History restore",
+    "Approved last-safe-page / Today-fallback rule",
+    "Pricing and coaching privacy"
+  ],
+  "files_to_upload": [
+    "recovery.html",
+    "build-2-shell.js",
+    "build-3-guidance.js",
+    "program-coach-core.js",
+    "lellee-progress-history-runtime.js",
+    "build-6-platform.js"
+  ],
+  "sql_required": false,
+  "note": "If the Build 6 database migration was never installed, same-device language persistence still works and the UI will report that account sync needs attention rather than silently reverting."
+}

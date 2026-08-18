@@ -132,13 +132,131 @@
     $('#b6ReducedMotion').checked=!!p.reduced_motion;$('#b6Voice').checked=p.speech_to_text_enabled!==false;$('#b6InterfaceTranslation').checked=p.interface_translation_enabled!==false;$('#b6UserTranslation').checked=!!p.user_content_translation_enabled;
     const tier=state.membership?.service_tier||'free';$('#b6TierTitle').textContent=tier.charAt(0).toUpperCase()+tier.slice(1);$('#b6TierText').textContent=`${state.entitlements.length} active add-on${state.entitlements.length===1?'':'s'} · interface ${p.language_code==='es'?'Español':'English'}`;
   }
-  async function savePreferences(){
-    const button=$('#b6SavePreferences');button.disabled=true;message('#b6PreferenceMsg',state.preferences.language_code==='es'?'Guardando…':'Saving…');
-    const language=$('#b6Language').value;const payload={
-      p_language_code:language,p_locale_code:language==='es'?'es-US':'en-US',p_timezone:$('#b6Timezone').value,p_text_scale:Number($('#b6TextScale').value),p_reduced_motion:$('#b6ReducedMotion').checked,p_speech_to_text_enabled:$('#b6Voice').checked,p_interface_translation_enabled:$('#b6InterfaceTranslation').checked,p_user_content_translation_enabled:$('#b6UserTranslation').checked
+  async function loadTranslationsForLanguage(language){
+    if(!client)return;
+    try{
+      const {data,error}=await client.from('lellee_translation_catalog')
+        .select('translation_key,translation_value')
+        .eq('language_code',language)
+        .in('review_status',['approved','professional_review','internal']);
+      if(!error&&Array.isArray(data)){
+        state.translations=Object.fromEntries(data.map(row=>[row.translation_key,row.translation_value]));
+      }
+    }catch(error){console.warn('Lellee translation refresh skipped:',error)}
+  }
+
+  async function persistPreferencesDirect(preferences){
+    if(!client)return {ok:false,error:new Error('No database client')};
+    const user=state.user||window.LelleeAuthContext?.getCurrentUser?.()||null;
+    if(!user?.id)return {ok:false,error:new Error('Authentication required')};
+    const row={
+      user_id:user.id,
+      language_code:preferences.language_code,
+      locale_code:preferences.locale_code,
+      timezone:preferences.timezone,
+      text_scale:preferences.text_scale,
+      reduced_motion:preferences.reduced_motion,
+      speech_to_text_enabled:preferences.speech_to_text_enabled,
+      interface_translation_enabled:preferences.interface_translation_enabled,
+      user_content_translation_enabled:preferences.user_content_translation_enabled
     };
-    if(client){const {data,error}=await client.rpc('lellee_save_platform_preferences',payload);if(error){button.disabled=false;message('#b6PreferenceMsg',error.message,'error');return}state.preferences=data}else state.preferences={...state.preferences,language_code:language,locale_code:payload.p_locale_code,timezone:payload.p_timezone,text_scale:payload.p_text_scale,reduced_motion:payload.p_reduced_motion,speech_to_text_enabled:payload.p_speech_to_text_enabled,interface_translation_enabled:payload.p_interface_translation_enabled,user_content_translation_enabled:payload.p_user_content_translation_enabled};
-    button.disabled=false;applyPreferenceState();message('#b6PreferenceMsg',text('platform.saved','Language and accessibility settings saved.'),'success');toast(text('platform.saved','Language and accessibility settings saved.'));
+    try{
+      const {data,error}=await client.from('lellee_platform_preferences')
+        .upsert(row,{onConflict:'user_id'})
+        .select('*')
+        .single();
+      return error?{ok:false,error}:{ok:true,data};
+    }catch(error){return {ok:false,error}}
+  }
+
+  async function savePreferences(){
+    const button=$('#b6SavePreferences');button.disabled=true;
+    const language=$('#b6Language').value;
+    message('#b6PreferenceMsg',language==='es'?'Guardando…':'Saving…');
+    const payload={
+      p_language_code:language,
+      p_locale_code:language==='es'?'es-US':'en-US',
+      p_timezone:$('#b6Timezone').value,
+      p_text_scale:Number($('#b6TextScale').value),
+      p_reduced_motion:$('#b6ReducedMotion').checked,
+      p_speech_to_text_enabled:$('#b6Voice').checked,
+      p_interface_translation_enabled:$('#b6InterfaceTranslation').checked,
+      p_user_content_translation_enabled:$('#b6UserTranslation').checked
+    };
+
+    const localPreferences={
+      ...state.preferences,
+      language_code:language,
+      locale_code:payload.p_locale_code,
+      timezone:payload.p_timezone,
+      text_scale:payload.p_text_scale,
+      reduced_motion:payload.p_reduced_motion,
+      speech_to_text_enabled:payload.p_speech_to_text_enabled,
+      interface_translation_enabled:payload.p_interface_translation_enabled,
+      user_content_translation_enabled:payload.p_user_content_translation_enabled
+    };
+
+    // Approved behavior: saving changes the interface immediately and persists
+    // locally before any network round-trip.
+    state.preferences=localPreferences;
+    try{localStorage.setItem(PREF_CACHE,JSON.stringify(localPreferences))}catch(_e){}
+    await loadTranslationsForLanguage(language);
+    applyPreferenceState();
+
+    let serverSaved=!client;
+    let serverError=null;
+
+    if(client){
+      try{
+        const {data,error}=await client.rpc('lellee_save_platform_preferences',payload);
+        if(!error&&data){
+          state.preferences={...localPreferences,...data};
+          serverSaved=true;
+        }else{
+          serverError=error||new Error('Preference save failed');
+          // Fallback to the same user-owned preferences table. This preserves
+          // account-level persistence when the RPC is temporarily unavailable.
+          const direct=await persistPreferencesDirect(localPreferences);
+          if(direct.ok){
+            state.preferences={...localPreferences,...(direct.data||{})};
+            serverSaved=true;
+            serverError=null;
+          }else if(direct.error){
+            serverError=direct.error;
+          }
+        }
+      }catch(error){
+        serverError=error;
+        const direct=await persistPreferencesDirect(localPreferences);
+        if(direct.ok){
+          state.preferences={...localPreferences,...(direct.data||{})};
+          serverSaved=true;
+          serverError=null;
+        }else if(direct.error){
+          serverError=direct.error;
+        }
+      }
+    }
+
+    try{localStorage.setItem(PREF_CACHE,JSON.stringify(state.preferences))}catch(_e){}
+    await loadTranslationsForLanguage(language);
+    applyPreferenceState();
+    button.disabled=false;
+
+    if(serverSaved){
+      const savedText=language==='es'?'Idioma y accesibilidad guardados.':'Language and accessibility settings saved.';
+      message('#b6PreferenceMsg',savedText,'success');
+      toast(savedText);
+    }else{
+      // Same-device persistence remains intact. Surface the account-sync issue
+      // instead of silently reverting the selected language.
+      const warning=language==='es'
+        ? 'Español guardado en este dispositivo. La sincronización de la cuenta necesita atención.'
+        : 'Saved on this device. Account sync needs attention.';
+      message('#b6PreferenceMsg',warning,'error');
+      toast(warning,'error');
+      console.warn('Lellee preference account sync failed:',serverError);
+    }
   }
 
   function hasFeature(key){
@@ -166,7 +284,16 @@
     applyPreferenceState();if(!client)return;
     const sessionUser=window.LelleeAuthContext?.getCurrentUser?.()||null;state.user=sessionUser;state.isAdmin=['admin','owner','service_role'].includes(sessionUser?.app_metadata?.role||'');installNav();
     if(!state.user)return;
-    const {data,error}=await client.rpc('lellee_get_platform_bootstrap');if(!error&&data){state.preferences={...state.preferences,...(data.preferences||{})};state.membership=data.membership||state.membership;state.entitlements=data.entitlements||[];state.translations=data.translations||{};state.locales=data.locales||[];applyPreferenceState()}
+    const {data,error}=await client.rpc('lellee_get_platform_bootstrap');
+    if(!error&&data){
+      state.preferences={...state.preferences,...(data.preferences||{})};
+      state.membership=data.membership||state.membership;
+      state.entitlements=data.entitlements||[];
+      state.translations=data.translations||{};
+      state.locales=data.locales||[];
+      await loadTranslationsForLanguage(state.preferences.language_code||'en');
+      applyPreferenceState();
+    }
     const readiness=await client.rpc('lellee_build6_release_readiness');if(!readiness.error){state.readiness=readiness.data;renderReadiness()}
   }
 
