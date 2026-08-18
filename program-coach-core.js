@@ -36,7 +36,8 @@ async function loadBusiness(){
  q('#coachCredentials')&&(q('#coachCredentials').value=business.credentials_disclosure||'');
  q('#coachBusinessModel')&&(q('#coachBusinessModel').value=business.business_model||'solo');
  q('#coachPrimaryProgram')&&business.primary_program_id&&(q('#coachPrimaryProgram').value=business.primary_program_id);
- q('#coachNavItem')?.classList.toggle('hidden',business.status!=='approved');
+ // Consumer Recovery does not expose the independent-business dashboard.
+ q('#coachNavItem')?.classList.add('hidden');
 }
 
 async function submitBusiness(){

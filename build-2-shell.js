@@ -11,7 +11,7 @@
       label: 'Grow & Learn', icon: '◇', pages: ['learn', 'expert-guided-practices', 'tools', 'recovery-paths-v2']
     },
     connect: {
-      label: 'Connect', icon: '♡', pages: ['meetings', 'community', 'coach-dashboard']
+      label: 'Connect', icon: '♡', pages: ['meetings', 'community']
     },
     reflect: {
       label: 'Reflect & Track', icon: '↗', pages: ['journal', 'progress', 'calendar']
@@ -28,7 +28,7 @@
     today: 'daily', 'for-you': 'daily', recovery: 'daily', journey: 'daily', day2: 'daily',
     'recovery-hub': 'daily', 'personal-plan': 'daily', 'return-path': 'daily', 'stability-map': 'daily',
     learn: 'grow', lesson: 'grow', tools: 'grow', 'recovery-paths-v2': 'grow', 'expert-guided-practices': 'grow',
-    meetings: 'connect', community: 'connect', 'coach-dashboard': 'connect', support: 'connect', 'support-network': 'connect',
+    meetings: 'connect', community: 'connect', support: 'connect', 'support-network': 'connect',
     journal: 'reflect', 'journal-companion': 'reflect', progress: 'reflect', 'progress-hub': 'reflect', calendar: 'reflect',
     milestones: 'reflect', 'then-now': 'reflect', story: 'reflect', 'story-archive': 'reflect', history: 'reflect',
     longterm: 'reflect', 'long-term-maintenance': 'reflect', 'monthly-review': 'reflect', 'weekly-review': 'reflect',
@@ -81,6 +81,13 @@
     button.className = 'nav-item b2-nav-placeholder';
     button.dataset.page = 'expert-guided-practices';
     button.innerHTML = '<span class="nav-icon">▧</span>Expert-Guided Practices';
+    // APPROVED RESTORE: this button is created after the core static
+    // data-page bindings, so it must own its navigation handler.
+    button.addEventListener('click', event => {
+      event.preventDefault();
+      event.stopPropagation();
+      navigateTo('expert-guided-practices');
+    });
     return button;
   }
 

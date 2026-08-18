@@ -1,0 +1,33 @@
+{
+  "patch": "LELLEE_CONSUMER_BOUNDARY_EXPERT_GUIDED_RESTORE",
+  "supersedes": "LELLEE_GROW_AND_LEARN_APPROVED_STABILITY_RESTORE.zip",
+  "fixes": [
+    "Expert-Guided Practices sidebar button now actually navigates to the approved consumer practices page.",
+    "Carries forward the prior approved Learn freeze/stability fix.",
+    "Removes coach-dashboard from the consumer Connect navigation.",
+    "Removes Start a Coaching Business from consumer Settings.",
+    "Removes the legacy Coach Dashboard nav item from consumer Recovery.",
+    "Stops loading Professional Hub / Training Center / Business Builder module inside consumer Recovery.",
+    "Blocks consumer Recovery from resuming/opening professional-business pages.",
+    "Preserves consumer My Coaching and Find a Coach features."
+  ],
+  "approved_boundary": "Hybrid technically, separate commercially: consumer Lellee remains recovery-focused; professional/coaching-business tools belong to a separate professional/business experience.",
+  "not_changed": [
+    "Public landing page",
+    "Consumer Recovery logo/design",
+    "Pricing",
+    "Journal",
+    "Today",
+    "Recovery Journey",
+    "My Coaching member privacy",
+    "Agent security permissions",
+    "Supabase schema"
+  ],
+  "files_to_upload": [
+    "recovery.html",
+    "build-2-shell.js",
+    "build-3-guidance.js",
+    "program-coach-core.js"
+  ],
+  "sql_required": false
+}

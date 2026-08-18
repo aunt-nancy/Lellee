@@ -1143,7 +1143,7 @@ body.coach-account-count-visible [data-coach-client-count]{filter:none;user-sele
 <button class="nav-item" data-page="milestones"><span class="nav-icon">◆</span>Milestones</button><button class="nav-item" data-page="then-now"><span class="nav-icon">↔</span>Then &amp; Now</button><button class="nav-item" data-page="story"><span class="nav-icon">▤</span>My Recovery Story</button><button class="nav-item" data-page="history"><span class="nav-icon">◷</span>My History</button><button class="nav-item" data-page="longterm"><span class="nav-icon">∞</span>Year 3+</button><button class="nav-item" data-page="account"><span class="nav-icon">◉</span>Account &amp; Privacy</button><button class="nav-item" data-page="plus"><span class="nav-icon">✦</span>Lellee Plus</button>
 <button class="nav-item hidden" data-page="admin" id="adminNavItem"><span class="nav-icon">⚙</span>Admin</button>
 <button class="nav-item" data-page="settings"><span class="nav-icon">⚙</span>Settings</button>
-<button class="nav-item hidden" data-page="coach-dashboard" id="coachNavItem"><span class="nav-icon">◎</span>Coach Dashboard</button><button class="nav-item" data-page="inbox" id="inboxNavItem"><span class="nav-icon">✉</span>Inbox <span class="inbox-nav-badge hidden" id="inboxNavBadge">0</span></button><button class="nav-item" data-page="workspace-home" id="workspaceNavItem"><span class="nav-icon">◇</span>Workspaces</button><button class="nav-item" data-page="global-search" id="searchNavItem"><span class="nav-icon">⌕</span>Search</button><button class="nav-item" data-page="calendar" id="calendarNavItem"><span class="nav-icon">◷</span>Calendar</button><button class="nav-item" data-page="for-you" id="forYouNavItem"><span class="nav-icon">✦</span>For You</button><button class="nav-item" data-page="community" id="communityNavItem"><span class="nav-icon">◎</span>Community</button><button class="nav-item" data-page="help-center" id="helpNavItem"><span class="nav-icon">?</span>Help</button></nav>
+<button class="nav-item" data-page="inbox" id="inboxNavItem"><span class="nav-icon">✉</span>Inbox <span class="inbox-nav-badge hidden" id="inboxNavBadge">0</span></button><button class="nav-item" data-page="workspace-home" id="workspaceNavItem"><span class="nav-icon">◇</span>Workspaces</button><button class="nav-item" data-page="global-search" id="searchNavItem"><span class="nav-icon">⌕</span>Search</button><button class="nav-item" data-page="calendar" id="calendarNavItem"><span class="nav-icon">◷</span>Calendar</button><button class="nav-item" data-page="for-you" id="forYouNavItem"><span class="nav-icon">✦</span>For You</button><button class="nav-item" data-page="community" id="communityNavItem"><span class="nav-icon">◎</span>Community</button><button class="nav-item" data-page="help-center" id="helpNavItem"><span class="nav-icon">?</span>Help</button></nav>
 <div class="side-spacer"></div>
 <div class="help-card">
 <h4>Need Help Now?</h4>
@@ -7125,7 +7125,7 @@ body.coach-account-count-visible [data-coach-client-count]{filter:none;user-sele
 </div>
 <div class="program-settings-shortcuts">
 <article><div><b>Lellee Programs</b><small>Recovery is Program #1. Review the future Lellee program architecture.</small></div><button class="approved-link" data-page="programs">View Programs →</button></article>
-<article><div><b>Start a Coaching Business</b><small>Create services, groups and a client workflow inside Lellee.</small></div><button class="approved-link" data-page="coach-business">Start Coaching Business →</button></article>
+
 <article><div><b>My Coaching</b><small>Manage invitations and information you choose to share with a coach.</small></div><button class="approved-link" data-page="my-coaching">Open My Coaching →</button></article>
 </div>
 <div class="program-settings-shortcuts">
@@ -7400,16 +7400,26 @@ const LELLEE_RESUME_BLOCKED_PAGES=new Set([
   'support-ops','communications-admin','revenue-ops','platform-health','analytics',
   'pilot-enrollment-admin','safety-profile-builder','content-releases','content-preview',
   'content-studio','outcome-builder','resource-admin','organization-admin','program-demand',
-  'coach-admin','program-builder'
+  'coach-admin','program-builder',
+  'coach-dashboard','coach-business','coach-cohorts','coach-analytics','coach-revenue',
+  'coach-scheduler','coach-automation','coach-credentials','coach-quickstart',
+  'professional-hub','training-center','staff-coach-workspace','business-builder','social-agent'
 ]);
 
 function resumeStorageKey(userId){
   return userId?`lellee:last-page:${userId}`:'';
 }
 
+const LELLEE_CONSUMER_PROFESSIONAL_PAGES=new Set([
+  'coach-dashboard','coach-business','coach-cohorts','coach-analytics','coach-revenue',
+  'coach-scheduler','coach-automation','coach-credentials','coach-quickstart',
+  'professional-hub','training-center','staff-coach-workspace','business-builder','social-agent'
+]);
+
 function canResumePage(name){
   if(!name||typeof name!=='string')return false;
   if(LELLEE_RESUME_BLOCKED_PAGES.has(name))return false;
+  if(LELLEE_CONSUMER_PROFESSIONAL_PAGES.has(name))return false;
   const page=document.getElementById(`page-${name}`);
   return !!page;
 }
@@ -7432,6 +7442,9 @@ function rememberResumePage(name){
 }
 
 function showPage(name,options={}){
+  // Consumer Recovery never opens coach-business / Professional Hub pages.
+  // Those belong to the separate professional/business experience.
+  if(LELLEE_CONSUMER_PROFESSIONAL_PAGES.has(name)) name='today';
   const requested=canResumePage(name)?name:'today';
   $$('.page').forEach(p=>p.classList.remove('active'));
   const page=$(`#page-${requested}`)||$('#page-today');
@@ -8432,7 +8445,7 @@ Transportation"></textarea></label>
 <script id="lellee-staged-module-loader">
 (function(){
   'use strict';
-  const modules=["/build-2-shell.js", "/build-3-guidance.js?v=20260818-approved-learn-stability-r1", "/journal-review-hotfix.js?v=20260816-journal-review-r1", "/build-4-community.js", "/inbox-reminders.js", "/resource-navigation.js", "/progress-core.js", "/legal-privacy-safety.js", "/pwa-runtime.js", "/build-5-professional.js", "/build-6-platform.js", "/push-button-hotfix.js", "/program-coach-core.js", "/program-builder.js", "/coach-marketplace.js", "/welcome-router.js", "/organization-licensing.js", "/life-admin-core.js", "/content-studio.js", "/safety-privacy-core.js", "/pilot-runtime.js", "/analytics-insights.js", "/platform-integration.js", "/commerce-ops.js", "/scheduling-crm.js", "/trust-support.js", "/automation-workflows.js", "/personalization-experience.js", "/release-reliability.js", "/security-continuity.js", "/integrations-interop.js", "/community-peer.js", "/forms-credentials.js", "/staff-operations.js", "/trusted-circle.js", "/onboarding-help.js", "/partner-provider-network.js", "/communications-lifecycle.js", "/platform-integrity.js", "/agent-operations.js", "/growth-partnerships.js", "/contracts-procurement.js", "/customer-success.js", "/finance-revenue-ops.js", "/executive-intelligence.js", "/data-governance.js", "/product-discovery.js", "/universal-search.js", "/physical-commerce.js", "/supply-chain.js", "/search-coverage.js", "/story-archive.js", "/personal-plan.js", "/journal-companion.js", "/return-path.js", "/stability-map.js", "/long-term-maintenance.js", "/recovery-completion.js", "/release-candidate.js", "/lellee-final-repair.js?v=20260816-final-r3-plus-payments", "/lellee-pricing-update.js?v=20260816-pricing-r2", "/lellee-agent-access-control.js?v=20260816-agent-security-r1", "/lellee-agent-permissions.js?v=20260816-r4", "/lellee-coaching-message-consent.js?v=20260816-r11", "/lellee-agent-control-center.js?v=20260816-r12", "/lellee-admin-agent-operations.js?v=20260816-r13"];
+  const modules=["/build-2-shell.js?v=20260818-expert-consumer-boundary-r1", "/build-3-guidance.js?v=20260818-approved-learn-stability-r1", "/journal-review-hotfix.js?v=20260816-journal-review-r1", "/build-4-community.js", "/inbox-reminders.js", "/resource-navigation.js", "/progress-core.js", "/legal-privacy-safety.js", "/pwa-runtime.js", "/build-6-platform.js", "/push-button-hotfix.js", "/program-coach-core.js?v=20260818-consumer-boundary-r1", "/program-builder.js", "/coach-marketplace.js", "/welcome-router.js", "/organization-licensing.js", "/life-admin-core.js", "/content-studio.js", "/safety-privacy-core.js", "/pilot-runtime.js", "/analytics-insights.js", "/platform-integration.js", "/commerce-ops.js", "/scheduling-crm.js", "/trust-support.js", "/automation-workflows.js", "/personalization-experience.js", "/release-reliability.js", "/security-continuity.js", "/integrations-interop.js", "/community-peer.js", "/forms-credentials.js", "/staff-operations.js", "/trusted-circle.js", "/onboarding-help.js", "/partner-provider-network.js", "/communications-lifecycle.js", "/platform-integrity.js", "/agent-operations.js", "/growth-partnerships.js", "/contracts-procurement.js", "/customer-success.js", "/finance-revenue-ops.js", "/executive-intelligence.js", "/data-governance.js", "/product-discovery.js", "/universal-search.js", "/physical-commerce.js", "/supply-chain.js", "/search-coverage.js", "/story-archive.js", "/personal-plan.js", "/journal-companion.js", "/return-path.js", "/stability-map.js", "/long-term-maintenance.js", "/recovery-completion.js", "/release-candidate.js", "/lellee-final-repair.js?v=20260816-final-r3-plus-payments", "/lellee-pricing-update.js?v=20260816-pricing-r2", "/lellee-agent-access-control.js?v=20260816-agent-security-r1", "/lellee-agent-permissions.js?v=20260816-r4", "/lellee-coaching-message-consent.js?v=20260816-r11", "/lellee-agent-control-center.js?v=20260816-r12", "/lellee-admin-agent-operations.js?v=20260816-r13"];
   let started=false;
   function loadScript(src){
     return new Promise(resolve=>{
