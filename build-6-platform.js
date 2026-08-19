@@ -4,11 +4,15 @@
   const PAGE_KEY='lellee:last-page:v2';
   const CATEGORY_KEY='lellee:last-nav-category:v2';
   const PREF_CACHE='lellee:platform-preferences:v6';
+  const LANGUAGE_CHOICE_KEY='lellee:explicit-language-choice:v6';
+  const embeddedSpanishByKey={"nav.daily":"Diario","nav.grow":"Crecer y aprender","nav.connect":"Conectar","nav.reflect":"Reflexionar y registrar","nav.support":"Encontrar apoyo","nav.account":"Cuenta","nav.today":"Hoy","nav.for_you":"Para ti","nav.my_recovery":"Mi recuperación","nav.learn":"Aprender","nav.expert_guided":"Prácticas guiadas por expertos","nav.tools":"Herramientas","nav.recovery_paths":"Caminos de recuperación","nav.meetings":"Reuniones","nav.community":"Comunidad","nav.journal":"Diario","nav.progress":"Progreso","nav.calendar":"Calendario","nav.resources":"Recursos","nav.inbox":"Bandeja de entrada","nav.workspaces":"Espacios de trabajo","nav.search":"Buscar","nav.plus":"Lellee Plus","nav.settings":"Configuración","nav.help":"Ayuda","nav.language":"Idioma y accesibilidad","nav.release":"Preparación para lanzamiento","common.save":"Guardar","common.edit":"Editar","common.delete":"Eliminar","common.cancel":"Cancelar","common.close":"Cerrar","common.open":"Abrir","common.add":"Agregar","common.create":"Crear","common.continue":"Continuar","common.back":"Atrás","common.refresh":"Actualizar","common.sign_out":"Cerrar sesión","common.loading":"Manteniendo Lellee sincronizado…","today.guided":"Recuperación guiada de hoy","today.help":"Ayúdame ahora","today.get_help":"Obtener ayuda ahora","today.rings":"Círculos de recuperación","today.upcoming":"Próximamente","today.inspiration":"Inspiración de hoy","today.checkin":"Registro","today.focus":"Enfoque diario","today.gratitude":"Gratitud","today.action":"Acción de recuperación","today.reflection":"Reflexión de la noche","platform.title":"Idioma y accesibilidad","platform.subtitle":"Elige cómo Lellee se comunica y muestra la información para ti.","platform.language":"Idioma de la interfaz","platform.timezone":"Zona horaria","platform.text_size":"Tamaño del texto","platform.reduced_motion":"Reducir movimiento y animación","platform.voice":"Mostrar controles de voz a texto","platform.interface_translation":"Traducir la interfaz de Lellee","platform.user_translation":"Ofrecer traducción de mis propios escritos solo cuando la solicite","platform.privacy_title":"Idioma y privacidad","platform.privacy_text":"Tus diarios y otros escritos personales permanecen en el idioma que usaste. Lellee no traduce ni comparte esos escritos automáticamente.","platform.save":"Guardar idioma y accesibilidad","platform.saved":"Configuración de idioma y accesibilidad guardada.","platform.english":"Inglés","platform.spanish":"Español","platform.normal":"Estándar","platform.large":"Grande","platform.larger":"Más grande","release.title":"Integración de plataforma y preparación para lanzamiento","release.subtitle":"Las seis compilaciones están instaladas. Las revisiones finales de calidad siguen separadas y no se han marcado como completas.","release.refresh":"Actualizar revisiones","release.export":"Exportar informe de calidad","professional.hub":"Centro profesional","professional.training":"Centro de capacitación","professional.staff":"Espacio de trabajo del coach empleado","professional.business":"Constructor de negocio","professional.social":"Agente de redes sociales","messages.success":"Guardado correctamente.","messages.error":"Algo requiere atención. Inténtalo de nuevo."};
+  const embeddedSpanishByEnglish={"Daily":"Diario","Grow & Learn":"Crecer y aprender","Connect":"Conectar","Reflect & Track":"Reflexionar y registrar","Find Support":"Encontrar apoyo","Account":"Cuenta","Today":"Hoy","For You":"Para ti","My Recovery":"Mi recuperación","Learn":"Aprender","Expert-Guided Practices":"Prácticas guiadas por expertos","Tools":"Herramientas","Recovery Paths":"Caminos de recuperación","Meetings":"Reuniones","Community":"Comunidad","Journal":"Diario","Progress":"Progreso","Calendar":"Calendario","Resources":"Recursos","Inbox":"Bandeja de entrada","Workspaces":"Espacios de trabajo","Search":"Buscar","Settings":"Configuración","Help":"Ayuda","Language & Accessibility":"Idioma y accesibilidad","Release Readiness":"Preparación para lanzamiento","Save":"Guardar","Edit":"Editar","Delete":"Eliminar","Cancel":"Cancelar","Close":"Cerrar","Open":"Abrir","Add":"Agregar","Create":"Crear","Continue":"Continuar","Back":"Atrás","Refresh":"Actualizar","Sign out":"Cerrar sesión","Keeping Lellee in sync…":"Manteniendo Lellee sincronizado…","Today's Guided Recovery":"Recuperación guiada de hoy","Help Me Right Now":"Ayúdame ahora","Get Help Now":"Obtener ayuda ahora","Recovery Rings":"Círculos de recuperación","Upcoming":"Próximamente","Today's Inspiration":"Inspiración de hoy","Check-In":"Registro","Daily Focus":"Enfoque diario","Gratitude":"Gratitud","Recovery Action":"Acción de recuperación","Evening Reflection":"Reflexión de la noche","Choose how Lellee communicates and displays information for you.":"Elige cómo Lellee se comunica y muestra la información para ti.","Interface language":"Idioma de la interfaz","Time zone":"Zona horaria","Text size":"Tamaño del texto","Reduce motion and animation":"Reducir movimiento y animación","Show speech-to-text controls":"Mostrar controles de voz a texto","Translate the Lellee interface":"Traducir la interfaz de Lellee","Offer translation for my own writing only when I request it":"Ofrecer traducción de mis propios escritos solo cuando la solicite","Language and privacy":"Idioma y privacidad","Your journals and other personal writing stay in the language you used. Lellee does not translate or share that writing automatically.":"Tus diarios y otros escritos personales permanecen en el idioma que usaste. Lellee no traduce ni comparte esos escritos automáticamente.","Save Language & Accessibility":"Guardar idioma y accesibilidad","Language and accessibility settings saved.":"Configuración de idioma y accesibilidad guardada.","English":"Inglés","Spanish":"Español","Standard":"Estándar","Large":"Grande","Larger":"Más grande","Platform Integration & Release Readiness":"Integración de plataforma y preparación para lanzamiento","All six builds are installed. Final quality checks remain separate and have not been marked complete.":"Las seis compilaciones están instaladas. Las revisiones finales de calidad siguen separadas y no se han marcado como completas.","Refresh Checks":"Actualizar revisiones","Export QA Report":"Exportar informe de calidad","Professional Hub":"Centro profesional","Training Center":"Centro de capacitación","Staff Coach Workspace":"Espacio de trabajo del coach empleado","Business Builder":"Constructor de negocio","Social Media Agent":"Agente de redes sociales","Saved successfully.":"Guardado correctamente.","Something needs attention. Please try again.":"Algo requiere atención. Inténtalo de nuevo."};
   const exactSpanish={"Daily": "Diario", "Grow & Learn": "Crecer y aprender", "Connect": "Conectar", "Reflect & Track": "Reflexionar y registrar", "Find Support": "Encontrar apoyo", "Account": "Cuenta", "Today": "Hoy", "For You": "Para ti", "My Recovery": "Mi recuperación", "Learn": "Aprender", "Expert-Guided Practices": "Prácticas guiadas por expertos", "Tools": "Herramientas", "Recovery Paths": "Caminos de recuperación", "Meetings": "Reuniones", "Community": "Comunidad", "Journal": "Diario", "Progress": "Progreso", "Calendar": "Calendario", "Resources": "Recursos", "Inbox": "Bandeja de entrada", "Workspaces": "Espacios de trabajo", "Search": "Buscar", "Settings": "Configuración", "Help": "Ayuda", "Language & Accessibility": "Idioma y accesibilidad", "Release Readiness": "Preparación para lanzamiento", "Save": "Guardar", "Edit": "Editar", "Delete": "Eliminar", "Cancel": "Cancelar", "Close": "Cerrar", "Open": "Abrir", "Add": "Agregar", "Create": "Crear", "Continue": "Continuar", "Back": "Atrás", "Refresh": "Actualizar", "Sign out": "Cerrar sesión", "Today's Guided Recovery": "Recuperación guiada de hoy", "Help Me Right Now": "Ayúdame ahora", "Get Help Now": "Obtener ayuda ahora", "Recovery Rings": "Círculos de recuperación", "Upcoming": "Próximamente", "Today's Inspiration": "Inspiración de hoy", "Check-In": "Registro", "Daily Focus": "Enfoque diario", "Gratitude": "Gratitud", "Recovery Action": "Acción de recuperación", "Evening Reflection": "Reflexión de la noche", "Professional Hub": "Centro profesional", "Training Center": "Centro de capacitación", "Staff Coach Workspace": "Espacio de trabajo del coach empleado", "Business Builder": "Constructor de negocio", "Social Media Agent": "Agente de redes sociales", "Notification Settings": "Configuración de notificaciones", "Account & Privacy": "Cuenta y privacidad", "Recovery News": "Noticias de recuperación", "Saved": "Guardado", "My Insights": "Mis perspectivas", "Milestones": "Hitos", "Then & Now": "Antes y ahora", "Recovery Story": "Historia de recuperación", "Weekly Review": "Revisión semanal", "Monthly Review": "Revisión mensual", "Free": "Gratis", "Plus": "Plus", "Premium": "Premium", "Other": "Otro", "Relationship": "Relación", "Format": "Formato", "Location or link": "Ubicación o enlace", "Meeting Name": "Nombre de la reunión", "Save Meeting": "Guardar reunión", "Add Person": "Agregar persona", "Save Person": "Guardar persona"};
   const placeholderSpanish={"Search Lellee": "Buscar en Lellee", "Write here…": "Escribe aquí…", "What is going on right now?": "¿Qué está pasando ahora?", "Add a routine": "Agregar una rutina", "Add a warning sign": "Agregar una señal de alerta", "Add a trigger": "Agregar un desencadenante", "Add a coping step": "Agregar una estrategia", "Add a person": "Agregar una persona"};
+  Object.assign(exactSpanish,embeddedSpanishByEnglish);
   const state={
     user:null,preferences:{language_code:'en',locale_code:'en-US',timezone:'America/Los_Angeles',text_scale:1,reduced_motion:false,speech_to_text_enabled:true,interface_translation_enabled:true,user_content_translation_enabled:false},
-    membership:{service_tier:'free',status:'active'},entitlements:[],translations:{},locales:[],readiness:null,isAdmin:false,translating:false
+    membership:{service_tier:'free',status:'active'},entitlements:[],translations:{...embeddedSpanishByKey},locales:[],readiness:null,isAdmin:false,translating:false
   };
   const $=(s,r=document)=>r.querySelector(s); const $$=(s,r=document)=>[...r.querySelectorAll(s)];
   const escapeHtml=(v='')=>String(v).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
@@ -98,6 +102,17 @@
     document.body.classList.toggle('b6-large-text',Number(p.text_scale||1)>1.05);
     try{localStorage.setItem(PREF_CACHE,JSON.stringify(p))}catch(_e){}
     applyTranslations();updateLocalDates();renderPreferences();
+
+    // Build 6 is the canonical interface-language source. Notify compatibility
+    // layers so older language code cannot silently switch the app back to English.
+    try{
+      window.dispatchEvent(new CustomEvent('lellee:language-changed',{
+        detail:{language_code:lang,locale_code:p.locale_code||(lang==='es'?'es-US':'en-US')}
+      }));
+    }catch(_e){}
+    try{
+      window.LelleeFinalRepair?.applyLocale?.(lang==='es'?'es-US':'en-US',{syncBuild6:false});
+    }catch(_e){}
   }
 
   const nodeOriginal=new WeakMap();const placeholderOriginal=new WeakMap();
@@ -133,6 +148,9 @@
     const tier=state.membership?.service_tier||'free';$('#b6TierTitle').textContent=tier.charAt(0).toUpperCase()+tier.slice(1);$('#b6TierText').textContent=`${state.entitlements.length} active add-on${state.entitlements.length===1?'':'s'} · interface ${p.language_code==='es'?'Español':'English'}`;
   }
   async function loadTranslationsForLanguage(language){
+    // The approved launch Spanish catalog is bundled locally so selecting Español
+    // works even before or during a database/network problem.
+    state.translations=language==='es'?{...embeddedSpanishByKey}:{};
     if(!client)return;
     try{
       const {data,error}=await client.from('lellee_translation_catalog')
@@ -140,7 +158,10 @@
         .eq('language_code',language)
         .in('review_status',['approved','professional_review','internal']);
       if(!error&&Array.isArray(data)){
-        state.translations=Object.fromEntries(data.map(row=>[row.translation_key,row.translation_value]));
+        state.translations={
+          ...(language==='es'?embeddedSpanishByKey:{}),
+          ...Object.fromEntries(data.map(row=>[row.translation_key,row.translation_value]))
+        };
       }
     }catch(error){console.warn('Lellee translation refresh skipped:',error)}
   }
@@ -199,7 +220,10 @@
     // Approved behavior: saving changes the interface immediately and persists
     // locally before any network round-trip.
     state.preferences=localPreferences;
-    try{localStorage.setItem(PREF_CACHE,JSON.stringify(localPreferences))}catch(_e){}
+    try{
+      localStorage.setItem(LANGUAGE_CHOICE_KEY,language);
+      localStorage.setItem(PREF_CACHE,JSON.stringify(localPreferences));
+    }catch(_e){}
     await loadTranslationsForLanguage(language);
     applyPreferenceState();
 
@@ -280,25 +304,75 @@
   function exportReadiness(){const report={generated_at:new Date().toISOString(),build:6,readiness:state.readiness,preferences:state.preferences,membership:state.membership,entitlements:state.entitlements.map(e=>e.entitlement_key)};const blob=new Blob([JSON.stringify(report,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=`lellee-build-6-qa-${new Date().toISOString().slice(0,10)}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),500)}
 
   async function hydrate(){
-    try{const cached=JSON.parse(localStorage.getItem(PREF_CACHE)||'null');if(cached)state.preferences={...state.preferences,...cached}}catch(_e){}
+    let cached=null,explicitLanguage=null;
+    try{
+      cached=JSON.parse(localStorage.getItem(PREF_CACHE)||'null');
+      explicitLanguage=localStorage.getItem(LANGUAGE_CHOICE_KEY);
+      if(cached)state.preferences={...state.preferences,...cached};
+    }catch(_e){}
+    if(explicitLanguage==='es'||explicitLanguage==='en'){
+      state.preferences={
+        ...state.preferences,
+        language_code:explicitLanguage,
+        locale_code:explicitLanguage==='es'?'es-US':'en-US',
+        interface_translation_enabled:explicitLanguage==='es'?true:state.preferences.interface_translation_enabled!==false
+      };
+    }
+    await loadTranslationsForLanguage(state.preferences.language_code||'en');
     applyPreferenceState();if(!client)return;
     const sessionUser=window.LelleeAuthContext?.getCurrentUser?.()||null;state.user=sessionUser;state.isAdmin=['admin','owner','service_role'].includes(sessionUser?.app_metadata?.role||'');installNav();
     if(!state.user)return;
     const {data,error}=await client.rpc('lellee_get_platform_bootstrap');
     if(!error&&data){
-      state.preferences={...state.preferences,...(data.preferences||{})};
+      const serverPreferences=data.preferences||{};
+      state.preferences={...state.preferences,...serverPreferences};
+
+      // An explicit choice made on this device is newer user intent and must not
+      // be silently replaced by stale English from an older server row.
+      if(explicitLanguage==='es'||explicitLanguage==='en'){
+        state.preferences={
+          ...state.preferences,
+          language_code:explicitLanguage,
+          locale_code:explicitLanguage==='es'?'es-US':'en-US',
+          interface_translation_enabled:explicitLanguage==='es'?true:state.preferences.interface_translation_enabled!==false
+        };
+      }
+
       state.membership=data.membership||state.membership;
       state.entitlements=data.entitlements||[];
-      state.translations=data.translations||{};
       state.locales=data.locales||[];
       await loadTranslationsForLanguage(state.preferences.language_code||'en');
       applyPreferenceState();
+
+      // Best-effort reconciliation: bring the account row up to the explicit
+      // local choice after authentication.
+      if(explicitLanguage==='es'||explicitLanguage==='en'){
+        persistPreferencesDirect(state.preferences).catch(()=>{});
+      }
     }
     const readiness=await client.rpc('lellee_build6_release_readiness');if(!readiness.error){state.readiness=readiness.data;renderReadiness()}
   }
 
   function bindEvents(){
     document.addEventListener('click',event=>{const page=event.target.closest('[data-page="language-accessibility"],[data-page="release-readiness"]');if(page){event.preventDefault();navigate(page.dataset.page)}});
+
+    $('#b6Language')?.addEventListener('change',async event=>{
+      const language=event.target.value==='es'?'es':'en';
+      if(language==='es'&&$('#b6InterfaceTranslation'))$('#b6InterfaceTranslation').checked=true;
+      state.preferences={
+        ...state.preferences,
+        language_code:language,
+        locale_code:language==='es'?'es-US':'en-US',
+        interface_translation_enabled:language==='es'?true:$('#b6InterfaceTranslation')?.checked!==false
+      };
+      try{
+        localStorage.setItem(LANGUAGE_CHOICE_KEY,language);
+        localStorage.setItem(PREF_CACHE,JSON.stringify(state.preferences));
+      }catch(_e){}
+      await loadTranslationsForLanguage(language);
+      applyPreferenceState();
+    });
+
     $('#b6SavePreferences')?.addEventListener('click',savePreferences);$('#b6RefreshChecks')?.addEventListener('click',()=>refreshReadiness(true));$('#b6ExportReport')?.addEventListener('click',exportReadiness);
     const content=$('.content');if(content)new MutationObserver(()=>{const active=$('.page.active')?.id?.replace('page-','');if(['language-accessibility','release-readiness'].includes(active)){localStorage.setItem(PAGE_KEY,active);openAccountCategory();if(active==='language-accessibility')renderPreferences();else renderReadiness()}}).observe(content,{subtree:true,attributes:true,attributeFilter:['class']});
   }

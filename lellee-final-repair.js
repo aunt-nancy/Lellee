@@ -7,7 +7,9 @@
   'use strict';
 
   const LOCALE_KEY='lellee-locale-v2';
-  const VERSION='20260816-final-r2';
+  const BUILD6_PREF_KEY='lellee:platform-preferences:v6';
+  const LANGUAGE_CHOICE_KEY='lellee:explicit-language-choice:v6';
+  const VERSION='20260818-spanish-single-source-r1';
   const $=(s,r=document)=>r.querySelector(s);
   const $$=(s,r=document)=>Array.from(r.querySelectorAll(s));
 
@@ -280,7 +282,40 @@
     'Grow & Learn':'Crecer y aprender'
   };
   const EN=Object.fromEntries(Object.entries(ES).map(([k,v])=>[v,k]));
-  function localLocale(){ return localStorage.getItem(LOCALE_KEY)||'en-US'; }
+
+  function readBuild6Preference(){
+    try{
+      const value=JSON.parse(localStorage.getItem(BUILD6_PREF_KEY)||'null');
+      return value&&typeof value==='object'?value:null;
+    }catch(_){ return null; }
+  }
+  function build6Locale(){
+    try{
+      const explicit=localStorage.getItem(LANGUAGE_CHOICE_KEY);
+      if(explicit==='es')return 'es-US';
+      if(explicit==='en')return 'en-US';
+    }catch(_){}
+    const pref=readBuild6Preference();
+    if(!pref||!pref.language_code)return null;
+    if(pref.interface_translation_enabled===false)return 'en-US';
+    return pref.language_code==='es'?'es-US':'en-US';
+  }
+  function syncBuild6Preference(locale){
+    try{
+      const current=readBuild6Preference()||{};
+      const next={
+        ...current,
+        language_code:locale==='es-US'?'es':'en',
+        locale_code:locale,
+        interface_translation_enabled:true
+      };
+      localStorage.setItem(BUILD6_PREF_KEY,JSON.stringify(next));
+      localStorage.setItem(LANGUAGE_CHOICE_KEY,locale==='es-US'?'es':'en');
+    }catch(_){}
+  }
+  function localLocale(){
+    return build6Locale()||localStorage.getItem(LOCALE_KEY)||'en-US';
+  }
   function translateLeaf(el,locale){
     if(!el || el.closest('#journalEntryCards,#messageThreadBody,#supportPeopleList,.approved-story-paper,[data-no-translate]')) return;
     if(el.children.length) return;
@@ -288,9 +323,10 @@
     const map=locale==='es-US'?ES:EN;
     if(map[raw]) el.textContent=map[raw];
   }
-  function applyLocale(locale){
+  function applyLocale(locale,options={}){
     locale=locale==='es-US'?'es-US':'en-US';
     localStorage.setItem(LOCALE_KEY,locale);
+    if(options.syncBuild6!==false)syncBuild6Preference(locale);
     document.documentElement.lang=locale==='es-US'?'es':'en';
     const sel=$('#prefLocale'); if(sel) sel.value=locale;
     const esOpt=$('#prefLocale option[value="es-US"]'); if(esOpt) esOpt.textContent='Español (US)';
@@ -308,7 +344,40 @@
   }
   function applySavedLocale(){ applyLocale(localLocale()); }
   async function loadLocaleFromServer(){
-    const c=client(), u=await user(); if(!c||!u){applySavedLocale();return}
+    const c=client(), u=await user();
+    const cachedBuild6=build6Locale();
+
+    // Apply the newest local preference immediately. Do not allow a legacy
+    // profile locale to overwrite a newer Build 6 selection.
+    if(cachedBuild6) applyLocale(cachedBuild6,{syncBuild6:false});
+    if(!c||!u){applySavedLocale();return}
+
+    // Canonical source: Build 6 per-user platform preferences.
+    try{
+      const {data,error}=await c.from('lellee_platform_preferences')
+        .select('language_code,locale_code,interface_translation_enabled')
+        .eq('user_id',u.id).maybeSingle();
+      if(!error&&data?.language_code){
+        const locale=data.interface_translation_enabled===false
+          ? 'en-US'
+          : (data.language_code==='es'?'es-US':'en-US');
+        const pref=readBuild6Preference()||{};
+        localStorage.setItem(BUILD6_PREF_KEY,JSON.stringify({
+          ...pref,
+          language_code:data.language_code,
+          locale_code:data.locale_code||locale,
+          interface_translation_enabled:data.interface_translation_enabled!==false
+        }));
+        applyLocale(locale,{syncBuild6:false});
+        return;
+      }
+    }catch(_){ }
+
+    // If Build 6 has an explicit local selection but the canonical table/RPC is
+    // temporarily unavailable, keep it. Never fall back to older English data.
+    if(cachedBuild6){applyLocale(cachedBuild6,{syncBuild6:false});return}
+
+    // Legacy fallback only for users who have never made a Build 6 selection.
     let locale=null;
     try{
       const {data}=await c.from('user_experience_preferences').select('locale').eq('user_id',u.id).maybeSingle();
@@ -326,12 +395,33 @@
   async function saveLocale(locale){
     locale=locale==='es-US'?'es-US':'en-US';
     localStorage.setItem(LOCALE_KEY,locale);
-    applyLocale(locale);
+    syncBuild6Preference(locale);
+    applyLocale(locale,{syncBuild6:false});
+
     const c=client(), u=await user(); if(!c||!u) return;
+
+    // Canonical save first.
+    try{
+      const pref=readBuild6Preference()||{};
+      await c.from('lellee_platform_preferences').upsert({
+        user_id:u.id,
+        language_code:locale==='es-US'?'es':'en',
+        locale_code:locale,
+        timezone:pref.timezone||'America/Los_Angeles',
+        text_scale:Number(pref.text_scale||1),
+        reduced_motion:!!pref.reduced_motion,
+        speech_to_text_enabled:pref.speech_to_text_enabled!==false,
+        interface_translation_enabled:true,
+        user_content_translation_enabled:!!pref.user_content_translation_enabled
+      },{onConflict:'user_id'});
+    }catch(_){ }
+
+    // Legacy compatibility writes remain secondary.
     try{
       await c.from('user_experience_preferences').upsert({user_id:u.id,locale,updated_at:new Date().toISOString()},{onConflict:'user_id'});
     }catch(_){ }
     try{ await c.from('profiles').update({locale}).eq('id',u.id); }catch(_){ }
+
     const msg=$('#experiencePrefMsg');
     if(msg) msg.textContent=locale==='es-US'?'Idioma guardado: Español.':'Language saved: English.';
   }
@@ -603,6 +693,11 @@
         e.preventDefault(); startPlusCheckout();
       }
     },true);
+
+    window.addEventListener('lellee:language-changed',event=>{
+      const lang=event?.detail?.language_code==='es'?'es-US':'en-US';
+      applyLocale(lang,{syncBuild6:false});
+    });
 
     window.addEventListener('pageshow',()=>{setTimeout(()=>{applySavedLocale();refreshRecoveryDay();refreshPlusStatus()},100)});
     document.addEventListener('visibilitychange',()=>{if(!document.hidden){applySavedLocale();refreshRecoveryDay()}});

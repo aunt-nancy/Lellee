@@ -1,0 +1,43 @@
+{
+  "patch": "LELLEE_SPANISH_DURABLE_FULL_RESTORE",
+  "supersedes": "LELLEE_SPANISH_SINGLE_SOURCE_RESTORE.zip",
+  "verified_root_causes": [
+    "The original approved Build 6 multilingual feature requires BUILD_6_PLATFORM_INTEGRATION.sql to be run in Supabase first.",
+    "There is no recovered evidence that the Build 6 SQL was successfully installed.",
+    "The browser depended on the database translation catalog for many Language & Accessibility labels.",
+    "On refresh, server bootstrap preferences could overwrite a newer locally selected Espa\u00f1ol value with stale English."
+  ],
+  "fixes": [
+    "Bundles the approved Spanish launch translation catalog directly in build-6-platform.js.",
+    "Espa\u00f1ol now previews immediately when selected, before Save.",
+    "Choosing Espa\u00f1ol automatically enables interface translation.",
+    "Save records an explicit user language choice locally before network calls.",
+    "An explicit local Espa\u00f1ol choice outranks stale English returned by server bootstrap.",
+    "After authentication, Lellee best-effort syncs the explicit local language choice back to the account.",
+    "Final repair also honors the explicit language marker.",
+    "Includes the original approved Build 6 SQL for full account-level multilingual support."
+  ],
+  "installation_order": [
+    "1. In Supabase SQL Editor run RUN_FIRST_BUILD_6_LANGUAGE_BACKEND.sql and wait for Success.",
+    "2. Upload the seven website files to GitHub root and replace existing versions.",
+    "3. Let Vercel finish deploying.",
+    "4. Test Language & Accessibility -> Espa\u00f1ol. The visible interface should change immediately; then Save; then refresh."
+  ],
+  "website_files": [
+    "recovery.html",
+    "build-2-shell.js",
+    "build-3-guidance.js",
+    "program-coach-core.js",
+    "lellee-progress-history-runtime.js",
+    "build-6-platform.js",
+    "lellee-final-repair.js"
+  ],
+  "sql_file": "RUN_FIRST_BUILD_6_LANGUAGE_BACKEND.sql",
+  "preserves": [
+    "Grow & Learn stability",
+    "Expert-Guided Practices",
+    "consumer/professional separation",
+    "Progress/History restore",
+    "last safe page resume"
+  ]
+}
