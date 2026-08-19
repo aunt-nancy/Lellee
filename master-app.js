@@ -127,16 +127,40 @@
     if(!grid.children.length){
       grid.innerHTML=`<article class="journey-card"><span class="journey-status">START HERE</span><h2>Choose what would help now</h2><p>Start Your Journey will help Lellee suggest a sensible place to begin.</p><a class="primary" href="/">Start Your Journey</a></article>`;
     }
+    syncPrimaryJourneyActions();
   }
   function escapeHtml(s=''){return String(s).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]))}
 
+  function activeRecoveryEnrollment(){
+    return enrollments.find(e=>e?.programs?.slug==='recovery'&&['active','paused'].includes(e.status));
+  }
+  function syncPrimaryJourneyActions(){
+    const recovery=activeRecoveryEnrollment();
+    const continueLink=$('#continuePrimaryJourney');
+    const updateLink=$('#updateJourneyLink');
+    if(continueLink)continueLink.classList.toggle('hidden',!recovery);
+    if(updateLink)updateLink.classList.toggle('primary',!recovery);
+    if(updateLink)updateLink.classList.toggle('secondary',!!recovery);
+  }
+  function openPrimaryJourney(){
+    if(activeRecoveryEnrollment()){location.href='/app/recovery';return}
+    showSection('home');
+    setTimeout(()=>$('#homeJourneyArea')?.scrollIntoView({behavior:'smooth',block:'start'}),40);
+  }
+
   function showSection(name){
+    const requested=name;
+    if(name==='journeys')name='home';
     document.querySelectorAll('.app-section').forEach(s=>s.classList.toggle('active',s.id==='section-'+name));
     document.querySelectorAll('.nav-item').forEach(b=>b.classList.toggle('active',b.dataset.section===name));
     window.scrollTo({top:0,behavior:'smooth'});
+    if(requested==='journeys')setTimeout(()=>$('#homeJourneyArea')?.scrollIntoView({behavior:'smooth',block:'start'}),40);
   }
   document.querySelectorAll('[data-section]').forEach(b=>b.addEventListener('click',()=>showSection(b.dataset.section)));
   document.querySelectorAll('[data-section-jump]').forEach(b=>b.addEventListener('click',()=>showSection(b.dataset.sectionJump)));
+  $('#todayJourneyAction')?.addEventListener('click',openPrimaryJourney);
+  $('#homeJourneyBlock')?.addEventListener('click',openPrimaryJourney);
+  $('#supportJourneyAction')?.addEventListener('click',()=>{showSection('home');setTimeout(()=>$('#homeJourneyArea')?.scrollIntoView({behavior:'smooth',block:'start'}),40)});
 
   sb.auth.getSession().then(({data})=>{
     if(data.session?.user)begin(data.session.user);

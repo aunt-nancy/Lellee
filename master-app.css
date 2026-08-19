@@ -27,3 +27,11 @@
 .auth-gate{position:fixed;inset:0;background:linear-gradient(145deg,#f6f1fa,#fff7fa);z-index:100;display:grid;place-items:center;padding:20px}.auth-card{width:min(450px,100%);background:#fff;border:1px solid var(--line);border-radius:22px;box-shadow:0 25px 70px rgba(46,31,77,.17);padding:31px}.auth-logo{width:230px;height:100px;object-fit:contain;display:block;margin:0 auto 5px}.auth-card h1{font-family:Georgia,serif;font-size:1.9rem;font-weight:500;color:#2d2268;margin:5px 0 8px;text-align:center}.auth-card>p{text-align:center;color:var(--muted);font-size:.78rem}.auth-card form{display:grid;gap:12px;margin-top:20px}.auth-card label{display:grid;gap:5px;font-size:.7rem;font-weight:800;color:#554e61}.auth-card input{border:1px solid #ded6e5;border-radius:9px;padding:11px 12px}.auth-msg{min-height:18px;color:#8b3f54!important;margin:9px 0 0!important}.auth-card .text-button{display:block;margin:0 auto}.back-home{display:block;text-align:center;margin-top:14px;text-decoration:none;color:#736b7c;font-size:.7rem}
 @media(max-width:900px){.app-header nav{display:none}.welcome-grid{grid-template-columns:1fr}.home-blocks,.tool-grid{grid-template-columns:1fr 1fr}.journey-grid,.support-grid{grid-template-columns:1fr 1fr}.brand{width:205px}}
 @media(max-width:560px){.app-header{height:72px;padding:0 12px}.brand{width:170px;height:60px}.header-actions span{display:none}.app-shell{padding:12px}.welcome-card{padding:26px}.welcome-card h1{font-size:2.3rem}.home-blocks,.tool-grid,.journey-grid,.support-grid{grid-template-columns:1fr}.browse-box{display:block}.browse-box .secondary{margin-top:12px}.section-page-heading h1{font-size:2rem}}
+
+/* 2026-08-18 APPROVED EFFICIENCY RESTORE: Home + My Journeys combined */
+.journey-home-section{scroll-margin-top:96px}
+.journey-home-section .journey-grid{margin-top:3px}
+.compact-browse-box{box-shadow:none;background:#fbf9fd;margin-top:12px}
+.text-link{border:0;background:transparent;color:#5939a0;font-weight:800;text-decoration:none;font-size:.72rem}
+.welcome-actions #continuePrimaryJourney{min-width:142px;text-align:center}
+@media(min-width:901px){.journey-home-section .journey-grid:has(.journey-card:only-child){grid-template-columns:minmax(0,1fr)}}

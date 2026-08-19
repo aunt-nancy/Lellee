@@ -1,12 +1,16 @@
 {
   "rewrites": [
     {
-      "source": "/app/recovery",
-      "destination": "/recovery.html"
+      "source": "/",
+      "destination": "/landing.html"
     },
     {
       "source": "/app",
       "destination": "/home.html"
+    },
+    {
+      "source": "/app/recovery",
+      "destination": "/index.html"
     },
     {
       "source": "/((?!.*\\.).*)",
@@ -24,65 +28,11 @@
       ]
     },
     {
-      "source": "/master-landing.js",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-cache"
-        }
-      ]
-    },
-    {
-      "source": "/master-landing.css",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-cache"
-        }
-      ]
-    },
-    {
-      "source": "/sw.js",
+      "source": "/home.html",
       "headers": [
         {
           "key": "Cache-Control",
           "value": "no-cache, no-store, must-revalidate"
-        }
-      ]
-    },
-    {
-      "source": "/recovery.html",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-cache, no-store, must-revalidate"
-        }
-      ]
-    },
-    {
-      "source": "/app/recovery",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-cache, no-store, must-revalidate"
-        }
-      ]
-    },
-    {
-      "source": "/(.*).js",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-cache"
-        }
-      ]
-    },
-    {
-      "source": "/(.*).css",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-cache"
         }
       ]
     }

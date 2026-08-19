@@ -1,0 +1,28 @@
+{
+  "patch": "LELLEE_HOME_MY_JOURNEYS_COMBINED",
+  "purpose": "Combine Home and My Journeys into one efficient logged-in consumer landing page.",
+  "changes": [
+    "Removes My Journeys as a separate top navigation page.",
+    "Moves active Recovery journey card directly onto Home.",
+    "Returning Recovery user gets Continue Recovery directly on the Welcome card.",
+    "Today -> My Journey opens Recovery directly when Recovery is active.",
+    "Lower Recovery tile opens Recovery directly.",
+    "Explore Support Paths remains available without replacing the current Recovery journey.",
+    "Multiple future active journeys can still render in the Home journey grid.",
+    "Legacy journeys navigation requests safely map to the Home journey area."
+  ],
+  "preserves": [
+    "Approved soft Lellee master-shell styling",
+    "Start / Update My Journey",
+    "Tools and Support sections",
+    "Consumer coaching card",
+    "Multi-program architecture",
+    "Recovery as the current primary program"
+  ],
+  "files_to_upload": [
+    "home.html",
+    "master-app.js",
+    "master-app.css"
+  ],
+  "sql_required": false
+}

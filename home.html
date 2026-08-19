@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Lellee | My Lellee</title>
   <meta name="theme-color" content="#f7f3fb">
-  <link rel="stylesheet" href="/master-app.css">
+  <link rel="stylesheet" href="/master-app.css?v=20260818-combined-home-r1">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
@@ -32,7 +32,6 @@
     <a href="/app" class="brand"><img src="/lellee-approved-logo-final.jpg" alt="Lellee"></a>
     <nav>
       <button class="nav-item active" data-section="home">Home</button>
-      <button class="nav-item" data-section="journeys">My Journeys</button>
       <button class="nav-item" data-section="tools">Tools</button>
       <button class="nav-item" data-section="support">Support</button>
     </nav>
@@ -50,8 +49,8 @@
           <h1 id="welcomeTitle">Your support, in one place.</h1>
           <p id="welcomeCopy">Start with what matters today. Your Lellee can grow as your needs change.</p>
           <div class="welcome-actions">
-            <a href="/" class="primary">Start / Update My Journey</a>
-            <button class="secondary" data-section-jump="journeys">View My Journeys</button>
+            <a href="/app/recovery" class="primary hidden" id="continuePrimaryJourney">Continue Recovery</a>
+            <a href="/" class="secondary" id="updateJourneyLink">Start / Update My Journey</a>
           </div>
         </article>
 
@@ -59,12 +58,26 @@
           <span class="card-label">TODAY</span>
           <h2>What would help right now?</h2>
           <div class="today-actions">
-            <button data-section-jump="journeys"><span class="tile-purple">✦</span><b>My Journey</b><small>Continue where you left off</small></button>
+            <button id="todayJourneyAction" type="button"><span class="tile-purple">✦</span><b>My Journey</b><small>Continue where you left off</small></button>
             <button data-section-jump="tools"><span class="tile-blue">▣</span><b>Tools</b><small>Use something practical</small></button>
             <button data-section-jump="support"><span class="tile-green">♡</span><b>Support</b><small>Find people or resources</small></button>
           </div>
         </aside>
       </div>
+
+      <section class="color-block-section journey-home-section" id="homeJourneyArea">
+        <div class="section-heading">
+          <div><span class="eyebrow">YOUR JOURNEY</span><h2>Continue where you left off.</h2></div>
+          <a class="text-link" href="/">Update my needs →</a>
+        </div>
+        <div id="activeJourneyGrid" class="journey-grid">
+          <div class="loading-card">Loading your Lellee journey…</div>
+        </div>
+        <div class="browse-box compact-browse-box">
+          <div><b>Need something different?</b><p>Update what would help now without losing your current Recovery journey.</p></div>
+          <a class="secondary" href="/">Explore Support Paths</a>
+        </div>
+      </section>
 
       <section id="recommendationPanel" class="recommendation-panel hidden">
         <div class="recommendation-color"></div>
@@ -83,10 +96,9 @@
       <section class="color-block-section">
         <div class="section-heading">
           <div><span class="eyebrow">YOUR LELLEE</span><h2>Keep the important pieces connected.</h2></div>
-          <button class="text-button" data-section-jump="journeys">See all →</button>
         </div>
         <div class="home-blocks">
-          <button class="home-block block-lavender" data-section-jump="journeys"><span>✦</span><b>Journeys</b><small>Your current and connected support paths</small></button>
+          <button class="home-block block-lavender" id="homeJourneyBlock" type="button"><span>✦</span><b>Recovery</b><small>Continue your active journey</small></button>
           <button class="home-block block-green" data-section-jump="tools"><span>✓</span><b>Daily Tools</b><small>Small practical actions for real life</small></button>
           <button class="home-block block-orange" data-section-jump="support"><span>⌂</span><b>Resources</b><small>Find practical support when you need it</small></button>
           <button class="home-block block-pink" data-section-jump="support"><span>♡</span><b>Coaching</b><small>Optional accountability and human support</small></button>
@@ -94,20 +106,6 @@
       </section>
     </section>
 
-    <section id="section-journeys" class="app-section">
-      <div class="section-page-heading">
-        <span class="eyebrow">MY JOURNEYS</span>
-        <h1>Support that can change as life changes.</h1>
-        <p>Your active program and any support paths you chose are shown here. Lellee does not automatically switch your program.</p>
-      </div>
-      <div id="activeJourneyGrid" class="journey-grid">
-        <div class="loading-card">Loading your Lellee journeys…</div>
-      </div>
-      <div class="browse-box">
-        <div><b>Need something different?</b><p>Return to Start Your Journey and update what would help now.</p></div>
-        <a class="secondary" href="/">Explore Support Paths</a>
-      </div>
-    </section>
 
     <section id="section-tools" class="app-section">
       <div class="section-page-heading">
@@ -132,11 +130,11 @@
       <div class="support-grid">
         <article class="support-block block-green"><span>⌂</span><h2>Resources</h2><p>Browse practical service and support options.</p><a class="secondary" href="/resources">Explore Resources</a></article>
         <article class="support-block block-pink"><span>♡</span><h2>Coaching</h2><p>Coach matching and coach cards are part of the Lellee architecture and remain controlled until public marketplace launch.</p><button class="secondary" disabled>Marketplace Coming Later</button></article>
-        <article class="support-block block-lavender"><span>◎</span><h2>My Support Paths</h2><p>Review the areas you selected through Start Your Journey.</p><button class="secondary" data-section-jump="journeys">View My Journeys</button></article>
+        <article class="support-block block-lavender"><span>◎</span><h2>My Support Paths</h2><p>Review the areas you selected through Start Your Journey.</p><button class="secondary" id="supportJourneyAction" type="button">View My Journey</button></article>
       </div>
     </section>
   </main>
 
-  <script src="/master-app.js"></script>
+  <script src="/master-app.js?v=20260818-combined-home-r1"></script>
 </body>
 </html>
