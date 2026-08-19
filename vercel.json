@@ -10,7 +10,7 @@
     },
     {
       "source": "/app/recovery",
-      "destination": "/index.html"
+      "destination": "/recovery.html"
     },
     {
       "source": "/((?!.*\\.).*)",
@@ -29,6 +29,15 @@
     },
     {
       "source": "/home.html",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/recovery.html",
       "headers": [
         {
           "key": "Cache-Control",
