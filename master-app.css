@@ -35,3 +35,5 @@
 .text-link{border:0;background:transparent;color:#5939a0;font-weight:800;text-decoration:none;font-size:.72rem}
 .welcome-actions #continuePrimaryJourney{min-width:142px;text-align:center}
 @media(min-width:901px){.journey-home-section .journey-grid:has(.journey-card:only-child){grid-template-columns:minmax(0,1fr)}}
+
+/* 2026-08-18 dedupe fix: removed duplicate Your Journey card and made Update My Needs a real button */

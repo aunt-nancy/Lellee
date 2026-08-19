@@ -100,7 +100,9 @@
     }catch(_){return[]}
   }
   async function renderJourneys(){
-    const grid=$('#activeJourneyGrid');grid.innerHTML='';
+    const grid=$('#activeJourneyGrid');
+    if(!grid){syncPrimaryJourneyActions();return}
+    grid.innerHTML='';
     const prefs=await loadPreferences();
     const used=new Set();
     enrollments.forEach((e,i)=>{
@@ -137,30 +139,27 @@
   function syncPrimaryJourneyActions(){
     const recovery=activeRecoveryEnrollment();
     const continueLink=$('#continuePrimaryJourney');
-    const updateLink=$('#updateJourneyLink');
+    const updateBtn=$('#updateNeedsBtn');
     if(continueLink)continueLink.classList.toggle('hidden',!recovery);
-    if(updateLink)updateLink.classList.toggle('primary',!recovery);
-    if(updateLink)updateLink.classList.toggle('secondary',!!recovery);
+    if(updateBtn)updateBtn.classList.add('secondary');
   }
   function openPrimaryJourney(){
     if(activeRecoveryEnrollment()){location.href='/app/recovery';return}
-    showSection('home');
-    setTimeout(()=>$('#homeJourneyArea')?.scrollIntoView({behavior:'smooth',block:'start'}),40);
+    location.href='/';
   }
 
   function showSection(name){
-    const requested=name;
     if(name==='journeys')name='home';
     document.querySelectorAll('.app-section').forEach(s=>s.classList.toggle('active',s.id==='section-'+name));
     document.querySelectorAll('.nav-item').forEach(b=>b.classList.toggle('active',b.dataset.section===name));
     window.scrollTo({top:0,behavior:'smooth'});
-    if(requested==='journeys')setTimeout(()=>$('#homeJourneyArea')?.scrollIntoView({behavior:'smooth',block:'start'}),40);
   }
   document.querySelectorAll('[data-section]').forEach(b=>b.addEventListener('click',()=>showSection(b.dataset.section)));
   document.querySelectorAll('[data-section-jump]').forEach(b=>b.addEventListener('click',()=>showSection(b.dataset.sectionJump)));
   $('#todayJourneyAction')?.addEventListener('click',openPrimaryJourney);
   $('#homeJourneyBlock')?.addEventListener('click',openPrimaryJourney);
-  $('#supportJourneyAction')?.addEventListener('click',()=>{showSection('home');setTimeout(()=>$('#homeJourneyArea')?.scrollIntoView({behavior:'smooth',block:'start'}),40)});
+  $('#supportJourneyAction')?.addEventListener('click',openPrimaryJourney);
+  $('#updateNeedsBtn')?.addEventListener('click',()=>{location.href='/'});
 
   sb.auth.getSession().then(({data})=>{
     if(data.session?.user)begin(data.session.user);
