@@ -1,0 +1,43 @@
+LELLEE PUBLIC PREVIEW — MANUAL DEPLOY
+Date: August 24, 2026
+
+PURPOSE
+- Public visitors can browse Lellee without creating an account.
+- Account creation is disabled in this preview.
+- Subscription/checkout remains disabled.
+- Existing Vercel routing stays the same: / -> landing.html and /app -> index.html.
+
+FILES TO REPLACE IN GITHUB
+1. index.html
+2. landing.html
+
+DO NOT CHANGE
+- vercel.json (included only for reference)
+- Supabase keys/settings
+- Stripe/billing configuration
+
+GITHUB
+1. Open github.com/aunt-nancy/Lellee
+2. Confirm branch: main
+3. Add file > Upload files
+4. Upload index.html and landing.html
+5. Choose Replace when GitHub detects the existing filenames.
+6. Commit message: Public preview - open sections, disable signup and subscriptions
+7. Commit directly to main.
+
+VERCEL
+1. Open the Lellee Vercel project.
+2. Confirm the new deployment from main finishes successfully.
+3. Open the *.vercel.app deployment and test / and /app first.
+4. Confirm /app opens without an account prompt.
+5. Confirm there is no Create Account control and no subscription/checkout action.
+
+LIVE DOMAIN
+1. Vercel project > Settings > Domains.
+2. Add lellee.com to Production.
+3. Add www.lellee.com too if you want both forms of the address.
+4. Follow the DNS records Vercel displays for your domain registrar.
+5. After Vercel shows the domain as configured, open https://lellee.com in a private/incognito browser window and retest.
+
+ROLLBACK
+If anything is wrong, use Vercel Deployments to promote the prior working deployment or revert the GitHub commit.

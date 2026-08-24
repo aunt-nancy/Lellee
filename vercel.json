@@ -6,11 +6,7 @@
     },
     {
       "source": "/app",
-      "destination": "/home.html"
-    },
-    {
-      "source": "/app/recovery",
-      "destination": "/recovery.html"
+      "destination": "/index.html"
     },
     {
       "source": "/((?!.*\\.).*)",
@@ -20,24 +16,6 @@
   "headers": [
     {
       "source": "/service-worker.js",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-cache, no-store, must-revalidate"
-        }
-      ]
-    },
-    {
-      "source": "/home.html",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-cache, no-store, must-revalidate"
-        }
-      ]
-    },
-    {
-      "source": "/recovery.html",
       "headers": [
         {
           "key": "Cache-Control",
