@@ -1,36 +1,43 @@
-LELLEE SAME-PAGE REFRESH PATCH
+LELLEE BUILD 6 — PUBLIC PREVIEW RESTORE
 August 24, 2026
 
-UPLOAD
-1. Upload same-page-refresh.js to the ROOT of the Lellee GitHub repository.
-2. Then edit the root index.html.
-3. Immediately BEFORE </body>, add this one line:
+WHY THIS FILE
+The live index.html had been replaced by an older simplified release candidate.
+This root index.html restores the full approved Build 6 master while preserving
+the current public-preview constraints.
 
-<script src="/same-page-refresh.js"></script>
+RESTORED FROM BUILD 6
+- Full Resources finder
+- Search resources field
+- Recovery Path dropdown
+- Access dropdown
+- Full resource type filters including Housing and Employment
+- Later Build 6 sections and scripts
+- Approved Build 6 interface/behavior
 
-Place it AFTER the existing group-b-production.js script line.
+PUBLIC PREVIEW PRESERVED
+- No forced account login for browsing
+- Account creation disabled
+- Subscription signup disabled
+- same-page-refresh.js remains active
+- Existing beta sign-in logic is sign-in-only if used
 
-Expected ending:
+DO NOT CHANGE / DO NOT UPLOAD
+- Do not replace landing.html
+- Do not replace vercel.json
+- Do not replace same-page-refresh.js
 
-<script src="/group-a-core.js"></script>
-<script src="/group-b-production.js"></script>
-<script src="/same-page-refresh.js"></script>
-</body>
-</html>
-
-DO NOT change vercel.json.
-DO NOT change landing.html.
-DO NOT change Supabase, account creation, or subscriptions.
-
-TEST
-1. Wait for Vercel deployment = Ready.
-2. Open www.lellee.com -> landing page.
-3. Click Explore Lellee.
-4. Click Journal.
-5. The address should end in #journal.
-6. Refresh.
-7. Journal should remain open.
-8. Repeat with Tools; address should end in #tools and refresh should stay on Tools.
+MANUAL DEPLOY
+1. In GitHub, open the Lellee repository root.
+2. Upload/replace ONLY index.html from this package.
+3. Commit directly to main.
+4. Wait for Vercel deployment to show Ready.
+5. Open a fresh InPrivate window.
+6. Confirm www.lellee.com opens the landing page.
+7. Explore Lellee -> Resources.
+8. Confirm Search, Recovery Path dropdown, Access dropdown, and type filters are back.
+9. Open Journal and refresh; it should remain on Journal.
+10. Verify account creation and subscriptions are still unavailable.
 
 ROLLBACK
-Delete the one script-tag line from index.html and delete same-page-refresh.js.
+Revert only the GitHub commit that replaced index.html.
