@@ -1,57 +1,36 @@
-LELLEE CORE + PROGRAMS + COACH BUSINESS — BIG BUILD
+LELLEE SAME-PAGE REFRESH PATCH
+August 24, 2026
 
-This replaces the previously planned Core + Programs build. Run THIS build instead.
+UPLOAD
+1. Upload same-page-refresh.js to the ROOT of the Lellee GitHub repository.
+2. Then edit the root index.html.
+3. Immediately BEFORE </body>, add this one line:
 
-MASTER BRAND
-Lellee
+<script src="/same-page-refresh.js"></script>
 
-PROGRAM #1
-Recovery — ACTIVE
+Place it AFTER the existing group-b-production.js script line.
 
-FUTURE PROGRAMS
-20 additional underserved programs — PLANNED
+Expected ending:
 
-COACH BUSINESS
-Individuals can create a coaching business inside Lellee.
-Approved coaches can manage:
-- clients
-- group coaching
-- services and pricing
-- lead pipeline
-- messages
-- assignments
-- sessions foundation
-- program-specific coaching
+<script src="/group-a-core.js"></script>
+<script src="/group-b-production.js"></script>
+<script src="/same-page-refresh.js"></script>
+</body>
+</html>
 
-AFFORDABILITY
-Group and hybrid packages are first-class service types so one coach can support several people simultaneously and lower the per-person cost.
+DO NOT change vercel.json.
+DO NOT change landing.html.
+DO NOT change Supabase, account creation, or subscriptions.
 
-PRIVACY
-Coach access is consent-based.
-A coach does NOT automatically see a client's journal, check-ins, support contacts or full private history.
-Only client-selected shared items are coach-visible.
+TEST
+1. Wait for Vercel deployment = Ready.
+2. Open www.lellee.com -> landing page.
+3. Click Explore Lellee.
+4. Click Journal.
+5. The address should end in #journal.
+6. Refresh.
+7. Journal should remain open.
+8. Repeat with Tools; address should end in #tools and refresh should stay on Tools.
 
-PAYMENTS
-Coach payments/payouts are NOT activated in this build.
-Pricing/package setup is included.
-coach_payments_enabled=false
-
-PUBLIC COACH MARKETPLACE
-OFF until legal/quality/credential review.
-coach_public_marketplace_enabled=false
-
-RUN
-1. LELLEE_CORE_PROGRAMS_COACH_BUSINESS.sql
-2. LELLEE_CORE_PROGRAMS_COACH_BUSINESS_VERIFY.sql
-
-UPLOAD TO GITHUB
-- index.html
-- program-coach-core.css
-- program-coach-core.js
-
-Keep all other current Lellee files.
-
-NO STRIPE CHANGE.
-NO VERCEL LAUNCH CHANGE.
-NO LEGAL GATE CHANGE.
-NO DOMAIN CHANGE.
+ROLLBACK
+Delete the one script-tag line from index.html and delete same-page-refresh.js.
