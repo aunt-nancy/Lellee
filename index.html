@@ -34,26 +34,6 @@
   --r2:24px;
 }
 
-
-/* LELLEE LOGO TOP-EDGE FIX — protect only the area above the approved logo */
-.sidebar{overflow:hidden!important}
-.sidebar>.logo-wrap{
-  position:relative!important;
-  z-index:2147483647!important;
-}
-#lelleeLogoTopCover{
-  position:absolute!important;
-  top:0!important;
-  left:0!important;
-  right:0!important;
-  height:66px!important;
-  background:#0c1029!important;
-  z-index:2147483647!important;
-  pointer-events:none!important;
-  border:0!important;
-  box-shadow:none!important;
-}
-
 /* LELLEE CLEAN PUBLIC PREVIEW STARTUP */
 html.lellee-shell-pending .app-shell{visibility:hidden!important}
 #installPrompt,#offlineBar{display:none!important}
@@ -8157,43 +8137,6 @@ Transportation"></textarea></label>
   if(document.readyState==='complete')finish();
   else window.addEventListener('load',finish,{once:true});
   setTimeout(finish,1800);
-})();
-</script>
-
-
-<script id="lellee-logo-top-edge-fix">
-(() => {
-  'use strict';
-  const sidebar = document.querySelector('.sidebar');
-  const logo = sidebar?.querySelector(':scope > .logo-wrap');
-  if (!sidebar || !logo) return;
-
-  const cleanTop = () => {
-    // Build 6 should have the approved logo as the first meaningful child.
-    // Remove only unexpected siblings inserted before it.
-    for (const child of Array.from(sidebar.children)) {
-      if (child === logo) break;
-      if (child.id !== 'lelleeLogoTopCover') child.remove();
-    }
-
-    let cover = document.getElementById('lelleeLogoTopCover');
-    if (!cover) {
-      cover = document.createElement('div');
-      cover.id = 'lelleeLogoTopCover';
-      cover.setAttribute('aria-hidden', 'true');
-      sidebar.appendChild(cover);
-    }
-
-    // Keep the approved logo above every other branding layer.
-    logo.style.position = 'relative';
-    logo.style.zIndex = '2147483647';
-  };
-
-  cleanTop();
-
-  // If the shell adds a legacy branding element later, remove it immediately.
-  const observer = new MutationObserver(cleanTop);
-  observer.observe(sidebar, { childList: true });
 })();
 </script>
 
