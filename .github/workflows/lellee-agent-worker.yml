@@ -1,0 +1,24 @@
+name: Lellee Agent Worker
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "*/15 * * * *"
+
+jobs:
+  run-lellee-agents:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Run Lellee agent worker
+        env:
+          WORKER_URL: ${{ secrets.DYNAMIC_WORKER_URL }}
+          WORKER_SECRET: ${{ secrets.LELLEE_AGENT_WORKER_SECRET }}
+        run: |
+          curl --fail-with-body \
+            --request POST \
+            --url "$WORKER_URL" \
+            --header "Content-Type: application/json" \
+            --header "x-lellee-agent-worker-secret: $WORKER_SECRET" \
+            --data '{"mode":"run","limit":3}'
