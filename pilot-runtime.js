@@ -1,182 +1,332 @@
+(() => {
+  'use strict';
 
-(()=>{
-'use strict';
-const q=s=>document.querySelector(s),qa=s=>[...document.querySelectorAll(s)];
-const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-const toast=(m,bad=false)=>{const t=q('#globalToast');if(t){t.textContent=m;t.classList.remove('hidden');if(bad)t.style.background='#7f2634';setTimeout(()=>{t.classList.add('hidden');t.style.background=''},2300)}};
+  const auth = window.LelleeAuthContext;
+  if (!auth?.client) {
+    console.warn('Lellee Pilot Runtime: auth bridge unavailable.');
+    return;
+  }
 
-let activeProgram=null,enrollments=[],runtimeStages=[],runtimeContent=[],runtimeModules=[],todayItem=null,selectedChoices=new Set(),isAdmin=false;
+  const sb = auth.client;
+  const $ = (s) => document.querySelector(s);
+  const esc = (s='') => String(s).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+  const CONTROLLED = ['reentry','caregiving','independent-living','housing-stability','grief','workforce-reentry','family-recovery'];
+  const ICONS = {
+    recovery:'♡', reentry:'↗', caregiving:'♡', 'independent-living':'✦',
+    'housing-stability':'⌂', grief:'◇', 'workforce-reentry':'▣', 'family-recovery':'◎'
+  };
+  const MODULE_ICON = {
+    today:'☀',journey:'↗',help_now:'♡',journal:'▧',tools:'⌁',learn:'◇',support:'◎',resources:'⌂',milestones:'◆',
+    documents:'▤',appointments:'◷',benefits:'✓',employment:'▣',housing:'⌂'
+  };
+  const MODULE_PAGE = {
+    today:'program-home', journey:'program-journey-runtime', help_now:'help-now', journal:'journal', tools:'tools', learn:'learn',
+    support:'community', resources:'resources', milestones:'milestones', documents:'life-admin', appointments:'life-admin', benefits:'life-admin', employment:'life-admin', housing:'life-admin'
+  };
 
-async function loadEnrollments(){
- if(!currentUser)return;
- const {data,error}=await sb.from('program_enrollments')
-   .select('id,program_id,status,is_primary,enrolled_at,programs(id,slug,name,short_description,status,terminology,journey_config,brand_config)')
-   .eq('user_id',currentUser.id)
-   .in('status',['active','paused']);
- if(error)return toast(error.message,true);
- enrollments=data||[];
+  let user = null;
+  let settings = {};
+  let programs = [];
+  let activeProgram = null;
+  let activeProgress = null;
+  let activeStages = [];
+  let activeModules = [];
+  let activeContent = [];
+  let todayItem = null;
+  let selectedChoices = new Set();
 
- const {data:state}=await sb.from('user_program_state').select('active_program_id').eq('user_id',currentUser.id).maybeSingle();
- const activeId=state?.active_program_id;
- activeProgram=enrollments.find(x=>x.program_id===activeId)?.programs||enrollments[0]?.programs||null;
- renderSwitcher();
-}
-function renderSwitcher(){
- const box=q('#programSwitcherList');if(!box)return;
- box.innerHTML=enrollments.length?enrollments.map((e,i)=>{
-   const p=e.programs,active=p.id===activeProgram?.id;
-   return `<article class="program-switch-row ${active?'active':''}"><div class="program-switch-icon">${esc((p.name||'L').slice(0,1))}</div><div><b>${esc(p.name)}</b><small>${esc(p.short_description||'Lellee program')}</small><span class="program-switch-pill ${active?'active':p.status==='pilot'?'pilot':''}">${active?'CURRENT':String(p.status||e.status).toUpperCase()}</span></div><button data-switch-program="${p.id}">${active?'Open':'Switch'}</button></article>`;
- }).join(''):'<div class="approved-resource-empty">No programs are connected to your account.</div>';
- qa('[data-switch-program]').forEach(b=>b.onclick=()=>switchProgram(b.dataset.switchProgram));
-}
-async function switchProgram(id){
- const enrolled=enrollments.find(x=>x.program_id===id);
- if(!enrolled)return toast('You are not enrolled in that program.',true);
- const {error}=await sb.from('user_program_state').update({active_program_id:id,updated_at:new Date().toISOString()}).eq('user_id',currentUser.id);
- if(error)return toast(error.message,true);
- activeProgram=enrolled.programs;
- if(activeProgram.slug==='recovery'){
-   toast('Recovery selected.');showPage('today');return;
- }
- await loadRuntime();
- showPage('program-home');
-}
-async function loadRuntime(){
- if(!activeProgram)return;
- const [stages,content,modules,progress]=await Promise.all([
-   sb.from('program_journey_stages').select('*').eq('program_id',activeProgram.id).eq('status','published').order('sequence'),
-   sb.from('published_program_content').select('*').eq('program_id',activeProgram.id).order('day_number').order('week_number').order('sequence'),
-   sb.from('program_modules').select('*').eq('program_id',activeProgram.id).eq('enabled',true).order('display_order'),
-   sb.from('pilot_program_progress').select('*').eq('user_id',currentUser.id).eq('program_id',activeProgram.id).maybeSingle()
- ]);
- runtimeStages=stages.data||[];runtimeContent=content.data||[];runtimeModules=modules.data||[];
- const prog=progress.data||{};
- const day=Math.max(1,prog.current_day||1),week=Math.max(1,prog.current_week||1);
- todayItem=chooseToday(day,week);
- selectedChoices=new Set();
- renderRuntime(day,week);
-}
-function chooseToday(day,week){
- const byDay=runtimeContent.find(x=>x.day_number===day&&['guided_action','prompt'].includes(x.content_type));
- if(byDay)return byDay;
- const byWeek=runtimeContent.find(x=>x.week_number===week&&['guided_action','prompt'].includes(x.content_type));
- if(byWeek)return byWeek;
- return runtimeContent.find(x=>['guided_action','prompt'].includes(x.content_type))||runtimeContent[0]||null;
-}
-function currentStage(day){
- return runtimeStages.find(s=>s.start_day&&s.end_day&&day>=s.start_day&&day<=s.end_day) || runtimeStages[0] || null;
-}
-function renderRuntime(day,week){
- const p=activeProgram,stage=currentStage(day);
- q('#runtimeProgramKicker').textContent=`LELLEE · ${(p.name||'PROGRAM').toUpperCase()}`;
- q('#runtimeProgramName').textContent=p.name;
- q('#runtimeProgramDescription').textContent=p.short_description||'';
- q('#runtimeJourneyLabel').textContent=p.terminology?.journey||`${p.name} Journey`;
- q('#runtimeStageLabel').textContent=stage?.name||`Day ${day}`;
+  function page(name){
+    if (typeof window.showPage === 'function') window.showPage(name);
+    else {
+      document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+      document.querySelector(`#page-${name}`)?.classList.add('active');
+      window.scrollTo({top:0});
+    }
+  }
 
- if(todayItem){
-   q('#runtimeTodayTitle').textContent=todayItem.title;
-   q('#runtimeTodayIntro').textContent=todayItem.intro_text||todayItem.body_text||'';
-   q('#runtimeTodayChoices').innerHTML=(todayItem.suggested_choices||[]).map((x,i)=>`<button data-runtime-choice="${i}">${esc(x)}</button>`).join('');
-   const hasReflection=!!todayItem.reflection_prompt;
-   q('#runtimeTodayReflectionWrap').classList.toggle('hidden',!hasReflection);
-   q('#runtimeTodayReflectionLabel').textContent=todayItem.reflection_prompt||'Optional reflection';
-   qa('[data-runtime-choice]').forEach(b=>b.onclick=()=>{const v=Number(b.dataset.runtimeChoice);if(selectedChoices.has(v))selectedChoices.delete(v);else selectedChoices.add(v);b.classList.toggle('selected')});
- }else{
-   q('#runtimeTodayTitle').textContent='Your program is being prepared';
-   q('#runtimeTodayIntro').textContent='No published guided action is scheduled yet.';
-   q('#runtimeTodayChoices').innerHTML='';
-   q('#runtimeTodayReflectionWrap').classList.add('hidden');
- }
+  async function waitForUser(timeout=12000){
+    const started=Date.now();
+    while(Date.now()-started < timeout){
+      user = auth.getCurrentUser?.() || null;
+      if(user) return user;
+      await new Promise(r=>setTimeout(r,180));
+    }
+    return null;
+  }
 
- q('#runtimeModuleGrid').innerHTML=runtimeModules.filter(x=>!['today'].includes(x.module_key)).map(m=>`<button data-runtime-module="${m.module_key}"><b>${esc(m.label)}</b><small>${esc(moduleHelp(m.module_key))}</small></button>`).join('');
- qa('[data-runtime-module]').forEach(b=>b.onclick=()=>openModule(b.dataset.runtimeModule));
+  async function loadSettings(){
+    const keys=['pilot_program_runtime_enabled','program_switcher_enabled','non_recovery_runtime_mode','recovery_legacy_renderer_enabled','content_engine_v2_consumer_enabled','public_multi_program_launch_enabled'];
+    const {data,error}=await sb.from('app_public_settings').select('key,value').in('key',keys);
+    if(error) throw error;
+    settings=Object.fromEntries((data||[]).map(x=>[x.key,x.value]));
+  }
 
- q('#runtimeStageList').innerHTML=runtimeStages.map(s=>`<article class="runtime-stage-chip ${stage?.id===s.id?'current':''}"><b>${esc(s.name)}</b><small>${s.start_day&&s.end_day?`Days ${s.start_day}–${s.end_day}`:esc(s.status)}</small></article>`).join('');
-}
-function moduleHelp(k){
- return ({journey:'See where you are going',help_now:'Immediate support',journal:'Reflect privately',tools:'Practical tools',learn:'Learn at your pace',support:'People and connection',resources:'Find practical help',milestones:'Notice progress',history:'Review your journey',story:'Build your story',documents:'Track documents',appointments:'Track appointments',benefits:'Track benefits',housing:'Track housing',employment:'Track work and training'})[k]||'Open this part of your program';
-}
-function openModule(k){
- const map={journey:'program-journey-runtime',help_now:'safety-center',journal:'journal',tools:'tools',learn:'learn',support:'support',resources:'resource-navigator',milestones:'progress-hub',history:'history',story:'story',documents:'life-documents',appointments:'life-appointments',benefits:'life-benefits',housing:'life-housing',employment:'life-employment'};
- showPage(map[k]||'program-home');
-}
-async function saveToday(){
- if(!todayItem||!activeProgram)return;
- const choices=[...selectedChoices].map(i=>todayItem.suggested_choices?.[i]).filter(Boolean);
- const reflection=q('#runtimeTodayReflection')?.value.trim()||null;
- const {error}=await sb.from('pilot_daily_responses').upsert({
-   user_id:currentUser.id,
-   program_id:activeProgram.id,
-   content_item_id:todayItem.id,
-   selected_choices:choices,
-   reflection,
-   completed_at:new Date().toISOString()
- },{onConflict:'user_id,program_id,content_item_id'});
- if(error)return toast(error.message,true);
- q('#runtimeTodayMsg').textContent='Saved.';
- toast('Today saved.');
-}
-async function loadJourneyRuntime(){
- if(!activeProgram)return;
- if(!runtimeStages.length)await loadRuntime();
- q('#runtimeJourneyTitle').textContent=activeProgram.terminology?.journey||`${activeProgram.name} Journey`;
- q('#runtimeJourneyDescription').textContent='Your current stage is emphasized. Future stages stay visible without overwhelming Today.';
- q('#runtimeJourneyStages').innerHTML=runtimeStages.map((s,i)=>`<article class="runtime-journey-stage ${i===0?'current':''}"><b>${esc(s.sequence+'. '+s.name)}</b><small>${s.start_day&&s.end_day?`Days ${s.start_day}–${s.end_day}`:esc(s.status)}</small></article>`).join('');
- q('#runtimeJourneyContent').innerHTML=runtimeContent.filter(x=>['guided_action','prompt','learn','tool','milestone_review'].includes(x.content_type)).slice(0,60).map(x=>`<article class="runtime-content-row"><b>${esc(x.title)}</b><small>${esc(x.content_type.replaceAll('_',' '))}${x.day_number?' · day '+x.day_number:''}${x.week_number?' · week '+x.week_number:''}</small><p>${esc(String(x.intro_text||x.body_text||'').slice(0,220))}</p></article>`).join('');
-}
+  function protectedRuntimeOkay(){
+    return settings.pilot_program_runtime_enabled==='true'
+      && settings.program_switcher_enabled==='true'
+      && settings.recovery_legacy_renderer_enabled==='true'
+      && settings.content_engine_v2_consumer_enabled==='false'
+      && settings.public_multi_program_launch_enabled==='false';
+  }
 
-async function checkAdmin(){
- const {data}=await sb.from('admin_user_roles').select('role,active').eq('user_id',currentUser.id).maybeSingle();
- isAdmin=!!data?.active&&['admin','editor'].includes(data.role);return isAdmin;
-}
-async function loadPilotAdmin(){
- if(!await checkAdmin())return;
- const [{data:programs},{data:rows,error}]=await Promise.all([
-   sb.from('programs').select('id,name,slug,status').in('status',['pilot','planned']).order('display_order'),
-   sb.from('program_pilot_enrollments').select('id,user_id,program_id,status,enrolled_at,profiles:user_id(display_name),programs(name,slug,status)').order('enrolled_at',{ascending:false})
- ]);
- if(error)return toast(error.message,true);
- q('#pilotProgramSelect').innerHTML=(programs||[]).map(x=>`<option value="${x.id}">${esc(x.name)} · ${esc(x.status)}</option>`).join('');
- const r=rows||[];
- q('#pilotMetricUsers').textContent=new Set(r.filter(x=>x.status==='active').map(x=>x.user_id)).size;
- q('#pilotMetricPrograms').textContent=new Set(r.filter(x=>x.status==='active').map(x=>x.program_id)).size;
- q('#pilotMetricActive').textContent=r.filter(x=>x.status==='active').length;
- q('#pilotEnrollmentList').innerHTML=r.length?r.map(x=>`<article class="program-switch-row"><div class="program-switch-icon">P</div><div><b>${esc(x.profiles?.display_name||'Pilot user')}</b><small>${esc(x.programs?.name||'Program')} · ${esc(x.status)}</small></div><button data-remove-pilot="${x.id}">Remove</button></article>`).join(''):'<div class="approved-resource-empty">No pilot enrollments yet.</div>';
- qa('[data-remove-pilot]').forEach(b=>b.onclick=()=>removePilot(b.dataset.removePilot));
-}
-async function enrollPilot(){
- const email=q('#pilotUserEmail').value.trim(),pid=q('#pilotProgramSelect').value;
- if(!email||!pid)return toast('Choose a program and enter a user email.',true);
- const {data,error}=await sb.rpc('admin_enroll_user_in_pilot',{p_email:email,p_program_id:pid});
- if(error)return toast(error.message,true);
- q('#pilotUserEmail').value='';toast('Pilot user enrolled.');loadPilotAdmin();
-}
-async function removePilot(id){
- const {error}=await sb.rpc('admin_remove_pilot_enrollment',{p_pilot_enrollment_id:id});
- if(error)return toast(error.message,true);loadPilotAdmin();
-}
+  async function loadPrograms(){
+    const [{data:pilot,error:pErr},{data:recovery,error:rErr}] = await Promise.all([
+      sb.from('program_pilot_enrollments').select('program_id,status').eq('user_id',user.id).eq('status','active'),
+      sb.from('programs').select('id,slug,name,short_description,status,audience,display_order,terminology,journey_config,privacy_config').eq('slug','recovery').maybeSingle()
+    ]);
+    if(pErr) throw pErr;
+    if(rErr) throw rErr;
 
-q('#runtimeSaveToday')?.addEventListener('click',saveToday);
-q('#pilotEnrollUser')?.addEventListener('click',enrollPilot);
+    const pilotIds=(pilot||[]).map(x=>x.program_id);
+    let pilotPrograms=[];
+    if(pilotIds.length){
+      const {data,error}=await sb.from('programs')
+        .select('id,slug,name,short_description,status,audience,display_order,terminology,journey_config,privacy_config')
+        .in('id',pilotIds).in('slug',CONTROLLED);
+      if(error) throw error;
+      pilotPrograms=data||[];
+    }
 
-if(typeof showPage==='function'){
- const old=showPage;
- showPage=function(name){
-   old(name);
-   if(name==='program-switcher')loadEnrollments();
-   if(name==='program-home')loadEnrollments().then(()=>{if(activeProgram?.slug!=='recovery')loadRuntime()});
-   if(name==='program-journey-runtime')loadJourneyRuntime();
-   if(name==='pilot-enrollment-admin')loadPilotAdmin();
- };
-}
+    const merged=[];
+    if(recovery) merged.push({...recovery,isRecovery:true,pilotStatus:'live'});
+    pilotPrograms.sort((a,b)=>(a.display_order||999)-(b.display_order||999)).forEach(p=>merged.push({...p,isRecovery:false,pilotStatus:'active'}));
+    programs=merged;
+    return programs;
+  }
 
-let tries=0;
-const timer=setInterval(()=>{
- tries++;
- if(typeof currentUser!=='undefined'&&currentUser){
-   clearInterval(timer);
-   loadEnrollments();
- }else if(tries>40)clearInterval(timer);
-},200);
+  function programJourneyName(p){
+    return p?.terminology?.journey || `${p?.name || 'Lellee'} Journey`;
+  }
+
+  function programToneClass(slug){
+    return `runtime-tone-${slug || 'default'}`;
+  }
+
+  function renderSwitcher(){
+    const wrap=$('#programSwitcherList');
+    if(!wrap) return;
+    wrap.innerHTML='';
+
+    if(!protectedRuntimeOkay()){
+      wrap.innerHTML='<div class="runtime-state-card runtime-state-warning"><b>Internal program access is paused.</b><p>The protected runtime settings are not in their expected test configuration.</p></div>';
+      return;
+    }
+
+    const intro=document.createElement('div');
+    intro.className='runtime-switcher-summary';
+    intro.innerHTML=`<div><b>${programs.length}</b><span>programs available to this test account</span></div><p>Recovery keeps its current live experience. Additional programs use the controlled pilot runtime and remain private to enrolled test accounts.</p>`;
+    wrap.appendChild(intro);
+
+    programs.forEach((p,index)=>{
+      const card=document.createElement('article');
+      card.className=`runtime-program-card ${programToneClass(p.slug)}`;
+      card.innerHTML=`
+        <div class="runtime-program-icon">${ICONS[p.slug]||'✦'}</div>
+        <div class="runtime-program-copy">
+          <div class="runtime-program-meta"><span>${p.isRecovery?'LIVE':'INTERNAL PILOT'}</span><em>${p.isRecovery?'Current Recovery experience':'Private test access'}</em></div>
+          <h3>${esc(p.name)}</h3>
+          <p>${esc(p.short_description||'A Lellee support program.')}</p>
+        </div>
+        <button class="runtime-open-program">${p.isRecovery?'Open Recovery':'Open Program'} →</button>`;
+      card.querySelector('button').addEventListener('click',()=>openProgram(p));
+      wrap.appendChild(card);
+    });
+  }
+
+  async function openProgram(program){
+    if(program.isRecovery){
+      activeProgram=null;
+      page('today');
+      return;
+    }
+    activeProgram=program;
+    await loadProgramRuntime(program);
+    renderProgramHome();
+    page('program-home');
+  }
+
+  async function loadProgramRuntime(program){
+    const [progressQ,modulesQ,stagesQ,contentQ] = await Promise.all([
+      sb.from('pilot_program_progress').select('*').eq('user_id',user.id).eq('program_id',program.id).maybeSingle(),
+      sb.from('program_modules').select('module_key,label,enabled,display_order,settings').eq('program_id',program.id).eq('enabled',true).order('display_order'),
+      sb.from('program_journey_stages').select('id,stage_key,name,description,sequence,start_day,end_day,status').eq('program_id',program.id).in('status',['published','review','draft']).order('sequence'),
+      sb.from('program_content_items').select('id,stage_id,content_key,content_type,title,intro_text,body_text,suggested_choices,reflection_prompt,sequence,day_number,week_number,estimated_minutes,status,tags').eq('program_id',program.id).in('status',['published','review','draft']).order('sequence')
+    ]);
+    for(const q of [progressQ,modulesQ,stagesQ,contentQ]) if(q.error) throw q.error;
+    activeProgress=progressQ.data||{current_day:1,current_week:1,current_stage_id:null};
+    activeModules=modulesQ.data||[];
+    activeStages=stagesQ.data||[];
+    activeContent=contentQ.data||[];
+
+    let stage=activeStages.find(s=>s.id===activeProgress.current_stage_id) || activeStages[0] || null;
+    if(stage && !activeProgress.current_stage_id) activeProgress.current_stage_id=stage.id;
+
+    todayItem = activeContent.find(c=>c.stage_id===stage?.id) || activeContent.find(c=>Array.isArray(c.tags)&&c.tags.includes('weekly_review')) || activeContent[0] || null;
+    selectedChoices=new Set();
+
+    if(todayItem){
+      const {data,error}=await sb.from('pilot_daily_responses')
+        .select('selected_choices,reflection,completed_at')
+        .eq('user_id',user.id).eq('program_id',program.id).eq('content_item_id',todayItem.id).maybeSingle();
+      if(!error && data){
+        selectedChoices=new Set(data.selected_choices||[]);
+        todayItem._savedReflection=data.reflection||'';
+        todayItem._completedAt=data.completed_at||null;
+      }
+    }
+  }
+
+  function renderProgramHome(){
+    if(!activeProgram) return;
+    const stage=activeStages.find(s=>s.id===activeProgress?.current_stage_id)||activeStages[0]||null;
+    $('#runtimeProgramKicker').textContent='LELLEE · INTERNAL PILOT';
+    $('#runtimeProgramName').textContent=activeProgram.name;
+    $('#runtimeProgramDescription').textContent=activeProgram.short_description||'';
+    $('#runtimeJourneyLabel').textContent=programJourneyName(activeProgram);
+    $('#runtimeStageLabel').textContent=stage?.name||'Starting Point';
+
+    const title=$('#runtimeTodayTitle'), intro=$('#runtimeTodayIntro'), choices=$('#runtimeTodayChoices'), refWrap=$('#runtimeTodayReflectionWrap'), refLabel=$('#runtimeTodayReflectionLabel'), ref=$('#runtimeTodayReflection'), save=$('#runtimeSaveToday'), msg=$('#runtimeTodayMsg');
+    choices.innerHTML='';
+    msg.textContent='';
+
+    if(todayItem){
+      title.textContent=todayItem.title||'Your next step';
+      intro.textContent=todayItem.intro_text||todayItem.body_text||'Choose one useful step for today.';
+      const list=Array.isArray(todayItem.suggested_choices)?todayItem.suggested_choices:[];
+      list.forEach(choice=>{
+        const b=document.createElement('button');
+        b.type='button'; b.className='runtime-choice'; b.textContent=choice;
+        b.classList.toggle('selected',selectedChoices.has(choice));
+        b.addEventListener('click',()=>{selectedChoices.has(choice)?selectedChoices.delete(choice):selectedChoices.add(choice);b.classList.toggle('selected')});
+        choices.appendChild(b);
+      });
+      if(todayItem.reflection_prompt){
+        refWrap.classList.remove('hidden');
+        refLabel.textContent=todayItem.reflection_prompt;
+        ref.value=todayItem._savedReflection||'';
+      } else {
+        refWrap.classList.add('hidden'); ref.value='';
+      }
+      save.disabled=false;
+      if(todayItem._completedAt) msg.textContent='Saved previously — you can revise it.';
+    } else {
+      title.textContent='This program is ready for structure review';
+      intro.textContent='The program is enrolled for internal testing, but no readable pilot content is available yet.';
+      refWrap.classList.add('hidden'); save.disabled=true;
+    }
+
+    renderModules();
+    renderStageList();
+  }
+
+  function renderModules(){
+    const wrap=$('#runtimeModuleGrid');
+    wrap.innerHTML='';
+    const shown=activeModules.filter(m=>m.module_key!=='today').slice(0,12);
+    shown.forEach(m=>{
+      const b=document.createElement('button');
+      b.className='runtime-module-card';
+      b.innerHTML=`<span>${MODULE_ICON[m.module_key]||'◇'}</span><b>${esc(m.label)}</b><small>${moduleHelp(m.module_key)}</small>`;
+      b.addEventListener('click',()=>{
+        if(m.module_key==='journey') renderJourneyPage();
+        page(MODULE_PAGE[m.module_key]||'program-home');
+      });
+      wrap.appendChild(b);
+    });
+  }
+
+  function moduleHelp(key){
+    return ({journey:'See the stages in this program.',help_now:'Immediate support options.',journal:'Private reflection space.',tools:'Practical tools.',learn:'Program learning.',support:'Connection and support.',resources:'Find useful resources.',milestones:'Review progress without scoring.',documents:'Organize important documents.',appointments:'Keep track of appointments.',benefits:'Track benefit-related steps.',employment:'Work-related planning.',housing:'Housing-related planning.'})[key]||'Open this program area.';
+  }
+
+  function renderStageList(){
+    const wrap=$('#runtimeStageList');
+    wrap.innerHTML='';
+    const currentId=activeProgress?.current_stage_id || activeStages[0]?.id;
+    activeStages.forEach((s,index)=>{
+      const item=document.createElement('div');
+      item.className='runtime-stage-row';
+      if(s.id===currentId)item.classList.add('current');
+      item.innerHTML=`<span>${index+1}</span><div><b>${esc(s.name)}</b><small>${esc(s.description||'')}</small></div><em>${s.id===currentId?'Current':'Available'}</em>`;
+      wrap.appendChild(item);
+    });
+  }
+
+  function renderJourneyPage(){
+    if(!activeProgram)return;
+    $('#runtimeJourneyTitle').textContent=programJourneyName(activeProgram);
+    $('#runtimeJourneyDescription').textContent='Move through this journey at your own pace. Stages are guides, not compliance gates.';
+    const stages=$('#runtimeJourneyStages'), content=$('#runtimeJourneyContent');
+    stages.innerHTML=''; content.innerHTML='';
+    const currentId=activeProgress?.current_stage_id || activeStages[0]?.id;
+    activeStages.forEach((s,index)=>{
+      const b=document.createElement('button');
+      b.className='runtime-journey-stage-button';
+      if(s.id===currentId)b.classList.add('current');
+      b.innerHTML=`<span>${index+1}</span><div><b>${esc(s.name)}</b><small>${esc(s.description||'')}</small></div>`;
+      b.addEventListener('click',()=>renderStageContent(s));
+      stages.appendChild(b);
+    });
+    renderStageContent(activeStages.find(s=>s.id===currentId)||activeStages[0]);
+  }
+
+  function renderStageContent(stage){
+    const wrap=$('#runtimeJourneyContent');
+    wrap.innerHTML='';
+    if(!stage){wrap.innerHTML='<div class="runtime-state-card"><p>No stages are available yet.</p></div>';return}
+    const items=activeContent.filter(c=>c.stage_id===stage.id);
+    const head=document.createElement('div');
+    head.className='runtime-journey-content-head';
+    head.innerHTML=`<span>STAGE</span><h3>${esc(stage.name)}</h3><p>${esc(stage.description||'')}</p>`;
+    wrap.appendChild(head);
+    if(!items.length){
+      wrap.insertAdjacentHTML('beforeend','<div class="runtime-state-card"><p>No readable content has been added to this stage yet.</p></div>');
+      return;
+    }
+    items.forEach(item=>{
+      const a=document.createElement('article');
+      a.className='runtime-content-card';
+      a.innerHTML=`<div><span>${esc((item.content_type||'prompt').replaceAll('_',' '))}</span><em>${item.estimated_minutes||5} min</em></div><h4>${esc(item.title)}</h4><p>${esc(item.intro_text||item.body_text||'')}</p>${item.reflection_prompt?`<blockquote>${esc(item.reflection_prompt)}</blockquote>`:''}`;
+      wrap.appendChild(a);
+    });
+  }
+
+  async function saveToday(){
+    if(!activeProgram || !todayItem || !user)return;
+    const btn=$('#runtimeSaveToday'), msg=$('#runtimeTodayMsg');
+    btn.disabled=true; msg.textContent='Saving…';
+    const reflection=$('#runtimeTodayReflection')?.value?.trim()||null;
+    const payload={
+      user_id:user.id, program_id:activeProgram.id, content_item_id:todayItem.id,
+      selected_choices:[...selectedChoices], reflection, completed_at:new Date().toISOString(), updated_at:new Date().toISOString()
+    };
+    const {error}=await sb.from('pilot_daily_responses').upsert(payload,{onConflict:'user_id,program_id,content_item_id'});
+    if(error){msg.textContent='Could not save yet. Please try again.';console.error(error)}
+    else {
+      await sb.from('pilot_program_progress').upsert({
+        user_id:user.id,program_id:activeProgram.id,current_day:activeProgress?.current_day||1,current_week:activeProgress?.current_week||1,current_stage_id:activeProgress?.current_stage_id||activeStages[0]?.id||null,last_opened_at:new Date().toISOString(),updated_at:new Date().toISOString()
+      },{onConflict:'user_id,program_id'});
+      msg.textContent='Saved privately to this program.';
+      todayItem._completedAt=new Date().toISOString();
+    }
+    btn.disabled=false;
+  }
+
+  async function init(){
+    if(!(await waitForUser())) return;
+    try{
+      await loadSettings();
+      await loadPrograms();
+      renderSwitcher();
+      $('#runtimeSaveToday')?.addEventListener('click',saveToday);
+      document.querySelectorAll('[data-page="program-switcher"]').forEach(b=>b.addEventListener('click',()=>{loadPrograms().then(renderSwitcher).catch(console.error)}));
+      window.LelleePilotRuntime={reload:async()=>{await loadSettings();await loadPrograms();renderSwitcher()},openProgram};
+    }catch(error){
+      console.error('Lellee Pilot Runtime initialization failed:',error);
+      const wrap=$('#programSwitcherList');
+      if(wrap)wrap.innerHTML='<div class="runtime-state-card runtime-state-warning"><b>Programs could not be loaded.</b><p>The pilot runtime is installed, but its data could not be read for this account.</p></div>';
+    }
+  }
+
+  init();
 })();
