@@ -25,10 +25,9 @@
   const dialog = document.getElementById('journeyDialog');
   const topicGrid = document.getElementById('topicGrid');
   const surveyError = document.getElementById('surveyError');
-  // HOTFIX 2026-08-27: prevent the broken journey dialog from blocking the public site.
-  // Start Your Journey now goes directly to /app while the survey UI is repaired.
-  try { if (dialog?.open) dialog.close(); } catch (_) {}
 
+  // PUBLIC ACCESS FAIL-SAFE — 2026-08-27
+  try { if(dialog?.open) dialog.close(); } catch(_) {}
 
   function safeIcon(topic){
     return icons[topic.icon_key] || icons[topic.topic_key] || icons.default;
@@ -38,20 +37,61 @@
     if(t.availability === 'coming_soon') return 'Coming soon — explore now';
     return 'Explore with Lellee';
   }
+  function topicRank(t, fallbackIndex){
+    const rank = Number(t?.display_rank);
+    return Number.isFinite(rank) ? rank : 1000 + fallbackIndex;
+  }
+  function topicHref(t){
+    return '/app?recommended=' + encodeURIComponent(t.topic_key || '');
+  }
   function renderTopics(){
+    if(!topicGrid) return;
+
+    // The public support-topic RPC already returns display_rank from the latest
+    // human-published demand ranking. Sort again defensively so the first six
+    // always represent highest demand when rank data is available.
+    const ranked = topics
+      .map((t,i)=>({...t,__fallbackIndex:i}))
+      .sort((a,b)=>topicRank(a,a.__fallbackIndex)-topicRank(b,b.__fallbackIndex));
+
+    const featured = ranked.slice(0,6);
+    const remaining = ranked.slice(6);
+
     topicGrid.innerHTML = '';
-    topics.slice(0,12).forEach(t => {
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'topic-card';
-      btn.dataset.topicKey = t.topic_key;
-      btn.innerHTML = `<span class="topic-icon">${safeIcon(t)}</span>
+    topicGrid.classList.add('topic-grid-featured');
+
+    featured.forEach((t,index) => {
+      const a = document.createElement('a');
+      a.className = `topic-card topic-card-featured topic-color-${(index % 6)+1}`;
+      a.dataset.topicKey = t.topic_key;
+      a.href = topicHref(t);
+      a.innerHTML = `<span class="topic-icon">${safeIcon(t)}</span>
         <h3>${escapeHtml(t.label)}</h3>
         <p>${escapeHtml(t.description || '')}</p>
         <span class="topic-status">${availabilityText(t)}</span>`;
-      btn.addEventListener('click', () => { location.assign('/app?recommended=' + encodeURIComponent(t.topic_key)); });
-      topicGrid.appendChild(btn);
+      topicGrid.appendChild(a);
     });
+
+    let moreWrap = document.getElementById('topicMoreWrap');
+    if(moreWrap) moreWrap.remove();
+
+    if(remaining.length){
+      moreWrap = document.createElement('div');
+      moreWrap.id = 'topicMoreWrap';
+      moreWrap.className = 'topic-more-wrap';
+      moreWrap.innerHTML = '<div class="topic-more-label">More support topics</div><div id="topicMoreLinks" class="topic-more-links"></div>';
+      topicGrid.insertAdjacentElement('afterend', moreWrap);
+      const links = moreWrap.querySelector('#topicMoreLinks');
+
+      remaining.forEach(t => {
+        const a = document.createElement('a');
+        a.className = 'topic-more-link';
+        a.href = topicHref(t);
+        a.dataset.topicKey = t.topic_key;
+        a.innerHTML = `<span>${safeIcon(t)}</span><b>${escapeHtml(t.label)}</b>`;
+        links.appendChild(a);
+      });
+    }
   }
   function escapeHtml(s=''){
     return String(s).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
