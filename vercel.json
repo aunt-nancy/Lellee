@@ -1,13 +1,9 @@
 {
-  "$schema": "https://openapi.vercel.sh/vercel.json",
-  "redirects": [
+  "rewrites": [
     {
       "source": "/",
-      "destination": "/landing.html",
-      "permanent": false
-    }
-  ],
-  "rewrites": [
+      "destination": "/landing.html"
+    },
     {
       "source": "/app",
       "destination": "/index.html"
@@ -20,6 +16,42 @@
   "headers": [
     {
       "source": "/service-worker.js",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/landing.html",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/master-landing.js",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/master-landing.css",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/index.html",
       "headers": [
         {
           "key": "Cache-Control",
