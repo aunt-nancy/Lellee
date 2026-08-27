@@ -1,4 +1,6 @@
 {
+  "cleanUrls": false,
+  "trailingSlash": false,
   "rewrites": [
     {
       "source": "/",
@@ -9,7 +11,11 @@
       "destination": "/index.html"
     },
     {
-      "source": "/((?!.*\\.).*)",
+      "source": "/app/:path*",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/resources",
       "destination": "/index.html"
     }
   ],
@@ -20,6 +26,10 @@
         {
           "key": "Cache-Control",
           "value": "no-cache, no-store, must-revalidate"
+        },
+        {
+          "key": "Service-Worker-Allowed",
+          "value": "/"
         }
       ]
     },
@@ -33,7 +43,7 @@
       ]
     },
     {
-      "source": "/master-landing.js",
+      "source": "/index.html",
       "headers": [
         {
           "key": "Cache-Control",
@@ -51,7 +61,7 @@
       ]
     },
     {
-      "source": "/index.html",
+      "source": "/master-landing.js",
       "headers": [
         {
           "key": "Cache-Control",

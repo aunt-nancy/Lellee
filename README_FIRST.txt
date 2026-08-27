@@ -1,43 +1,27 @@
-LELLEE BUILD 6 — PUBLIC PREVIEW RESTORE
-August 24, 2026
+LELLEE ROOT + LANDING DESIGN RESTORE — 2026-08-27
 
-WHY THIS FILE
-The live index.html had been replaced by an older simplified release candidate.
-This root index.html restores the full approved Build 6 master while preserving
-the current public-preview constraints.
+UPLOAD ALL FIVE FILES TO THE ROOT OF THE SAME GITHUB REPOSITORY CONNECTED TO WWW.LELLEE.COM:
 
-RESTORED FROM BUILD 6
-- Full Resources finder
-- Search resources field
-- Recovery Path dropdown
-- Access dropdown
-- Full resource type filters including Housing and Employment
-- Later Build 6 sections and scripts
-- Approved Build 6 interface/behavior
+1. landing.html
+2. master-landing.css
+3. master-landing.js
+4. service-worker.js
+5. vercel.json
 
-PUBLIC PREVIEW PRESERVED
-- No forced account login for browsing
-- Account creation disabled
-- Subscription signup disabled
-- same-page-refresh.js remains active
-- Existing beta sign-in logic is sign-in-only if used
+Replace the existing files with these exact filenames.
 
-DO NOT CHANGE / DO NOT UPLOAD
-- Do not replace landing.html
-- Do not replace vercel.json
-- Do not replace same-page-refresh.js
+WHAT THIS FIXES
+- lellee.com / www.lellee.com opens the public landing page, not Today.
+- /app opens the authenticated application/index.html.
+- Removes the broad catch-all route that could send public URLs to Today.
+- Clears stale service-worker caches and prevents the app shell from replacing the landing page.
+- Restores the matching approved landing HTML/CSS design pair.
+- landing.html includes its own CSS and JS, so a missing/mismatched asset cannot leave it unstyled.
+- Shows the top six topics in published demand order as colorful tiles.
+- Shows remaining topics as compact links/buttons.
+- Keeps the broken public survey overlay bypassed; Start Your Journey currently opens /app.
 
-MANUAL DEPLOY
-1. In GitHub, open the Lellee repository root.
-2. Upload/replace ONLY index.html from this package.
-3. Commit directly to main.
-4. Wait for Vercel deployment to show Ready.
-5. Open a fresh InPrivate window.
-6. Confirm www.lellee.com opens the landing page.
-7. Explore Lellee -> Resources.
-8. Confirm Search, Recovery Path dropdown, Access dropdown, and type filters are back.
-9. Open Journal and refresh; it should remain on Journal.
-10. Verify account creation and subscriptions are still unavailable.
-
-ROLLBACK
-Revert only the GitHub commit that replaced index.html.
+AFTER VERCEL SAYS READY
+1. Open https://www.lellee.com/landing.html once. This installs the corrected service worker.
+2. Then open https://www.lellee.com/ in a new tab.
+3. The root must show the landing page. Today must appear only at /app after login.

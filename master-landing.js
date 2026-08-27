@@ -25,9 +25,7 @@
   const dialog = document.getElementById('journeyDialog');
   const topicGrid = document.getElementById('topicGrid');
   const surveyError = document.getElementById('surveyError');
-
-  // PUBLIC ACCESS FAIL-SAFE — 2026-08-27
-  try { if(dialog?.open) dialog.close(); } catch(_) {}
+  try{if(dialog?.open)dialog.close()}catch(_){}
 
   function safeIcon(topic){
     return icons[topic.icon_key] || icons[topic.topic_key] || icons.default;
@@ -37,60 +35,56 @@
     if(t.availability === 'coming_soon') return 'Coming soon — explore now';
     return 'Explore with Lellee';
   }
-  function topicRank(t, fallbackIndex){
-    const rank = Number(t?.display_rank);
-    return Number.isFinite(rank) ? rank : 1000 + fallbackIndex;
+  function topicDisplayRank(topic,index){
+    const rank=Number(topic?.display_rank);
+    return Number.isFinite(rank)?rank:1000+index;
   }
-  function topicHref(t){
-    return '/app?recommended=' + encodeURIComponent(t.topic_key || '');
+  function topicAppUrl(topic){
+    const q=new URLSearchParams();
+    if(topic?.topic_key)q.set('recommended',topic.topic_key);
+    return '/app'+(q.toString()?'?'+q.toString():'');
   }
   function renderTopics(){
-    if(!topicGrid) return;
+    if(!topicGrid)return;
 
-    // The public support-topic RPC already returns display_rank from the latest
-    // human-published demand ranking. Sort again defensively so the first six
-    // always represent highest demand when rank data is available.
-    const ranked = topics
-      .map((t,i)=>({...t,__fallbackIndex:i}))
-      .sort((a,b)=>topicRank(a,a.__fallbackIndex)-topicRank(b,b.__fallbackIndex));
+    const ranked=topics
+      .map((topic,index)=>({...topic,__index:index}))
+      .sort((a,b)=>topicDisplayRank(a,a.__index)-topicDisplayRank(b,b.__index));
 
-    const featured = ranked.slice(0,6);
-    const remaining = ranked.slice(6);
+    const featured=ranked.slice(0,6);
+    const remaining=ranked.slice(6);
 
-    topicGrid.innerHTML = '';
-    topicGrid.classList.add('topic-grid-featured');
+    topicGrid.innerHTML='';
+    topicGrid.className='support-card-grid featured-support-grid';
 
-    featured.forEach((t,index) => {
-      const a = document.createElement('a');
-      a.className = `topic-card topic-card-featured topic-color-${(index % 6)+1}`;
-      a.dataset.topicKey = t.topic_key;
-      a.href = topicHref(t);
-      a.innerHTML = `<span class="topic-icon">${safeIcon(t)}</span>
-        <h3>${escapeHtml(t.label)}</h3>
-        <p>${escapeHtml(t.description || '')}</p>
-        <span class="topic-status">${availabilityText(t)}</span>`;
-      topicGrid.appendChild(a);
+    featured.forEach((topic,index)=>{
+      const card=document.createElement('a');
+      card.className=`support-card tone-${index%6}`;
+      card.href=topicAppUrl(topic);
+      card.dataset.topicKey=topic.topic_key;
+      card.innerHTML=`<span class="support-icon">${safeIcon(topic)}</span>
+        <h3>${escapeHtml(topic.label)}</h3>
+        <p>${escapeHtml(topic.description||'')}</p>
+        <span class="card-action">${escapeHtml(availabilityText(topic))}</span>`;
+      topicGrid.appendChild(card);
     });
 
-    let moreWrap = document.getElementById('topicMoreWrap');
-    if(moreWrap) moreWrap.remove();
-
+    document.getElementById('moreTopicLinks')?.remove();
     if(remaining.length){
-      moreWrap = document.createElement('div');
-      moreWrap.id = 'topicMoreWrap';
-      moreWrap.className = 'topic-more-wrap';
-      moreWrap.innerHTML = '<div class="topic-more-label">More support topics</div><div id="topicMoreLinks" class="topic-more-links"></div>';
-      topicGrid.insertAdjacentElement('afterend', moreWrap);
-      const links = moreWrap.querySelector('#topicMoreLinks');
-
-      remaining.forEach(t => {
-        const a = document.createElement('a');
-        a.className = 'topic-more-link';
-        a.href = topicHref(t);
-        a.dataset.topicKey = t.topic_key;
-        a.innerHTML = `<span>${safeIcon(t)}</span><b>${escapeHtml(t.label)}</b>`;
-        links.appendChild(a);
+      const wrap=document.createElement('div');
+      wrap.id='moreTopicLinks';
+      wrap.className='more-topic-wrap';
+      wrap.innerHTML='<span class="more-topic-heading">More support topics</span><div class="more-topic-list"></div>';
+      const list=wrap.querySelector('.more-topic-list');
+      remaining.forEach(topic=>{
+        const link=document.createElement('a');
+        link.className='more-topic-link';
+        link.href=topicAppUrl(topic);
+        link.dataset.topicKey=topic.topic_key;
+        link.innerHTML=`<span>${safeIcon(topic)}</span><b>${escapeHtml(topic.label)}</b>`;
+        list.appendChild(link);
       });
+      topicGrid.insertAdjacentElement('afterend',wrap);
     }
   }
   function escapeHtml(s=''){
@@ -112,8 +106,8 @@
     e.currentTarget.setAttribute('aria-expanded', nav.classList.contains('open') ? 'true' : 'false');
   });
 
-  document.querySelectorAll('[data-start-survey]').forEach(el => el.addEventListener('click', (e) => {
-    e.preventDefault();
+  document.querySelectorAll('[data-start-survey]').forEach(el=>el.addEventListener('click',event=>{
+    event.preventDefault();
     location.assign('/app');
   }));
   document.getElementById('surveyClose')?.addEventListener('click', () => dialog.close());
@@ -320,4 +314,13 @@
   function clearError(){surveyError.textContent='';surveyError.classList.add('hidden')}
 
   loadTopics();
+
+  if('serviceWorker' in navigator){
+    window.addEventListener('load',async()=>{
+      try{
+        const registration=await navigator.serviceWorker.register('/service-worker.js',{updateViaCache:'none'});
+        await registration.update();
+      }catch(error){console.warn('Lellee service-worker update skipped.',error?.message||error)}
+    });
+  }
 })();

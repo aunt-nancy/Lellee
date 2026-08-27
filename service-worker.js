@@ -1,24 +1,69 @@
-const CACHE='lellee-v1-rc1-20260807';
-const SHELL=['/app','/index.html','/group-a-core.css','/group-a-core.js','/group-b-production.css','/group-b-production.js','/manifest.webmanifest','/icon-192.png','/icon-512.png','/privacy.html','/terms.html','/safety.html'];
-self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(SHELL).catch(()=>{})));self.skipWaiting()});
-self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))));self.clients.claim()});
-self.addEventListener('fetch',e=>{
- const u=new URL(e.request.url);
- if(e.request.method!=='GET')return;
- if(u.hostname.includes('supabase.co')||u.pathname.includes('/functions/v1/'))return;
- if(e.request.mode==='navigate'){
-   e.respondWith(fetch(e.request).then(r=>{const copy=r.clone();caches.open(CACHE).then(c=>c.put('/index.html',copy));return r}).catch(()=>caches.match('/index.html')));
-   return;
- }
- e.respondWith(caches.match(e.request).then(hit=>hit||fetch(e.request).then(r=>{if(r.ok){const copy=r.clone();caches.open(CACHE).then(c=>c.put(e.request,copy))}return r})));
+const LELLEE_SW_VERSION='lellee-root-routing-2026-08-27-v1';
+
+self.addEventListener('install',event=>{
+  self.skipWaiting();
 });
-self.addEventListener('push',e=>{
- let d={};try{d=e.data?e.data.json():{}}catch(err){d={body:e.data?.text?.()||''}}
- const page=d.page||'today';
- const options={body:d.body||'You have a recovery reminder.',icon:'/icon-192.png',badge:'/icon-192.png',tag:d.tag||'lellee-reminder',renotify:false,data:{url:`/app?page=${encodeURIComponent(page)}`}};
- e.waitUntil(self.registration.showNotification(d.title||'Lellee',options));
+
+self.addEventListener('activate',event=>{
+  event.waitUntil((async()=>{
+    const names=await caches.keys();
+    await Promise.all(names.map(name=>caches.delete(name)));
+    await self.clients.claim();
+  })());
 });
-self.addEventListener('notificationclick',e=>{
- e.notification.close();const url=e.notification.data?.url||'/app';
- e.waitUntil(clients.matchAll({type:'window',includeUncontrolled:true}).then(ws=>{for(const w of ws){if('focus'in w){w.navigate(url);return w.focus()}}return clients.openWindow(url)}));
+
+self.addEventListener('message',event=>{
+  if(event.data?.type==='SKIP_WAITING')self.skipWaiting();
+});
+
+self.addEventListener('fetch',event=>{
+  const request=event.request;
+  if(request.method!=='GET')return;
+
+  const url=new URL(request.url);
+  if(url.origin!==self.location.origin)return;
+
+  // Critical routing rule: navigations are network-only. The service worker
+  // must never replace the public landing page with the authenticated Today app.
+  if(request.mode==='navigate'){
+    event.respondWith((async()=>{
+      try{
+        return await fetch(request,{cache:'no-store'});
+      }catch(_){
+        const fallback=url.pathname.startsWith('/app')?'/index.html':'/landing.html';
+        try{return await fetch(fallback,{cache:'no-store'})}
+        catch(__){return new Response('Lellee is temporarily unavailable. Please reconnect and try again.',{status:503,headers:{'Content-Type':'text/plain; charset=utf-8'}})}
+      }
+    })());
+    return;
+  }
+
+  // Keep public and app assets fresh while this routing repair is deployed.
+  event.respondWith(fetch(request,{cache:'no-store'}).catch(()=>new Response('',{status:504})));
+});
+
+self.addEventListener('push',event=>{
+  let payload={};
+  try{payload=event.data?.json()||{}}catch(_){payload={body:event.data?.text()||''}}
+  const title=payload.title||'Lellee';
+  const options={
+    body:payload.body||'You have a new Lellee update.',
+    icon:payload.icon||'/icon-192.png',
+    badge:payload.badge||'/icon-192.png',
+    data:{url:payload.url||'/app'},
+    tag:payload.tag||'lellee-update'
+  };
+  event.waitUntil(self.registration.showNotification(title,options));
+});
+
+self.addEventListener('notificationclick',event=>{
+  event.notification.close();
+  const target=event.notification?.data?.url||'/app';
+  event.waitUntil((async()=>{
+    const windows=await self.clients.matchAll({type:'window',includeUncontrolled:true});
+    for(const client of windows){
+      if('focus' in client){await client.navigate(target);return client.focus()}
+    }
+    return self.clients.openWindow(target);
+  })());
 });
