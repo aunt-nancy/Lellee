@@ -1,144 +1,130 @@
-LELLEE — FINAL AGENT OPERATIONS BUILD
+LELLEE — FINAL ORGANIZATION + WORKSPACES BUILD
 Date: 2026-08-27
-Build 1 of the final 3 consolidated Lellee builds.
+Build 3 of the final 3 consolidated Lellee builds.
 
-THIS PACKAGE CONSOLIDATES THE AGENT WORK SO YOU DO NOT HAVE TO RUN THE OLD:
-- Growth Agents / Trend + Social package
-- Agent Roster Completion package
-- 17-Agent First Missions package
+THIS PACKAGE CONSOLIDATES THE ORGANIZATION / WORKSPACE WORK SO YOU DO NOT HAVE TO RUN THE OLD:
+- Organization Front Door + Live Dashboard V3 package
+- Organization Operations Completion package
+- Unified Workspace Switcher package
 again.
 
-PREREQUISITE
-The original Agent Operations foundation (original 8 agents) must exist.
+SEQUENCE
+Final Build 1 (Agent Operations) and Final Build 2 (Coach Operations) should already be complete.
 
 OPTIONAL PRECHECK
-00_Final_Agent_Operations_PRECHECK_READ_ONLY.sql
+00_Final_Organization_Workspaces_PRECHECK_READ_ONLY.sql
 
 RUN / UPLOAD ORDER
 
 1. SUPABASE SQL EDITOR
 Run as ONE complete script:
-01_Lellee_Final_Agent_Operations_2026-08-27.sql
+01_Lellee_Final_Organization_Workspaces_2026-08-27.sql
+
+This runs the proven Organization V3 foundation/dashboard migration first and then the
+Organization Operations completion migration. The workspace switcher itself requires no
+new database migration.
+
+COMPATIBILITY PROTECTION
+The SQL NEVER drops, creates, or replaces:
+public.is_organization_member(uuid)
+
+It reuses the existing legacy helper exactly as deployed. This preserves the V3 fix for
+the earlier PostgreSQL input-parameter-name conflict.
 
 2. GITHUB ROOT
-Upload / replace:
+Upload / replace these exact files:
 - index.html
-- agent-command-center.js
-- agent-command-center.css
+- organizations.html
+- organizations.css
+- organizations.js
+- organization-entry-router.js
+- organization-dashboard-live.js
+- organization-dashboard-live.css
+- organization-operations-completion.js
+- organization-operations-completion.css
+- unified-workspace-switcher.js
+- unified-workspace-switcher.css
 
-3. SUPABASE EDGE FUNCTIONS — dynamic-worker
-Replace the existing dynamic-worker index.ts contents with:
-dynamic-worker-index.ts
-Then deploy the existing dynamic-worker function.
+IMPORTANT PUBLIC-ROOT PROTECTION
+This Build 3 package intentionally DOES NOT include:
+- landing.html
+- vercel.json
+- service-worker.js
+- reset-lellee-cache.html
 
-No secret values are contained in this package.
-Keep the existing OpenAI key and worker secret in Supabase.
+Do not replace the current public-root routing files with an older Organization package.
+The lellee.com public-root routing repair remains a separate final deployment-validation item.
 
-4. OPTIONAL VERIFY
-02_Final_Agent_Operations_READ_ONLY_VERIFY.sql
+3. OPTIONAL VERIFY
+02_Final_Organization_Workspaces_READ_ONLY_VERIFY.sql
 
 WHAT THIS FINALIZES
 
-17 ACTIVE SPECIALISTS
-1. Operations Copilot
-2. Content QA
-3. Provider Research
-4. Prospect Research
-5. Support Triage
-6. Release QA
-7. Program Builder Assistant
-8. Knowledge Assistant
-9. Trend & Demand Intelligence
-10. Social Media Growth
-11. Growth & Marketing
-12. Coach Business Growth
-13. Revenue Intelligence
-14. Resource Freshness
-15. Accessibility QA
-16. Customer Success
-17. Coach Quality
+ORGANIZATION FRONT DOOR + LIVE DASHBOARD
+- organization application/setup
+- team/member roles and invitations
+- human-reviewed program licensing
+- sponsored access invitations
+- cohorts
+- live organization dashboard context
+- V3-safe RPC/function naming
 
-FOUR TEAMS
-- Growth & Revenue
-- Build & Quality
-- Operations & Success
-- Research & Resources
+ORGANIZATION OPERATIONS
+- aggregate analytics and utilization
+- small-group outcome suppression below 5 active participants
+- quote/license preparation without activating billing
+- sponsored-user operational outreach
+- human-click in-app announcements
+- operational follow-ups/history
+- safe automation rules that create follow-ups/drafts only
+- staged integration/data-exchange jobs only
+- operational forms and assignment/completion status
+- Quick Start organization setup checklist
 
-FIRST MISSIONS
-The 17 mission templates are installed.
-For safety, SQL Editor does not invent a requester identity.
-When an Admin opens Agent Workbench, click:
-Queue Missing Missions
-The signed-in admin becomes requester/reviewer for only the missions not already queued.
+UNIFIED WORKSPACES
+- Personal workspace
+- Coach workspace when a coach role is connected
+- Organization workspace when an organization role is connected
+- Admin workspace when admin access is active
+- compact workspace selector near Sign Out
+- workspace-specific quick access
+- recent non-sensitive page destinations
+- populated Account Access role status/entry buttons
 
-HUMAN REVIEW FIX
-The old browser flow could record a review and then fail to update agent_outputs
-because direct output mutation is admin-only under RLS.
+DATA BOUNDARIES REMAIN SEPARATE
+Switching workspace changes navigation context only. It does not merge Personal, Coach,
+Organization or Admin data.
 
-This package fixes that with:
-lellee_review_agent_output_v1(...)
-
-Review + output status + task status are handled atomically through a controlled
-SECURITY DEFINER RPC.
-
-APPROVED HANDOFFS
-Approved outputs can be handed off to:
-- internal reference
-- staff follow-up
-- growth
-- research
-- content
-- release
-- coach operations
-- organization operations
-- support
-
-A handoff is an INTERNAL HUMAN ACTION RECORD.
-It does not automatically publish, email, DM, charge, change settings or modify
-another production system.
-
-WORKER UPDATE
-The existing worker already executes all active agent roles through the model.
-This package extends PUBLIC WEB RESEARCH to:
-- provider_research
-- prospect_research
-- trend_intelligence
-- resource_freshness
-
-Other roles still use model execution with supplied/approved context but do not
-automatically invoke web research.
-
-COMMAND CENTER
-The UI now uses one RLS-safe command-center RPC rather than relying on direct
-output mutation.
-It shows:
-- 17-agent roster status
-- worker / model / public research status
-- four team workloads
-- tasks and latest outputs
-- confidence
-- sources
-- human review actions
-- approved internal handoffs
-- missing first-mission queue button for Admin
-
-PROTECTED SETTINGS REMAIN
-- Human review REQUIRED
-- Autonomous outreach OFF
-- Autonomous publishing OFF
-- Autonomous financial actions OFF
-- Permission changes OFF
-- Sensitive participant-data access OFF
-- Journal access OFF
-- Private-message access OFF
-- Safety-activity access OFF
-- Secret access OFF
-- Clinical decisions OFF
+PROTECTED STATES REMAIN
+- Organization payments OFF
+- Organization individual private-data access OFF
 - Public multi-program launch OFF
+- External API delivery OFF
+- Webhooks OFF
+- SSO OFF
+- Automatic third-party data delivery OFF
+- Agent autonomous actions OFF
+- Coach payments/payouts OFF
+- Public coach marketplace OFF
 
-THIS DOES NOT CHANGE
-Recovery curriculum/rendering
-Coach payments
-Organization payments
-Public coach marketplace
-Public multi-program release
+RECOVERY / PRICING
+This build does not change the Recovery curriculum/renderer or approved consumer pricing.
+
+CUMULATIVE INDEX
+The included index.html is the latest cumulative app shell. It carries forward the recent:
+- Agent Command Center integration from Build 1
+- Coach Dashboard / Coach Operations integration from Build 2
+- Organization Dashboard / Organization Operations integration
+- Unified Workspace Switcher
+
+AFTER BUILD 3
+The three final consolidated builds are complete.
+The remaining work is deployment verification and end-to-end live-site QA, including:
+- verify Vercel deployment is Ready
+- verify public root opens the approved Lellee landing page
+- verify /app opens Today
+- verify Coach / Organization professional entry routes
+- verify workspace switching and role boundaries
+- verify admin/agent areas
+- verify mobile/navigation/logout
+- resolve the deferred lellee.com public-root routing issue without changing index.html
