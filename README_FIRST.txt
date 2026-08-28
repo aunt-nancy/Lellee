@@ -1,21 +1,43 @@
-LELLEE — ORGANIZATION FRONT DOOR + LIVE DASHBOARD
+LELLEE — ORGANIZATION FRONT DOOR + LIVE DASHBOARD V3
 Date: 2026-08-27
 
-THIS OPENS THE NEXT COMMERCIAL/INSTITUTIONAL SIDE OF LELLEE WITHOUT TURNING
-ON ORGANIZATION PAYMENTS OR PUBLIC MULTI-PROGRAM LAUNCH.
+WHY V3
+V2 still attempted to CREATE OR REPLACE the already-existing function:
 
-RUN / UPLOAD IN THIS ORDER
+public.is_organization_member(uuid)
 
-1. SUPABASE SQL EDITOR
-Run as ONE complete script:
-01_Lellee_Organization_Foundation_Live_Dashboard_2026-08-27.sql
+Your production database has that signature already, and PostgreSQL will reject
+a replacement whenever the stored input-parameter name does not exactly match
+the replacement definition.
 
-2. GITHUB ROOT
-Upload / replace:
+V3 ELIMINATES THAT CONFLICT COMPLETELY.
+
+V3 does NOT:
+- DROP public.is_organization_member(uuid)
+- CREATE OR REPLACE public.is_organization_member(uuid)
+- use CASCADE
+- disturb RLS policies that already depend on the legacy helper
+
+Instead, V3 reuses the existing helper exactly as it is.
+
+V3 also gives every new Organization RPC/helper a unique V3 function name so
+older deployed functions cannot trigger another input-parameter-name conflict.
+
+RUN NOW
+Run as ONE complete script in Supabase SQL Editor:
+
+01_Lellee_Organization_Foundation_Live_Dashboard_V3_2026-08-27.sql
+
+Do not run V1 or V2 first.
+
+IMPORTANT
+Because the previous attempt was inside a transaction and failed before COMMIT,
+it did not complete this package.
+
+AFTER SQL SUCCESS
+Upload these V3 package files to the GitHub root:
 - index.html
 - landing.html
-
-Upload new:
 - organizations.html
 - organizations.css
 - organizations.js
@@ -23,79 +45,17 @@ Upload new:
 - organization-dashboard-live.js
 - organization-dashboard-live.css
 
-3. OPTIONAL READ-ONLY CHECK
-02_Lellee_Organization_READ_ONLY_VERIFY.sql
+The V3 JavaScript calls the unique V3 RPC names.
 
-PUBLIC SITE
-- Consumer header remains free of organization sales navigation.
-- Consumer footer gains a small "For Organizations" path.
-- /organizations.html is a separate institutional front door.
-- No invented institutional price is published.
-- Organization payments stay OFF.
+OPTIONAL READ-ONLY CHECK
+02_Lellee_Organization_V3_READ_ONLY_VERIFY.sql
 
-ORGANIZATION SETUP
-- nonprofit
-- county/city
-- community program
-- employer
-- recovery/treatment organization
-- education
-- healthcare
-- other
-- organization submission goes to HUMAN REVIEW
-- edits/resubmission return to review
-
-LIVE ORGANIZATION DASHBOARD
-- sponsored-seat total
-- assigned seats
-- active sponsored users
-- active program licenses
-- licenses tab
-- sponsored access tab
-- cohorts tab
-- aggregate report tab
-- team tab
-
-PROGRAM LICENSES
-- approved organization requests program + seats
-- request does NOT auto-activate
-- Lellee admin must activate/deny/pause
-- activating a license is a deliberate admin action
-- public_multi_program_launch_enabled stays false
-
-SPONSORED ACCESS
-- organization generates a private invitation link for an ACTIVE license
-- invite is bound to the invited email
-- accepted invite enrolls that account in the specifically sponsored program
-- organization does NOT get journal/check-in/message/safety/private-history access
-
-TEAM
-- admin/program-manager/viewer invitation links
-- invited account must match invited email
-- owner/admin/program-manager can perform management actions
-- viewers are read-only at the dashboard-policy layer
-
-ADMIN · ORGANIZATIONS
-- review submitted organizations
-- approve / return to review / pause / reject
-- activate / deny / pause requested program licenses
-- set approved seat count
-
-COHORTS
-- create cohorts under active licensed programs
-- site/location + funding-source fields
-- capacity + dates
-
-PROTECTED SETTINGS
-organization_payments_enabled = false
-organization_individual_private_data_access = false
-public_multi_program_launch_enabled = false
-
-PRESERVED FROM PRIOR SPRINTS
+PROTECTED STATES REMAIN
+- organization_payments_enabled = false
+- organization_individual_private_data_access = false
+- public_multi_program_launch_enabled = false
 - Recovery unchanged
-- larger logo
-- logout fix
-- Agent Command Center
-- professional Coach front door
-- Coach live dashboard V2
-- Coach operations completion
+
+NOTE
+V2 also contained a parameter-reference typo inside its new manager helper after
+the earlier compatibility edit. V3 corrects that at the same time.

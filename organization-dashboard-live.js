@@ -30,7 +30,7 @@
     const c=bridge(),u=user();if(!c||!u)return null;
     state.loading=true;
     try{
-      const {data,error}=await c.client.rpc('get_my_organization_dashboard_context');
+      const {data,error}=await c.client.rpc('lellee_get_my_organization_dashboard_context_v3');
       if(error)throw error;
       state.ctx=data||{};state.user=u;return state.ctx;
     }finally{state.loading=false}
@@ -61,7 +61,7 @@
   async function submitOrg(){
     const payload={p_name:$('#orgName').value.trim(),p_public_name:$('#orgPublicName').value.trim(),p_organization_type:$('#orgType').value,p_contact_email:$('#orgContactEmail').value.trim(),p_target_audience:$('#orgAudience').value.trim()||null};
     if(!payload.p_name||!payload.p_public_name||!payload.p_contact_email)return alert('Organization name, public name and contact email are required.');
-    const {error}=await sb().rpc('submit_my_organization',payload);if(error)throw error;
+    const {error}=await sb().rpc('lellee_submit_my_organization_v3',payload);if(error)throw error;
     state.ctx=null;const m=$('#orgSetupMsg');if(m)m.textContent='Submitted for human review.';await loadSetup();
   }
 
@@ -133,7 +133,7 @@
       </div><div class="org-live-footer"><button type="button" data-org-live-close>Cancel</button><button class="primary" type="submit">Request program</button></div></form>`);
   }
   async function saveLicense(){
-    const {error}=await sb().rpc('request_organization_program_license',{p_organization_id:state.ctx.organization.id,p_program_id:$('#orgLiveProgram').value,p_requested_seats:Number($('#orgLiveSeats').value||25),p_license_model:$('#orgLiveModel').value,p_notes:$('#orgLiveLicenseNotes').value.trim()||null});if(error)throw error;closeDialog();await loadDashboard();showTab('licenses');
+    const {error}=await sb().rpc('lellee_request_organization_program_license_v3',{p_organization_id:state.ctx.organization.id,p_program_id:$('#orgLiveProgram').value,p_requested_seats:Number($('#orgLiveSeats').value||25),p_license_model:$('#orgLiveModel').value,p_notes:$('#orgLiveLicenseNotes').value.trim()||null});if(error)throw error;closeDialog();await loadDashboard();showTab('licenses');
   }
 
   function openSponsorInvite(){
@@ -145,7 +145,7 @@
       </div><div class="org-live-footer"><button type="button" data-org-live-close>Cancel</button><button class="primary" type="submit">Create invitation</button></div></form>`);
   }
   async function createSponsorInvite(){
-    const {data,error}=await sb().rpc('create_organization_sponsored_invite',{p_organization_id:state.ctx.organization.id,p_license_id:$('#orgSponsorLicense').value,p_email:$('#orgSponsorEmail').value.trim()});if(error)throw error;
+    const {data,error}=await sb().rpc('lellee_create_organization_sponsored_invite_v3',{p_organization_id:state.ctx.organization.id,p_license_id:$('#orgSponsorLicense').value,p_email:$('#orgSponsorEmail').value.trim()});if(error)throw error;
     const link=`${location.origin}/app?org_invite=${encodeURIComponent(data)}`;
     $('#orgLiveDialogInner').innerHTML=`<div class="org-live-dialog-head"><div><span class="approved-kicker">SPONSORED ACCESS</span><h3>Invitation ready</h3><p>Send this private link to the invited person.</p></div><button class="org-live-close" data-org-live-close>×</button></div><div class="org-invite-link" id="orgInviteLink">${esc(link)}</div><div class="org-live-footer"><button id="copyOrgInvite" type="button">Copy link</button><button class="primary" data-org-live-close type="button">Done</button></div>`;
   }
@@ -176,7 +176,7 @@
       </div><div class="org-live-footer"><button type="button" data-org-live-close>Cancel</button><button class="primary" type="submit">Create invitation</button></div></form>`);
   }
   async function createTeamInvite(){
-    const {data,error}=await sb().rpc('create_organization_member_invite',{p_organization_id:state.ctx.organization.id,p_email:$('#orgTeamEmail').value.trim(),p_role:$('#orgTeamRole').value});if(error)throw error;
+    const {data,error}=await sb().rpc('lellee_create_organization_member_invite_v3',{p_organization_id:state.ctx.organization.id,p_email:$('#orgTeamEmail').value.trim(),p_role:$('#orgTeamRole').value});if(error)throw error;
     const link=`${location.origin}/app?org_member_invite=${encodeURIComponent(data)}`;
     $('#orgLiveDialogInner').innerHTML=`<div class="org-live-dialog-head"><div><span class="approved-kicker">ORGANIZATION TEAM</span><h3>Team invitation ready</h3><p>Send this private link to the invited administrator.</p></div><button class="org-live-close" data-org-live-close>×</button></div><div class="org-invite-link" id="orgInviteLink">${esc(link)}</div><div class="org-live-footer"><button id="copyOrgInvite" type="button">Copy link</button><button class="primary" data-org-live-close type="button">Done</button></div>`;
   }
@@ -188,11 +188,11 @@
     if(!sponsor&&!member)return;
     try{
       if(sponsor){
-        const {error}=await sb().rpc('accept_organization_sponsored_invite',{p_token:sponsor});if(error)throw error;
+        const {error}=await sb().rpc('lellee_accept_organization_sponsored_invite_v3',{p_token:sponsor});if(error)throw error;
         alert('Sponsored access accepted. Your sponsor can manage the sponsored seat and aggregate operations, but does not automatically receive your private Lellee content.');
         pageClick('sponsored-access');
       }else{
-        const {error}=await sb().rpc('accept_organization_member_invite',{p_token:member});if(error)throw error;
+        const {error}=await sb().rpc('lellee_accept_organization_member_invite_v3',{p_token:member});if(error)throw error;
         alert('Organization team invitation accepted.');
         pageClick('organization-dashboard');
       }
@@ -225,7 +225,7 @@
   async function reviewOrg(id,decision){
     const note=decision==='approved'?(prompt('Optional approval note:','')||''):(prompt('Reviewer note:','')||'');
     if(decision==='rejected'&&!note.trim())return alert('Add a reviewer note explaining what must change.');
-    const {error}=await sb().rpc('admin_review_organization',{p_organization_id:id,p_decision:decision,p_review_note:note||null});if(error)throw error;await loadAdmin();
+    const {error}=await sb().rpc('lellee_admin_review_organization_v3',{p_organization_id:id,p_decision:decision,p_review_note:note||null});if(error)throw error;await loadAdmin();
   }
   async function reviewLicense(id,decision,seats){
     let n=seats?Number(seats):null;
@@ -233,7 +233,7 @@
       const entered=prompt('Approved seat limit:',String(n||25));if(entered===null)return;n=Number(entered);if(!Number.isFinite(n)||n<1)return alert('Enter a valid seat limit.');
     }
     const note=prompt('Optional license review note:','')||'';
-    const {error}=await sb().rpc('admin_review_organization_license',{p_license_id:id,p_decision:decision,p_seat_limit:n,p_license_model:null,p_review_note:note||null});if(error)throw error;await loadAdmin();
+    const {error}=await sb().rpc('lellee_admin_review_organization_license_v3',{p_license_id:id,p_decision:decision,p_seat_limit:n,p_license_model:null,p_review_note:note||null});if(error)throw error;await loadAdmin();
   }
 
   document.addEventListener('click',e=>{

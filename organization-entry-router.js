@@ -24,7 +24,7 @@
       const r=await c.client.from('organization_members').select('organization_id,role,status').eq('user_id',u.id).eq('status','active').limit(1);
       if(r.error){
         if(r.error.code==='42P01'||/does not exist|not found/i.test(r.error.message||'')){
-          status('Organization foundation is not installed yet. Run the Organization Foundation + Live Dashboard SQL.',true);
+          status('Organization foundation is not installed yet. Run the Organization Foundation + Live Dashboard V3 SQL.',true);
           pageClick('organization-setup');return true;
         }
         throw r.error;
