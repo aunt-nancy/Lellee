@@ -1,0 +1,17 @@
+
+/* LELLEE — ORGANIZATION OPERATIONS COMPLETION — 2026-08-27 */
+.org-ops-item{border:1px solid #e1e5ed;background:#fff;border-radius:14px;padding:13px 14px;margin:8px 0}
+.org-ops-row{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+.org-ops-item b{font-size:.78rem;color:#30384b}.org-ops-item small{display:block;margin-top:4px;color:#727b8b;font-size:.63rem;line-height:1.45}
+.org-ops-pill{display:inline-block;border-radius:999px;background:#eef2f8;color:#49658f;padding:4px 8px;font-size:.56rem;font-weight:850;white-space:nowrap}
+.org-ops-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.org-ops-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}
+.org-ops-actions button{border:1px solid #d9e0ea;background:#fff;border-radius:9px;padding:6px 9px;color:#4e5e76;font-size:.6rem;font-weight:850}
+.org-ops-actions .primary{background:#334e78;color:#fff;border-color:#334e78}.org-ops-actions .warn{color:#8b4050;background:#fff4f6;border-color:#edcbd2}
+.org-ops-empty{padding:17px;border:1px dashed #dce2eb;border-radius:12px;background:#f9fbfd;color:#768093;font-size:.7rem}
+.org-ops-warning{padding:10px 12px;border:1px solid #eadabb;background:#fff9ef;border-radius:11px;color:#73592d;font-size:.65rem}
+.org-ops-dialog{border:0;border-radius:20px;padding:0;width:min(740px,calc(100% - 28px));box-shadow:0 30px 90px rgba(25,33,50,.3)}
+.org-ops-dialog::backdrop{background:rgba(24,31,45,.58)}.org-ops-dialog-inner{padding:22px}.org-ops-dialog-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:14px}.org-ops-dialog-head h3{margin:3px 0 4px}.org-ops-dialog-head p{margin:0;color:#717b8b;font-size:.72rem}.org-ops-close{width:34px;height:34px;border-radius:50%;border:1px solid #dce3ec;background:#fff;font-size:1.15rem}
+.org-ops-form{display:grid;grid-template-columns:1fr 1fr;gap:11px}.org-ops-form label{display:grid;gap:5px;font-size:.65rem;font-weight:820;color:#525d70}.org-ops-form label.wide{grid-column:1/-1}.org-ops-form input,.org-ops-form select,.org-ops-form textarea{width:100%;border:1px solid #dbe2eb;border-radius:10px;padding:10px;background:#fff;color:#30394a}.org-ops-form textarea{min-height:100px;resize:vertical}
+.org-ops-footer{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}.org-ops-footer button{border:1px solid #d9e0e9;background:#fff;border-radius:10px;padding:9px 13px;font-weight:850}.org-ops-footer .primary{background:#334e78;color:#fff;border-color:#334e78}
+.org-ops-progress{display:grid;grid-template-columns:28px 1fr auto;gap:10px;align-items:center;padding:12px;border-bottom:1px solid #e9edf3}.org-ops-progress:last-child{border-bottom:0}.org-ops-check{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:#eef2f7;color:#5e718f;font-weight:900}.org-ops-check.done{background:#e9f6ed;color:#2f6840}.org-ops-progress b{font-size:.72rem}.org-ops-progress small{font-size:.61rem;color:#778194}.org-ops-progress button{border:1px solid #d9e0e9;background:#fff;border-radius:9px;padding:6px 9px;font-size:.59rem;font-weight:820}
+@media(max-width:650px){.org-ops-form{grid-template-columns:1fr}.org-ops-form label.wide{grid-column:auto}.org-ops-row{display:block}}

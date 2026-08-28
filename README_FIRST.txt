@@ -1,41 +1,24 @@
-LELLEE — ORGANIZATION FRONT DOOR + LIVE DASHBOARD V3
+LELLEE — ORGANIZATION OPERATIONS COMPLETION
 Date: 2026-08-27
 
-WHY V3
-V2 still attempted to CREATE OR REPLACE the already-existing function:
+THIS IS THE NEXT ORGANIZATION SPRINT.
 
-public.is_organization_member(uuid)
+PREREQUISITE
+The Organization Front Door + Live Dashboard V3 SQL must have succeeded.
 
-Your production database has that signature already, and PostgreSQL will reject
-a replacement whenever the stored input-parameter name does not exactly match
-the replacement definition.
+OPTIONAL FIRST CHECK
+00_Organization_Operations_PRECHECK_READ_ONLY.sql
 
-V3 ELIMINATES THAT CONFLICT COMPLETELY.
+RUN / UPLOAD ORDER
 
-V3 does NOT:
-- DROP public.is_organization_member(uuid)
-- CREATE OR REPLACE public.is_organization_member(uuid)
-- use CASCADE
-- disturb RLS policies that already depend on the legacy helper
+1. SUPABASE SQL EDITOR
+Run as ONE complete script:
+01_Lellee_Organization_Operations_Completion_2026-08-27.sql
 
-Instead, V3 reuses the existing helper exactly as it is.
+If V3 is missing, this script stops clearly before installing the operations layer.
 
-V3 also gives every new Organization RPC/helper a unique V3 function name so
-older deployed functions cannot trigger another input-parameter-name conflict.
-
-RUN NOW
-Run as ONE complete script in Supabase SQL Editor:
-
-01_Lellee_Organization_Foundation_Live_Dashboard_V3_2026-08-27.sql
-
-Do not run V1 or V2 first.
-
-IMPORTANT
-Because the previous attempt was inside a transaction and failed before COMMIT,
-it did not complete this package.
-
-AFTER SQL SUCCESS
-Upload these V3 package files to the GitHub root:
+2. GITHUB ROOT
+This package is cumulative. Upload / replace:
 - index.html
 - landing.html
 - organizations.html
@@ -45,17 +28,89 @@ Upload these V3 package files to the GitHub root:
 - organization-dashboard-live.js
 - organization-dashboard-live.css
 
-The V3 JavaScript calls the unique V3 RPC names.
+Upload new:
+- organization-operations-completion.js
+- organization-operations-completion.css
 
-OPTIONAL READ-ONLY CHECK
-02_Lellee_Organization_V3_READ_ONLY_VERIFY.sql
+3. OPTIONAL READ-ONLY CHECK
+02_Organization_Operations_READ_ONLY_VERIFY.sql
 
-PROTECTED STATES REMAIN
-- organization_payments_enabled = false
-- organization_individual_private_data_access = false
-- public_multi_program_launch_enabled = false
-- Recovery unchanged
+WHAT BECOMES FUNCTIONAL
 
-NOTE
-V2 also contained a parameter-reference typo inside its new manager helper after
-the earlier compatibility edit. V3 corrects that at the same time.
+ORGANIZATION ANALYTICS
+- licensed seats
+- assigned / active sponsored users
+- activation rate
+- licensed programs
+- cohorts
+- aggregate milestone count when that table is available
+- per-program utilization
+- small-group outcome suppression below 5 active participants
+
+LICENSING & REVENUE PREPARATION
+- configured license values
+- quote list
+- organization can request a quote
+- a quote request does NOT set or approve price
+- organization billing remains OFF
+
+OUTREACH
+- sponsored-user outreach list
+- in-app organization announcement drafts
+- a separate HUMAN click is required to send an announcement
+- announcement delivery is inside Lellee only
+- no email / SMS / DM sending
+- operational follow-ups and history
+
+AUTOMATION
+- sponsored invitation -> internal follow-up only
+- cohort start -> internal follow-up or announcement DRAFT
+- automation never auto-sends an announcement
+- no journal, message-body, safety, crisis, diagnosis, relapse-detail or treatment-note inputs
+- no emergency dispatch
+
+INTEGRATIONS
+- staged roster/cohort/aggregate-report/resources/configuration jobs
+- import/export job records only
+- no transfer is executed automatically
+- prepared feeds/SSO/API counts can be viewed
+- external API, webhooks and SSO remain OFF
+- no raw credentials are requested from the organization UI
+
+FORMS
+- operational acknowledgments
+- aggregate surveys
+- operational intake
+- assign forms to active sponsored users
+- organization sees assignment/completion status
+- this package does NOT expose private consumer journal/message/safety content or unrelated private form answers
+
+QUICK START
+- live setup checklist:
+  profile
+  approval
+  team
+  license request
+  active license
+  sponsored participant
+  cohort
+  form
+  staged integration job
+
+COMPATIBILITY
+This package NEVER drops, creates, or replaces:
+public.is_organization_member(uuid)
+
+All new mutating RPCs use unique Lellee versioned names.
+
+PROTECTED STATES
+organization_payments_enabled = false
+organization_individual_private_data_access = false
+public_multi_program_launch_enabled = false
+external_api_access_enabled = false
+webhook_delivery_enabled = false
+sso_enabled = false
+automatic_third_party_data_delivery_enabled = false
+
+RECOVERY
+No Recovery tables, content, curriculum, renderer, pricing, or public launch state are changed.
