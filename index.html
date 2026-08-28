@@ -244,7 +244,7 @@ dialog::backdrop{background:rgba(7,8,21,.55);backdrop-filter:blur(5px)}
   }
 }
 
-.auth-overlay{position:fixed;inset:0;background:linear-gradient(145deg,#0b1028,#17133e);z-index:9999;display:grid;place-items:center;padding:20px}.auth-overlay.hidden{display:none}.auth-box{width:min(440px,100%);background:#fff;border-radius:22px;padding:26px;box-shadow:0 30px 80px rgba(0,0,0,.3)}.auth-box h2{margin:0 0 5px}.auth-field{display:grid;gap:6px;margin:13px 0}.auth-field label{font-size:.76rem;font-weight:850}.auth-field input{width:100%;border:1px solid #e6e7ed;border-radius:10px;padding:12px}.auth-actions{display:flex;gap:8px;margin-top:12px}.auth-msg{font-size:.76rem;line-height:1.45;margin:10px 0;color:#6d7380}.auth-msg.error{color:#8f2736;background:#fff0f1;border:1px solid #f0c7cc;padding:9px;border-radius:9px}.auth-logo{display:block;width:170px;max-width:70%;margin:0 auto 20px}.signout-btn{border:1px solid #e3e3ea;background:#fff;border-radius:8px;padding:7px 9px;font-size:.68rem;font-weight:800;margin-left:8px}.sync-note{position:fixed;right:14px;bottom:76px;z-index:70;background:#0b1028;color:#fff;padding:7px 10px;border-radius:999px;font-size:.64rem;opacity:.92}
+.auth-overlay{position:fixed;inset:0;background:linear-gradient(145deg,#0b1028,#17133e);z-index:9999;display:grid;place-items:center;padding:20px}.auth-overlay.hidden{display:none}.auth-box{width:min(440px,100%);background:#fff;border-radius:22px;padding:26px;box-shadow:0 30px 80px rgba(0,0,0,.3)}.auth-box h2{margin:0 0 5px}.auth-field{display:grid;gap:6px;margin:13px 0}.auth-field label{font-size:.76rem;font-weight:850}.auth-field input{width:100%;border:1px solid #e6e7ed;border-radius:10px;padding:12px}.auth-actions{display:flex;gap:8px;margin-top:12px}.auth-msg{font-size:.76rem;line-height:1.45;margin:10px 0;color:#6d7380}.auth-msg.error{color:#8f2736;background:#fff0f1;border:1px solid #f0c7cc;padding:9px;border-radius:9px}.auth-logo{display:block;width:170px;max-width:70%;margin:0 auto 20px}.signout-btn{border:1px solid #e3e3ea;background:#fff;border-radius:8px;padding:7px 9px;font-size:.68rem;font-weight:800;margin-left:8px}.sync-note{position:fixed;right:14px;bottom:76px;z-index:70;background:#0b1028;color:#fff;padding:7px 10px;border-radius:999px;font-size:.64rem;opacity:.92}.auth-browse{width:100%;margin-top:10px;border:1px solid #d9d5e2;background:#faf8fc;color:#5a4668;border-radius:10px;padding:11px 12px;font-weight:850;cursor:pointer}.auth-browse-note{font-size:.68rem;line-height:1.45;color:#77717c;text-align:center;margin:9px 0 0}.guest-preview-badge{display:inline-flex;align-items:center;gap:6px;margin-top:7px;background:#f3eef8;color:#65409a;border:1px solid #e3d9ec;border-radius:999px;padding:6px 9px;font-size:.58rem;font-weight:850;letter-spacing:.02em}.guest-preview-badge button{border:0;background:transparent;color:#65409a;font:inherit;text-decoration:underline;cursor:pointer;padding:0}.guest-account-hint{font-size:.62rem;color:#756d79;margin-top:6px}
 
 
 /* --- Guided Day 2: soft interaction system --- */
@@ -1099,7 +1099,7 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <div><b>Add Lellee to your phone</b><span>Open it from your home screen like an app.</span></div>
 <div><button id="installLellee">Add</button><button id="dismissInstall">Not now</button></div>
 </div>
-<div class="auth-overlay" id="authOverlay"><div class="auth-box"><img alt="Lellee" class="auth-logo" src="/lellee-approved-logo-final.jpg?v=20260814-1"/><h2 id="authTitle">Sign in to Lellee</h2><p class="auth-msg" id="authMsg">Use your Lellee account to continue.</p><form id="authForm"><div class="auth-field"><label>Email</label><input autocomplete="email" id="authEmail" required="" type="email"/></div><div class="auth-field"><label>Password</label><input autocomplete="current-password" id="authPassword" minlength="8" required="" type="password"/></div><div class="legal-signup-notice hidden" id="legalSignupNotice"><label><input id="legalSignupAdult" type="checkbox"/> I confirm I am at least 18 years old.</label><label><input id="legalSignupAgree" type="checkbox"/> I reviewed the <a href="/terms.html" target="_blank">Terms</a>, <a href="/privacy.html" target="_blank">Privacy Policy</a>, and <a href="/consumer-health-privacy.html" target="_blank">Consumer Health Data Notice</a>.</label><label><input id="legalSignupSafety" type="checkbox"/> I understand Lellee is recovery support, not emergency or professional medical treatment.</label></div><div class="auth-actions"><button class="primary" id="authSubmit" type="submit">Sign in</button><button class="secondary" id="authToggle" type="button">Create account</button></div></form><div class="launch-auth-links"><a href="/privacy.html">Privacy</a><a href="/terms.html">Terms</a><a href="/safety.html">Safety</a><a href="/consumer-health-privacy.html">Consumer Health Data</a></div></div></div>
+<div class="auth-overlay hidden" id="authOverlay"><div class="auth-box"><img alt="Lellee" class="auth-logo" src="/lellee-approved-logo-final.jpg?v=20260814-1"/><h2 id="authTitle">Sign in to Lellee</h2><p class="auth-msg" id="authMsg">Sign in when you are ready to save your progress. You can browse Lellee first without an account.</p><form id="authForm"><div class="auth-field"><label>Email</label><input autocomplete="email" id="authEmail" required="" type="email"/></div><div class="auth-field"><label>Password</label><input autocomplete="current-password" id="authPassword" minlength="8" required="" type="password"/></div><div class="legal-signup-notice hidden" id="legalSignupNotice"><label><input id="legalSignupAdult" type="checkbox"/> I confirm I am at least 18 years old.</label><label><input id="legalSignupAgree" type="checkbox"/> I reviewed the <a href="/terms.html" target="_blank">Terms</a>, <a href="/privacy.html" target="_blank">Privacy Policy</a>, and <a href="/consumer-health-privacy.html" target="_blank">Consumer Health Data Notice</a>.</label><label><input id="legalSignupSafety" type="checkbox"/> I understand Lellee is recovery support, not emergency or professional medical treatment.</label></div><div class="auth-actions"><button class="primary" id="authSubmit" type="submit">Sign in</button><button class="secondary" id="authToggle" type="button">Create account</button></div><button class="auth-browse" id="browseWithoutAccount" type="button">Browse Lellee first</button><p class="auth-browse-note">No account is required to explore support paths, tools, resources, coaching information, or the Lellee experience.</p></form><div class="launch-auth-links"><a href="/privacy.html">Privacy</a><a href="/terms.html">Terms</a><a href="/safety.html">Safety</a><a href="/consumer-health-privacy.html">Consumer Health Data</a></div></div></div>
 <div class="app-shell">
 <aside class="sidebar">
 <div class="logo-wrap"><img alt="Lellee" class="approved-logo" src="/lellee-approved-logo-final.jpg?v=20260814-1"/></div>
@@ -7265,13 +7265,15 @@ const SUPABASE_URL='https://hkrrxscyhtxmbvxevfkw.supabase.co';
 const SUPABASE_PUBLISHABLE_KEY='sb_publishable_QPwVWU-qNnc3GJb_FoFnlQ_kEHa3dtU';
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
 let currentUser=null;
+let guestMode=false;
 // Stable bridge for separately loaded Lellee feature scripts.
 window.LelleeAuthContext={
   client:sb,
-  getCurrentUser:()=>currentUser
+  getCurrentUser:()=>currentUser,
+  isGuest:()=>guestMode
 };
 let syncTimer=null;
-const save=()=>{localStorage.setItem(STORAGE,JSON.stringify(data));if(currentUser){clearTimeout(syncTimer);syncTimer=setTimeout(syncCoreProfile,450)}};
+const save=()=>{if(guestMode)return;if(!currentUser)return;localStorage.setItem(STORAGE,JSON.stringify(data));clearTimeout(syncTimer);syncTimer=setTimeout(syncCoreProfile,450)};
 const approachToDb=v=>({'12-Step':'12_step','SMART / skills-based':'skills_based','Therapy / counseling':'therapy_counseling','Medication-supported':'medication_supported','Peer support':'peer_support','Mixed':'mixed','Exploring':'exploring'}[v]||String(v||'exploring').toLowerCase().replaceAll(' ','_'));
 const beliefToDb=v=>({'Secular':'secular','Spiritual':'spiritual','Faith-Based':'faith_based','Mixed':'mixed','Exploring':'exploring'}[v]||String(v||'exploring').toLowerCase().replaceAll('-','_'));
 const approachFromDb=v=>({'12_step':'12-Step','skills_based':'SMART / skills-based','therapy_counseling':'Therapy / counseling','medication_supported':'Medication-supported','peer_support':'Peer support','mixed':'Mixed','exploring':'Exploring'}[v]||'Exploring');
@@ -7520,11 +7522,29 @@ $('#reviewPrevious')?.addEventListener('click',()=>{
 function escapeHtml(str){return str.replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
 
 let authMode='signin';
-function setAuthMode(mode,msg=''){authMode=mode;$('#authTitle').textContent=mode==='signin'?'Sign in to Lellee':'Create your Lellee account';$('#authSubmit').textContent=mode==='signin'?'Sign in':'Create account';$('#authToggle').textContent=mode==='signin'?'Create account':'Back to sign in';$('#authPassword').autocomplete=mode==='signin'?'current-password':'new-password';$('#authMsg').textContent=msg|| (mode==='signin'?'Use your Lellee account to continue.':'Email confirmation is enabled for new accounts.');$('#authMsg').className='auth-msg'}
+function setAuthMode(mode,msg=''){authMode=mode;$('#authTitle').textContent=mode==='signin'?'Sign in to Lellee':'Create your Lellee account';$('#authSubmit').textContent=mode==='signin'?'Sign in':'Create account';$('#authToggle').textContent=mode==='signin'?'Create account':'Back to sign in';$('#authPassword').autocomplete=mode==='signin'?'current-password':'new-password';$('#authMsg').textContent=msg|| (mode==='signin'?'Sign in to save your progress, journal, preferences, and personal plan.':'Create an account when you are ready to save and personalize Lellee.');$('#authMsg').className='auth-msg'}
+function showAuthOverlay(mode='signin',msg=''){setAuthMode(mode,msg);$('#authOverlay').classList.remove('hidden')}
+function guestPreviewData(){return {...defaults,name:'friend',recoveryDate:defaultRecoveryDate(),goal:'Explore Lellee and see what support fits.',city:'',state:'',daily:{},journalEntries:[]}}
+function renderGuestChrome(){
+  $('#greetingText').textContent='Welcome to Lellee';
+  $('#avatarInitial').textContent='L';
+  const btn=$('#signOutBtn');if(btn){btn.textContent='Sign in';btn.title='Sign in or create an account';}
+  let badge=document.getElementById('guestPreviewBadge');
+  if(!badge){badge=document.createElement('div');badge.id='guestPreviewBadge';badge.className='guest-preview-badge';badge.innerHTML='Browsing preview · <button type="button" id="guestJoinNow">Sign in or create account</button>';document.querySelector('.greeting')?.appendChild(badge);badge.querySelector('button')?.addEventListener('click',()=>showAuthOverlay('signin'));}
+  const firstStat=document.querySelector('.top-stats .mini-stat small');if(firstStat)firstStat.textContent='Example recovery day';
+}
+function enterGuestMode(){
+  guestMode=true;currentUser=null;data=guestPreviewData();
+  $('#authOverlay').classList.add('hidden');
+  renderBasics();renderGuestChrome();showPage('today');
+}
+function requireAccount(reason='save your progress'){showAuthOverlay('signup',`Create a Lellee account to ${reason}. You can continue browsing without one.`)}
+$('#browseWithoutAccount')?.addEventListener('click',enterGuestMode);
 $('#authToggle').addEventListener('click',()=>setAuthMode(authMode==='signin'?'signup':'signin'));
 $('#authForm').addEventListener('submit',async e=>{e.preventDefault();const email=$('#authEmail').value.trim(),password=$('#authPassword').value;let result;if(authMode==='signin')result=await sb.auth.signInWithPassword({email,password});else result=await sb.auth.signUp({email,password});if(result.error){$('#authMsg').textContent=result.error.message;$('#authMsg').className='auth-msg error';return}if(authMode==='signup'&&!result.data.session){setAuthMode('signin','Account created. Confirm your email, then sign in.');return}await beginSession(result.data.user)});
 $('#signOutBtn').addEventListener('click',async(e)=>{
   e.preventDefault();
+  if(!currentUser){showAuthOverlay('signin');return;}
   const btn=$('#signOutBtn');
   if(btn.disabled)return;
   const prior=btn.textContent;
@@ -7536,6 +7556,7 @@ $('#signOutBtn').addEventListener('click',async(e)=>{
     currentUser=null;
     try{
       localStorage.removeItem('lellee_user');
+      localStorage.removeItem(STORAGE);
       sessionStorage.clear();
     }catch(_){}
     window.location.replace('/');
@@ -7546,7 +7567,7 @@ $('#signOutBtn').addEventListener('click',async(e)=>{
     alert('Sign out did not complete. Please try again.');
   }
 });
-async function beginSession(user){currentUser=user;const [p,r,u,l,j,dc,ra]=await Promise.all([sb.from('profiles').select('*').eq('id',user.id).single(),sb.from('recovery_profiles').select('*').eq('user_id',user.id).single(),sb.from('user_preferences').select('*').eq('user_id',user.id).single(),sb.from('local_preferences').select('*').eq('user_id',user.id).single(),sb.from('journal_entries').select('content,created_at').eq('user_id',user.id).order('created_at',{ascending:false}).limit(20),sb.from('daily_checkins').select('*').eq('user_id',user.id).eq('checkin_date',todayKey()),sb.from('recovery_actions').select('*').eq('user_id',user.id).eq('action_date',todayKey())]);data.name=p.data?.display_name||data.name;data.recoveryDate=r.data?.recovery_date||data.recoveryDate;data.goal=r.data?.current_goal||data.goal;data.approach=approachFromDb(u.data?.recovery_approach);data.belief=beliefFromDb(u.data?.belief_preference);data.faith=u.data?.faith_tradition||'';data.denomination=u.data?.denomination||'';data.city=l.data?.city||'';data.state=l.data?.state||'';data.journalEntries=(j.data||[]).map(x=>({date:x.created_at,text:x.content}));data.daily[todayKey()]={};if(dc.data?.length)data.daily[todayKey()].checkin='Checked in';for(const a of (ra.data||[])){const rev={daily_focus:'focus',gratitude:'gratitude',recovery_action:'action',evening_reflection:'reflection'};if(rev[a.action_type])data.daily[todayKey()][rev[a.action_type]]=a.content||'Completed'}localStorage.setItem(STORAGE,JSON.stringify(data));renderBasics();$('#authOverlay').classList.add('hidden');showPage('today');setTimeout(()=>window.LelleeFinalOnboarding?.check(),60)}
+async function beginSession(user){guestMode=false;currentUser=user;document.getElementById('guestPreviewBadge')?.remove();const signBtn=$('#signOutBtn');if(signBtn){signBtn.textContent='Sign out';signBtn.title='';}const [p,r,u,l,j,dc,ra]=await Promise.all([sb.from('profiles').select('*').eq('id',user.id).single(),sb.from('recovery_profiles').select('*').eq('user_id',user.id).single(),sb.from('user_preferences').select('*').eq('user_id',user.id).single(),sb.from('local_preferences').select('*').eq('user_id',user.id).single(),sb.from('journal_entries').select('content,created_at').eq('user_id',user.id).order('created_at',{ascending:false}).limit(20),sb.from('daily_checkins').select('*').eq('user_id',user.id).eq('checkin_date',todayKey()),sb.from('recovery_actions').select('*').eq('user_id',user.id).eq('action_date',todayKey())]);data.name=p.data?.display_name||data.name;data.recoveryDate=r.data?.recovery_date||data.recoveryDate;data.goal=r.data?.current_goal||data.goal;data.approach=approachFromDb(u.data?.recovery_approach);data.belief=beliefFromDb(u.data?.belief_preference);data.faith=u.data?.faith_tradition||'';data.denomination=u.data?.denomination||'';data.city=l.data?.city||'';data.state=l.data?.state||'';data.journalEntries=(j.data||[]).map(x=>({date:x.created_at,text:x.content}));data.daily[todayKey()]={};if(dc.data?.length)data.daily[todayKey()].checkin='Checked in';for(const a of (ra.data||[])){const rev={daily_focus:'focus',gratitude:'gratitude',recovery_action:'action',evening_reflection:'reflection'};if(rev[a.action_type])data.daily[todayKey()][rev[a.action_type]]=a.content||'Completed'}localStorage.setItem(STORAGE,JSON.stringify(data));renderBasics();$('#authOverlay').classList.add('hidden');showPage('today');setTimeout(()=>window.LelleeFinalOnboarding?.check(),60)}
 
 const phase1Curriculum = [
 {d:1,t:"Start Here: Safety & Support",lead:"Today is about getting a little steadier. You do not need to solve your whole recovery at once.",focus:"What would help you feel a little safer or steadier today?",choices:["A safe place","Someone I trust","Food / water","Rest","Distance from alcohol / drugs","A meeting or recovery support","Medical / professional help","I'm not sure yet"],actions:["Call or text someone supportive","Eat and hydrate","Rest somewhere safe","Attend a meeting","Create distance from alcohol / drugs","Ask for professional help","Take one hour at a time"]},
@@ -7749,9 +7770,26 @@ function routeForRecoveryStage(){
   return 'longterm';
 }
 
-async function initSupabase(){const {data:{session}}=await sb.auth.getSession();if(session?.user)await beginSession(session.user);else $('#authOverlay').classList.remove('hidden')}
+const GUEST_ACCOUNT_ACTIONS='#saveActivity,#storySaveDraft,#maintenanceSaveWeek,#maintenanceSaveAnniversary,#planMessageSave,#stabilitySavePriority,#returnSave,#returnComplete,#saveGuidedJourneyA,#saveGuidedDay,#saveRecoveryPaths,#saveJournal,#createJournalCollection,#saveJournalEntryPermissions,#saveMilestoneReviewV2,#saveThenNowReflection,#saveStoryDraftV2,#saveLongTermWeek,#saveMeeting,#saveGoal,#savePlannedAction,#saveSupportPerson,#saveNotificationPrefs,#saveConsents,#saveWeeklyReview,#saveMonthlyReview,#saveLearningItem,#startPlusMembership,#saveRecoveryReview,#saveReminderPlus,#saveStoryEdition,#saveNotificationSettings,#savePrivacyMode,#runtimeSaveToday,#saveExperiencePreferences,#saveSettings';
+document.addEventListener('click',e=>{
+  if(!guestMode)return;
+  const target=e.target.closest(GUEST_ACCOUNT_ACTIONS);
+  if(!target)return;
+  e.preventDefault();e.stopImmediatePropagation();
+  requireAccount('save your personal Lellee information');
+},true);
+
+async function initSupabase(){
+  const {data:{session}}=await sb.auth.getSession();
+  if(session?.user){await beginSession(session.user);return;}
+  const params=new URLSearchParams(location.search);
+  const requestedAuth=(params.get('auth')||'').toLowerCase();
+  if(requestedAuth==='signin'||requestedAuth==='signup'){showAuthOverlay(requestedAuth);return;}
+  enterGuestMode();
+}
 initSupabase();
 </script>
+<!-- LELLEE GUEST BROWSE ACCESS FIX 2026-08-28 -->
 <!-- LELLEE MASTER INDEX
 Includes:
 - Approved logo artwork embedded directly

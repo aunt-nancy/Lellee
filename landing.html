@@ -232,7 +232,7 @@ textarea{width:100%;border:1px solid #ddd4e5;border-radius:12px;padding:13px;col
         <a href="#tools">Tools</a>
         <a href="#coaching">Coaching</a>
         <a href="/resources">Resources</a>
-        <a class="login-link" href="/app">Log In</a>
+        <a class="login-link" href="/app?auth=signin">Log In</a>
         <button class="nav-cta" data-start-survey>Start Your Journey</button>
       </nav>
     </div>
@@ -351,7 +351,7 @@ textarea{width:100%;border:1px solid #ddd4e5;border-radius:12px;padding:13px;col
         <div class="quick-list">
           <a href="/resources"><span>⌂</span>Find Resources</a>
           <button data-start-survey><span>✦</span>Start My Journey</button>
-          <a href="/app"><span>▣</span>My Lellee</a>
+          <a href="/app?auth=signin"><span>▣</span>My Lellee</a>
           <a href="#coaching"><span>♡</span>Explore Coaching</a>
         </div>
       </article>
@@ -394,7 +394,7 @@ textarea{width:100%;border:1px solid #ddd4e5;border-radius:12px;padding:13px;col
         <span class="section-kicker">OPTIONAL HUMAN SUPPORT</span>
         <h2>When you want accountability, Lellee can help connect you with a coach.</h2>
         <p>Coach cards can show specialties, availability and verified credentials. Matching can consider fit and capacity without exposing private journal or safety information.</p>
-        <a class="secondary-button" href="/app">Learn About Coaching</a>
+        <a class="secondary-button" href="#coaching">Learn About Coaching</a>
       </div>
       <div class="coach-card-preview">
         <div class="coach-photo-placeholder">L</div>
@@ -420,7 +420,7 @@ textarea{width:100%;border:1px solid #ddd4e5;border-radius:12px;padding:13px;col
     <div class="footer-inner">
       <img src="/lellee-approved-logo.jpg" alt="Lellee">
       <div><b>Explore</b><a href="#support-paths">Support Paths</a><a href="#how-it-works">How It Works</a><a href="#tools">Tools</a></div>
-      <div><b>Support</b><a href="/resources">Resources</a><a href="/app">Log In</a><a href="#coaching">Coaching</a></div>
+      <div><b>Support</b><a href="/resources">Resources</a><a href="/app?auth=signin">Log In</a><a href="#coaching">Coaching</a></div>
       <div><b>Legal</b><a href="/privacy.html">Privacy</a><a href="/terms.html">Terms</a><a href="/consumer-health-privacy.html">Consumer Health Privacy</a></div>
     </div>
     <div class="copyright">© 2026 Lellee. All rights reserved.</div>
@@ -492,7 +492,7 @@ textarea{width:100%;border:1px solid #ddd4e5;border-radius:12px;padding:13px;col
         </div>
         <p class="result-note">This is a recommendation, not a diagnosis. Lellee has not enrolled you in anything.</p>
         <div class="survey-actions result-actions">
-          <a class="primary-button" id="continueToApp" href="/app">Continue to Lellee</a>
+          <a class="primary-button" id="continueToApp" href="/app?browse=1">Continue to Lellee</a>
           <button class="secondary-button" id="exploreAgain">Explore Other Options</button>
         </div>
       </section>
@@ -545,6 +545,7 @@ textarea{width:100%;border:1px solid #ddd4e5;border-radius:12px;padding:13px;col
   }
   function topicAppUrl(topic){
     const q=new URLSearchParams();
+    q.set('browse','1');
     if(topic?.topic_key)q.set('recommended',topic.topic_key);
     return '/app'+(q.toString()?'?'+q.toString():'');
   }
@@ -612,7 +613,7 @@ textarea{width:100%;border:1px solid #ddd4e5;border-radius:12px;padding:13px;col
 
   document.querySelectorAll('[data-start-survey]').forEach(el=>el.addEventListener('click',event=>{
     event.preventDefault();
-    location.assign('/app');
+    location.assign('/app?browse=1');
   }));
   document.getElementById('surveyClose')?.addEventListener('click', () => dialog.close());
   document.getElementById('surveyBegin')?.addEventListener('click', async () => {
@@ -807,6 +808,7 @@ textarea{width:100%;border:1px solid #ddd4e5;border-radius:12px;padding:13px;col
     if(survey.sessionId) q.set('journeySurvey',survey.sessionId);
     if(survey.token) q.set('journeyToken',survey.token);
     if(r.primary_topic_key) q.set('recommended',r.primary_topic_key);
+    q.set('browse','1');
     app.href='/app?'+q.toString();
   }
   document.getElementById('exploreAgain')?.addEventListener('click',()=>{

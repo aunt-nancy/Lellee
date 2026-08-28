@@ -1,54 +1,38 @@
-LELLEE — FINAL GITHUB DEPLOYMENT PACKAGE
-Date: 2026-08-27
+LELLEE — GUEST BROWSE ACCESS FIX
+Date: August 28, 2026
 
-STATUS
-- Final consolidated Build 1 of 3: Agent Operations — complete
-- Final consolidated Build 2 of 3: Coach Operations — complete
-- Final consolidated Build 3 of 3: Organization + Workspaces — complete
-- This package is the final GitHub/Vercel deployment batch.
+PURPOSE
+Users must be able to explore Lellee before creating an account.
+Account creation/sign-in is required only when a user chooses to save or personalize private information.
 
-IMPORTANT
-Upload the CONTENTS of this folder to the ROOT of the exact GitHub repository connected to www.lellee.com.
-Replace files with the exact same filenames. Do not allow GitHub/browser uploads to create names such as index(1).html or vercel(1).json.
+WHAT THIS FIX CHANGES
+1. /app now opens in guest browsing mode when there is no signed-in session.
+2. The public landing page routes support exploration into guest browsing mode.
+3. "Log In" and "My Lellee" explicitly open the sign-in screen.
+4. The sign-in screen includes "Browse Lellee first."
+5. Guest users see a clear Browsing Preview badge and a Sign in/Create Account option.
+6. Personal save actions prompt the user to create/sign in to an account instead of blocking browsing.
+7. Guest preview data is not persisted as a Lellee account record.
+8. Signing out clears the local app-profile cache before returning to the public site, reducing the risk that a later guest on the same device sees the previous user's local profile.
+9. The service-worker version is bumped so the new navigation behavior replaces the prior cached shell.
 
-UPLOAD / REPLACE ALL FILES IN THIS PACKAGE.
+UPLOAD TO GITHUB
+Upload these four files to the ROOT of the same GitHub repository connected to www.lellee.com:
+- index.html
+- landing.html
+- service-worker.js
+- reset-lellee-cache.html
 
-PUBLIC ROOT ROUTING
-- Keep index.html. It is the cumulative authenticated Lellee Today application.
-- / redirects to /landing.html through vercel.json.
-- /app rewrites to /index.html.
-- Do not rename index.html to landing.html.
+Replace the existing files using the exact filenames. Do not add numbered copies.
+No Supabase SQL is required for this fix.
 
-WHAT THIS DEPLOYMENT CARRIES FORWARD
-- Final 17-agent Command Center UI
-- Final Coach professional entry, live dashboard and operations UI
-- Final Organization front door, live dashboard and operations UI
-- Unified Personal / Coach / Organization / Admin workspace switcher
-- Existing approved Recovery experience and pricing in the cumulative index
-- Corrected public landing-page routing
+AFTER VERCEL SHOWS READY
+1. Open https://www.lellee.com/reset-lellee-cache.html once.
+2. Open https://www.lellee.com/ and select a support path / Start Your Journey.
+3. Confirm Lellee opens for browsing WITHOUT requesting an account first.
+4. Navigate through Today, Recovery, Learn, Tools and Resources.
+5. Try a personal Save action. It should then invite the user to sign in/create an account while still offering Browse Lellee first.
+6. Open https://www.lellee.com/app?auth=signin and confirm the explicit sign-in page still works.
 
-AFTER GITHUB UPLOAD
-1. Open Vercel and wait for the matching deployment to show Ready.
-2. Open https://www.lellee.com/reset-lellee-cache.html ONCE.
-3. Then test https://www.lellee.com/
-   EXPECTED: public Lellee landing page.
-4. Test https://www.lellee.com/app
-   EXPECTED: authenticated Today application (or sign-in flow if signed out).
-5. Test Coach professional entry and Coach Dashboard.
-6. Test Organization entry and Organization Dashboard.
-7. Test workspace selector near Sign Out.
-8. Test Admin / Agent Command Center.
-9. Test mobile navigation and Sign Out.
-
-DO NOT TURN ON DURING THIS DEPLOYMENT
-- public multi-program launch
-- coach payments/payouts
-- organization payments
-- public coach marketplace
-- autonomous agent outreach/publishing/financial actions
-
-SUPABASE SQL
-No additional SQL migration is required by this GitHub deployment package if Final Builds 1, 2 and 3 were already successfully run.
-
-SUPABASE DYNAMIC-WORKER
-The Build 1 dynamic-worker update is not duplicated here. If it was already deployed during Build 1, leave it alone.
+EXPECTED EXPERIENCE
+Browse first -> understand Lellee -> choose support -> create/sign in only when saving/personalizing.

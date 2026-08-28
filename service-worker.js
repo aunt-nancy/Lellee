@@ -1,4 +1,4 @@
-const LELLEE_SW_VERSION='lellee-root-redirect-final-2026-08-27-v1';
+const LELLEE_SW_VERSION='lellee-guest-browse-2026-08-28-v1';
 self.addEventListener('install',event=>self.skipWaiting());
 self.addEventListener('activate',event=>event.waitUntil((async()=>{
   const names=await caches.keys();
