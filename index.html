@@ -1098,6 +1098,28 @@ Includes the approved Lellee consumer experience from early recovery through lif
 body.program-preview-mode .top-stats .mini-stat{min-width:110px}
 @media(max-width:720px){.program-preview-grid{grid-template-columns:1fr}.program-preview-hero{padding:20px 17px;border-radius:20px}.program-preview-hero h2{font-size:1.7rem}}
 </style>
+
+<style id="lellee-menu-navigation-repair-20260828">
+/* Mobile drawer only. Desktop navigation and approved logo sizing are unchanged. */
+.mobile-nav-close{display:none}
+@media(max-width:820px){
+  #appSidebar.sidebar.mobile-open{
+    display:flex!important;
+    position:fixed!important;
+    inset:0 auto 0 0!important;
+    width:min(86vw,320px)!important;
+    z-index:9998!important;
+    overflow-y:auto!important;
+    padding-top:18px!important;
+    box-shadow:22px 0 55px rgba(10,8,28,.34)!important;
+  }
+  body.mobile-nav-open{overflow:hidden!important}
+  body.mobile-nav-open:after{
+    content:"";position:fixed;inset:0;background:rgba(16,12,28,.44);z-index:9997;
+  }
+  #mobileMenuBtn{position:relative;z-index:9999}
+}
+</style>
 </head>
 <body><a class="skip-link" href="#mainContent">Skip to main content</a><a class="lellee-skip" href="#lelleeMain">Skip to main content</a>
 <div class="prod-overlay hidden" id="onboardingOverlay">
@@ -1116,7 +1138,7 @@ body.program-preview-mode .top-stats .mini-stat{min-width:110px}
 </div>
 <div class="auth-overlay hidden" id="authOverlay"><div class="auth-box"><img alt="Lellee" class="auth-logo" src="/lellee-approved-logo-final.jpg?v=20260814-1"/><h2 id="authTitle">Sign in to Lellee</h2><p class="auth-msg" id="authMsg">Sign in when you are ready to save your progress. You can browse Lellee first without an account.</p><form id="authForm"><div class="auth-field"><label>Email</label><input autocomplete="email" id="authEmail" required="" type="email"/></div><div class="auth-field"><label>Password</label><input autocomplete="current-password" id="authPassword" minlength="8" required="" type="password"/></div><div class="legal-signup-notice hidden" id="legalSignupNotice"><label><input id="legalSignupAdult" type="checkbox"/> I confirm I am at least 18 years old.</label><label><input id="legalSignupAgree" type="checkbox"/> I reviewed the <a href="/terms.html" target="_blank">Terms</a>, <a href="/privacy.html" target="_blank">Privacy Policy</a>, and <a href="/consumer-health-privacy.html" target="_blank">Consumer Health Data Notice</a>.</label><label><input id="legalSignupSafety" type="checkbox"/> I understand Lellee is recovery support, not emergency or professional medical treatment.</label></div><div class="auth-actions"><button class="primary" id="authSubmit" type="submit">Sign in</button><button class="secondary" id="authToggle" type="button">Create account</button></div><button class="auth-browse" id="browseWithoutAccount" type="button">Browse Lellee first</button><p class="auth-browse-note">No account is required to explore support paths, tools, resources, coaching information, or the Lellee experience.</p></form><div class="launch-auth-links"><a href="/privacy.html">Privacy</a><a href="/terms.html">Terms</a><a href="/safety.html">Safety</a><a href="/consumer-health-privacy.html">Consumer Health Data</a></div></div></div>
 <div class="app-shell">
-<aside class="sidebar">
+<aside class="sidebar" id="appSidebar">
 <div class="logo-wrap"><img alt="Lellee" class="approved-logo" src="/lellee-approved-logo-final.jpg?v=20260814-1"/></div>
 <nav class="nav-list">
 <button class="nav-item active" data-page="today"><span class="nav-icon">▣</span>Today</button>
@@ -1142,7 +1164,7 @@ body.program-preview-mode .top-stats .mini-stat{min-width:110px}
 </aside>
 <main class="main" id="lelleeMain" tabindex="-1">
 <header class="topbar">
-<button aria-label="Open menu" class="mobile-menu-btn" data-page="settings">☰</button>
+<button aria-label="Open menu" class="mobile-menu-btn" id="mobileMenuBtn" type="button" aria-expanded="false" aria-controls="appSidebar">☰</button>
 <div class="mobile-brand mobile-title">Today</div>
 <div class="greeting">
 <h1 id="greetingText">Good morning, Alex 👋</h1>
@@ -7403,15 +7425,46 @@ function renderBasics(){
 }
 function showPage(name){
   if(programBrowsePreviewMode && (name==='today' || RECOVERY_ONLY_BROWSE_PAGES.has(name)))name='program-preview';
+  const requested=$(`#page-${name}`);
+  const page=requested||$('#page-today');
+  if(!page)return;
   $$('.page').forEach(p=>p.classList.remove('active'));
-  const page=$(`#page-${name}`)||$('#page-today');
   page.classList.add('active');
   const navName=name==='program-preview'?'today':name;
   $$('.nav-item,.mobile-bottom button[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===navName));
   if(name==='program-preview')renderProgramBrowseChrome();
+  try{
+    const url=new URL(location.href);
+    url.hash=navName==='today'?'':navName;
+    history.replaceState(null,'',url.pathname+url.search+url.hash);
+  }catch(_){}
   window.scrollTo({top:0,behavior:'smooth'});
 }
-$$('[data-page]').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.page)));
+// MENU/NAVIGATION REPAIR — 2026-08-28
+// Event delegation keeps static and dynamically-added menu items working.
+function setMobileNav(open){
+  const sidebar=document.getElementById('appSidebar');
+  const btn=document.getElementById('mobileMenuBtn');
+  if(!sidebar||!btn)return;
+  sidebar.classList.toggle('mobile-open',!!open);
+  document.body.classList.toggle('mobile-nav-open',!!open);
+  btn.setAttribute('aria-expanded',open?'true':'false');
+}
+document.getElementById('mobileMenuBtn')?.addEventListener('click',event=>{
+  event.preventDefault();
+  const sidebar=document.getElementById('appSidebar');
+  setMobileNav(!sidebar?.classList.contains('mobile-open'));
+});
+document.addEventListener('click',event=>{
+  const control=event.target.closest('[data-page]');
+  if(!control)return;
+  const pageName=control.dataset.page;
+  if(!pageName)return;
+  event.preventDefault();
+  showPage(pageName);
+  if(window.matchMedia('(max-width:820px)').matches)setMobileNav(false);
+});
+document.addEventListener('keydown',event=>{if(event.key==='Escape')setMobileNav(false)});
 
 let activeActivity=null;
 const activityDialog=$('#activityDialog');

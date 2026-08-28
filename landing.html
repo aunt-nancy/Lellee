@@ -614,14 +614,44 @@ textarea{width:100%;border:1px solid #ddd4e5;border-radius:12px;padding:13px;col
 
   document.getElementById('menuToggle')?.addEventListener('click', e => {
     const nav = document.getElementById('siteNav');
+    if(!nav) return;
     nav.classList.toggle('open');
     e.currentTarget.setAttribute('aria-expanded', nav.classList.contains('open') ? 'true' : 'false');
   });
+  document.getElementById('siteNav')?.addEventListener('click',event=>{
+    const link=event.target.closest('a');
+    if(!link || (link.getAttribute('href')||'').startsWith('#')) return;
+    document.getElementById('siteNav')?.classList.remove('open');
+    document.getElementById('menuToggle')?.setAttribute('aria-expanded','false');
+  });
 
+  // MENU/NAVIGATION REPAIR — 2026-08-28
+  // Start Your Journey opens the landing survey; it must not be hijacked into /app.
   document.querySelectorAll('[data-start-survey]').forEach(el=>el.addEventListener('click',event=>{
     event.preventDefault();
-    location.assign('/app?browse=1');
+    openSurvey();
   }));
+
+  // Make every same-page menu link explicit and reliable, then close the mobile menu.
+  function goToLandingSection(hash){
+    if(!hash || hash.charAt(0)!=='#') return false;
+    const target=document.querySelector(hash);
+    if(!target) return false;
+    target.scrollIntoView({behavior:'smooth',block:'start'});
+    try{history.replaceState(null,'',hash)}catch(_){}
+    return true;
+  }
+  document.addEventListener('click',event=>{
+    const link=event.target.closest('a[href^="#"]');
+    if(!link) return;
+    const href=link.getAttribute('href');
+    if(!goToLandingSection(href)) return;
+    event.preventDefault();
+    const nav=document.getElementById('siteNav');
+    const toggle=document.getElementById('menuToggle');
+    nav?.classList.remove('open');
+    toggle?.setAttribute('aria-expanded','false');
+  });
   document.getElementById('surveyClose')?.addEventListener('click', () => dialog.close());
   document.getElementById('surveyBegin')?.addEventListener('click', async () => {
     await ensureSurveySession();

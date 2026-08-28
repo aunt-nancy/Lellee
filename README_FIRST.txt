@@ -1,27 +1,31 @@
-LELLEE — PUBLIC LANDING LOGO SOURCE + SIZE RESTORE
-Date: August 28, 2026
+LELLEE MENU + NAVIGATION REPAIR — 2026-08-28
 
-ROOT CAUSE FOUND
-The last two fixes mixed different logo assets with extra CSS overrides.
-- The too-small version used /lellee-approved-logo.jpg, whose canvas makes the visible wordmark smaller inside the same header frame.
-- The too-large version then added transform: scale(1.9), which overcorrected it.
+PURPOSE
+Fix menu/navigation controls without changing the approved landing-page logo.
 
-THIS PACKAGE RESTORES THE ORIGINAL PUBLIC-LANDING COMBINATION
-- Header logo asset: /lellee-approved-logo-final.jpg?v=20260814-1
-- No added transform / no injected logo-size override
-- Existing landing CSS remains the size source:
-  Desktop: 260px x 72px
-  <=1120px: 220px wide
-  <=560px: 185px x 64px
-
-UPLOAD TO GITHUB ROOT AND REPLACE ONLY:
-1. landing.html
-2. service-worker.js
-3. reset-lellee-cache.html
+UPLOAD TO GITHUB ROOT — replace these exact files:
+1. index.html
+2. landing.html
+3. service-worker.js
+4. reset-lellee-cache.html
 
 NO SUPABASE SQL.
-Do not upload earlier logo-size-lock packages after this one.
-After Vercel shows Ready, open /reset-lellee-cache.html once.
 
-LOCK RULE
-Future routing, program, content, agent, coach, organization, or layout patches must not inject a .brand/.brand img override into landing.html and must not change the landing logo asset unless explicitly approved.
+REPAIRS
+- Landing top navigation section links now explicitly scroll to their correct sections.
+- Landing mobile menu closes after a menu selection.
+- Start Your Journey opens the Lellee journey survey again instead of being hijacked directly into /app.
+- App sidebar/bottom-menu buttons use delegated click handling so dynamic menu controls continue to work.
+- Mobile hamburger now opens the navigation drawer instead of incorrectly acting like a Settings button.
+- Escape closes the mobile drawer.
+- Program-selection query context remains preserved.
+
+PROTECTED / UNCHANGED
+- Landing logo asset remains /lellee-approved-logo-final.jpg?v=20260814-1
+- Landing desktop logo frame remains 260px x 72px, no transform.
+- <=1120px remains 220px wide.
+- <=560px remains 185px x 64px.
+- No unrelated visual redesign.
+
+AFTER VERCEL = READY
+Open https://www.lellee.com/reset-lellee-cache.html once, then test the landing navigation and app/sidebar menus.
