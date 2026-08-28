@@ -1,0 +1,71 @@
+
+/* LELLEE — LIVE COACH DASHBOARD PATCH — 2026-08-27 */
+.coach-live-item{
+  border:1px solid #e4dfea;
+  background:#fff;
+  border-radius:14px;
+  padding:13px 14px;
+  margin:8px 0;
+}
+.coach-live-row{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+.coach-live-item b{font-size:.78rem;color:#342b40}
+.coach-live-item small{display:block;margin-top:3px;color:#756e7b;font-size:.63rem;line-height:1.42}
+.coach-live-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.coach-live-pill{
+  display:inline-block;border-radius:999px;background:#f1ecf6;color:#684c89;
+  padding:4px 8px;font-size:.56rem;font-weight:850
+}
+.coach-live-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}
+.coach-live-actions button{
+  border:1px solid #ddd5e5;background:#fff;color:#584764;border-radius:9px;
+  padding:6px 9px;font-size:.6rem;font-weight:850
+}
+.coach-live-actions button.primary{background:#65419b;color:#fff;border-color:#65419b}
+.coach-live-empty{
+  padding:18px;border:1px dashed #ded7e5;border-radius:12px;background:#faf8fb;
+  color:#77707d;font-size:.7rem
+}
+.coach-live-error{
+  padding:11px 12px;border:1px solid #efcdd4;border-radius:11px;background:#fff4f6;
+  color:#8b4050;font-size:.68rem
+}
+.coach-live-review-note{
+  margin-top:8px;padding:8px 10px;border-radius:9px;background:#fff8ed;
+  border:1px solid #eeddbf;color:#775b2e;font-size:.64rem
+}
+.coach-live-dialog{
+  border:0;border-radius:20px;padding:0;width:min(720px,calc(100% - 28px));
+  box-shadow:0 30px 90px rgba(28,19,39,.30)
+}
+.coach-live-dialog::backdrop{background:rgba(25,18,34,.58)}
+.coach-live-dialog-inner{padding:22px}
+.coach-live-dialog-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:14px}
+.coach-live-dialog-head h3{margin:3px 0 4px}
+.coach-live-dialog-head p{margin:0;color:#716a78;font-size:.72rem}
+.coach-live-close{width:34px;height:34px;border-radius:50%;border:1px solid #e0d8e7;background:#fff;font-size:1.15rem}
+.coach-live-form{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.coach-live-form label{display:grid;gap:5px;font-size:.65rem;font-weight:820;color:#554b5d}
+.coach-live-form label.wide{grid-column:1/-1}
+.coach-live-form input,.coach-live-form select,.coach-live-form textarea{
+  width:100%;border:1px solid #ded7e5;border-radius:10px;padding:10px;background:#fff;color:#302936
+}
+.coach-live-form textarea{min-height:105px;resize:vertical}
+.coach-live-footer{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}
+.coach-live-footer button{
+  border:1px solid #ddd4e6;background:#fff;border-radius:10px;padding:9px 13px;font-weight:850
+}
+.coach-live-footer .primary{background:#65419b;color:#fff;border-color:#65419b}
+#coachDashboardRefresh{margin-left:auto}
+.coach-admin-review-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}
+.coach-admin-review-actions button{border:1px solid #ddd5e4;border-radius:9px;background:#fff;padding:6px 9px;font-size:.59rem;font-weight:850}
+.coach-admin-review-actions .approve{background:#edf8f0;color:#245b36;border-color:#cfe5d6}
+.coach-admin-review-actions .reject{background:#fff3f5;color:#8b4050;border-color:#edcbd2}
+.coach-invite-link{
+  margin-top:12px;padding:10px;border-radius:10px;background:#f6f2fa;border:1px solid #e3dbea;
+  word-break:break-all;font-size:.66rem
+}
+@media(max-width:650px){
+  .coach-live-form{grid-template-columns:1fr}
+  .coach-live-form label.wide{grid-column:auto}
+  .coach-live-row{display:block}
+}

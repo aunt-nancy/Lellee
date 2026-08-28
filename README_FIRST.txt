@@ -1,41 +1,85 @@
-LELLEE — COACH PROFESSIONAL ENTRY INTEGRATION
+LELLEE — LIVE COACH DASHBOARD
 Date: 2026-08-27
 
-UPLOAD THESE THREE FILES TO GITHUB ROOT:
-1. index.html              (replace current app index)
-2. coach.html              (replace current professional front door)
-3. coach-entry-router.js   (new)
+RUN / UPLOAD IN THIS ORDER
 
-WHAT THIS FIXES
-The professional coaching front door previously sent every coach to /app, which
-normally opens the consumer app flow. This package makes /coach.html use:
+1. SUPABASE SQL EDITOR
+Run:
+01_Coach_Dashboard_Live_Bridge_2026-08-27.sql
 
-/app?entry=coach
+This requires the Coach Business Foundation Restore to have succeeded first.
 
-Then the app routes the signed-in professional to:
-- Coach Dashboard if they already belong to an APPROVED coaching business.
-- Coach Business Setup if they do not yet have a coaching business.
-- Coach Business Settings if their business exists but is pending/draft/paused.
+2. GITHUB ROOT
+Upload / replace:
+- index.html
+- coach-dashboard-live.js
+- coach-dashboard-live.css
 
-The login overlay also says "Coach Log In" when arriving through the professional entry.
+3. OPTIONAL READ-ONLY CHECK
+02_Coach_Dashboard_Live_READ_ONLY_VERIFY.sql
 
-DATABASE-AWARE
-If the Coach Business Foundation Restore has not actually been installed yet,
-the router shows a visible message instead of silently failing.
+WHAT THIS MAKES FUNCTIONAL
+COACH BUSINESS SETUP
+- loads program choices
+- loads existing business information
+- submits/resubmits a coaching business for HUMAN review
+- approved-business edits return to pending review
+- stores professional-scope/privacy attestations
 
-PRESERVES PRIOR FIXES
-The included index.html is based on the latest patched app and preserves:
-- larger Lellee app logo
-- working logout redirect
-- Agent Command Center UI references
+COACH DASHBOARD
+- live client count
+- live group count and open seats
+- unread coaching messages
+- clients tab
+- groups tab
+- services/pricing tab
+- messages tab
+- assignments tab
+- leads tab
+- Refresh
 
-OPTIONAL READ-ONLY DATABASE CHECK
-Lellee_Coach_Entry_READ_ONLY_VERIFY_2026-08-27.sql
+COACH ACTIONS
+- create service/package definitions
+- create groups
+- add business leads
+- create assignments for a client or group
+- send client/group coaching messages
+- create client invitation links
 
-NOT CHANGED
-- Recovery
-- consumer subscription prices
+CLIENT INVITATION
+The coach gets a private /app?coach_invite=... link.
+The invited person must sign in with the invited email.
+The app accepts the invitation and opens My Coaching.
+
+ADMIN REVIEW
+The existing Admin · Coaching page becomes functional for:
+- pending count
+- approved count
+- human review of business name, audience, bio, scope/credentials
+- Approve
+- Return to Review
+- Pause
+- Reject / Changes
+No business is auto-approved.
+
+PRIVACY
+The dashboard bridge returns coach-business operating data only.
+It does NOT return:
+- journals
+- private recovery check-ins
+- safety/crisis activity
+- diagnoses
+- support contacts
+- full private recovery history
+
+STILL OFF
+- coach payment collection
+- public coach marketplace
 - public multi-program launch
-- coach public marketplace
-- coach payments
-- agent autonomy/guardrails
+- autonomous agent actions
+
+The included index.html preserves the prior:
+- larger logo
+- logout fix
+- Agent Command Center
+- professional coach-entry routing
