@@ -1,86 +1,101 @@
-LELLEE — COACH OPERATIONS COMPLETION
+LELLEE — ORGANIZATION FRONT DOOR + LIVE DASHBOARD
 Date: 2026-08-27
 
-THIS IS THE NEXT LARGE COACHING SPRINT.
-It completes the remaining major buttons already present on the Coach Dashboard.
-
-PREREQUISITES
-1. Coach Business Foundation Restore succeeded.
-2. Live Coach Dashboard V2 succeeded.
+THIS OPENS THE NEXT COMMERCIAL/INSTITUTIONAL SIDE OF LELLEE WITHOUT TURNING
+ON ORGANIZATION PAYMENTS OR PUBLIC MULTI-PROGRAM LAUNCH.
 
 RUN / UPLOAD IN THIS ORDER
 
 1. SUPABASE SQL EDITOR
 Run as ONE complete script:
-01_Lellee_Coach_Operations_Completion_2026-08-27.sql
+01_Lellee_Organization_Foundation_Live_Dashboard_2026-08-27.sql
 
 2. GITHUB ROOT
 Upload / replace:
 - index.html
-- coach-operations-completion.js
-- coach-operations-completion.css
+- landing.html
+
+Upload new:
+- organizations.html
+- organizations.css
+- organizations.js
+- organization-entry-router.js
+- organization-dashboard-live.js
+- organization-dashboard-live.css
 
 3. OPTIONAL READ-ONLY CHECK
-02_Lellee_Coach_Operations_READ_ONLY_VERIFY.sql
+02_Lellee_Organization_READ_ONLY_VERIFY.sql
 
-WHAT BECOMES FUNCTIONAL
+PUBLIC SITE
+- Consumer header remains free of organization sales navigation.
+- Consumer footer gains a small "For Organizations" path.
+- /organizations.html is a separate institutional front door.
+- No invented institutional price is published.
+- Organization payments stay OFF.
 
-COACH ANALYTICS
-- leads + conversion
-- active/new clients
-- groups + open seats
-- consultations + conversion
-- service utilization
-- group capacity
+ORGANIZATION SETUP
+- nonprofit
+- county/city
+- community program
+- employer
+- recovery/treatment organization
+- education
+- healthcare
+- other
+- organization submission goes to HUMAN REVIEW
+- edits/resubmission return to review
 
-COACH REVENUE
-- configured service/package pricing
-- active clients/groups
-- group economics
-- projected configured gross value
-- clear payout/payment OFF status
-No earnings guarantee and no money movement.
+LIVE ORGANIZATION DASHBOARD
+- sponsored-seat total
+- assigned seats
+- active sponsored users
+- active program licenses
+- licenses tab
+- sponsored access tab
+- cohorts tab
+- aggregate report tab
+- team tab
 
-SCHEDULING & CRM
-- recurring availability
-- schedule 1-to-1/group/admin sessions
-- consultation list
-- follow-up CRM
-- mark follow-ups complete
-- contact-history log
+PROGRAM LICENSES
+- approved organization requests program + seats
+- request does NOT auto-activate
+- Lellee admin must activate/deny/pause
+- activating a license is a deliberate admin action
+- public_multi_program_launch_enabled stays false
 
-AUTOMATION
-- safe business-operational rules only
-- consultation requested -> follow-up
-- session scheduled -> follow-up
-- group start -> preparation follow-up
-- no journal, safety, diagnosis or message-body inputs
-- no emergency dispatch
-- no outbound email/SMS/DM
+SPONSORED ACCESS
+- organization generates a private invitation link for an ACTIVE license
+- invite is bound to the invited email
+- accepted invite enrolls that account in the specifically sponsored program
+- organization does NOT get journal/check-in/message/safety/private-history access
 
-CREDENTIALS & INTAKE
-- self-reported credential claims
-- training records
-- client intake form creation
-- intake assignment to active clients
-- explicit verification status
-- no automatic public credential claims
-- no automatic diagnosis
+TEAM
+- admin/program-manager/viewer invitation links
+- invited account must match invited email
+- owner/admin/program-manager can perform management actions
+- viewers are read-only at the dashboard-policy layer
 
-QUICK START
-- live setup checklist and completion percentage
-- links back to the exact next coaching area
+ADMIN · ORGANIZATIONS
+- review submitted organizations
+- approve / return to review / pause / reject
+- activate / deny / pause requested program licenses
+- set approved seat count
 
-STILL OFF
-- coach payments/payouts
-- public coach marketplace
-- public multi-program launch
-- autonomous agents
-- sensitive client-content analytics/automation
+COHORTS
+- create cohorts under active licensed programs
+- site/location + funding-source fields
+- capacity + dates
 
-The included index.html preserves the earlier:
-- larger Lellee logo
+PROTECTED SETTINGS
+organization_payments_enabled = false
+organization_individual_private_data_access = false
+public_multi_program_launch_enabled = false
+
+PRESERVED FROM PRIOR SPRINTS
+- Recovery unchanged
+- larger logo
 - logout fix
 - Agent Command Center
-- professional coach-entry routing
-- Live Coach Dashboard V2
+- professional Coach front door
+- Coach live dashboard V2
+- Coach operations completion

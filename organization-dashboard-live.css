@@ -1,0 +1,17 @@
+
+/* LELLEE — ORGANIZATION LIVE DASHBOARD — 2026-08-27 */
+.org-live-item{border:1px solid #e1e5ed;background:#fff;border-radius:14px;padding:13px 14px;margin:8px 0}
+.org-live-row{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+.org-live-item b{font-size:.78rem;color:#30384b}.org-live-item small{display:block;margin-top:4px;color:#727b8b;font-size:.63rem;line-height:1.45}
+.org-live-pill{display:inline-block;border-radius:999px;background:#eef2f8;color:#49658f;padding:4px 8px;font-size:.56rem;font-weight:850;white-space:nowrap}
+.org-live-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.org-live-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}
+.org-live-actions button{border:1px solid #d9e0ea;background:#fff;border-radius:9px;padding:6px 9px;color:#4e5e76;font-size:.6rem;font-weight:850}
+.org-live-actions .primary{background:#334e78;color:#fff;border-color:#334e78}.org-live-empty{padding:17px;border:1px dashed #dce2eb;border-radius:12px;background:#f9fbfd;color:#768093;font-size:.7rem}
+.org-live-review{margin-top:9px;padding:9px 10px;border:1px solid #eadbbd;background:#fff9ef;border-radius:10px;color:#735a2d;font-size:.65rem}
+.org-live-dialog{border:0;border-radius:20px;padding:0;width:min(720px,calc(100% - 28px));box-shadow:0 30px 90px rgba(25,33,50,.3)}
+.org-live-dialog::backdrop{background:rgba(24,31,45,.58)}.org-live-dialog-inner{padding:22px}.org-live-dialog-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:14px}.org-live-dialog-head h3{margin:3px 0 4px}.org-live-dialog-head p{margin:0;color:#717b8b;font-size:.72rem}.org-live-close{width:34px;height:34px;border-radius:50%;border:1px solid #dce3ec;background:#fff;font-size:1.15rem}
+.org-live-form{display:grid;grid-template-columns:1fr 1fr;gap:11px}.org-live-form label{display:grid;gap:5px;font-size:.65rem;font-weight:820;color:#525d70}.org-live-form label.wide{grid-column:1/-1}.org-live-form input,.org-live-form select,.org-live-form textarea{width:100%;border:1px solid #dbe2eb;border-radius:10px;padding:10px;background:#fff;color:#30394a}.org-live-form textarea{min-height:100px;resize:vertical}
+.org-live-footer{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}.org-live-footer button{border:1px solid #d9e0e9;background:#fff;border-radius:10px;padding:9px 13px;font-weight:850}.org-live-footer .primary{background:#334e78;color:#fff;border-color:#334e78}
+.org-invite-link{margin-top:12px;padding:10px;border-radius:10px;background:#f3f6fa;border:1px solid #dfe5ed;word-break:break-all;font-size:.66rem}
+.org-admin-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}.org-admin-actions button{border:1px solid #dbe2eb;background:#fff;border-radius:9px;padding:6px 9px;font-size:.59rem;font-weight:850}.org-admin-actions .approve{background:#edf7f0;color:#285b38;border-color:#cfe4d5}.org-admin-actions .reject{background:#fff3f5;color:#8a4050;border-color:#eccbd2}
+@media(max-width:650px){.org-live-form{grid-template-columns:1fr}.org-live-form label.wide{grid-column:auto}.org-live-row{display:block}}
