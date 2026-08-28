@@ -492,7 +492,7 @@
 
   function openAssignment(){
     if(!businessRequired()) return;
-    if(!(state.context?.clients||[]).length && !(state.context?.groups||[]).length return alert('Add a client relationship or group first.');
+    if(!(state.context?.clients||[]).length && !(state.context?.groups||[]).length) return alert('Add a client relationship or group first.');
     dialog('New Assignment','Send a structured next step to one client or one group.',`
       <form id="coachAssignmentForm">
         <div class="coach-live-form">
