@@ -217,15 +217,15 @@ textarea{width:100%;border:1px solid #ddd4e5;border-radius:12px;padding:13px;col
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style id="lellee-landing-logo-size-lock">
-/* LELLEE LANDING HEADER LOGO — APPROVED EXACT SIZE LOCK
-   Source-of-truth values recovered from the approved landing CSS.
-   Do not alter in unrelated design/routing/feature patches. */
+/* LELLEE LANDING HEADER LOGO — HISTORICAL APPROVED LOCK
+   Restored from archived working landing CSS. DO NOT MODIFY in unrelated patches.
+   Desktop: 210x78 frame, artwork scale 1.9. Mobile <=650px: 170x68 frame.
+*/
 .topbar .topbar-inner .brand{
-  width:260px!important;
-  height:72px!important;
-  min-width:260px!important;
-  display:flex!important;
-  align-items:center!important;
+  width:210px!important;
+  height:78px!important;
+  min-width:210px!important;
+  display:block!important;
   overflow:hidden!important;
 }
 .topbar .topbar-inner .brand img{
@@ -233,13 +233,15 @@ textarea{width:100%;border:1px solid #ddd4e5;border-radius:12px;padding:13px;col
   height:100%!important;
   object-fit:contain!important;
   display:block!important;
-  transform:none!important;
+  transform:scale(1.9)!important;
+  transform-origin:center!important;
 }
-@media(max-width:1120px){
-  .topbar .topbar-inner .brand{width:220px!important;height:72px!important;min-width:220px!important}
-}
-@media(max-width:560px){
-  .topbar .topbar-inner .brand{width:185px!important;height:64px!important;min-width:185px!important}
+@media(max-width:650px){
+  .topbar .topbar-inner .brand{
+    width:170px!important;
+    height:68px!important;
+    min-width:170px!important;
+  }
 }
 </style>
 </head>
