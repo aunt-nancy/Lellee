@@ -1,18 +1,22 @@
-LELLEE — LANDING LOGO SIZE LOCK
-Date: August 28, 2026
+LELLEE — APPROVED LANDING LOGO EXACT SIZE RESTORE — 2026-08-28
 
-PURPOSE
-- Restores the approved large Lellee logo on the public landing-page header.
-- Locks that visual size so unrelated routing, feature, layout, or design patches do not shrink it again.
-- Preserves the approved logo image asset and lettering exactly; only display sizing is protected.
+Recovered source-of-truth sizing from the previously approved landing CSS.
 
-UPLOAD TO GITHUB ROOT
+LOCKED HEADER LOGO VALUES
+- Desktop: 260px x 72px
+- Mid-size (<=1120px): 220px x 72px
+- Mobile (<=560px): 185px x 64px
+- Image transform: NONE
+- object-fit: contain
+
+CAUSE OF OVERSIZE
+The prior lock incorrectly added transform: scale(1.9) on top of the correct-sized container.
+That transform has been removed and explicitly blocked with transform:none!important.
+
+UPLOAD TO GITHUB ROOT AND REPLACE:
 1. landing.html
 2. service-worker.js
 3. reset-lellee-cache.html
 
-Replace the existing files using these exact names.
 No Supabase SQL is required.
-
-AFTER VERCEL IS READY
-Open https://www.lellee.com/reset-lellee-cache.html once, then verify the landing-page header logo remains large.
+After Vercel is Ready, open /reset-lellee-cache.html once.

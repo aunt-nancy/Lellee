@@ -217,11 +217,12 @@ textarea{width:100%;border:1px solid #ddd4e5;border-radius:12px;padding:13px;col
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style id="lellee-landing-logo-size-lock">
-/* LELLEE LANDING LOGO SIZE LOCK — APPROVED LARGE SIZE
-   Protected design constant. Do not shrink or override in unrelated patches. */
+/* LELLEE LANDING HEADER LOGO — APPROVED EXACT SIZE LOCK
+   Source-of-truth values recovered from the approved landing CSS.
+   Do not alter in unrelated design/routing/feature patches. */
 .topbar .topbar-inner .brand{
   width:260px!important;
-  height:76px!important;
+  height:72px!important;
   min-width:260px!important;
   display:flex!important;
   align-items:center!important;
@@ -232,16 +233,13 @@ textarea{width:100%;border:1px solid #ddd4e5;border-radius:12px;padding:13px;col
   height:100%!important;
   object-fit:contain!important;
   display:block!important;
-  transform:scale(1.9)!important;
-  transform-origin:center center!important;
+  transform:none!important;
 }
 @media(max-width:1120px){
-  .topbar .topbar-inner .brand{width:230px!important;height:72px!important;min-width:230px!important}
-  .topbar .topbar-inner .brand img{transform:scale(1.9)!important}
+  .topbar .topbar-inner .brand{width:220px!important;height:72px!important;min-width:220px!important}
 }
 @media(max-width:560px){
-  .topbar .topbar-inner .brand{width:190px!important;height:64px!important;min-width:190px!important}
-  .topbar .topbar-inner .brand img{transform:scale(1.85)!important}
+  .topbar .topbar-inner .brand{width:185px!important;height:64px!important;min-width:185px!important}
 }
 </style>
 </head>
