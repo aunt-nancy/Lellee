@@ -1,38 +1,23 @@
-LELLEE — GUEST BROWSE ACCESS FIX
+LELLEE — PROGRAM SELECTION ROUTING FIX
 Date: August 28, 2026
 
 PURPOSE
-Users must be able to explore Lellee before creating an account.
-Account creation/sign-in is required only when a user chooses to save or personalize private information.
+Fixes the bug where selecting Caregiving, Reentry, Housing Stability, or another Lellee support program opened Recovery > Today.
 
-WHAT THIS FIX CHANGES
-1. /app now opens in guest browsing mode when there is no signed-in session.
-2. The public landing page routes support exploration into guest browsing mode.
-3. "Log In" and "My Lellee" explicitly open the sign-in screen.
-4. The sign-in screen includes "Browse Lellee first."
-5. Guest users see a clear Browsing Preview badge and a Sign in/Create Account option.
-6. Personal save actions prompt the user to create/sign in to an account instead of blocking browsing.
-7. Guest preview data is not persisted as a Lellee account record.
-8. Signing out clears the local app-profile cache before returning to the public site, reducing the risk that a later guest on the same device sees the previous user's local profile.
-9. The service-worker version is bumped so the new navigation behavior replaces the prior cached shell.
+WHAT CHANGES
+- The selected public support path is preserved from the landing page into /app.
+- Recovery still opens Recovery > Today.
+- Non-Recovery selections open a program-specific browse/preview page instead of Recovery > Today.
+- The preview clearly remains in the selected program context.
+- Recovery-only navigation is hidden while browsing another support path.
+- Browsing does not require an account.
+- Sign-in remains required only for private saved/personalized features.
+- This does NOT publicly activate the unfinished multi-program journeys or change Supabase launch gates.
 
-UPLOAD TO GITHUB
-Upload these four files to the ROOT of the same GitHub repository connected to www.lellee.com:
-- index.html
-- landing.html
-- service-worker.js
-- reset-lellee-cache.html
+UPLOAD TO GITHUB ROOT
+1. index.html
+2. service-worker.js
+3. reset-lellee-cache.html
 
-Replace the existing files using the exact filenames. Do not add numbered copies.
-No Supabase SQL is required for this fix.
-
-AFTER VERCEL SHOWS READY
-1. Open https://www.lellee.com/reset-lellee-cache.html once.
-2. Open https://www.lellee.com/ and select a support path / Start Your Journey.
-3. Confirm Lellee opens for browsing WITHOUT requesting an account first.
-4. Navigate through Today, Recovery, Learn, Tools and Resources.
-5. Try a personal Save action. It should then invite the user to sign in/create an account while still offering Browse Lellee first.
-6. Open https://www.lellee.com/app?auth=signin and confirm the explicit sign-in page still works.
-
-EXPECTED EXPERIENCE
-Browse first -> understand Lellee -> choose support -> create/sign in only when saving/personalizing.
+Replace the existing files with these exact names. No Supabase SQL is required.
+After Vercel is Ready, open /reset-lellee-cache.html once, then select a non-Recovery program from the landing page and confirm the selected program opens.

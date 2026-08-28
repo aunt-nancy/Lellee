@@ -1083,6 +1083,21 @@ Includes the approved Lellee consumer experience from early recovery through lif
 <link rel="stylesheet" href="/organization-dashboard-live.css?v=20260827-1">
 <link rel="stylesheet" href="/organization-operations-completion.css?v=20260827-1">
 <link rel="stylesheet" href="/unified-workspace-switcher.css?v=20260827-1">
+
+<style id="lellee-program-selection-routing-fix">
+.program-preview-status{display:inline-flex;align-items:center;gap:7px;padding:7px 10px;border-radius:999px;background:#f1ebf8;color:#65409a;font-size:.68rem;font-weight:850;margin-bottom:12px}
+.program-preview-hero{background:linear-gradient(145deg,#f7f3fa,#fffaf5);border:1px solid #e8e0ec;border-radius:24px;padding:25px;margin-bottom:16px;box-shadow:var(--soft-shadow)}
+.program-preview-hero h2{font-family:Georgia,serif;font-weight:500;font-size:2rem;margin:.15em 0 .28em;color:#241b36}
+.program-preview-hero p{max-width:760px;color:#655d6c;line-height:1.62;margin:0}
+.program-preview-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:15px 0}
+.program-preview-card{background:#fff;border:1px solid #e8e4ea;border-radius:17px;padding:17px;box-shadow:var(--soft-shadow)}
+.program-preview-card b{display:block;color:#30263f;margin-bottom:5px}.program-preview-card p{margin:0;color:#746c79;font-size:.78rem;line-height:1.5}
+.program-preview-note{background:#f7f6f8;border:1px solid #e7e4e9;border-radius:15px;padding:14px 16px;color:#625b68;font-size:.76rem;line-height:1.5}
+.program-preview-actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:17px}
+.program-context-pill{display:inline-flex;align-items:center;gap:5px;margin-left:8px;padding:4px 8px;border-radius:999px;background:#efe8f7;color:#65409a;font-size:.62rem;font-weight:850}
+body.program-preview-mode .top-stats .mini-stat{min-width:110px}
+@media(max-width:720px){.program-preview-grid{grid-template-columns:1fr}.program-preview-hero{padding:20px 17px;border-radius:20px}.program-preview-hero h2{font-size:1.7rem}}
+</style>
 </head>
 <body><a class="skip-link" href="#mainContent">Skip to main content</a><a class="lellee-skip" href="#lelleeMain">Skip to main content</a>
 <div class="prod-overlay hidden" id="onboardingOverlay">
@@ -4954,6 +4969,28 @@ Includes the approved Lellee consumer experience from early recovery through lif
 </div>
 </div>
 </section>
+
+<section class="page" id="page-program-preview">
+<div class="approved-inner">
+  <div class="program-preview-hero">
+    <span class="program-preview-status" id="programPreviewStatus">EXPLORE THIS SUPPORT PATH</span>
+    <h2 id="programPreviewTitle">Explore Lellee</h2>
+    <p id="programPreviewDescription">See how this Lellee support path can help before you create an account.</p>
+  </div>
+  <div class="program-preview-grid">
+    <article class="program-preview-card"><b id="programPreviewCard1Title">Start where you are</b><p id="programPreviewCard1Text">See the kinds of steps and support this program is designed to organize.</p></article>
+    <article class="program-preview-card"><b id="programPreviewCard2Title">Practical tools</b><p id="programPreviewCard2Text">Explore planning, resources and guided support without saving personal information.</p></article>
+    <article class="program-preview-card"><b id="programPreviewCard3Title">Keep your privacy</b><p id="programPreviewCard3Text">Browsing does not enroll you, create a profile, or move you into another Lellee program.</p></article>
+    <article class="program-preview-card"><b id="programPreviewCard4Title">Choose what comes next</b><p id="programPreviewCard4Text">You can explore another support path at any time.</p></article>
+  </div>
+  <div class="program-preview-note" id="programPreviewNote"><b>Browse first.</b> You do not need an account to look around. Lellee asks you to sign in only when you choose to save or personalize private information.</div>
+  <div class="program-preview-actions">
+    <button class="approved-small-action" data-page="resources">Browse Shared Resources</button>
+    <button class="approved-link" id="programPreviewSignIn" type="button">Sign In When Ready</button>
+    <a class="approved-link" href="/#support-paths">Choose Another Support Path</a>
+  </div>
+</div>
+</section>
 <section class="page" id="page-programs">
 <div class="approved-inner">
 <div class="approved-inner-head">
@@ -7365,10 +7402,13 @@ function renderBasics(){
   });
 }
 function showPage(name){
+  if(programBrowsePreviewMode && (name==='today' || RECOVERY_ONLY_BROWSE_PAGES.has(name)))name='program-preview';
   $$('.page').forEach(p=>p.classList.remove('active'));
   const page=$(`#page-${name}`)||$('#page-today');
   page.classList.add('active');
-  $$('.nav-item,.mobile-bottom button[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===name));
+  const navName=name==='program-preview'?'today':name;
+  $$('.nav-item,.mobile-bottom button[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===navName));
+  if(name==='program-preview')renderProgramBrowseChrome();
   window.scrollTo({top:0,behavior:'smooth'});
 }
 $$('[data-page]').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.page)));
@@ -7521,6 +7561,66 @@ $('#reviewPrevious')?.addEventListener('click',()=>{
 });
 function escapeHtml(str){return str.replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
 
+
+const PROGRAM_BROWSE_KEY='lellee_browse_program_v1';
+let activeBrowseProgram='recovery';
+let programBrowsePreviewMode=false;
+const PROGRAM_PREVIEWS={
+  caregiving:{label:'Caregiving',description:'Support yourself while caring for a parent, partner, child, or loved one.',cards:[['Caregiver check-in','Notice what you need while you are caring for someone else.'],['Organize the load','Keep appointments, responsibilities and practical next steps easier to see.'],['Boundaries & backup','Think through rest, boundaries, trusted helpers and backup support.'],['Find caregiver resources','Explore practical community and support resources without creating an account.']]},
+  'housing-stability':{label:'Housing Stability',description:'Get organized around housing, stability and the next practical step.',cards:[['Know what is urgent','Separate immediate housing needs from steps that can wait.'],['Documents & deadlines','Keep track of applications, notices, appointments and follow-up.'],['Stability planning','Build a manageable plan around housing, income and daily needs.'],['Find housing resources','Explore public and community resources without being placed in Recovery.']]},
+  reentry:{label:'Returning Home',description:'Rebuild after jail, prison, probation, parole, or another justice-system transition.',cards:[['First priorities','Organize identification, housing, supervision, transportation and immediate needs.'],['Rebuild routines','Create structure around appointments, work, family and daily responsibilities.'],['Practical reentry tools','Explore planning and resource tools designed around returning home.'],['Move forward your way','Browse without enrollment and choose which support you want to use.']]},
+  'work-new-beginnings':{label:'Work & New Beginnings',description:'Return to work, find structure, build confidence and move toward income.',cards:[['Clarify the next step','Start with work readiness, job search, training or basic stability.'],['Organize the search','Keep applications, follow-ups and appointments in one place.'],['Build momentum','Break employment goals into realistic steps.'],['Explore work resources','Browse tools and resources before deciding whether to create an account.']]},
+  'workforce-reentry':{label:'Work & New Beginnings',description:'Return to work, find structure, build confidence and move toward income.',cards:[['Clarify the next step','Start with work readiness, job search, training or basic stability.'],['Organize the search','Keep applications, follow-ups and appointments in one place.'],['Build momentum','Break employment goals into realistic steps.'],['Explore work resources','Browse tools and resources before deciding whether to create an account.']]},
+  'grief-loss':{label:'Grief & Life After Loss',description:'Find your footing after a death, major loss, or painful life change.',cards:[['Take today gently','Start with what feels manageable rather than a fixed timeline.'],['Daily-life support','Explore routines, reminders and practical help when concentration is hard.'],['Reflection without pressure','Use optional prompts without being forced into a recovery journey.'],['Find grief resources','Browse support and community options privately.']]},
+  grief:{label:'Grief & Life After Loss',description:'Find your footing after a death, major loss, or painful life change.',cards:[['Take today gently','Start with what feels manageable rather than a fixed timeline.'],['Daily-life support','Explore routines, reminders and practical help when concentration is hard.'],['Reflection without pressure','Use optional prompts without being forced into a recovery journey.'],['Find grief resources','Browse support and community options privately.']]},
+  'independent-living':{label:'Independent Living',description:'Build routines, daily skills, confidence and greater independence.',cards:[['Daily routines','Explore simple support for appointments, tasks and everyday structure.'],['Life skills','Organize practical needs such as transportation, benefits, housing and money.'],['Build confidence','Break larger goals into small, visible steps.'],['Find useful resources','Browse support without creating an account or entering Recovery.']]},
+  'family-support':{label:'Family Support',description:'Navigate family stress, support someone you love and strengthen connection.',cards:[['What does the family need?','Separate your own needs from the needs of the person you are supporting.'],['Communication & boundaries','Explore practical ways to prepare for difficult conversations and limits.'],['Shared-life planning','Organize appointments, responsibilities and next steps.'],['Find family resources','Browse options without sharing private information.']]},
+  'family-recovery':{label:'Family Support',description:'Navigate family stress, support someone you love and strengthen connection.',cards:[['What does the family need?','Separate your own needs from the needs of the person you are supporting.'],['Communication & boundaries','Explore practical ways to prepare for difficult conversations and limits.'],['Shared-life planning','Organize appointments, responsibilities and next steps.'],['Find family resources','Browse options without sharing private information.']]},
+  'financial-stability':{label:'Financial Stability',description:'Get organized around bills, benefits, income and the next practical money step.',cards:[['See what needs attention','Separate urgent bills and deadlines from longer-term goals.'],['Organize paperwork','Keep benefits, applications and financial tasks easier to track.'],['Build a small plan','Turn money stress into a few manageable next actions.'],['Find financial resources','Browse available support without creating an account.']]},
+  'veteran-transition':{label:'Veteran Transition',description:'Navigate work, housing, benefits, family and community during a major transition.',cards:[['Choose a starting point','Focus first on the area that needs attention now.'],['Organize benefits & tasks','Keep appointments, documents and practical follow-up visible.'],['Build civilian routines','Create structure around work, family and daily life.'],['Find veteran resources','Browse support options without enrollment.']]},
+  'disability-independence':{label:'Disability & Independence',description:'Organize practical support, routines, benefits and greater day-to-day independence.',cards:[['Start with daily needs','Identify the routines or practical barriers that matter most.'],['Benefits & services','Keep applications, appointments and documents easier to manage.'],['Independence planning','Break larger goals into realistic steps.'],['Explore resources','Browse first without creating an account.']]},
+  'kinship-caregiving':{label:'Kinship Caregiving',description:'Support relatives raising children while managing family, school, benefits and everyday needs.',cards:[['Caregiver priorities','See what needs attention for you and the child today.'],['School & appointments','Organize responsibilities, documents and follow-up.'],['Family support','Explore boundaries, backup help and practical planning.'],['Find kinship resources','Browse support before deciding whether to create an account.']]}
+};
+const RECOVERY_ONLY_BROWSE_PAGES=new Set(['recovery','journey','recovery-paths-v2','meetings','journal','progress','community','milestones','then-now','story','history','longterm','planner','support-network','day2','recovery-hub','personal-plan','stability-map','return-path','journal-companion','story-archive','long-term-maintenance','recovery-completion']);
+function cleanProgramKey(key=''){return String(key||'').trim().toLowerCase().replace(/_/g,'-')}
+function programPreviewConfig(key=activeBrowseProgram){
+  const k=cleanProgramKey(key);
+  if(PROGRAM_PREVIEWS[k])return PROGRAM_PREVIEWS[k];
+  const label=k.split('-').filter(Boolean).map(w=>w.charAt(0).toUpperCase()+w.slice(1)).join(' ')||'Lellee Support';
+  return {label,description:`Explore ${label} support with Lellee before creating an account.`,cards:[['Start where you are','See what this support path is designed to help organize.'],['Practical next steps','Explore planning and shared tools without saving personal information.'],['Private by default','Browsing does not enroll you or switch you into Recovery.'],['Choose what comes next','You remain in control of which Lellee support path you explore.']]};
+}
+function captureBrowseProgram(){
+  const params=new URLSearchParams(location.search);
+  const requested=cleanProgramKey(params.get('recommended')||params.get('program')||'');
+  let saved='';try{saved=cleanProgramKey(sessionStorage.getItem(PROGRAM_BROWSE_KEY)||'')}catch(_){}
+  activeBrowseProgram=requested||saved||'recovery';
+  programBrowsePreviewMode=activeBrowseProgram!=='recovery';
+  try{if(programBrowsePreviewMode)sessionStorage.setItem(PROGRAM_BROWSE_KEY,activeBrowseProgram);else sessionStorage.removeItem(PROGRAM_BROWSE_KEY)}catch(_){}
+}
+function renderProgramPreview(){
+  if(!programBrowsePreviewMode)return;
+  const cfg=programPreviewConfig();
+  const set=(id,value)=>{const el=document.getElementById(id);if(el)el.textContent=value};
+  set('programPreviewTitle',cfg.label);
+  set('programPreviewDescription',cfg.description);
+  (cfg.cards||[]).slice(0,4).forEach((card,i)=>{set(`programPreviewCard${i+1}Title`,card[0]);set(`programPreviewCard${i+1}Text`,card[1])});
+  set('programPreviewNote','Browse first. You are exploring '+cfg.label+'. This preview does not enroll you, create an account, or switch you into the Recovery program. Sign in is only needed when you choose a private feature that saves or personalizes information.');
+}
+function renderProgramBrowseChrome(){
+  if(!programBrowsePreviewMode){document.body.classList.remove('program-preview-mode');return}
+  document.body.classList.add('program-preview-mode');
+  const cfg=programPreviewConfig();
+  const greeting=document.getElementById('greetingText');if(greeting)greeting.textContent=`Explore ${cfg.label} with Lellee`;
+  const gp=document.querySelector('.greeting > p');if(gp)gp.textContent='Browse this support path before deciding whether you want an account.';
+  const mobile=document.querySelector('.mobile-title');if(mobile)mobile.textContent=cfg.label;
+  const todayBtn=document.querySelector('.nav-item[data-page="today"]');if(todayBtn)todayBtn.innerHTML='<span class="nav-icon">▣</span>Program Overview';
+  ['recovery','learn','tools','recovery-paths-v2','meetings','journal','progress','community','milestones','then-now','story','history','longterm'].forEach(page=>{document.querySelectorAll(`.sidebar [data-page="${page}"],.mobile-bottom [data-page="${page}"]`).forEach(el=>el.style.display='none')});
+  const stats=document.querySelectorAll('.top-stats .mini-stat');
+  if(stats[0])stats[0].innerHTML='<span class="stat-emoji">✦</span><div><b>Explore</b><small>Program preview</small></div>';
+  if(stats[1])stats[1].innerHTML='<span class="stat-emoji">◇</span><div><b>Guest</b><small>No account required</small></div>';
+  renderProgramPreview();
+}
+
 let authMode='signin';
 function setAuthMode(mode,msg=''){authMode=mode;$('#authTitle').textContent=mode==='signin'?'Sign in to Lellee':'Create your Lellee account';$('#authSubmit').textContent=mode==='signin'?'Sign in':'Create account';$('#authToggle').textContent=mode==='signin'?'Create account':'Back to sign in';$('#authPassword').autocomplete=mode==='signin'?'current-password':'new-password';$('#authMsg').textContent=msg|| (mode==='signin'?'Sign in to save your progress, journal, preferences, and personal plan.':'Create an account when you are ready to save and personalize Lellee.');$('#authMsg').className='auth-msg'}
 function showAuthOverlay(mode='signin',msg=''){setAuthMode(mode,msg);$('#authOverlay').classList.remove('hidden')}
@@ -7536,10 +7636,11 @@ function renderGuestChrome(){
 function enterGuestMode(){
   guestMode=true;currentUser=null;data=guestPreviewData();
   $('#authOverlay').classList.add('hidden');
-  renderBasics();renderGuestChrome();showPage('today');
+  renderBasics();renderGuestChrome();renderProgramBrowseChrome();showPage('today');
 }
 function requireAccount(reason='save your progress'){showAuthOverlay('signup',`Create a Lellee account to ${reason}. You can continue browsing without one.`)}
 $('#browseWithoutAccount')?.addEventListener('click',enterGuestMode);
+$('#programPreviewSignIn')?.addEventListener('click',()=>showAuthOverlay('signin'));
 $('#authToggle').addEventListener('click',()=>setAuthMode(authMode==='signin'?'signup':'signin'));
 $('#authForm').addEventListener('submit',async e=>{e.preventDefault();const email=$('#authEmail').value.trim(),password=$('#authPassword').value;let result;if(authMode==='signin')result=await sb.auth.signInWithPassword({email,password});else result=await sb.auth.signUp({email,password});if(result.error){$('#authMsg').textContent=result.error.message;$('#authMsg').className='auth-msg error';return}if(authMode==='signup'&&!result.data.session){setAuthMode('signin','Account created. Confirm your email, then sign in.');return}await beginSession(result.data.user)});
 $('#signOutBtn').addEventListener('click',async(e)=>{
@@ -7567,7 +7668,7 @@ $('#signOutBtn').addEventListener('click',async(e)=>{
     alert('Sign out did not complete. Please try again.');
   }
 });
-async function beginSession(user){guestMode=false;currentUser=user;document.getElementById('guestPreviewBadge')?.remove();const signBtn=$('#signOutBtn');if(signBtn){signBtn.textContent='Sign out';signBtn.title='';}const [p,r,u,l,j,dc,ra]=await Promise.all([sb.from('profiles').select('*').eq('id',user.id).single(),sb.from('recovery_profiles').select('*').eq('user_id',user.id).single(),sb.from('user_preferences').select('*').eq('user_id',user.id).single(),sb.from('local_preferences').select('*').eq('user_id',user.id).single(),sb.from('journal_entries').select('content,created_at').eq('user_id',user.id).order('created_at',{ascending:false}).limit(20),sb.from('daily_checkins').select('*').eq('user_id',user.id).eq('checkin_date',todayKey()),sb.from('recovery_actions').select('*').eq('user_id',user.id).eq('action_date',todayKey())]);data.name=p.data?.display_name||data.name;data.recoveryDate=r.data?.recovery_date||data.recoveryDate;data.goal=r.data?.current_goal||data.goal;data.approach=approachFromDb(u.data?.recovery_approach);data.belief=beliefFromDb(u.data?.belief_preference);data.faith=u.data?.faith_tradition||'';data.denomination=u.data?.denomination||'';data.city=l.data?.city||'';data.state=l.data?.state||'';data.journalEntries=(j.data||[]).map(x=>({date:x.created_at,text:x.content}));data.daily[todayKey()]={};if(dc.data?.length)data.daily[todayKey()].checkin='Checked in';for(const a of (ra.data||[])){const rev={daily_focus:'focus',gratitude:'gratitude',recovery_action:'action',evening_reflection:'reflection'};if(rev[a.action_type])data.daily[todayKey()][rev[a.action_type]]=a.content||'Completed'}localStorage.setItem(STORAGE,JSON.stringify(data));renderBasics();$('#authOverlay').classList.add('hidden');showPage('today');setTimeout(()=>window.LelleeFinalOnboarding?.check(),60)}
+async function beginSession(user){guestMode=false;currentUser=user;document.getElementById('guestPreviewBadge')?.remove();const signBtn=$('#signOutBtn');if(signBtn){signBtn.textContent='Sign out';signBtn.title='';}const [p,r,u,l,j,dc,ra]=await Promise.all([sb.from('profiles').select('*').eq('id',user.id).single(),sb.from('recovery_profiles').select('*').eq('user_id',user.id).single(),sb.from('user_preferences').select('*').eq('user_id',user.id).single(),sb.from('local_preferences').select('*').eq('user_id',user.id).single(),sb.from('journal_entries').select('content,created_at').eq('user_id',user.id).order('created_at',{ascending:false}).limit(20),sb.from('daily_checkins').select('*').eq('user_id',user.id).eq('checkin_date',todayKey()),sb.from('recovery_actions').select('*').eq('user_id',user.id).eq('action_date',todayKey())]);data.name=p.data?.display_name||data.name;data.recoveryDate=r.data?.recovery_date||data.recoveryDate;data.goal=r.data?.current_goal||data.goal;data.approach=approachFromDb(u.data?.recovery_approach);data.belief=beliefFromDb(u.data?.belief_preference);data.faith=u.data?.faith_tradition||'';data.denomination=u.data?.denomination||'';data.city=l.data?.city||'';data.state=l.data?.state||'';data.journalEntries=(j.data||[]).map(x=>({date:x.created_at,text:x.content}));data.daily[todayKey()]={};if(dc.data?.length)data.daily[todayKey()].checkin='Checked in';for(const a of (ra.data||[])){const rev={daily_focus:'focus',gratitude:'gratitude',recovery_action:'action',evening_reflection:'reflection'};if(rev[a.action_type])data.daily[todayKey()][rev[a.action_type]]=a.content||'Completed'}localStorage.setItem(STORAGE,JSON.stringify(data));renderBasics();$('#authOverlay').classList.add('hidden');renderProgramBrowseChrome();showPage('today');setTimeout(()=>window.LelleeFinalOnboarding?.check(),60)}
 
 const phase1Curriculum = [
 {d:1,t:"Start Here: Safety & Support",lead:"Today is about getting a little steadier. You do not need to solve your whole recovery at once.",focus:"What would help you feel a little safer or steadier today?",choices:["A safe place","Someone I trust","Food / water","Rest","Distance from alcohol / drugs","A meeting or recovery support","Medical / professional help","I'm not sure yet"],actions:["Call or text someone supportive","Eat and hydrate","Rest somewhere safe","Attend a meeting","Create distance from alcohol / drugs","Ask for professional help","Take one hour at a time"]},
@@ -7780,6 +7881,7 @@ document.addEventListener('click',e=>{
 },true);
 
 async function initSupabase(){
+  captureBrowseProgram();
   const {data:{session}}=await sb.auth.getSession();
   if(session?.user){await beginSession(session.user);return;}
   const params=new URLSearchParams(location.search);
@@ -7790,6 +7892,7 @@ async function initSupabase(){
 initSupabase();
 </script>
 <!-- LELLEE GUEST BROWSE ACCESS FIX 2026-08-28 -->
+<!-- LELLEE PROGRAM SELECTION ROUTING FIX 2026-08-28 -->
 <!-- LELLEE MASTER INDEX
 Includes:
 - Approved logo artwork embedded directly
