@@ -1,41 +1,86 @@
-LELLEE — LIVE COACH DASHBOARD V2
+LELLEE — COACH OPERATIONS COMPLETION
 Date: 2026-08-27
 
-WHY V2
-The prior Live Coach Dashboard bridge stopped because public.profiles does not
-exist in the current Supabase database.
+THIS IS THE NEXT LARGE COACHING SPRINT.
+It completes the remaining major buttons already present on the Coach Dashboard.
 
-That table is NOT required for the coach dashboard to function.
+PREREQUISITES
+1. Coach Business Foundation Restore succeeded.
+2. Live Coach Dashboard V2 succeeded.
 
-V2 removes that hard dependency. Client/sender display labels now safely fall
-back to the signed-in account email local-part (for example, "alex" from
-alex@example.com) or a short generic client label.
+RUN / UPLOAD IN THIS ORDER
 
-RUN THIS CORRECTED FILE IN SUPABASE SQL EDITOR:
-01_Coach_Dashboard_Live_Bridge_V2_2026-08-27.sql
+1. SUPABASE SQL EDITOR
+Run as ONE complete script:
+01_Lellee_Coach_Operations_Completion_2026-08-27.sql
 
-Run it as ONE complete script.
-
-IMPORTANT
-Do NOT rerun the failed V1 SQL first. The failed V1 transaction stopped before
-installation, so use V2 directly.
-
-AFTER THE SQL SUCCEEDS
-Upload / replace these GitHub-root files:
+2. GITHUB ROOT
+Upload / replace:
 - index.html
-- coach-dashboard-live.js
-- coach-dashboard-live.css
+- coach-operations-completion.js
+- coach-operations-completion.css
 
-UNCHANGED
-- Coach Business Foundation is still required.
-- Human approval is still required for coaching businesses.
-- Coach payments remain OFF.
-- Public coach marketplace remains OFF.
-- Public multi-program launch remains OFF.
-- Recovery is unchanged.
-- Agent autonomy settings are unchanged.
-- No journal, safety/crisis, diagnosis, or private recovery-history data is
-  added to the coach dashboard.
+3. OPTIONAL READ-ONLY CHECK
+02_Lellee_Coach_Operations_READ_ONLY_VERIFY.sql
 
-OPTIONAL
-02_Coach_Dashboard_Live_READ_ONLY_VERIFY.sql
+WHAT BECOMES FUNCTIONAL
+
+COACH ANALYTICS
+- leads + conversion
+- active/new clients
+- groups + open seats
+- consultations + conversion
+- service utilization
+- group capacity
+
+COACH REVENUE
+- configured service/package pricing
+- active clients/groups
+- group economics
+- projected configured gross value
+- clear payout/payment OFF status
+No earnings guarantee and no money movement.
+
+SCHEDULING & CRM
+- recurring availability
+- schedule 1-to-1/group/admin sessions
+- consultation list
+- follow-up CRM
+- mark follow-ups complete
+- contact-history log
+
+AUTOMATION
+- safe business-operational rules only
+- consultation requested -> follow-up
+- session scheduled -> follow-up
+- group start -> preparation follow-up
+- no journal, safety, diagnosis or message-body inputs
+- no emergency dispatch
+- no outbound email/SMS/DM
+
+CREDENTIALS & INTAKE
+- self-reported credential claims
+- training records
+- client intake form creation
+- intake assignment to active clients
+- explicit verification status
+- no automatic public credential claims
+- no automatic diagnosis
+
+QUICK START
+- live setup checklist and completion percentage
+- links back to the exact next coaching area
+
+STILL OFF
+- coach payments/payouts
+- public coach marketplace
+- public multi-program launch
+- autonomous agents
+- sensitive client-content analytics/automation
+
+The included index.html preserves the earlier:
+- larger Lellee logo
+- logout fix
+- Agent Command Center
+- professional coach-entry routing
+- Live Coach Dashboard V2

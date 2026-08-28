@@ -1,0 +1,55 @@
+
+/* LELLEE — COACH OPERATIONS COMPLETION — 2026-08-27 */
+.coach-ops-item{
+  border:1px solid #e2dce8;background:#fff;border-radius:14px;padding:13px 14px;margin:8px 0;
+}
+.coach-ops-row{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+.coach-ops-item b{font-size:.78rem;color:#352c40}
+.coach-ops-item small{display:block;margin-top:4px;color:#766f7c;font-size:.63rem;line-height:1.45}
+.coach-ops-pill{
+  display:inline-block;padding:4px 8px;border-radius:999px;background:#f1ecf7;
+  color:#684d8b;font-size:.56rem;font-weight:850;white-space:nowrap
+}
+.coach-ops-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.coach-ops-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}
+.coach-ops-actions button{
+  border:1px solid #ded6e6;background:#fff;border-radius:9px;padding:6px 9px;
+  color:#584764;font-size:.6rem;font-weight:850
+}
+.coach-ops-actions .primary{background:#65419b;border-color:#65419b;color:#fff}
+.coach-ops-empty{
+  padding:17px;border:1px dashed #ded6e5;border-radius:12px;background:#faf8fb;
+  color:#776f7d;font-size:.7rem
+}
+.coach-ops-dialog{
+  border:0;border-radius:20px;padding:0;width:min(730px,calc(100% - 28px));
+  box-shadow:0 30px 90px rgba(30,20,42,.3)
+}
+.coach-ops-dialog::backdrop{background:rgba(25,18,35,.58)}
+.coach-ops-dialog-inner{padding:22px}
+.coach-ops-dialog-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:14px}
+.coach-ops-dialog-head h3{margin:3px 0 4px}
+.coach-ops-dialog-head p{margin:0;color:#716979;font-size:.72rem}
+.coach-ops-close{width:34px;height:34px;border-radius:50%;border:1px solid #e0d8e7;background:#fff;font-size:1.15rem}
+.coach-ops-form{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.coach-ops-form label{display:grid;gap:5px;font-size:.65rem;font-weight:820;color:#554b5d}
+.coach-ops-form label.wide{grid-column:1/-1}
+.coach-ops-form input,.coach-ops-form select,.coach-ops-form textarea{
+  width:100%;border:1px solid #ded7e5;border-radius:10px;padding:10px;background:#fff;color:#302936
+}
+.coach-ops-form textarea{min-height:100px;resize:vertical}
+.coach-ops-footer{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}
+.coach-ops-footer button{border:1px solid #ddd4e6;background:#fff;border-radius:10px;padding:9px 13px;font-weight:850}
+.coach-ops-footer .primary{background:#65419b;color:#fff;border-color:#65419b}
+.coach-ops-progress-row{display:grid;grid-template-columns:28px 1fr auto;gap:10px;align-items:center;padding:12px;border-bottom:1px solid #eee9f1}
+.coach-ops-progress-row:last-child{border-bottom:0}
+.coach-ops-check{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:#efeaf4;color:#735592;font-weight:900}
+.coach-ops-check.done{background:#e9f6ed;color:#2d6a3f}
+.coach-ops-progress-row b{font-size:.72rem}.coach-ops-progress-row small{font-size:.61rem;color:#77707c}
+.coach-ops-progress-row button{border:1px solid #ddd5e5;background:#fff;border-radius:9px;padding:6px 9px;font-size:.59rem;font-weight:820}
+.coach-ops-warning{padding:10px 12px;border:1px solid #efd9b8;background:#fff9ee;border-radius:11px;color:#76572b;font-size:.65rem}
+.coach-ops-error{padding:10px 12px;border:1px solid #efcbd3;background:#fff4f6;border-radius:11px;color:#8c4050;font-size:.67rem}
+@media(max-width:650px){
+  .coach-ops-form{grid-template-columns:1fr}.coach-ops-form label.wide{grid-column:auto}
+  .coach-ops-row{display:block}
+}
