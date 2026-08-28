@@ -1,28 +1,42 @@
-LELLEE — ALL-SEVEN RUNTIME POLISH / INTEGRATION SPRINT
+LELLEE — COACHING PROFESSIONAL FRONT DOOR
 Date: 2026-08-27
 
-This package does NOT replace recovery(6).html or rewrite the Recovery experience.
-The existing full app already loads /pilot-runtime.js and /pilot-runtime.css.
+UPLOAD THESE FOUR FILES TO THE GITHUB ROOT:
+1. coach.html
+2. coach.css
+3. coach.js
+4. landing.html  (replaces current landing.html; preserves the large logo and Plans & Pricing header)
 
-UPLOAD TO THE GITHUB ROOT, REPLACING ONLY:
-- pilot-runtime.js
-- pilot-runtime.css
+WHAT CHANGES ON THE CONSUMER LELLEE SITE
+- Coaching stays OUT of the public header.
+- The footer now uses a small "For Professionals" link to /coach.html.
+- The consumer Plans & Pricing header remains unchanged.
+- No coaching-business sales message is pushed into the main consumer navigation.
 
-DO NOT replace index.html/recovery(6).html in this sprint.
+WHAT /coach.html PROVIDES
+- Separate coaching/professional front door.
+- Coach Login and Start Your Business buttons.
+- Client-management, groups, programs, messaging, assignments, scheduling/CRM,
+  analytics, revenue tracking, services/pricing, credentials/intake and automation.
+- 1:1, group and hybrid coaching models.
+- Clear separation between consumer Lellee support and the coaching-business product.
+- Starter / Pro / Business plan structure without inventing unapproved prices.
+- Explicit notice that coach payments are not activated yet.
+- Professional scope / credential / client-sharing guardrails.
 
-WHAT THIS PACKAGE DOES
-- Uses the existing My Lellee Programs page and Program Home runtime.
-- Shows Recovery plus every explicit internal pilot enrollment.
-- Keeps Recovery on its existing legacy Today renderer.
-- Renders each non-Recovery program from existing program metadata, modules, stages and content.
-- Adds a polished shared visual runtime rather than seven separate hard-coded sites.
-- Saves pilot Today responses only to pilot_daily_responses for the signed-in user.
-- Does not auto-advance stages, create streak pressure, score users, publish content, change launch settings, or expose programs publicly.
-- Family Recovery uses the database-approved six-stage architecture already installed; the frontend does not redefine it.
+OPTIONAL READ-ONLY SUPABASE CHECK
+Lellee_Coaching_Front_Door_READ_ONLY_VERIFY_2026-08-27.sql
 
-OPTIONAL READ-ONLY CHECK
-Run Lellee_All_Seven_Runtime_READ_ONLY_VERIFY_2026-08-27.sql in Supabase after deployment.
-Expected protected values:
-- recovery_legacy_renderer_enabled = true
-- content_engine_v2_consumer_enabled = false
-- public_multi_program_launch_enabled = false
+NOT CHANGED
+- Recovery.
+- Public multi-program launch.
+- Coach payments.
+- Public coach marketplace.
+- Existing coach business data.
+- Agent settings.
+- Consumer subscription pricing.
+- Approved Lellee logo artwork.
+
+NOTE
+The final standalone coaching SaaS price points should be approved separately before
+numbers are published or coach checkout is activated.
