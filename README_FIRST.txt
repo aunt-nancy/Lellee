@@ -1,85 +1,41 @@
-LELLEE — LIVE COACH DASHBOARD
+LELLEE — LIVE COACH DASHBOARD V2
 Date: 2026-08-27
 
-RUN / UPLOAD IN THIS ORDER
+WHY V2
+The prior Live Coach Dashboard bridge stopped because public.profiles does not
+exist in the current Supabase database.
 
-1. SUPABASE SQL EDITOR
-Run:
-01_Coach_Dashboard_Live_Bridge_2026-08-27.sql
+That table is NOT required for the coach dashboard to function.
 
-This requires the Coach Business Foundation Restore to have succeeded first.
+V2 removes that hard dependency. Client/sender display labels now safely fall
+back to the signed-in account email local-part (for example, "alex" from
+alex@example.com) or a short generic client label.
 
-2. GITHUB ROOT
-Upload / replace:
+RUN THIS CORRECTED FILE IN SUPABASE SQL EDITOR:
+01_Coach_Dashboard_Live_Bridge_V2_2026-08-27.sql
+
+Run it as ONE complete script.
+
+IMPORTANT
+Do NOT rerun the failed V1 SQL first. The failed V1 transaction stopped before
+installation, so use V2 directly.
+
+AFTER THE SQL SUCCEEDS
+Upload / replace these GitHub-root files:
 - index.html
 - coach-dashboard-live.js
 - coach-dashboard-live.css
 
-3. OPTIONAL READ-ONLY CHECK
+UNCHANGED
+- Coach Business Foundation is still required.
+- Human approval is still required for coaching businesses.
+- Coach payments remain OFF.
+- Public coach marketplace remains OFF.
+- Public multi-program launch remains OFF.
+- Recovery is unchanged.
+- Agent autonomy settings are unchanged.
+- No journal, safety/crisis, diagnosis, or private recovery-history data is
+  added to the coach dashboard.
+
+OPTIONAL
 02_Coach_Dashboard_Live_READ_ONLY_VERIFY.sql
-
-WHAT THIS MAKES FUNCTIONAL
-COACH BUSINESS SETUP
-- loads program choices
-- loads existing business information
-- submits/resubmits a coaching business for HUMAN review
-- approved-business edits return to pending review
-- stores professional-scope/privacy attestations
-
-COACH DASHBOARD
-- live client count
-- live group count and open seats
-- unread coaching messages
-- clients tab
-- groups tab
-- services/pricing tab
-- messages tab
-- assignments tab
-- leads tab
-- Refresh
-
-COACH ACTIONS
-- create service/package definitions
-- create groups
-- add business leads
-- create assignments for a client or group
-- send client/group coaching messages
-- create client invitation links
-
-CLIENT INVITATION
-The coach gets a private /app?coach_invite=... link.
-The invited person must sign in with the invited email.
-The app accepts the invitation and opens My Coaching.
-
-ADMIN REVIEW
-The existing Admin · Coaching page becomes functional for:
-- pending count
-- approved count
-- human review of business name, audience, bio, scope/credentials
-- Approve
-- Return to Review
-- Pause
-- Reject / Changes
-No business is auto-approved.
-
-PRIVACY
-The dashboard bridge returns coach-business operating data only.
-It does NOT return:
-- journals
-- private recovery check-ins
-- safety/crisis activity
-- diagnoses
-- support contacts
-- full private recovery history
-
-STILL OFF
-- coach payment collection
-- public coach marketplace
-- public multi-program launch
-- autonomous agent actions
-
-The included index.html preserves the prior:
-- larger logo
-- logout fix
-- Agent Command Center
-- professional coach-entry routing
