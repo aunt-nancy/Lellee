@@ -1,4 +1,4 @@
-const LELLEE_SW_VERSION='lellee-logo-lock-2026-08-28-v1';
+const LELLEE_SW_VERSION='lellee-public-logo-source-lock-2026-08-28-v2';
 self.addEventListener('install',event=>self.skipWaiting());
 self.addEventListener('activate',event=>event.waitUntil((async()=>{
   const names=await caches.keys();
