@@ -1,116 +1,144 @@
-LELLEE — ORGANIZATION OPERATIONS COMPLETION
+LELLEE — FINAL AGENT OPERATIONS BUILD
 Date: 2026-08-27
+Build 1 of the final 3 consolidated Lellee builds.
 
-THIS IS THE NEXT ORGANIZATION SPRINT.
+THIS PACKAGE CONSOLIDATES THE AGENT WORK SO YOU DO NOT HAVE TO RUN THE OLD:
+- Growth Agents / Trend + Social package
+- Agent Roster Completion package
+- 17-Agent First Missions package
+again.
 
 PREREQUISITE
-The Organization Front Door + Live Dashboard V3 SQL must have succeeded.
+The original Agent Operations foundation (original 8 agents) must exist.
 
-OPTIONAL FIRST CHECK
-00_Organization_Operations_PRECHECK_READ_ONLY.sql
+OPTIONAL PRECHECK
+00_Final_Agent_Operations_PRECHECK_READ_ONLY.sql
 
 RUN / UPLOAD ORDER
 
 1. SUPABASE SQL EDITOR
 Run as ONE complete script:
-01_Lellee_Organization_Operations_Completion_2026-08-27.sql
-
-If V3 is missing, this script stops clearly before installing the operations layer.
+01_Lellee_Final_Agent_Operations_2026-08-27.sql
 
 2. GITHUB ROOT
-This package is cumulative. Upload / replace:
+Upload / replace:
 - index.html
-- landing.html
-- organizations.html
-- organizations.css
-- organizations.js
-- organization-entry-router.js
-- organization-dashboard-live.js
-- organization-dashboard-live.css
+- agent-command-center.js
+- agent-command-center.css
 
-Upload new:
-- organization-operations-completion.js
-- organization-operations-completion.css
+3. SUPABASE EDGE FUNCTIONS — dynamic-worker
+Replace the existing dynamic-worker index.ts contents with:
+dynamic-worker-index.ts
+Then deploy the existing dynamic-worker function.
 
-3. OPTIONAL READ-ONLY CHECK
-02_Organization_Operations_READ_ONLY_VERIFY.sql
+No secret values are contained in this package.
+Keep the existing OpenAI key and worker secret in Supabase.
 
-WHAT BECOMES FUNCTIONAL
+4. OPTIONAL VERIFY
+02_Final_Agent_Operations_READ_ONLY_VERIFY.sql
 
-ORGANIZATION ANALYTICS
-- licensed seats
-- assigned / active sponsored users
-- activation rate
-- licensed programs
-- cohorts
-- aggregate milestone count when that table is available
-- per-program utilization
-- small-group outcome suppression below 5 active participants
+WHAT THIS FINALIZES
 
-LICENSING & REVENUE PREPARATION
-- configured license values
-- quote list
-- organization can request a quote
-- a quote request does NOT set or approve price
-- organization billing remains OFF
+17 ACTIVE SPECIALISTS
+1. Operations Copilot
+2. Content QA
+3. Provider Research
+4. Prospect Research
+5. Support Triage
+6. Release QA
+7. Program Builder Assistant
+8. Knowledge Assistant
+9. Trend & Demand Intelligence
+10. Social Media Growth
+11. Growth & Marketing
+12. Coach Business Growth
+13. Revenue Intelligence
+14. Resource Freshness
+15. Accessibility QA
+16. Customer Success
+17. Coach Quality
 
-OUTREACH
-- sponsored-user outreach list
-- in-app organization announcement drafts
-- a separate HUMAN click is required to send an announcement
-- announcement delivery is inside Lellee only
-- no email / SMS / DM sending
-- operational follow-ups and history
+FOUR TEAMS
+- Growth & Revenue
+- Build & Quality
+- Operations & Success
+- Research & Resources
 
-AUTOMATION
-- sponsored invitation -> internal follow-up only
-- cohort start -> internal follow-up or announcement DRAFT
-- automation never auto-sends an announcement
-- no journal, message-body, safety, crisis, diagnosis, relapse-detail or treatment-note inputs
-- no emergency dispatch
+FIRST MISSIONS
+The 17 mission templates are installed.
+For safety, SQL Editor does not invent a requester identity.
+When an Admin opens Agent Workbench, click:
+Queue Missing Missions
+The signed-in admin becomes requester/reviewer for only the missions not already queued.
 
-INTEGRATIONS
-- staged roster/cohort/aggregate-report/resources/configuration jobs
-- import/export job records only
-- no transfer is executed automatically
-- prepared feeds/SSO/API counts can be viewed
-- external API, webhooks and SSO remain OFF
-- no raw credentials are requested from the organization UI
+HUMAN REVIEW FIX
+The old browser flow could record a review and then fail to update agent_outputs
+because direct output mutation is admin-only under RLS.
 
-FORMS
-- operational acknowledgments
-- aggregate surveys
-- operational intake
-- assign forms to active sponsored users
-- organization sees assignment/completion status
-- this package does NOT expose private consumer journal/message/safety content or unrelated private form answers
+This package fixes that with:
+lellee_review_agent_output_v1(...)
 
-QUICK START
-- live setup checklist:
-  profile
-  approval
-  team
-  license request
-  active license
-  sponsored participant
-  cohort
-  form
-  staged integration job
+Review + output status + task status are handled atomically through a controlled
+SECURITY DEFINER RPC.
 
-COMPATIBILITY
-This package NEVER drops, creates, or replaces:
-public.is_organization_member(uuid)
+APPROVED HANDOFFS
+Approved outputs can be handed off to:
+- internal reference
+- staff follow-up
+- growth
+- research
+- content
+- release
+- coach operations
+- organization operations
+- support
 
-All new mutating RPCs use unique Lellee versioned names.
+A handoff is an INTERNAL HUMAN ACTION RECORD.
+It does not automatically publish, email, DM, charge, change settings or modify
+another production system.
 
-PROTECTED STATES
-organization_payments_enabled = false
-organization_individual_private_data_access = false
-public_multi_program_launch_enabled = false
-external_api_access_enabled = false
-webhook_delivery_enabled = false
-sso_enabled = false
-automatic_third_party_data_delivery_enabled = false
+WORKER UPDATE
+The existing worker already executes all active agent roles through the model.
+This package extends PUBLIC WEB RESEARCH to:
+- provider_research
+- prospect_research
+- trend_intelligence
+- resource_freshness
 
-RECOVERY
-No Recovery tables, content, curriculum, renderer, pricing, or public launch state are changed.
+Other roles still use model execution with supplied/approved context but do not
+automatically invoke web research.
+
+COMMAND CENTER
+The UI now uses one RLS-safe command-center RPC rather than relying on direct
+output mutation.
+It shows:
+- 17-agent roster status
+- worker / model / public research status
+- four team workloads
+- tasks and latest outputs
+- confidence
+- sources
+- human review actions
+- approved internal handoffs
+- missing first-mission queue button for Admin
+
+PROTECTED SETTINGS REMAIN
+- Human review REQUIRED
+- Autonomous outreach OFF
+- Autonomous publishing OFF
+- Autonomous financial actions OFF
+- Permission changes OFF
+- Sensitive participant-data access OFF
+- Journal access OFF
+- Private-message access OFF
+- Safety-activity access OFF
+- Secret access OFF
+- Clinical decisions OFF
+- Public multi-program launch OFF
+
+THIS DOES NOT CHANGE
+Recovery curriculum/rendering
+Coach payments
+Organization payments
+Public coach marketplace
+Public multi-program release

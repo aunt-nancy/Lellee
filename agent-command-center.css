@@ -83,3 +83,26 @@
   .agent-team-grid{grid-template-columns:1fr}
   .agent-cc-form{grid-template-columns:1fr}.agent-cc-form label.wide{grid-column:auto}
 }
+
+
+/* FINAL AGENT OPERATIONS ADDITIONS */
+.agent-final-status{
+  margin:10px 0 0;padding:10px 12px;border:1px solid #ded7e5;border-radius:11px;
+  background:#faf8fb;font-size:.64rem;color:#655b6c;line-height:1.45
+}
+.agent-final-status.good{background:#eff8f1;border-color:#d3e7d8;color:#305f3c}
+.agent-final-status.warn{background:#fff8ee;border-color:#ecdcbc;color:#74582d}
+.agent-handoff-list{margin-top:10px}
+.agent-handoff-card{
+  border:1px solid #e4ddea;background:#fff;border-radius:12px;padding:11px 12px;margin:7px 0
+}
+.agent-handoff-card .row{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.agent-handoff-card b{font-size:.7rem}.agent-handoff-card small{display:block;color:#77707d;font-size:.59rem;margin-top:3px}
+.agent-handoff-card .pill{font-size:.54rem}
+.agent-handoff-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}
+.agent-handoff-actions button{border:1px solid #ddd5e5;background:#fff;border-radius:8px;padding:6px 8px;font-size:.57rem;font-weight:820}
+.agent-handoff-actions .primary{background:#65419b;color:#fff;border-color:#65419b}
+.agent-output-sources{margin-top:16px;padding-top:13px;border-top:1px solid #ebe6ee}
+.agent-output-sources b{font-size:.67rem}.agent-output-source{font-size:.62rem;color:#6d6572;word-break:break-word;margin-top:5px}
+.agent-command-actions{flex-wrap:wrap}
+@media(max-width:620px){.agent-handoff-card .row{display:block}}
