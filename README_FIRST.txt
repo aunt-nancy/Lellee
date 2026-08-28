@@ -1,42 +1,41 @@
-LELLEE — COACHING PROFESSIONAL FRONT DOOR
+LELLEE — COACH PROFESSIONAL ENTRY INTEGRATION
 Date: 2026-08-27
 
-UPLOAD THESE FOUR FILES TO THE GITHUB ROOT:
-1. coach.html
-2. coach.css
-3. coach.js
-4. landing.html  (replaces current landing.html; preserves the large logo and Plans & Pricing header)
+UPLOAD THESE THREE FILES TO GITHUB ROOT:
+1. index.html              (replace current app index)
+2. coach.html              (replace current professional front door)
+3. coach-entry-router.js   (new)
 
-WHAT CHANGES ON THE CONSUMER LELLEE SITE
-- Coaching stays OUT of the public header.
-- The footer now uses a small "For Professionals" link to /coach.html.
-- The consumer Plans & Pricing header remains unchanged.
-- No coaching-business sales message is pushed into the main consumer navigation.
+WHAT THIS FIXES
+The professional coaching front door previously sent every coach to /app, which
+normally opens the consumer app flow. This package makes /coach.html use:
 
-WHAT /coach.html PROVIDES
-- Separate coaching/professional front door.
-- Coach Login and Start Your Business buttons.
-- Client-management, groups, programs, messaging, assignments, scheduling/CRM,
-  analytics, revenue tracking, services/pricing, credentials/intake and automation.
-- 1:1, group and hybrid coaching models.
-- Clear separation between consumer Lellee support and the coaching-business product.
-- Starter / Pro / Business plan structure without inventing unapproved prices.
-- Explicit notice that coach payments are not activated yet.
-- Professional scope / credential / client-sharing guardrails.
+/app?entry=coach
 
-OPTIONAL READ-ONLY SUPABASE CHECK
-Lellee_Coaching_Front_Door_READ_ONLY_VERIFY_2026-08-27.sql
+Then the app routes the signed-in professional to:
+- Coach Dashboard if they already belong to an APPROVED coaching business.
+- Coach Business Setup if they do not yet have a coaching business.
+- Coach Business Settings if their business exists but is pending/draft/paused.
+
+The login overlay also says "Coach Log In" when arriving through the professional entry.
+
+DATABASE-AWARE
+If the Coach Business Foundation Restore has not actually been installed yet,
+the router shows a visible message instead of silently failing.
+
+PRESERVES PRIOR FIXES
+The included index.html is based on the latest patched app and preserves:
+- larger Lellee app logo
+- working logout redirect
+- Agent Command Center UI references
+
+OPTIONAL READ-ONLY DATABASE CHECK
+Lellee_Coach_Entry_READ_ONLY_VERIFY_2026-08-27.sql
 
 NOT CHANGED
-- Recovery.
-- Public multi-program launch.
-- Coach payments.
-- Public coach marketplace.
-- Existing coach business data.
-- Agent settings.
-- Consumer subscription pricing.
-- Approved Lellee logo artwork.
-
-NOTE
-The final standalone coaching SaaS price points should be approved separately before
-numbers are published or coach checkout is activated.
+- Recovery
+- consumer subscription prices
+- public multi-program launch
+- coach public marketplace
+- coach payments
+- agent autonomy/guardrails
