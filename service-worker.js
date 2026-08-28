@@ -1,4 +1,4 @@
-const LELLEE_SW_VERSION='lellee-program-routing-2026-08-28-v2';
+const LELLEE_SW_VERSION='lellee-logo-lock-2026-08-28-v1';
 self.addEventListener('install',event=>self.skipWaiting());
 self.addEventListener('activate',event=>event.waitUntil((async()=>{
   const names=await caches.keys();

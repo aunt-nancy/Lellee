@@ -215,6 +215,35 @@ textarea{width:100%;border:1px solid #ddd4e5;border-radius:12px;padding:13px;col
 
   </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style id="lellee-landing-logo-size-lock">
+/* LELLEE LANDING LOGO SIZE LOCK — APPROVED LARGE SIZE
+   Protected design constant. Do not shrink or override in unrelated patches. */
+.topbar .topbar-inner .brand{
+  width:260px!important;
+  height:76px!important;
+  min-width:260px!important;
+  display:flex!important;
+  align-items:center!important;
+  overflow:hidden!important;
+}
+.topbar .topbar-inner .brand img{
+  width:100%!important;
+  height:100%!important;
+  object-fit:contain!important;
+  display:block!important;
+  transform:scale(1.9)!important;
+  transform-origin:center center!important;
+}
+@media(max-width:1120px){
+  .topbar .topbar-inner .brand{width:230px!important;height:72px!important;min-width:230px!important}
+  .topbar .topbar-inner .brand img{transform:scale(1.9)!important}
+}
+@media(max-width:560px){
+  .topbar .topbar-inner .brand{width:190px!important;height:64px!important;min-width:190px!important}
+  .topbar .topbar-inner .brand img{transform:scale(1.85)!important}
+}
+</style>
 </head>
 <body data-lellee-public-build="landing-root-restore-2026-08-27">
   <a class="skip-link" href="#main">Skip to main content</a>
