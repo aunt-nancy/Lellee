@@ -65,7 +65,7 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(85,49,166,.22);outli
   background:linear-gradient(180deg,var(--b2-nav-bg) 0%,#11122f 68%,var(--b2-nav-bg-2) 100%)!important;
   color:#fff!important;
   border-right:0!important;
-  box-shadow:10px 0 30px rgba(18,17,37,.1)!important;
+  box-shadow:none!important;
   display:flex!important;
   flex-direction:column!important;
 }
@@ -74,7 +74,7 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(85,49,166,.22);outli
   position:relative;
   height:126px!important;
   min-height:126px!important;
-  padding:2px 2px 14px!important;
+  padding:2px 1px 14px!important;
   display:flex!important;
   align-items:center!important;
   justify-content:center!important;
@@ -84,9 +84,9 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(85,49,166,.22);outli
 .logo-wrap a{display:flex;width:100%;align-items:center;justify-content:center;text-decoration:none}
 .sidebar .approved-logo{
   display:block!important;
-  width:218px!important;
+  width:220px!important;
   max-width:100%!important;
-  max-height:108px!important;
+  max-height:110px!important;
   height:auto!important;
   object-fit:contain!important;
   object-position:center!important;
@@ -104,10 +104,10 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(85,49,166,.22);outli
    <details>/<summary> keeps every category usable even if optional JS fails. */
 .nav-list{display:flex!important;flex-direction:column!important;gap:7px!important;min-height:0}
 .nav-category{
-  border:1px solid transparent;border-radius:11px;overflow:hidden;background:transparent;
-  transition:background .16s ease,border-color .16s ease
+  border:0!important;border-radius:0!important;overflow:visible;background:transparent!important;box-shadow:none!important;
+  transition:none
 }
-.nav-category[open]{background:rgba(255,255,255,.045);border-color:var(--b2-nav-line)}
+.nav-category[open]{background:transparent!important;border-color:transparent!important;box-shadow:none!important}
 .nav-category-toggle{
   width:100%;min-height:43px;border:0;border-radius:10px;background:transparent;color:var(--b2-nav-text);
   padding:10px 10px;display:grid;grid-template-columns:24px 1fr 18px;align-items:center;gap:9px;text-align:left;
@@ -117,7 +117,7 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(85,49,166,.22);outli
 .nav-category-toggle::marker{content:""}
 .nav-category-toggle:hover,.nav-category-toggle:focus-visible{background:rgba(255,255,255,.07)}
 .nav-category-toggle .b2-cat-icon{
-  width:24px;height:24px;border-radius:7px;display:grid;place-items:center;background:rgba(255,255,255,.07);
+  width:24px;height:24px;border-radius:0;display:grid;place-items:center;background:transparent;
   color:#eee2f6;font-size:.78rem
 }
 .nav-category-toggle .b2-cat-chevron{justify-self:end;color:#c9bfd1;font-size:.78rem;transition:transform .18s ease}
@@ -133,7 +133,7 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(85,49,166,.22);outli
 .sidebar .nav-category .nav-item:hover{background:rgba(255,255,255,.07)!important;color:#fff!important}
 .sidebar .nav-category .nav-item.active{
   background:linear-gradient(90deg,var(--b2-nav-active-2),var(--b2-nav-active))!important;color:#fff!important;
-  font-weight:760!important;box-shadow:0 6px 18px rgba(40,23,65,.22)!important
+  font-weight:760!important;box-shadow:none!important
 }
 .sidebar .nav-category .nav-icon{width:20px!important;min-width:20px!important;color:#d9cde2!important;opacity:1!important;text-align:center!important}
 .sidebar .nav-category .nav-item.active .nav-icon{color:#fff!important}
@@ -167,7 +167,7 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(85,49,166,.22);outli
   .b2-sidebar-backdrop.open{display:block}
   body.b2-menu-open{overflow:hidden}
   .logo-wrap{height:118px!important;min-height:118px!important}
-  .sidebar .approved-logo{width:218px!important;max-height:102px!important}
+  .sidebar .approved-logo{width:220px!important;max-width:100%!important;max-height:104px!important}
 }
 
 /* iPhone/mobile discoverability only. The approved Build 6 vertical menu itself is unchanged. */
@@ -283,7 +283,7 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(85,49,166,.22);outli
 
   <main>
     <section class="view active" id="view-today">
-      <span class="eyebrow">RECOVERY · TODAY · PUBLIC PREVIEW</span>
+      <span class="eyebrow">RECOVERY · TODAY</span>
       <div class="title-row"><h1>Today</h1><p>Start with one manageable recovery step. You can look around before creating an account.</p></div>
       <div class="guest-note"><b>Browse first.</b> Personal check-ins, journal entries, saved progress and personalized plans require an account because they store private information.</div>
       <div class="activity-grid">
@@ -293,7 +293,7 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(85,49,166,.22);outli
         <article class="activity-card"><div class="ico">→</div><h3>Recovery Action</h3><p>Pick one realistic recovery action.</p><button type="button" data-private="Recovery Action">Choose</button></article>
         <article class="activity-card"><div class="ico">☾</div><h3>Reflection</h3><p>Close the day with a short reflection.</p><button type="button" data-private="Evening Reflection">Reflect</button></article>
       </div>
-      <div class="today-panel"><h2>One step is enough for today.</h2><p>Recovery does not have to be completed all at once. Lellee is designed to help you focus on the next useful step while keeping the larger journey visible.</p><div class="focus"><b>Public Recovery preview</b>Explore the Journey, Learn, Tools, Resources and Meetings menus. Sign in only when you are ready to save your own work.</div></div>
+      <div class="today-panel"><h2>One step is enough for today.</h2><p>Recovery does not have to be completed all at once. Lellee is designed to help you focus on the next useful step while keeping the larger journey visible.</p><div class="focus"><b>Explore Recovery</b>Browse the Journey, Learn, Tools, Resources and Meetings menus. Sign in only when you are ready to save your own work.</div></div>
     </section>
 
     <section class="view" id="view-for-you">
@@ -523,10 +523,10 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(85,49,166,.22);outli
 
   function showPreview(topic){
     lastFocus=document.activeElement;
-    status.textContent='PUBLIC PREVIEW';
+    status.textContent='EXPLORE LELLEE';
     title.textContent=topic;
     text.textContent='This area is part of the Lellee experience. You can keep browsing without an account; Lellee only asks you to sign in when an action saves or personalizes your information.';
-    note.textContent='This Build 6 public preview keeps account-only functionality separate so the page stays responsive.';
+    note.textContent='You can browse freely. Sign in only when you want to save progress or personalize your experience.';
     fillButtons(false);
     modal.classList.remove('hidden');
     document.body.style.overflow='hidden';

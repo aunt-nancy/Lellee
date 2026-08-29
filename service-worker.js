@@ -1,4 +1,4 @@
-const LELLEE_SW_VERSION='lellee-build6-native-dropdown-lock-2026-08-28-v1';
+const LELLEE_SW_VERSION='lellee-recovery-flat-menu-logo-finetune-2026-08-28-v1';
 self.addEventListener('install',event=>self.skipWaiting());
 self.addEventListener('activate',event=>event.waitUntil((async()=>{
   const names=await caches.keys();
