@@ -4,12 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Lellee | Recovery Today</title>
-<!-- LELLEE BUILD 6 RECOVERY DESIGN + NATIVE DROPDOWN LOCK + IPHONE DISCOVERY — 2026-08-28
-     Build 6 did not replace the Recovery shell; it was loaded after Builds 2–5.
-     This lightweight public preview restores the exact Build 2 shell/navigation design inherited by Build 6,
-     while intentionally omitting the old full-app observers/storage startup paths that caused freezing.
-     Dropdown categories use native <details>/<summary> controls so they still open even if optional JavaScript fails.
-     iPhone adds a persistent bottom navigation with an obvious Explore button that opens this exact approved drawer. -->
+<!-- LELLEE APPROVED RECOVERY NAVIGATION LOCK + EXACT MICRO-CORRECTION — 2026-08-28
+     Preserves the approved dropdown hierarchy and mobile Explore dock.
+     The sidebar logo is increased by exactly 1 CSS point; no asset, alignment, or sidebar-width change.
+     Dropdown groups are visually flat while retaining native <details>/<summary> reliability.
+     No MutationObserver, browser-storage, Supabase, or external-library dependency is introduced. -->
 <meta name="description" content="Explore Lellee Recovery before creating an account.">
 <meta name="theme-color" content="#f7f3fb">
 <style>
@@ -28,13 +27,10 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(85,49,166,.22);outli
 
 
 /* ============================================================
-   LELLEE BUILD 6 — EXACT RECOVERY SHELL RESTORE · 2026-08-28
-   Build 6 explicitly loaded after Builds 2–5. Its Recovery navigation
-   therefore inherited Build 2's 232px dark accordion shell.
-
-   VISUAL SOURCE: public repo build-2-shell.css / build-2-shell.js.
-   STABILITY RULE: visual structure only. No MutationObserver, no localStorage,
-   no Supabase dependency and no feature-script startup dependency are used here.
+   LELLEE APPROVED RECOVERY SIDEBAR — EXACT MICRO-CORRECTION · 2026-08-28
+   Structure, dropdown behavior, sidebar width, colors, mobile drawer, and dock
+   remain unchanged. Only the requested 1pt logo increase and flat menu treatment
+   are applied. No observer, storage, Supabase, or external-library dependency.
    ============================================================ */
 :root{
   --b2-sidebar-width:232px;
@@ -65,16 +61,16 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(85,49,166,.22);outli
   background:linear-gradient(180deg,var(--b2-nav-bg) 0%,#11122f 68%,var(--b2-nav-bg-2) 100%)!important;
   color:#fff!important;
   border-right:0!important;
-  box-shadow:none!important;
+  box-shadow:10px 0 30px rgba(18,17,37,.1)!important;
   display:flex!important;
   flex-direction:column!important;
 }
-/* Build 2 / Build 6 inherited approved sidebar artwork treatment. */
+/* Approved sidebar artwork treatment. */
 .logo-wrap{
   position:relative;
   height:126px!important;
   min-height:126px!important;
-  padding:2px 1px 14px!important;
+  padding:2px 2px 14px!important;
   display:flex!important;
   align-items:center!important;
   justify-content:center!important;
@@ -84,10 +80,11 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(85,49,166,.22);outli
 .logo-wrap a{display:flex;width:100%;align-items:center;justify-content:center;text-decoration:none}
 .sidebar .approved-logo{
   display:block!important;
-  width:220px!important;
-  max-width:100%!important;
-  max-height:110px!important;
+  width:calc(218px + 1pt)!important;
+  max-width:calc(100% + 1pt)!important;
+  max-height:calc(108px + 1pt)!important;
   height:auto!important;
+  margin-inline:-.5pt!important;
   object-fit:contain!important;
   object-position:center!important;
   border:0!important;
@@ -100,22 +97,22 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(85,49,166,.22);outli
   display:none;position:absolute;right:0;top:0;width:36px;height:36px;border:0;border-radius:50%;
   background:rgba(255,255,255,.08);color:#fff;font-size:1.15rem;place-items:center
 }
-/* Exact Build 2 proportions with native dropdown behavior.
+/* Approved proportions with native dropdown behavior.
    <details>/<summary> keeps every category usable even if optional JS fails. */
 .nav-list{display:flex!important;flex-direction:column!important;gap:7px!important;min-height:0}
 .nav-category{
-  border:0!important;border-radius:0!important;overflow:visible;background:transparent!important;box-shadow:none!important;
+  border:0;border-radius:0;overflow:visible;background:transparent;
   transition:none
 }
-.nav-category[open]{background:transparent!important;border-color:transparent!important;box-shadow:none!important}
+.nav-category[open]{background:transparent;border-color:transparent}
 .nav-category-toggle{
-  width:100%;min-height:43px;border:0;border-radius:10px;background:transparent;color:var(--b2-nav-text);
+  width:100%;min-height:43px;border:0;border-radius:0;background:transparent;color:var(--b2-nav-text);
   padding:10px 10px;display:grid;grid-template-columns:24px 1fr 18px;align-items:center;gap:9px;text-align:left;
   font-size:.88rem;line-height:1.2;font-weight:760;letter-spacing:.005em;cursor:pointer;list-style:none;user-select:none
 }
 .nav-category-toggle::-webkit-details-marker{display:none}
 .nav-category-toggle::marker{content:""}
-.nav-category-toggle:hover,.nav-category-toggle:focus-visible{background:rgba(255,255,255,.07)}
+.nav-category-toggle:hover,.nav-category-toggle:focus-visible{background:rgba(255,255,255,.045)}
 .nav-category-toggle .b2-cat-icon{
   width:24px;height:24px;border-radius:0;display:grid;place-items:center;background:transparent;
   color:#eee2f6;font-size:.78rem
@@ -123,22 +120,22 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(85,49,166,.22);outli
 .nav-category-toggle .b2-cat-chevron{justify-self:end;color:#c9bfd1;font-size:.78rem;transition:transform .18s ease}
 .nav-category[open] .b2-cat-chevron{transform:rotate(90deg)}
 .nav-category-items{display:block}
-.nav-category-items-inner{min-height:0;display:grid;gap:3px;padding:0 6px 7px}
+.nav-category-items-inner{min-height:0;display:grid;gap:2px;margin:0 0 7px 21px;padding:0 0 0 10px;border-left:1px solid rgba(255,255,255,.11)}
 .sidebar .nav-category .nav-item{
   display:flex!important;width:100%;min-height:37px!important;margin:0!important;padding:8px 10px 8px 13px!important;
-  border:0!important;border-radius:8px!important;background:transparent!important;box-shadow:none!important;color:#ebe7f0!important;
+  border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;color:#ebe7f0!important;
   font-size:.79rem!important;line-height:1.25!important;font-weight:570!important;letter-spacing:0!important;opacity:1!important;
   align-items:center;gap:10px;text-align:left;text-decoration:none
 }
 .sidebar .nav-category .nav-item:hover{background:rgba(255,255,255,.07)!important;color:#fff!important}
 .sidebar .nav-category .nav-item.active{
-  background:linear-gradient(90deg,var(--b2-nav-active-2),var(--b2-nav-active))!important;color:#fff!important;
-  font-weight:760!important;box-shadow:none!important
+  background:rgba(138,98,177,.28)!important;color:#fff!important;
+  font-weight:760!important;box-shadow:inset 3px 0 0 #c7a7dd!important
 }
 .sidebar .nav-category .nav-icon{width:20px!important;min-width:20px!important;color:#d9cde2!important;opacity:1!important;text-align:center!important}
 .sidebar .nav-category .nav-item.active .nav-icon{color:#fff!important}
 .nav-category[data-category="account"] .nav-item[data-page="plus"]{
-  margin-top:5px!important;border-top:1px solid rgba(255,255,255,.08)!important;border-radius:0 0 8px 8px!important;
+  margin-top:5px!important;border-top:1px solid rgba(255,255,255,.08)!important;border-radius:0!important;
   padding-top:11px!important;color:#f4dff1!important
 }
 .side-spacer{flex:0 0 10px!important;min-height:10px!important}
@@ -167,10 +164,10 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(85,49,166,.22);outli
   .b2-sidebar-backdrop.open{display:block}
   body.b2-menu-open{overflow:hidden}
   .logo-wrap{height:118px!important;min-height:118px!important}
-  .sidebar .approved-logo{width:220px!important;max-width:100%!important;max-height:104px!important}
+  .sidebar .approved-logo{width:calc(218px + 1pt)!important;max-width:calc(100% + 1pt)!important;max-height:calc(102px + 1pt)!important;margin-inline:-.5pt!important}
 }
 
-/* iPhone/mobile discoverability only. The approved Build 6 vertical menu itself is unchanged. */
+/* Approved iPhone/mobile discoverability. The vertical-menu structure is unchanged. */
 .mobile-recovery-dock{display:none}
 @media(max-width:820px){
   .menu-btn{display:none!important}
@@ -293,12 +290,12 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(85,49,166,.22);outli
         <article class="activity-card"><div class="ico">→</div><h3>Recovery Action</h3><p>Pick one realistic recovery action.</p><button type="button" data-private="Recovery Action">Choose</button></article>
         <article class="activity-card"><div class="ico">☾</div><h3>Reflection</h3><p>Close the day with a short reflection.</p><button type="button" data-private="Evening Reflection">Reflect</button></article>
       </div>
-      <div class="today-panel"><h2>One step is enough for today.</h2><p>Recovery does not have to be completed all at once. Lellee is designed to help you focus on the next useful step while keeping the larger journey visible.</p><div class="focus"><b>Explore Recovery</b>Browse the Journey, Learn, Tools, Resources and Meetings menus. Sign in only when you are ready to save your own work.</div></div>
+      <div class="today-panel"><h2>One step is enough for today.</h2><p>Recovery does not have to be completed all at once. Lellee is designed to help you focus on the next useful step while keeping the larger journey visible.</p><div class="focus"><b>Explore Recovery</b>Explore the Journey, Learn, Tools, Resources and Meetings menus. Sign in only when you are ready to save your own work.</div></div>
     </section>
 
     <section class="view" id="view-for-you">
       <span class="eyebrow">RECOVERY · FOR YOU</span>
-      <div class="title-row"><h1>For You</h1><p>A calm preview of the kinds of suggestions Lellee can surface based on the support you choose.</p></div>
+      <div class="title-row"><h1>For You</h1><p>A calm look at the kinds of suggestions Lellee can surface based on the support you choose.</p></div>
       <div class="card-grid">
         <article class="info-card"><small>TODAY</small><h3>One useful next step</h3><p>Choose one manageable action instead of trying to solve everything at once.</p></article>
         <article class="info-card"><small>SUPPORT</small><h3>Stay connected</h3><p>Use meetings, trusted people and practical resources before stress has to become a crisis.</p></article>
@@ -332,10 +329,10 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(85,49,166,.22);outli
     <section class="view" id="view-learn">
       <span class="eyebrow">RECOVERY · LEARN</span><div class="title-row"><h1>Learn</h1><p>Short, practical topics you can explore without saving personal information.</p></div>
       <div class="card-grid">
-        <article class="info-card"><small>FOUNDATIONS</small><h3>Triggers & Patterns</h3><p>Learn how situations, thoughts, feelings and routines can raise risk.</p><button type="button" data-preview="Triggers & Patterns">Open preview</button></article>
-        <article class="info-card"><small>SKILLS</small><h3>Cravings & Urges</h3><p>Learn ways to slow down, create distance and ride out an urge.</p><button type="button" data-preview="Cravings & Urges">Open preview</button></article>
-        <article class="info-card"><small>SUPPORT</small><h3>Building a Support Network</h3><p>Think about people, groups and services that can support recovery.</p><button type="button" data-preview="Building a Support Network">Open preview</button></article>
-        <article class="info-card"><small>DAILY LIFE</small><h3>Routine & Stability</h3><p>See why sleep, meals, appointments and structure can support recovery.</p><button type="button" data-preview="Routine & Stability">Open preview</button></article>
+        <article class="info-card"><small>FOUNDATIONS</small><h3>Triggers & Patterns</h3><p>Learn how situations, thoughts, feelings and routines can raise risk.</p><button type="button" data-preview="Triggers & Patterns">Explore</button></article>
+        <article class="info-card"><small>SKILLS</small><h3>Cravings & Urges</h3><p>Learn ways to slow down, create distance and ride out an urge.</p><button type="button" data-preview="Cravings & Urges">Explore</button></article>
+        <article class="info-card"><small>SUPPORT</small><h3>Building a Support Network</h3><p>Think about people, groups and services that can support recovery.</p><button type="button" data-preview="Building a Support Network">Explore</button></article>
+        <article class="info-card"><small>DAILY LIFE</small><h3>Routine & Stability</h3><p>See why sleep, meals, appointments and structure can support recovery.</p><button type="button" data-preview="Routine & Stability">Explore</button></article>
       </div>
     </section>
 
@@ -526,7 +523,7 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(85,49,166,.22);outli
     status.textContent='EXPLORE LELLEE';
     title.textContent=topic;
     text.textContent='This area is part of the Lellee experience. You can keep browsing without an account; Lellee only asks you to sign in when an action saves or personalizes your information.';
-    note.textContent='You can browse freely. Sign in only when you want to save progress or personalize your experience.';
+    note.textContent='Browse freely. Sign in only when you want to save progress or personalize your experience.';
     fillButtons(false);
     modal.classList.remove('hidden');
     document.body.style.overflow='hidden';
@@ -590,7 +587,7 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(85,49,166,.22);outli
   document.documentElement.dataset.recoveryNavReady=String(audit.ok);
   if(!audit.ok)console.error('Lellee Recovery navigation audit failed.',audit);
 
-  // Build 6-era navigation begins with Daily open and Today selected.
+  // Approved navigation begins with Daily open and Today selected.
   const initial=findViewNavItem('today');
   if(initial)setActiveItem(initial);
 })();

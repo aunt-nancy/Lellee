@@ -1,28 +1,34 @@
-LELLEE — RECOVERY LOGO + FLAT VERTICAL MENU REFINEMENT — 2026-08-28
+LELLEE — EXACT RECOVERY SIDEBAR MICRO-FIX — 2026-08-28
 
-PURPOSE
-Applies only the two requested visual corrections to the already approved Recovery navigation:
-1. Increase the dark-sidebar Lellee logo by approximately 1 typographic point.
-2. Make the vertical dropdown menu visually flat rather than raised.
+THIS IS NOT A REDESIGN.
+It starts from the already approved/locked Recovery navigation package and changes only the items the user explicitly requested.
 
-EXACT VISUAL CHANGES
-- Sidebar logo width: 218px -> 220px, with horizontal logo-wrap padding reduced by 1px per side so the small increase actually renders on desktop.
-- Sidebar and open dropdown groups: no drop shadow, raised panel background, or outlined card frame.
-- Category icon squares: background removed so icons sit flat on the navy sidebar.
-- Active submenu: same approved purple treatment, but no elevation shadow.
-
-CUSTOMER-FACING COPY CLEANUP
-- Removes visible “Build 6” and “Public Preview” development wording.
-- Replaces it with customer-friendly “Explore Lellee” and browse-first language.
+EXACT CHANGES
+1. Dark-background sidebar logo: increased by exactly 1 CSS point (1pt = 1.333 CSS px).
+   - Same image asset.
+   - Same 232px sidebar.
+   - Same center alignment.
+   - No transform scaling.
+2. Vertical dropdown menu: flattened.
+   - No raised/open-category card.
+   - No category border or filled open-state panel.
+   - No outer shadow on the active submenu row.
+   - A subtle nested guide line and flat inset active indicator preserve clarity.
+3. Public wording cleaned.
+   - No visible “Build 6” wording.
+   - Visible “Public Preview” and internal build wording removed; customer-facing exploration language used instead.
+   - Cache-refresh page uses customer-facing wording.
 
 PROTECTED / UNCHANGED
-- Six approved dropdown groups and every current submenu item.
-- Dropdown order, labels, native details/summary behavior, and JavaScript fallback.
-- Desktop and mobile drawer behavior.
-- iPhone/Android bottom navigation: Today | Journey | Explore | Tools | Help.
-- Need Help Now/Get Help Now.
-- Recovery routing and browse-before-account behavior.
-- Landing page and its locked logo.
+- Approved six dropdown groups and all submenu offerings.
+- Native details/summary dropdown reliability.
+- Desktop sidebar width, background, placement, and hierarchy.
+- Need Help Now / Get Help Now.
+- Approved iPhone/Android bottom navigation: Today | Journey | Explore | Tools | Help.
+- Mobile drawer behavior.
+- Browse-before-account rules.
+- Page-stability architecture.
+- Landing page and landing-page logo.
 
 UPLOAD / REPLACE ONLY
 1. recovery-preview.html
