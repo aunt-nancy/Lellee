@@ -1,33 +1,31 @@
-LELLEE — APPROVED RECOVERY SIDEBAR REINSTATE
+LELLEE — BLUE APPROVED RECOVERY FORMAT RESTORE
 Date: 2026-08-28
 
 WHY THIS PACKAGE EXISTS
-The prior Recovery preview repair recreated a sidebar instead of reinstating the approved navigation. This package corrects that.
+The grouped/sectioned sidebar was not the approved format. This package restores the earlier blue/navy Recovery format from the approved Lellee dashboard source of truth.
 
-AUDITED SOURCE OF TRUTH
-- Approved Lellee interior design lock: 198px dark navy Recovery sidebar; purple active state; compact proportions; persistent Need Help Now.
-- Working Recovery dashboard screenshot from 2026-08-27: Daily expanded with Today, For You, My Recovery; Grow & Learn; Connect; Reflect & Track; Find Support; Account; Get Help Now.
-- Working Journal/Resources screenshots confirm Reflect & Track expands to Journal/Progress/Calendar and Find Support expands to Resources/Inbox.
+RESTORED EXACTLY IN SPIRIT AND STRUCTURE
+- 198px dark navy/blue desktop sidebar
+- Approved navy gradient (#0c1029 → #10112c → #151534)
+- Compact flat primary navigation; no accordion/group replacement
+- Purple active row (#56347f → #65438d)
+- Primary menu order: Today, My Recovery, Tools, Recovery Paths, Meetings, Journal, Progress, Resources, Community, Settings
+- Persistent Need Help Now / Get Help Now panel
+- Uses the existing approved interior logo asset: /lellee-approved-logo-locked.png
+- Mobile still uses the lightweight preview menu drawer
 
-WHAT IS REINSTATED
-- Dark navy 198px Recovery sidebar.
-- Daily group with Today / For You / My Recovery.
-- Grow & Learn group with Learn / Tools / Recovery Paths.
-- Connect group with Meetings / Community.
-- Reflect & Track group with Journal / Progress / Calendar.
-- Find Support group with Resources / Inbox.
-- Account group with Sign in / Create account.
-- Persistent Need Help Now card and purple/pink action.
-- Approved compact navigation proportions and active purple treatment.
+PRESERVED
+- Lightweight Recovery preview (keeps the page-stability fix)
+- Browse-before-account behavior
+- Journal, Progress, Settings and saved/personal actions clearly prompt for an account
+- Recovery public content and current white content background
+- Landing page and locked public landing logo are untouched
 
-IMPORTANT
-This remains the lightweight public Recovery preview so the page-stability fix stays intact. Private/saved items explain account requirements instead of becoming dead links.
-
-UPLOAD / REPLACE ONLY
+UPLOAD ONLY
 1. recovery-preview.html
 2. service-worker.js
 3. reset-lellee-cache.html
 
-NO SUPABASE SQL.
-No landing.html or index.html change.
-Landing-page logo sizing is untouched.
+NO SQL.
+
+This package supersedes Lellee_APPROVED_RECOVERY_SIDEBAR_REINSTATE_2026-08-28.zip.
