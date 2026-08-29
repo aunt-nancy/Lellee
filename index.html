@@ -1011,7 +1011,61 @@ button,a{cursor:pointer}
 
 </style>
 <title>Lellee — V1 Final Release Candidate</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script id="lellee-core-menu-bootstrap-20260828">
+(() => {
+  'use strict';
+  function closeMobileNav(){
+    document.getElementById('appSidebar')?.classList.remove('mobile-open');
+    document.body?.classList.remove('mobile-nav-open');
+    document.getElementById('mobileMenuBtn')?.setAttribute('aria-expanded','false');
+  }
+  function fallbackShowPage(name){
+    if(!name) return false;
+    const requested=document.getElementById('page-'+name);
+    const page=requested||document.getElementById('page-today');
+    if(!page) return false;
+    document.querySelectorAll('.page').forEach(el=>el.classList.remove('active'));
+    page.classList.add('active');
+    document.querySelectorAll('.nav-item,.mobile-bottom [data-page]').forEach(el=>{
+      el.classList.toggle('active',el.dataset.page===name);
+    });
+    closeMobileNav();
+    try{
+      const url=new URL(location.href);
+      url.hash=name==='today'?'':name;
+      history.replaceState(null,'',url.pathname+url.search+url.hash);
+    }catch(_){ }
+    try{window.scrollTo({top:0,behavior:'auto'})}catch(_){ }
+    return true;
+  }
+  window.__lelleeFallbackShowPage=fallbackShowPage;
+  document.addEventListener('click',event=>{
+    if(window.__lelleeCoreNavReady) return;
+    const target=event.target instanceof Element?event.target:null;
+    const menuButton=target?.closest('#mobileMenuBtn');
+    if(menuButton){
+      event.preventDefault();
+      const sidebar=document.getElementById('appSidebar');
+      if(!sidebar) return;
+      const open=!sidebar.classList.contains('mobile-open');
+      sidebar.classList.toggle('mobile-open',open);
+      document.body?.classList.toggle('mobile-nav-open',open);
+      menuButton.setAttribute('aria-expanded',open?'true':'false');
+      return;
+    }
+    const control=target?.closest('#appSidebar [data-page],.mobile-bottom [data-page]');
+    if(!control) return;
+    event.preventDefault();
+    fallbackShowPage(control.dataset.page||'today');
+  },true);
+  document.addEventListener('keydown',event=>{
+    if(event.key==='Escape') closeMobileNav();
+  },true);
+})();
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+  onload="window.__lelleeSupabaseReady=true;window.dispatchEvent(new Event('lellee:supabase-ready'))"
+  onerror="window.__lelleeSupabaseLoadFailed=true;window.dispatchEvent(new Event('lellee:supabase-unavailable'))"></script>
 <!-- LELLEE BUILD 5: W-2 coach workforce, independent business, training gates and social drafting. -->
 <!-- LELLEE CANONICAL MASTER
 This is the consolidated index.html.
@@ -1119,6 +1173,14 @@ body.program-preview-mode .top-stats .mini-stat{min-width:110px}
   }
   #mobileMenuBtn{position:relative;z-index:9999}
 }
+</style>
+
+<style id="lellee-response-failsafe-20260828">
+/* Hidden overlays must never intercept the page. */
+.hidden,[hidden]{display:none!important;pointer-events:none!important}
+.auth-overlay.hidden,.prod-overlay.hidden,.admin-overlay.hidden,.onboarding-overlay.hidden{display:none!important;pointer-events:none!important}
+body:not(.mobile-nav-open)::after{display:none!important;pointer-events:none!important}
+#appSidebar,.nav-item,.mobile-bottom [data-page],#mobileMenuBtn{pointer-events:auto}
 </style>
 </head>
 <body><a class="skip-link" href="#mainContent">Skip to main content</a><a class="lellee-skip" href="#lelleeMain">Skip to main content</a>
@@ -7316,13 +7378,67 @@ const defaults={
   daily:{},
   journalEntries:[]
 };
-let data={...defaults,...JSON.parse(localStorage.getItem(STORAGE)||'{}')};
+const createSafeStorage=storageName=>({
+  getItem(key){try{return window[storageName]?.getItem(key)??null}catch(_){return null}},
+  setItem(key,value){try{window[storageName]?.setItem(key,value);return true}catch(_){return false}},
+  removeItem(key){try{window[storageName]?.removeItem(key);return true}catch(_){return false}},
+  clear(){try{window[storageName]?.clear();return true}catch(_){return false}}
+});
+const LelleeSafeStorage=window.LelleeSafeStorage=createSafeStorage('localStorage');
+const LelleeSafeSessionStorage=window.LelleeSafeSessionStorage=createSafeStorage('sessionStorage');
+let storedData={};
+try{storedData=JSON.parse(LelleeSafeStorage.getItem(STORAGE)||'{}')||{}}catch(_){storedData={}}
+let data={...defaults,...storedData};
 if(!data.daily) data.daily={};
 if(!data.journalEntries) data.journalEntries=[];
 
 const SUPABASE_URL='https://hkrrxscyhtxmbvxevfkw.supabase.co';
 const SUPABASE_PUBLISHABLE_KEY='sb_publishable_QPwVWU-qNnc3GJb_FoFnlQ_kEHa3dtU';
-const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
+function createOfflineSupabaseClient(){
+  const offlineResult=()=>({data:null,error:null});
+  const makeChain=()=>{
+    let chain;
+    chain=new Proxy(function(){},{
+      get(_target,prop){
+        if(prop==='then') return (resolve,reject)=>Promise.resolve(offlineResult()).then(resolve,reject);
+        return (..._args)=>chain;
+      },
+      apply(){return chain}
+    });
+    return chain;
+  };
+  const unavailable=async()=>({data:{user:null,session:null},error:{message:'Lellee sign-in is temporarily unavailable. Browsing still works.'}});
+  return {
+    __offline:true,
+    from:()=>makeChain(),
+    auth:{
+      getSession:async()=>({data:{session:null},error:null}),
+      signInWithPassword:unavailable,
+      signUp:unavailable,
+      signOut:async()=>({error:null})
+    }
+  };
+}
+let sb;
+try{
+  sb=window.supabase?.createClient
+    ? window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY)
+    : createOfflineSupabaseClient();
+}catch(error){
+  console.warn('Lellee is starting in browse mode.',error);
+  sb=createOfflineSupabaseClient();
+}
+function activateRealSupabaseClient(){
+  if(!window.supabase?.createClient||!sb?.__offline) return false;
+  try{
+    sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
+    if(window.LelleeAuthContext) window.LelleeAuthContext.client=sb;
+    return true;
+  }catch(error){
+    console.warn('Lellee sign-in services are not ready yet.',error);
+    return false;
+  }
+}
 let currentUser=null;
 let guestMode=false;
 // Stable bridge for separately loaded Lellee feature scripts.
@@ -7332,7 +7448,7 @@ window.LelleeAuthContext={
   isGuest:()=>guestMode
 };
 let syncTimer=null;
-const save=()=>{if(guestMode)return;if(!currentUser)return;localStorage.setItem(STORAGE,JSON.stringify(data));clearTimeout(syncTimer);syncTimer=setTimeout(syncCoreProfile,450)};
+const save=()=>{if(guestMode)return;if(!currentUser)return;LelleeSafeStorage.setItem(STORAGE,JSON.stringify(data));clearTimeout(syncTimer);syncTimer=setTimeout(syncCoreProfile,450)};
 const approachToDb=v=>({'12-Step':'12_step','SMART / skills-based':'skills_based','Therapy / counseling':'therapy_counseling','Medication-supported':'medication_supported','Peer support':'peer_support','Mixed':'mixed','Exploring':'exploring'}[v]||String(v||'exploring').toLowerCase().replaceAll(' ','_'));
 const beliefToDb=v=>({'Secular':'secular','Spiritual':'spiritual','Faith-Based':'faith_based','Mixed':'mixed','Exploring':'exploring'}[v]||String(v||'exploring').toLowerCase().replaceAll('-','_'));
 const approachFromDb=v=>({'12_step':'12-Step','skills_based':'SMART / skills-based','therapy_counseling':'Therapy / counseling','medication_supported':'Medication-supported','peer_support':'Peer support','mixed':'Mixed','exploring':'Exploring'}[v]||'Exploring');
@@ -7465,6 +7581,7 @@ document.addEventListener('click',event=>{
   if(window.matchMedia('(max-width:820px)').matches)setMobileNav(false);
 });
 document.addEventListener('keydown',event=>{if(event.key==='Escape')setMobileNav(false)});
+window.__lelleeCoreNavReady=true;
 
 let activeActivity=null;
 const activityDialog=$('#activityDialog');
@@ -7606,7 +7723,7 @@ $('#saveSettings').addEventListener('click',()=>{
   data.state=$('#setState').value.trim();
   save();renderBasics();showPage('today');
 });
-$('#resetDemo')?.addEventListener('click',()=>{localStorage.removeItem(STORAGE);location.reload()});
+$('#resetDemo')?.addEventListener('click',()=>{LelleeSafeStorage.removeItem(STORAGE);location.reload()});
 $('#reviewPrevious')?.addEventListener('click',()=>{
   $('#toolTitle').textContent='Previous Work';
   $('#toolBody').innerHTML=`<p class="subtle">Previous completed work will live here. Future phases remain hidden until they become relevant.</p>`;
@@ -7645,10 +7762,10 @@ function programPreviewConfig(key=activeBrowseProgram){
 function captureBrowseProgram(){
   const params=new URLSearchParams(location.search);
   const requested=cleanProgramKey(params.get('recommended')||params.get('program')||'');
-  let saved='';try{saved=cleanProgramKey(sessionStorage.getItem(PROGRAM_BROWSE_KEY)||'')}catch(_){}
+  let saved='';try{saved=cleanProgramKey(LelleeSafeSessionStorage.getItem(PROGRAM_BROWSE_KEY)||'')}catch(_){}
   activeBrowseProgram=requested||saved||'recovery';
   programBrowsePreviewMode=activeBrowseProgram!=='recovery';
-  try{if(programBrowsePreviewMode)sessionStorage.setItem(PROGRAM_BROWSE_KEY,activeBrowseProgram);else sessionStorage.removeItem(PROGRAM_BROWSE_KEY)}catch(_){}
+  try{if(programBrowsePreviewMode)LelleeSafeSessionStorage.setItem(PROGRAM_BROWSE_KEY,activeBrowseProgram);else LelleeSafeSessionStorage.removeItem(PROGRAM_BROWSE_KEY)}catch(_){}
 }
 function renderProgramPreview(){
   if(!programBrowsePreviewMode)return;
@@ -7709,9 +7826,9 @@ $('#signOutBtn').addEventListener('click',async(e)=>{
     if(error)throw error;
     currentUser=null;
     try{
-      localStorage.removeItem('lellee_user');
-      localStorage.removeItem(STORAGE);
-      sessionStorage.clear();
+      LelleeSafeStorage.removeItem('lellee_user');
+      LelleeSafeStorage.removeItem(STORAGE);
+      LelleeSafeSessionStorage.clear();
     }catch(_){}
     window.location.replace('/');
   }catch(err){
@@ -7721,7 +7838,7 @@ $('#signOutBtn').addEventListener('click',async(e)=>{
     alert('Sign out did not complete. Please try again.');
   }
 });
-async function beginSession(user){guestMode=false;currentUser=user;document.getElementById('guestPreviewBadge')?.remove();const signBtn=$('#signOutBtn');if(signBtn){signBtn.textContent='Sign out';signBtn.title='';}const [p,r,u,l,j,dc,ra]=await Promise.all([sb.from('profiles').select('*').eq('id',user.id).single(),sb.from('recovery_profiles').select('*').eq('user_id',user.id).single(),sb.from('user_preferences').select('*').eq('user_id',user.id).single(),sb.from('local_preferences').select('*').eq('user_id',user.id).single(),sb.from('journal_entries').select('content,created_at').eq('user_id',user.id).order('created_at',{ascending:false}).limit(20),sb.from('daily_checkins').select('*').eq('user_id',user.id).eq('checkin_date',todayKey()),sb.from('recovery_actions').select('*').eq('user_id',user.id).eq('action_date',todayKey())]);data.name=p.data?.display_name||data.name;data.recoveryDate=r.data?.recovery_date||data.recoveryDate;data.goal=r.data?.current_goal||data.goal;data.approach=approachFromDb(u.data?.recovery_approach);data.belief=beliefFromDb(u.data?.belief_preference);data.faith=u.data?.faith_tradition||'';data.denomination=u.data?.denomination||'';data.city=l.data?.city||'';data.state=l.data?.state||'';data.journalEntries=(j.data||[]).map(x=>({date:x.created_at,text:x.content}));data.daily[todayKey()]={};if(dc.data?.length)data.daily[todayKey()].checkin='Checked in';for(const a of (ra.data||[])){const rev={daily_focus:'focus',gratitude:'gratitude',recovery_action:'action',evening_reflection:'reflection'};if(rev[a.action_type])data.daily[todayKey()][rev[a.action_type]]=a.content||'Completed'}localStorage.setItem(STORAGE,JSON.stringify(data));renderBasics();$('#authOverlay').classList.add('hidden');renderProgramBrowseChrome();showPage('today');setTimeout(()=>window.LelleeFinalOnboarding?.check(),60)}
+async function beginSession(user){guestMode=false;currentUser=user;document.getElementById('guestPreviewBadge')?.remove();const signBtn=$('#signOutBtn');if(signBtn){signBtn.textContent='Sign out';signBtn.title='';}const [p,r,u,l,j,dc,ra]=await Promise.all([sb.from('profiles').select('*').eq('id',user.id).single(),sb.from('recovery_profiles').select('*').eq('user_id',user.id).single(),sb.from('user_preferences').select('*').eq('user_id',user.id).single(),sb.from('local_preferences').select('*').eq('user_id',user.id).single(),sb.from('journal_entries').select('content,created_at').eq('user_id',user.id).order('created_at',{ascending:false}).limit(20),sb.from('daily_checkins').select('*').eq('user_id',user.id).eq('checkin_date',todayKey()),sb.from('recovery_actions').select('*').eq('user_id',user.id).eq('action_date',todayKey())]);data.name=p.data?.display_name||data.name;data.recoveryDate=r.data?.recovery_date||data.recoveryDate;data.goal=r.data?.current_goal||data.goal;data.approach=approachFromDb(u.data?.recovery_approach);data.belief=beliefFromDb(u.data?.belief_preference);data.faith=u.data?.faith_tradition||'';data.denomination=u.data?.denomination||'';data.city=l.data?.city||'';data.state=l.data?.state||'';data.journalEntries=(j.data||[]).map(x=>({date:x.created_at,text:x.content}));data.daily[todayKey()]={};if(dc.data?.length)data.daily[todayKey()].checkin='Checked in';for(const a of (ra.data||[])){const rev={daily_focus:'focus',gratitude:'gratitude',recovery_action:'action',evening_reflection:'reflection'};if(rev[a.action_type])data.daily[todayKey()][rev[a.action_type]]=a.content||'Completed'}LelleeSafeStorage.setItem(STORAGE,JSON.stringify(data));renderBasics();$('#authOverlay').classList.add('hidden');renderProgramBrowseChrome();showPage('today');setTimeout(()=>window.LelleeFinalOnboarding?.check(),60)}
 
 const phase1Curriculum = [
 {d:1,t:"Start Here: Safety & Support",lead:"Today is about getting a little steadier. You do not need to solve your whole recovery at once.",focus:"What would help you feel a little safer or steadier today?",choices:["A safe place","Someone I trust","Food / water","Rest","Distance from alcohol / drugs","A meeting or recovery support","Medical / professional help","I'm not sure yet"],actions:["Call or text someone supportive","Eat and hydrate","Rest somewhere safe","Attend a meeting","Create distance from alcohol / drugs","Ask for professional help","Take one hour at a time"]},
@@ -7942,7 +8059,14 @@ async function initSupabase(){
   if(requestedAuth==='signin'||requestedAuth==='signup'){showAuthOverlay(requestedAuth);return;}
   enterGuestMode();
 }
-initSupabase();
+initSupabase().catch(error=>{
+  console.warn('Lellee account services did not initialize; browse mode remains available.',error);
+  try{enterGuestMode()}catch(_){ }
+});
+window.addEventListener('lellee:supabase-ready',()=>{
+  if(!activateRealSupabaseClient()) return;
+  initSupabase().catch(error=>console.warn('Lellee account services are still unavailable.',error));
+},{once:true});
 </script>
 <!-- LELLEE GUEST BROWSE ACCESS FIX 2026-08-28 -->
 <!-- LELLEE PROGRAM SELECTION ROUTING FIX 2026-08-28 -->
@@ -8057,9 +8181,9 @@ Includes:
 <div class="final-onboarding-actions"><button class="approved-link hidden" id="onboardingBack" type="button">Back</button><button class="approved-link" id="onboardingSkip" type="button">Finish later</button><button class="approved-small-action" id="onboardingNext" type="button">Continue</button></div>
 </div>
 </div>
-<script src="/lellee-v1.js"></script>
-<script src="/push-button-hotfix.js"></script>
-<div class="legal-acceptance-overlay hidden" id="legalAcceptanceOverlay"><div class="legal-acceptance-card"><span class="approved-kicker">PRIVACY &amp; SAFETY UPDATE</span><h2>Before continuing</h2><p>Lellee stores sensitive recovery information. Review the current consumer terms and privacy notices.</p><div class="legal-acceptance-links"><a href="/terms.html" target="_blank">Terms</a><a href="/privacy.html" target="_blank">Privacy</a><a href="/consumer-health-privacy.html" target="_blank">Consumer Health Data</a><a href="/safety.html" target="_blank">Safety</a></div><label><input id="legalGateAdult" type="checkbox"/> I confirm I am at least 18.</label><label><input id="legalGateAgree" type="checkbox"/> I agree to the current Terms and acknowledge the Privacy and Consumer Health Data notices.</label><label><input id="legalGateSafety" type="checkbox"/> I understand Lellee is not an emergency service or individualized medical treatment.</label><div class="legal-acceptance-actions"><span id="legalGateStatus"></span><button class="approved-small-action" id="legalAcceptContinue">Accept &amp; Continue</button></div></div></div><script src="/legal-privacy-safety.js"></script><script src="/program-coach-core.js"></script>
+<script defer src="/lellee-v1.js"></script>
+<script defer src="/push-button-hotfix.js"></script>
+<div class="legal-acceptance-overlay hidden" id="legalAcceptanceOverlay"><div class="legal-acceptance-card"><span class="approved-kicker">PRIVACY &amp; SAFETY UPDATE</span><h2>Before continuing</h2><p>Lellee stores sensitive recovery information. Review the current consumer terms and privacy notices.</p><div class="legal-acceptance-links"><a href="/terms.html" target="_blank">Terms</a><a href="/privacy.html" target="_blank">Privacy</a><a href="/consumer-health-privacy.html" target="_blank">Consumer Health Data</a><a href="/safety.html" target="_blank">Safety</a></div><label><input id="legalGateAdult" type="checkbox"/> I confirm I am at least 18.</label><label><input id="legalGateAgree" type="checkbox"/> I agree to the current Terms and acknowledge the Privacy and Consumer Health Data notices.</label><label><input id="legalGateSafety" type="checkbox"/> I understand Lellee is not an emergency service or individualized medical treatment.</label><div class="legal-acceptance-actions"><span id="legalGateStatus"></span><button class="approved-small-action" id="legalAcceptContinue">Accept &amp; Continue</button></div></div></div><script defer src="/legal-privacy-safety.js"></script><script defer src="/program-coach-core.js"></script>
 <div class="admin-overlay hidden" id="programBuilderEditor">
 <div class="admin-editor-card program-builder-editor-card">
 <div class="admin-editor-head">
@@ -8173,13 +8297,13 @@ Transportation"></textarea></label>
 </div>
 </div>
 </div>
-<script src="/program-builder.js"></script><script src="/coach-marketplace.js"></script><script src="/inbox-reminders.js"></script><script src="/welcome-router.js"></script><script src="/organization-licensing.js"></script>
+<script defer src="/program-builder.js"></script><script defer src="/coach-marketplace.js"></script><script defer src="/inbox-reminders.js"></script><script defer src="/welcome-router.js"></script><script defer src="/organization-licensing.js"></script>
 <div class="admin-overlay hidden" id="lifeItemEditor"><div class="admin-editor-card life-editor-card">
 <div class="admin-editor-head"><div><span class="approved-kicker" id="lifeEditorKicker">MY PLAN</span><h3 id="lifeEditorTitle">Add Item</h3></div><button class="approved-link" id="closeLifeEditor">Close</button></div>
 <div class="admin-editor-grid" id="lifeEditorFields"></div>
 <div class="approved-settings-footer"><button class="approved-link hidden" id="deleteLifeItem">Delete</button><span class="approved-setting-note" id="lifeEditorMsg"></span><button class="approved-small-action" id="saveLifeItem">Save</button></div>
 </div></div>
-<script src="/life-admin-core.js"></script><script src="/resource-navigation.js"></script>
+<script defer src="/life-admin-core.js"></script><script defer src="/resource-navigation.js"></script>
 <div class="admin-overlay hidden" id="progressCoreEditor">
 <div class="admin-editor-card progress-editor-card">
 <div class="admin-editor-head">
@@ -8194,7 +8318,7 @@ Transportation"></textarea></label>
 </div>
 </div>
 </div>
-<script src="/progress-core.js"></script>
+<script defer src="/progress-core.js"></script>
 <div class="admin-overlay hidden" id="contentStudioEditor">
 <div class="admin-editor-card content-editor-card">
 <div class="admin-editor-head">
@@ -8282,7 +8406,7 @@ Transportation"></textarea></label>
 </div>
 </div>
 </div>
-<script src="/content-studio.js"></script>
+<script defer src="/content-studio.js"></script>
 <div class="admin-overlay hidden" id="safetyRouteEditor">
 <div class="admin-editor-card">
 <div class="admin-editor-head">
@@ -8306,7 +8430,7 @@ Transportation"></textarea></label>
 </div>
 </div>
 </div>
-<script src="/safety-privacy-core.js"></script><script src="/pilot-runtime.js"></script><script src="/analytics-insights.js"></script><script src="/platform-integration.js"></script><script src="/commerce-ops.js"></script><script src="/scheduling-crm.js"></script>
+<script defer src="/safety-privacy-core.js"></script><script defer src="/pilot-runtime.js"></script><script defer src="/analytics-insights.js"></script><script defer src="/platform-integration.js"></script><script defer src="/commerce-ops.js"></script><script defer src="/scheduling-crm.js"></script>
 <div class="admin-overlay hidden" id="supportRequestEditor">
 <div class="admin-editor-card">
 <div class="admin-editor-head">
@@ -8323,25 +8447,25 @@ Transportation"></textarea></label>
 <div class="approved-settings-footer"><span class="approved-setting-note" id="supportEditorMsg"></span><button class="approved-small-action" id="supportEditorSave">Send Request</button></div>
 </div>
 </div>
-<script src="/trust-support.js"></script><script src="/automation-workflows.js"></script><script src="/personalization-experience.js"></script><script src="/release-reliability.js"></script><script src="/security-continuity.js"></script><script src="/integrations-interop.js"></script><script src="/community-peer.js"></script><script src="/forms-credentials.js"></script><script src="/staff-operations.js"></script><script src="/trusted-circle.js"></script><script src="/onboarding-help.js"></script><script src="/partner-provider-network.js"></script><script src="/communications-lifecycle.js"></script><script src="/platform-integrity.js"></script><script src="/agent-operations.js"></script><script src="/growth-partnerships.js"></script><script src="/contracts-procurement.js"></script><script src="/customer-success.js"></script><script src="/finance-revenue-ops.js"></script><script src="/executive-intelligence.js"></script><script src="/data-governance.js"></script><script src="/product-discovery.js"></script><script src="/universal-search.js"></script><script src="/physical-commerce.js"></script><script src="/supply-chain.js"></script><script src="/pwa-runtime.js"></script><script src="/search-coverage.js"></script><script src="/story-archive.js"></script><script src="/personal-plan.js"></script><script src="/journal-companion.js"></script><script src="/return-path.js"></script><script src="/stability-map.js"></script><script src="/long-term-maintenance.js"></script><script src="/recovery-completion.js"></script><script src="/release-candidate.js"></script>
-<script src="/build-2-shell.js"></script>
-<script src="/build-3-guidance.js?v=20260816-stability1"></script>
-<script src="/build-4-community.js"></script>
-<script src="/build-5-professional.js"></script>
-<script src="/build-6-platform.js"></script>
-<script src="/consolidated-repair.js?v=20260816-r4-auth-bridge"></script>
-<script src="/journal-review-hotfix.js?v=20260816-journal-review-r1"></script>
-<script src="/lellee-final-repair.js?v=20260816-final-r3-plus-payments"></script>
-<script src="/lellee-pricing-update.js?v=20260816-pricing-r2"></script>
-<script src="/lellee-agent-access-control.js?v=20260816-agent-security-r1"></script>
+<script defer src="/trust-support.js"></script><script defer src="/automation-workflows.js"></script><script defer src="/personalization-experience.js"></script><script defer src="/release-reliability.js"></script><script defer src="/security-continuity.js"></script><script defer src="/integrations-interop.js"></script><script defer src="/community-peer.js"></script><script defer src="/forms-credentials.js"></script><script defer src="/staff-operations.js"></script><script defer src="/trusted-circle.js"></script><script defer src="/onboarding-help.js"></script><script defer src="/partner-provider-network.js"></script><script defer src="/communications-lifecycle.js"></script><script defer src="/platform-integrity.js"></script><script defer src="/agent-operations.js"></script><script defer src="/growth-partnerships.js"></script><script defer src="/contracts-procurement.js"></script><script defer src="/customer-success.js"></script><script defer src="/finance-revenue-ops.js"></script><script defer src="/executive-intelligence.js"></script><script defer src="/data-governance.js"></script><script defer src="/product-discovery.js"></script><script defer src="/universal-search.js"></script><script defer src="/physical-commerce.js"></script><script defer src="/supply-chain.js"></script><script defer src="/pwa-runtime.js"></script><script defer src="/search-coverage.js"></script><script defer src="/story-archive.js"></script><script defer src="/personal-plan.js"></script><script defer src="/journal-companion.js"></script><script defer src="/return-path.js"></script><script defer src="/stability-map.js"></script><script defer src="/long-term-maintenance.js"></script><script defer src="/recovery-completion.js"></script><script defer src="/release-candidate.js"></script>
+<script defer src="/build-2-shell.js"></script>
+<script defer src="/build-3-guidance.js?v=20260816-stability1"></script>
+<script defer src="/build-4-community.js"></script>
+<script defer src="/build-5-professional.js"></script>
+<script defer src="/build-6-platform.js"></script>
+<script defer src="/consolidated-repair.js?v=20260816-r4-auth-bridge"></script>
+<script defer src="/journal-review-hotfix.js?v=20260816-journal-review-r1"></script>
+<script defer src="/lellee-final-repair.js?v=20260816-final-r3-plus-payments"></script>
+<script defer src="/lellee-pricing-update.js?v=20260816-pricing-r2"></script>
+<script defer src="/lellee-agent-access-control.js?v=20260816-agent-security-r1"></script>
 
-<script src="/lellee-agent-permissions.js?v=20260816-r4"></script>
+<script defer src="/lellee-agent-permissions.js?v=20260816-r4"></script>
 
-<script src="/lellee-coaching-message-consent.js?v=20260816-r11"></script>
+<script defer src="/lellee-coaching-message-consent.js?v=20260816-r11"></script>
 
-<script src="/lellee-agent-control-center.js?v=20260816-r12"></script>
+<script defer src="/lellee-agent-control-center.js?v=20260816-r12"></script>
 
-<script src="/lellee-admin-agent-operations.js?v=20260816-r13"></script>
+<script defer src="/lellee-admin-agent-operations.js?v=20260816-r13"></script>
 
 <script id="coach-account-visibility-script">
 (function(){
@@ -8379,13 +8503,14 @@ Transportation"></textarea></label>
 
     const toggle = document.getElementById('coachAccountVisibilityToggle');
     const label = document.getElementById('coachAccountVisibilityLabel');
-    if (toggle) toggle.checked = !!visible;
-    if (label) label.textContent = visible ? 'On' : 'Off';
+    if (toggle && toggle.checked !== !!visible) toggle.checked = !!visible;
+    const nextLabel = visible ? 'On' : 'Off';
+    if (label && label.textContent !== nextLabel) label.textContent = nextLabel;
   }
 
   function init(){
     // Privacy-first: always start hidden in a fresh browser/session.
-    const saved = sessionStorage.getItem(STORAGE_KEY) === 'true';
+    const saved = window.LelleeSafeSessionStorage?.getItem(STORAGE_KEY) === 'true';
     setVisibility(saved);
 
     const toggle = document.getElementById('coachAccountVisibilityToggle');
@@ -8393,13 +8518,21 @@ Transportation"></textarea></label>
       toggle.dataset.bound = 'true';
       toggle.addEventListener('change', () => {
         const visible = toggle.checked;
-        sessionStorage.setItem(STORAGE_KEY, visible ? 'true' : 'false');
+        window.LelleeSafeSessionStorage?.setItem(STORAGE_KEY, visible ? 'true' : 'false');
         setVisibility(visible);
       });
     }
 
-    // Re-apply after dynamic dashboard rendering.
-    const observer = new MutationObserver(() => setVisibility(sessionStorage.getItem(STORAGE_KEY) === 'true'));
+    // Re-apply after dynamic dashboard rendering without observing our own label update forever.
+    let visibilityRefreshQueued = false;
+    const observer = new MutationObserver(() => {
+      if (visibilityRefreshQueued) return;
+      visibilityRefreshQueued = true;
+      requestAnimationFrame(() => {
+        visibilityRefreshQueued = false;
+        setVisibility(window.LelleeSafeSessionStorage?.getItem(STORAGE_KEY) === 'true');
+      });
+    });
     observer.observe(document.body, {childList:true, subtree:true});
   }
 
@@ -8411,14 +8544,14 @@ Transportation"></textarea></label>
 })();
 </script>
 
-<script src="/agent-command-center.js?v=20260827-1"></script>
-<script src="/coach-entry-router.js?v=20260827-1"></script>
-<script src="/coach-dashboard-live.js?v=20260827-1"></script>
-<script src="/coach-operations-completion.js?v=20260827-1"></script>
-<script src="/organization-entry-router.js?v=20260827-1"></script>
-<script src="/organization-dashboard-live.js?v=20260827-1"></script>
-<script src="/organization-operations-completion.js?v=20260827-1"></script>
-<script src="/unified-workspace-switcher.js?v=20260827-1"></script>
+<script defer src="/agent-command-center.js?v=20260827-1"></script>
+<script defer src="/coach-entry-router.js?v=20260827-1"></script>
+<script defer src="/coach-dashboard-live.js?v=20260827-1"></script>
+<script defer src="/coach-operations-completion.js?v=20260827-1"></script>
+<script defer src="/organization-entry-router.js?v=20260827-1"></script>
+<script defer src="/organization-dashboard-live.js?v=20260827-1"></script>
+<script defer src="/organization-operations-completion.js?v=20260827-1"></script>
+<script defer src="/unified-workspace-switcher.js?v=20260827-1"></script>
 </body>
 </html>
 

@@ -1,5 +1,5 @@
-const LELLEE_SW_VERSION='lellee-menu-navigation-repair-2026-08-28-v1';
-self.addEventListener('install',event=>self.skipWaiting());
+const LELLEE_SW_VERSION='lellee-page-response-menu-failsafe-2026-08-28-v2';
+self.addEventListener('install',event=>{self.skipWaiting()});
 self.addEventListener('activate',event=>event.waitUntil((async()=>{
   const names=await caches.keys();
   await Promise.all(names.map(name=>caches.delete(name)));
@@ -19,13 +19,16 @@ self.addEventListener('fetch',event=>{
     }));
     return;
   }
-  event.respondWith(fetch(request,{cache:'no-store'}).catch(()=>new Response('',{status:504})));
+  event.respondWith(fetch(request,{cache:'no-store'}).catch(()=>{
+    const type=url.pathname.endsWith('.js')?'application/javascript; charset=utf-8':
+      url.pathname.endsWith('.css')?'text/css; charset=utf-8':'text/plain; charset=utf-8';
+    return new Response('',{status:503,headers:{'Content-Type':type}});
+  }));
 });
 self.addEventListener('push',event=>{
   let p={};try{p=event.data?.json()||{}}catch(_){p={body:event.data?.text()||''}}
   event.waitUntil(self.registration.showNotification(p.title||'Lellee',{
-    body:p.body||'You have a new Lellee update.',
-    icon:p.icon||'/icon-192.png',badge:p.badge||'/icon-192.png',
+    body:p.body||'You have a new Lellee update.',icon:p.icon||'/icon-192.png',badge:p.badge||'/icon-192.png',
     data:{url:p.url||'/app'},tag:p.tag||'lellee-update'
   }));
 });
@@ -34,7 +37,7 @@ self.addEventListener('notificationclick',event=>{
   const target=event.notification?.data?.url||'/app';
   event.waitUntil((async()=>{
     const windows=await self.clients.matchAll({type:'window',includeUncontrolled:true});
-    for(const client of windows){if('focus' in client){await client.navigate(target);return client.focus()}}
+    for(const client of windows){if('focus'in client){await client.navigate(target);return client.focus()}}
     return self.clients.openWindow(target);
   })());
 });

@@ -220,8 +220,18 @@ textarea{width:100%;border:1px solid #ddd4e5;border-radius:12px;padding:13px;col
        desktop 260x72, <=1120px 220px wide, <=560px 185x64.
        Approved public artwork: lellee-approved-logo-final.jpg.
   -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+window.__lelleeSupabaseReady=false;
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+  onload="window.__lelleeSupabaseReady=true;window.dispatchEvent(new Event('lellee:supabase-ready'))"
+  onerror="window.__lelleeSupabaseLoadFailed=true;window.dispatchEvent(new Event('lellee:supabase-unavailable'))"></script>
 
+
+<style id="lellee-landing-response-failsafe-20260828">
+.topbar,.topbar-inner,.site-nav,.site-nav a,.site-nav button,.menu-toggle{pointer-events:auto}
+.journey-dialog:not([open]){display:none!important;pointer-events:none!important}
+</style>
 </head>
 <body data-lellee-public-build="landing-root-restore-2026-08-27">
   <a class="skip-link" href="#main">Skip to main content</a>
@@ -512,7 +522,7 @@ textarea{width:100%;border:1px solid #ddd4e5;border-radius:12px;padding:13px;col
 (() => {
   const SUPABASE_URL = 'https://hkrrxscyhtxmbvxevfkw.supabase.co';
   const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_QPwVWU-qNnc3GJb_FoFnlQ_kEHa3dtU';
-  const sb = window.supabase?.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+  let sb = window.supabase?.createClient ? window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY) : null;
 
   const fallbackTopics = [
     {topic_key:'caregiving',label:'Caregiving',description:'Support yourself while caring for a parent, partner or loved one.',icon_key:'heart',availability:'coming_soon'},
@@ -635,7 +645,7 @@ textarea{width:100%;border:1px solid #ddd4e5;border-radius:12px;padding:13px;col
   // Make every same-page menu link explicit and reliable, then close the mobile menu.
   function goToLandingSection(hash){
     if(!hash || hash.charAt(0)!=='#') return false;
-    const target=document.querySelector(hash);
+    let target=null;try{target=document.querySelector(hash)}catch(_){return false}
     if(!target) return false;
     target.scrollIntoView({behavior:'smooth',block:'start'});
     try{history.replaceState(null,'',hash)}catch(_){}
@@ -856,6 +866,11 @@ textarea{width:100%;border:1px solid #ddd4e5;border-radius:12px;padding:13px;col
   function showError(msg){surveyError.textContent=msg;surveyError.classList.remove('hidden')}
   function clearError(){surveyError.textContent='';surveyError.classList.add('hidden')}
 
+  window.addEventListener('lellee:supabase-ready',()=>{
+    if(!sb&&window.supabase?.createClient){
+      try{sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);loadTopics()}catch(error){console.warn(error)}
+    }
+  },{once:true});
   loadTopics();
 
   if('serviceWorker' in navigator){

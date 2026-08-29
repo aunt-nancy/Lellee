@@ -1,9 +1,9 @@
-LELLEE MENU + NAVIGATION REPAIR — 2026-08-28
+LELLEE PAGE RESPONSE + MENU FAILSAFE — 2026-08-28
 
 PURPOSE
-Fix menu/navigation controls without changing the approved landing-page logo.
+Restore responsive landing and app menus even when the Supabase CDN, browser storage, or optional feature modules are slow or unavailable.
 
-UPLOAD TO GITHUB ROOT — replace these exact files:
+UPLOAD TO THE GITHUB ROOT — replace these exact files:
 1. index.html
 2. landing.html
 3. service-worker.js
@@ -11,21 +11,21 @@ UPLOAD TO GITHUB ROOT — replace these exact files:
 
 NO SUPABASE SQL.
 
-REPAIRS
-- Landing top navigation section links now explicitly scroll to their correct sections.
-- Landing mobile menu closes after a menu selection.
-- Start Your Journey opens the Lellee journey survey again instead of being hijacked directly into /app.
-- App sidebar/bottom-menu buttons use delegated click handling so dynamic menu controls continue to work.
-- Mobile hamburger now opens the navigation drawer instead of incorrectly acting like a Settings button.
-- Escape closes the mobile drawer.
-- Program-selection query context remains preserved.
+FIXES
+- App navigation is bound by a dependency-free failsafe before Supabase or optional modules initialize.
+- Supabase now loads without blocking the page.
+- If Supabase is unavailable, Lellee remains usable in guest browse mode instead of crashing.
+- Browser-storage failures no longer stop the app JavaScript.
+- Optional feature scripts are ordered deferred downloads instead of sequential parser-blocking requests.
+- Hidden overlays cannot intercept clicks.
+- Landing menu links retain native hash navigation and remain clickable without Supabase.
+- Existing program-selection context and browse-first behavior are preserved.
 
-PROTECTED / UNCHANGED
-- Landing logo asset remains /lellee-approved-logo-final.jpg?v=20260814-1
-- Landing desktop logo frame remains 260px x 72px, no transform.
-- <=1120px remains 220px wide.
-- <=560px remains 185px x 64px.
-- No unrelated visual redesign.
+PROTECTED
+- Approved landing logo asset and exact approved sizing are unchanged.
 
-AFTER VERCEL = READY
-Open https://www.lellee.com/reset-lellee-cache.html once, then test the landing navigation and app/sidebar menus.
+AFTER VERCEL SHOWS READY
+1. Close every open Lellee tab.
+2. Open https://www.lellee.com/reset-lellee-cache.html once.
+3. Test the landing header menus.
+4. Open /app?browse=1 and test Today, My Recovery, Tools and Journal.
