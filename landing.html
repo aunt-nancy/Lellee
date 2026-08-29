@@ -1,23 +1,303 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <!-- LELLEE_APPROVED_LOGO_FINAL 2026-08-13 -->
+  <!-- LELLEE_CALM_JOURNEY_INLINE_FORMAT_REPAIR 2026-08-29 -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Lellee | Your journey. Your support. Your way.</title>
   <meta name="description" content="Lellee helps people find the right place to begin across recovery, reentry, caregiving, housing, work, grief, independent living, family support and other major life transitions.">
   <link rel="canonical" href="https://lellee.com/">
   <meta name="theme-color" content="#f7f3fb">
-  <link rel="stylesheet" href="/master-landing.css?v=20260829-calm-journey-v1">
+  <style>
+:root{
+  --navy:#0d1029;
+  --ink:#17152d;
+  --muted:#666175;
+  --purple:#5531a6;
+  --purple2:#7852c5;
+  --lav:#eee8f6;
+  --lav2:#f7f3fb;
+  --pink:#df5a9c;
+  --softpink:#fae8f1;
+  --green:#2ca343;
+  --softgreen:#f0f8ec;
+  --blue:#2e4fd2;
+  --softblue:#eef0fb;
+  --orange:#efa128;
+  --softorange:#fff4df;
+  --teal:#3aa29a;
+  --softteal:#e9f7f5;
+  --gold:#d4a32c;
+  --softgold:#fff7e3;
+  --line:#e8e3ee;
+  --shadow:0 8px 28px rgba(39,29,72,.07);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:#fbfafc;color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.45}
+button,a,textarea{font:inherit}
+a{color:inherit}
+button{cursor:pointer}
+.skip-link{position:absolute;left:-9999px;top:8px;background:#fff;padding:10px 14px;z-index:999}
+.skip-link:focus{left:8px}
+.topbar{background:#fff;border-bottom:1px solid #eeeaf1;position:sticky;top:0;z-index:50}
+.topbar-inner{max-width:1480px;margin:auto;height:84px;padding:0 26px;display:flex;align-items:center;gap:28px}
+.brand{width:260px;height:72px;display:flex;align-items:center;overflow:hidden;text-decoration:none}
+.brand img{width:100%;height:100%;object-fit:contain}
+.site-nav{display:flex;align-items:center;gap:24px;margin-left:auto;font-size:.9rem;font-weight:650;color:#17152d}
+.site-nav a{text-decoration:none;white-space:nowrap}
+.site-nav a:hover,.site-nav a.active{color:var(--purple)}
+.site-nav a.active{padding-bottom:8px;border-bottom:2px solid var(--purple)}
+.login-link{margin-left:10px;border:1px solid #d8cee7;border-radius:9px;padding:10px 21px!important}
+.nav-cta{border:0;background:var(--purple);color:#fff;border-radius:9px;padding:11px 20px;font-weight:800}
+.menu-toggle{display:none;margin-left:auto;border:1px solid #ddd2e8;background:#fff;border-radius:9px;padding:9px 14px}
+.topbar,.topbar-inner,.brand,.site-nav,.site-nav a,.site-nav button,.menu-toggle{pointer-events:auto!important}
+dialog:not([open]){display:none!important;pointer-events:none!important}
+.page-shell{max-width:1480px;margin:0 auto;padding:18px 18px 0}
+.hero-layout{display:grid;grid-template-columns:minmax(0,3.35fr) minmax(330px,1fr);gap:16px}
+.hero-panel{min-height:370px;border-radius:18px;position:relative;overflow:hidden;background:linear-gradient(115deg,#fff 0%,#fff 32%,#efe8f7 56%,#e5d8f1 100%);box-shadow:var(--shadow);border:1px solid #eee9f1}
+.hero-panel:after{pointer-events:none;content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(255,255,255,.99) 0%,rgba(255,255,255,.96) 30%,rgba(255,255,255,.15) 55%,rgba(255,255,255,0) 100%);z-index:1}
+.hero-content{position:relative;z-index:5;width:44%;padding:48px 0 40px 54px}
+.hero-kicker,.section-kicker,.survey-kicker{font-size:.72rem;letter-spacing:.12em;font-weight:850;color:#6d4ca6}
+.hero-content h1{font-size:clamp(2.8rem,4.6vw,4.55rem);line-height:.98;letter-spacing:-.035em;margin:0 0 22px;font-weight:780;color:#20155f}
+.hero-content h1 em{font-style:normal;color:var(--pink)}
+.hero-content p{font-size:1.04rem;color:#312c49;max-width:490px;margin:0 0 22px}
+.hero-actions{display:flex;gap:10px;flex-wrap:wrap}
+.primary-button,.secondary-button,.light-button{border:0;border-radius:9px;padding:13px 20px;font-weight:800;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.primary-button{background:linear-gradient(135deg,#4e2d98,#6e45b6);color:#fff;box-shadow:0 7px 18px rgba(80,44,151,.16)}
+.secondary-button{background:#fff;color:#4f3191;border:1px solid #d6c9e6;box-shadow:none}
+.button-heart{font-size:1.2rem}
+.hero-note{font-size:.75rem!important;color:#71697a!important;margin-top:8px!important}
+.hero-art-left{pointer-events:none;position:absolute;left:-28px;top:100px;width:100px;height:200px;border:4px solid rgba(122,83,186,.45);border-right:0;border-bottom:0;border-radius:90% 0 0 0;transform:rotate(-12deg);z-index:4}
+.hero-art-left:before,.hero-art-left:after{content:"";position:absolute;border:3px solid rgba(218,121,167,.45);width:52px;height:83px;border-radius:100% 0 100% 0}
+.hero-art-left:before{left:28px;top:-40px;transform:rotate(14deg)}
+.hero-art-left:after{left:12px;top:85px;transform:rotate(70deg);width:36px;height:60px}
+.hero-visual{pointer-events:none;position:absolute;right:0;top:0;width:68%;height:100%;overflow:hidden;background:linear-gradient(180deg,#f6d8df 0%,#d9d1ed 34%,#8d75bc 68%,#57427c 100%)}
+.sunrise-orb{position:absolute;width:170px;height:170px;border-radius:50%;background:radial-gradient(circle,#ffe9b8 0%,rgba(255,223,180,.78) 32%,rgba(255,220,192,0) 70%);left:32%;top:16%}
+.ridge{position:absolute;left:-5%;right:-5%;bottom:0;clip-path:polygon(0 100%,0 67%,14% 53%,23% 61%,35% 42%,46% 55%,57% 31%,68% 50%,79% 25%,100% 48%,100% 100%)}
+.ridge-back{height:68%;background:#aaa0ca;opacity:.55}
+.ridge-mid{height:56%;background:#7567a0;opacity:.68;transform:translateY(20px)}
+.ridge-front{height:43%;background:linear-gradient(180deg,#5a477d,#3d315b);transform:translateY(34px)}
+.path-line{position:absolute;bottom:-10px;left:31%;width:38%;height:58%;border-radius:50%;border:22px solid rgba(246,220,203,.72);border-left-color:transparent;border-top-color:transparent;transform:rotate(11deg)}
+.wildflowers{position:absolute;bottom:28px;left:46%;color:#e9a3c6;font-size:1.7rem;letter-spacing:.5rem;opacity:.9}
+.hero-message{pointer-events:none;position:absolute;z-index:5;right:6%;top:39%;width:205px;padding:19px;background:rgba(255,255,255,.86);border:1px solid rgba(255,255,255,.7);border-radius:15px;box-shadow:0 10px 25px rgba(40,27,66,.12);backdrop-filter:blur(4px)}
+.hero-message>span{font-size:1.5rem;color:#51319a}.hero-message b{display:block;font-size:1rem;margin:4px 0}.hero-message p{margin:0;font-size:.82rem;color:#493d61}
+.journey-panel{background:#fff;border:1px solid #eee9f1;border-radius:18px;box-shadow:var(--shadow);padding:18px 18px 10px}
+.panel-title{text-align:center;border-bottom:1px solid #eee8f0;padding:2px 0 14px;margin-bottom:3px}
+.panel-title b{display:block;font-size:.88rem;color:#22175c;letter-spacing:.035em}.panel-title span{font-size:.72rem;color:#716b7d}
+.journey-step{display:grid;grid-template-columns:42px 1fr 28px;gap:10px;align-items:center;padding:11px 4px;border-bottom:1px solid #eeeaf0}
+.step-square{width:38px;height:38px;border-radius:7px;display:grid;place-items:center;color:#fff;font-size:1.15rem;font-weight:850;box-shadow:inset 0 -2px 0 rgba(0,0,0,.08)}
+.journey-step b{display:block;font-size:.84rem}.journey-step small{display:block;font-size:.69rem;color:#6e6976;margin-top:2px;line-height:1.35}.step-icon{text-align:center;font-size:1.1rem}
+.step-green .step-square{background:#3aa543}.step-green .step-icon{color:#2ca343}
+.step-blue .step-square{background:#274dcc}.step-blue .step-icon{color:#274dcc}
+.step-orange .step-square{background:#f09a23}.step-orange .step-icon{color:#f09a23}
+.step-purple .step-square{background:#7138b0}.step-purple .step-icon{color:#bd5aa4}
+.step-teal .step-square{background:#3aa49a}.step-teal .step-icon{color:#3aa49a}
+.step-gold .step-square{background:#d7a42a}.step-gold .step-icon{color:#d7a42a}
+.support-block{background:#fff;border:1px solid #eee9f1;border-radius:18px;box-shadow:var(--shadow);padding:18px;margin-top:16px}
+.block-heading{text-align:center;margin-bottom:16px}.block-heading h2{margin:0;font-size:1.25rem;color:#2f256c}.block-heading p{margin:6px auto 0;max-width:760px;font-size:.76rem;color:#746e7c}
+.support-card-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:12px}
+.support-card{border:0;border-radius:14px;min-height:180px;padding:18px 13px 14px;text-align:center;display:flex;flex-direction:column;align-items:center;color:#211a4d;box-shadow:inset 0 0 0 1px rgba(255,255,255,.7);transition:.16s ease}
+.support-card:hover{transform:translateY(-2px);box-shadow:0 10px 22px rgba(51,34,88,.1)}
+.support-icon{font-size:2rem;line-height:1;margin-bottom:10px}.support-card h3{font-size:.91rem;margin:0 0 6px}.support-card p{font-size:.69rem;line-height:1.4;margin:0 0 14px;color:#4f485c}.support-card .card-action{margin-top:auto;font-size:.69rem;padding:7px 11px;border-radius:8px;color:#fff;font-weight:800}
+.tone-0{background:linear-gradient(180deg,#f1f8ed,#edf7e8)}.tone-0 .support-icon{color:#25973a}.tone-0 .card-action{background:#2ba13d}
+.tone-1{background:linear-gradient(180deg,#f0f0fb,#ebeefa)}.tone-1 .support-icon{color:#4056cb}.tone-1 .card-action{background:#4354ce}
+.tone-2{background:linear-gradient(180deg,#fff6e8,#fff0d5)}.tone-2 .support-icon{color:#e79518}.tone-2 .card-action{background:#ef9d22}
+.tone-3{background:linear-gradient(180deg,#f3edfb,#eee5fa)}.tone-3 .support-icon{color:#6139b2}.tone-3 .card-action{background:#6540b7}
+.tone-4{background:linear-gradient(180deg,#eaf7f5,#e3f3f0)}.tone-4 .support-icon{color:#319a91}.tone-4 .card-action{background:#38a097}
+.tone-5{background:linear-gradient(180deg,#fff5f8,#fce8f0)}.tone-5 .support-icon{color:#d84d93}.tone-5 .card-action{background:#db5596}
+.support-skeleton{height:180px;border-radius:14px;background:linear-gradient(90deg,#f6f3f8,#fff,#f6f3f8);background-size:250% 100%;animation:shimmer 1.3s infinite}
+@keyframes shimmer{to{background-position:-100% 0}}
+.help-choose{display:block;margin:14px auto 0;border:0;background:transparent;color:#5635a0;font-size:.76rem;font-weight:800}
+.dashboard-grid{display:grid;grid-template-columns:1.02fr 1.04fr 1.1fr;gap:14px;margin-top:16px}
+.dashboard-card{background:#fff;border:1px solid #eee9f1;border-radius:16px;box-shadow:var(--shadow);min-height:195px;padding:18px}
+.card-heading{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:13px}.card-heading b{color:#2b2263}.card-heading span{font-size:.7rem;color:#77717d}
+.ring-wrap{display:flex;align-items:center;gap:20px}
+.multi-ring{width:125px;height:125px;border-radius:50%;background:conic-gradient(var(--purple) 0 20%,var(--blue) 20% 40%,var(--teal) 40% 60%,var(--orange) 60% 80%,var(--pink) 80% 100%);display:grid;place-items:center;position:relative}
+.multi-ring:after{content:"";position:absolute;width:90px;height:90px;border-radius:50%;background:#fff}
+.ring-center{position:relative;z-index:2;text-align:center}.ring-center b{display:block;font-size:2rem;color:#251a5d}.ring-center span{font-size:.65rem}
+.ring-legend{display:grid;gap:8px;font-size:.69rem}.ring-legend span{display:flex;align-items:center;gap:7px}.dot{width:8px;height:8px;border-radius:50%;display:inline-block}.dot-purple{background:var(--purple)}.dot-blue{background:var(--blue)}.dot-teal{background:var(--teal)}.dot-orange{background:var(--orange)}.dot-pink{background:var(--pink)}
+.inspiration-card{padding:0;overflow:hidden;background:linear-gradient(180deg,#f4d8e5,#d6d2ee 48%,#735b92);position:relative}
+.inspiration-card:before{content:"";position:absolute;left:-10%;right:-10%;bottom:-3%;height:55%;background:#5a4676;clip-path:polygon(0 100%,0 63%,18% 42%,33% 63%,50% 28%,67% 61%,82% 36%,100% 59%,100% 100%)}
+.inspiration-overlay{position:relative;z-index:2;height:100%;padding:18px;color:#261b59;display:flex;flex-direction:column}.inspiration-overlay b{font-size:.84rem}.inspiration-overlay p{font-family:Georgia,serif;font-size:1.1rem;line-height:1.35;max-width:330px;margin:20px 0;color:#29224b}.inspiration-overlay button{margin-top:auto;align-self:center;background:#fff;border:0;border-radius:8px;padding:9px 17px;color:#57369f;font-weight:800;font-size:.7rem}
+.quick-list{display:grid;grid-template-columns:1fr 1fr;gap:8px}.quick-list a,.quick-list button{border:0;background:#faf9fc;border-radius:10px;padding:11px;text-align:left;text-decoration:none;font-size:.72rem;color:#302862;display:flex;align-items:center;gap:8px}.quick-list span{width:25px;height:25px;border-radius:50%;background:#eee7f7;color:#5937a5;display:grid;place-items:center}
+.connected-tools{display:grid;grid-template-columns:2.1fr .95fr;gap:14px;margin-top:16px}
+.connected-main,.digital-card{background:#fff;border:1px solid #eee9f1;border-radius:16px;box-shadow:var(--shadow);padding:22px}
+.connected-main{display:grid;grid-template-columns:1.15fr .85fr;gap:28px;align-items:center}.connected-main h2,.coaching-copy h2{font-size:1.65rem;line-height:1.08;color:#2a2162;margin:5px 0 8px}.connected-main p,.coaching-copy p{font-size:.78rem;color:#716a79;margin:0}
+.connected-icons{display:flex;align-items:center;justify-content:center;gap:14px}.connected-icons>div{text-align:center}.connected-icons span{width:54px;height:54px;border:1px solid #dcd2e8;border-radius:13px;display:grid;place-items:center;font-size:1.5rem;color:#5637a2;background:#fbf9fd}.connected-icons small{display:block;font-size:.63rem;margin-top:5px;color:#706879}.connected-icons>b{color:#613ea8}
+.digital-card{position:relative;overflow:hidden}.digital-card h3{font-size:1.05rem;color:#2e2568;margin:6px 0 10px}.digital-card ul{list-style:none;padding:0;margin:0 0 14px;display:grid;gap:7px}.digital-card li{font-size:.69rem}.digital-card li:before{content:"✓";display:inline-grid;place-items:center;width:18px;height:18px;border:1px solid #6e4bb0;border-radius:50%;color:#5d3aa5;margin-right:7px;font-size:.57rem}
+.mini-journal{position:absolute;right:16px;bottom:10px;display:flex;align-items:flex-end;gap:8px}.journal-cover{width:105px;height:133px;border-radius:6px;background:linear-gradient(145deg,#3e2a72,#6c4ba2);color:#fff;padding:18px 10px;text-align:center;font-family:Georgia,serif;box-shadow:0 10px 20px rgba(38,25,65,.18);transform:rotate(-4deg)}.journal-cover small{font-family:Inter,sans-serif;font-size:.46rem;letter-spacing:.08em}.phone-card{width:60px;height:104px;background:#fff;border:5px solid #29272f;border-radius:13px;padding:12px 5px;font-size:.55rem;color:#2e245f;box-shadow:0 8px 16px rgba(30,22,53,.16)}.phone-card span{display:block;font-size:.47rem;color:#777}
+.coaching-block{display:grid;grid-template-columns:1.3fr 1fr;gap:14px;margin-top:16px;margin-bottom:16px}
+.coaching-copy,.coach-card-preview{background:#fff;border:1px solid #eee9f1;border-radius:16px;box-shadow:var(--shadow);padding:24px}
+.coaching-copy .secondary-button{margin-top:16px;font-size:.72rem}
+.coach-card-preview{display:flex;gap:18px;align-items:center;background:linear-gradient(135deg,#f7f3fb,#fff7fa)}
+.coach-photo-placeholder{width:76px;height:76px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(145deg,#5432a4,#d76aa5);color:#fff;font-family:Georgia,serif;font-size:2rem;flex:0 0 auto}.coach-badge{font-size:.6rem;font-weight:850;color:#6141a7;letter-spacing:.08em}.coach-card-preview h3{margin:5px 0;font-size:1.15rem;color:#2f2569}.coach-card-preview p{font-size:.71rem;color:#6e6776;margin:0}
+.final-cta{border-radius:16px;background:linear-gradient(115deg,#43298a,#6c46af 58%,#ca5f9b);color:#fff;padding:28px 32px;display:flex;align-items:center;justify-content:space-between;gap:24px;margin-bottom:18px}.final-cta b{font-family:Georgia,serif;font-size:1.35rem}.final-cta h2{font-size:1.55rem;margin:2px 0 4px}.final-cta p{margin:0;font-size:.76rem;color:#eee7fa}.light-button{background:#fff;color:#523294}
+.footer{background:#fff;border-top:1px solid #eee9f1;padding:28px 18px 18px}.footer-inner{max-width:1400px;margin:auto;display:grid;grid-template-columns:1.5fr repeat(3,.6fr);gap:26px}.footer-inner img{width:230px;height:110px;object-fit:contain}.footer-inner>div{display:grid;gap:6px;align-content:start;font-size:.72rem}.footer-inner a{text-decoration:none;color:#6b6573}.copyright{max-width:1400px;margin:18px auto 0;border-top:1px solid #eee9f1;padding-top:13px;color:#817b87;font-size:.66rem}
+.journey-dialog{width:min(760px,calc(100% - 28px));max-height:92vh;border:0;border-radius:22px;padding:0;box-shadow:0 30px 85px rgba(42,29,69,.28);overflow:auto;color:var(--ink)}
+.journey-dialog::backdrop{background:rgba(28,22,44,.55);backdrop-filter:blur(3px)}
+.dialog-shell{padding:34px;position:relative}.dialog-close{position:absolute;right:16px;top:16px;width:36px;height:36px;border-radius:50%;border:1px solid #e3dbe9;background:#fff;color:#554867;font-size:1.25rem}.survey-progress{height:5px;background:#eee8f3;border-radius:999px;margin:0 48px 25px 0;overflow:hidden}.survey-progress span{display:block;height:100%;width:8%;background:linear-gradient(90deg,#4f31a0,#d25e9c);transition:width .2s}
+.survey-logo{width:220px;height:95px;object-fit:contain;display:block;margin:-8px 0 12px}.survey-step h2{font-size:2.15rem;line-height:1.05;color:#261d5f;margin:5px 0 10px}.survey-step>p{font-size:.86rem;color:#706978;margin:0 0 20px}.hidden{display:none!important}
+.survey-choices{display:grid;grid-template-columns:1fr 1fr;gap:9px}.survey-choices button{border:1px solid #e2daea;background:#fff;border-radius:11px;padding:13px;text-align:left;color:#2d2650;font-weight:700;min-height:58px}.survey-choices button:hover{background:#faf8fc;border-color:#c9b7dd}.survey-choices button.selected{background:#eee7f8;border-color:#7653b7;box-shadow:inset 0 0 0 1px #7653b7}.survey-choices.single{grid-template-columns:1fr}.survey-actions{display:flex;justify-content:flex-end;margin-top:22px}.survey-actions.split{justify-content:space-between;align-items:center}.survey-actions.result-actions{justify-content:flex-start;gap:9px;flex-wrap:wrap}.back-button{border:0;background:transparent;color:#57389d;font-weight:800}
+textarea{width:100%;border:1px solid #ddd4e5;border-radius:12px;padding:13px;color:#30294b;resize:vertical}.survey-working{margin-top:10px;color:#6b4ca0;font-weight:700}.survey-error{margin-top:14px;background:#fff0f2;border:1px solid #f0c8d0;color:#8d3648;padding:10px 12px;border-radius:10px;font-size:.78rem}
+.result-primary{background:linear-gradient(135deg,#f0e9f8,#fff1f6);border:1px solid #ddcfe8;border-radius:14px;padding:20px;margin-top:14px}.result-primary>span{font-size:.62rem;letter-spacing:.1em;font-weight:850;color:#6d4aa4}.result-primary h3{font-size:1.7rem;margin:4px 0;color:#2b2164}.result-primary p{font-size:.8rem;color:#665e70;margin:0}.result-related{margin-top:16px}.related-pills{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}.related-pills span{background:#f1ebf7;color:#654594;border-radius:999px;padding:7px 10px;font-size:.69rem;font-weight:750}.result-note{font-size:.7rem!important;color:#7c7483!important;margin-top:18px!important}
+@media(max-width:1120px){
+  .site-nav{gap:14px;font-size:.8rem}.brand{width:220px}
+  .hero-layout{grid-template-columns:1fr}.journey-panel{display:grid;grid-template-columns:repeat(2,1fr);gap:0 14px}.panel-title{grid-column:1/-1}.journey-step:nth-last-child(1),.journey-step:nth-last-child(2){border-bottom:0}
+  .support-card-grid{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:820px){
+  .menu-toggle{display:block}.site-nav{display:none;position:absolute;left:14px;right:14px;top:76px;background:#fff;border:1px solid #e6deeb;border-radius:14px;padding:14px;box-shadow:0 15px 40px rgba(38,26,60,.14);flex-direction:column;align-items:stretch}.site-nav.open{display:flex}.site-nav a.active{border:0;padding-bottom:0}.nav-cta{width:100%}
+  .hero-content{width:64%;padding-left:34px}.hero-panel:after{background:linear-gradient(90deg,#fff 0%,rgba(255,255,255,.96) 45%,rgba(255,255,255,.18) 78%,transparent 100%)}.hero-visual{width:55%}.hero-message{display:none}
+  .dashboard-grid,.connected-tools,.coaching-block{grid-template-columns:1fr}.connected-main{grid-template-columns:1fr}.digital-card{min-height:250px}.footer-inner{grid-template-columns:1fr 1fr}.footer-inner img{grid-column:1/-1}
+}
+@media(max-width:560px){
+  .topbar-inner{height:74px;padding:0 12px}.brand{width:185px;height:64px}.page-shell{padding:10px 10px 0}
+  .hero-panel{min-height:520px}.hero-content{width:100%;padding:35px 25px 230px}.hero-content h1{font-size:3rem}.hero-panel:after{background:linear-gradient(180deg,#fff 0%,rgba(255,255,255,.96) 54%,rgba(255,255,255,.12) 83%,transparent 100%)}.hero-visual{left:0;right:0;top:auto;bottom:0;width:100%;height:47%}.hero-art-left{display:none}
+  .journey-panel{grid-template-columns:1fr}.support-card-grid{grid-template-columns:1fr 1fr}.support-card{min-height:170px}.dashboard-grid{grid-template-columns:1fr}.ring-wrap{justify-content:center}.connected-main{padding:18px}.connected-icons{gap:8px}.connected-icons>b{display:none}
+  .mini-journal{opacity:.72}.final-cta{display:block}.final-cta .light-button{margin-top:18px;width:100%}.survey-choices{grid-template-columns:1fr}.dialog-shell{padding:27px 18px}.survey-step h2{font-size:1.8rem}
+}
+
+
+/* ============================================================
+   LELLEE PUBLIC SUPPORT TOPICS — APPROVED PRESENTATION RESTORE
+   Top 6 follow the human-published demand rank and use colorful tiles.
+   Remaining topics use compact links/buttons.
+   ============================================================ */
+.featured-support-grid{
+  grid-template-columns:repeat(6,minmax(0,1fr))!important;
+  align-items:stretch;
+}
+.featured-support-grid .support-card{
+  text-decoration:none;
+}
+.more-topic-wrap{
+  margin:18px auto 0;
+  padding-top:15px;
+  border-top:1px solid #ebe5f0;
+  text-align:center;
+}
+.more-topic-heading{
+  display:block;
+  margin-bottom:10px;
+  color:#776c80;
+  font-size:.67rem;
+  font-weight:850;
+  letter-spacing:.085em;
+  text-transform:uppercase;
+}
+.more-topic-list{
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:8px;
+}
+.more-topic-link{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  padding:8px 12px;
+  border:1px solid #dcd1e7;
+  border-radius:999px;
+  background:#fff;
+  color:#593b91;
+  text-decoration:none;
+  font-size:.72rem;
+  box-shadow:0 4px 12px rgba(53,36,82,.04);
+}
+.more-topic-link:hover{background:#f6f1fa;border-color:#bda9d2}
+.more-topic-link b{font-weight:780}
+
+@media(max-width:1120px){
+  .featured-support-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+}
+@media(max-width:560px){
+  .featured-support-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .more-topic-list{justify-content:flex-start}
+}
+
+
+
+/* =========================================================
+   LELLEE CALM JOURNEY SELECTOR — MODAL ONLY — 2026-08-29
+   Preserves the approved landing header, 260px x 72px logo frame,
+   hero, navigation, routing, and all non-modal page formatting.
+   ========================================================= */
+.journey-dialog{
+  background:linear-gradient(145deg,#fbf8fd 0%,#fff9fb 55%,#f6f1fb 100%);
+}
+.journey-dialog::backdrop{background:rgba(48,34,67,.38);backdrop-filter:blur(7px)}
+.journey-dialog .dialog-shell{padding:31px 34px 27px}
+.journey-dialog .dialog-close{background:rgba(255,255,255,.88);border-color:#ded3e7;box-shadow:none}
+.journey-dialog .survey-progress{height:4px;background:#eee7f2;margin-bottom:21px}
+.journey-dialog .survey-progress span{background:linear-gradient(90deg,#7451b7,#d985ae)}
+.journey-dialog .survey-step[data-step="needs"] h2{
+  margin:4px auto 8px;text-align:center;max-width:620px;
+  font-family:Georgia,"Times New Roman",serif;font-weight:500;
+  font-size:clamp(1.85rem,3.3vw,2.55rem);line-height:1.08;color:#30215f
+}
+.journey-dialog .survey-step[data-step="needs"]>.survey-kicker,
+.journey-dialog .survey-step[data-step="needs"]>p{text-align:center;display:block}
+.journey-dialog .survey-step[data-step="needs"]>p{max-width:620px;margin:0 auto 9px;color:#756b7c}
+.browse-reassurance{font-size:.74rem!important;font-weight:750;color:#6f50a1!important;margin-bottom:16px!important}
+.calm-topic-choices{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.calm-topic-choices button.calm-topic-card{
+  min-height:96px;padding:12px 13px;display:grid;grid-template-columns:40px 1fr 22px;
+  align-items:center;gap:11px;border-radius:14px;border:1px solid rgba(95,67,135,.13);
+  box-shadow:none!important;text-align:left;transition:transform .14s ease,border-color .14s ease
+}
+.calm-topic-choices button.calm-topic-card:hover{transform:translateY(-1px);border-color:rgba(106,72,151,.3)}
+.calm-topic-card[hidden]{display:none!important}
+.calm-topic-icon{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font-size:1.25rem;background:rgba(255,255,255,.67)}
+.calm-topic-copy{display:block;min-width:0}
+.calm-topic-copy b{display:block;font-size:.86rem;color:#302451;margin-bottom:3px}
+.calm-topic-copy small{display:block;font-size:.64rem;line-height:1.38;color:#655c6e;font-weight:500}
+.calm-selected-mark{opacity:0;color:#68469e;font-weight:900;font-size:1rem;text-align:center}
+.calm-topic-choices button.calm-topic-card.selected{border-color:#7958ad!important;box-shadow:inset 0 0 0 1px #7958ad!important}
+.calm-topic-card.selected .calm-selected-mark{opacity:1}
+.calm-lavender{background:linear-gradient(145deg,#f1eafb,#fbf8fd)!important}.calm-lavender .calm-topic-icon{color:#6c49ad}
+.calm-blush{background:linear-gradient(145deg,#fcecf2,#fff8fa)!important}.calm-blush .calm-topic-icon{color:#c75a87}
+.calm-blue{background:linear-gradient(145deg,#eaf2fc,#f8fbff)!important}.calm-blue .calm-topic-icon{color:#4b73b6}
+.calm-peach{background:linear-gradient(145deg,#fff0e5,#fff9f4)!important}.calm-peach .calm-topic-icon{color:#c97a45}
+.calm-gold{background:linear-gradient(145deg,#fff5df,#fffbf2)!important}.calm-gold .calm-topic-icon{color:#b88530}
+.calm-lilac{background:linear-gradient(145deg,#efeafa,#faf8fd)!important}.calm-lilac .calm-topic-icon{color:#7a5bac}
+.calm-sage{background:linear-gradient(145deg,#eaf4eb,#f8fbf7)!important}.calm-sage .calm-topic-icon{color:#568e60}
+.calm-teal{background:linear-gradient(145deg,#e7f5f3,#f8fcfb)!important}.calm-teal .calm-topic-icon{color:#438f88}
+.calm-unsure{background:linear-gradient(145deg,#f5effa,#fcfafd)!important}.calm-unsure .calm-topic-icon{color:#7654a7}
+.more-support-paths{display:block;margin:13px auto 0;border:0;background:transparent;color:#5e4096;font-size:.73rem;font-weight:850;padding:7px 11px}
+.survey-browse-note{font-size:.67rem!important;color:#817687!important;margin:8px auto 0!important}
+.calm-actions{justify-content:center!important;gap:11px;margin-top:15px!important}
+.calm-actions .primary-button,.calm-actions .secondary-button{min-width:180px}
+@media(max-width:560px){
+  .journey-dialog{width:calc(100% - 18px);max-height:94vh;border-radius:21px}
+  .journey-dialog .dialog-shell{padding:25px 15px calc(22px + env(safe-area-inset-bottom))}
+  .journey-dialog .survey-progress{margin-right:43px;margin-bottom:16px}
+  .journey-dialog .survey-step[data-step="needs"] h2{font-size:1.55rem}
+  .calm-topic-choices{grid-template-columns:1fr;gap:7px}
+  .calm-topic-choices button.calm-topic-card{min-height:72px;padding:10px 11px;grid-template-columns:34px 1fr 20px;gap:9px;border-radius:12px}
+  .calm-topic-icon{width:33px;height:33px;font-size:1rem}
+  .calm-topic-copy b{font-size:.78rem}.calm-topic-copy small{font-size:.6rem}
+  .calm-actions{display:grid!important;grid-template-columns:1fr 1fr;gap:8px}
+  .calm-actions .primary-button,.calm-actions .secondary-button{min-width:0;width:100%;padding:11px 8px}
+}
+
+  </style>
+  <!-- LELLEE LANDING LOGO SOURCE LOCK — 2026-08-28
+       IMPORTANT: Do not add sizing transforms here.
+       Header sizing remains controlled by the original landing CSS:
+       desktop 260x72, <=1120px 220px wide, <=560px 185x64.
+       Approved public artwork: lellee-approved-logo-final.jpg.
+  -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 </head>
-<body>
+<body data-lellee-public-build="landing-root-restore-2026-08-27">
   <a class="skip-link" href="#main">Skip to main content</a>
 
   <header class="topbar">
     <div class="topbar-inner">
       <a class="brand" href="/" aria-label="Lellee home">
-        <img src="/lellee-approved-logo-final.jpg" alt="Lellee — Your journey. Your support. Your way.">
+        <img src="/lellee-approved-logo-final.jpg?v=20260814-1" alt="Lellee — Your journey. Your support. Your way.">
       </a>
       <button class="menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="siteNav">Menu</button>
       <nav id="siteNav" class="site-nav" aria-label="Primary">
@@ -27,7 +307,7 @@
         <a href="#tools">Tools</a>
         <a href="#coaching">Coaching</a>
         <a href="/resources">Resources</a>
-        <a class="login-link" href="/app">Log In</a>
+        <a class="login-link" href="/app?auth=signin">Log In</a>
         <button class="nav-cta" data-start-survey>Start Your Journey</button>
       </nav>
     </div>
@@ -146,7 +426,7 @@
         <div class="quick-list">
           <a href="/resources"><span>⌂</span>Find Resources</a>
           <button data-start-survey><span>✦</span>Start My Journey</button>
-          <a href="/app"><span>▣</span>My Lellee</a>
+          <a href="/app?auth=signin"><span>▣</span>My Lellee</a>
           <a href="#coaching"><span>♡</span>Explore Coaching</a>
         </div>
       </article>
@@ -189,7 +469,7 @@
         <span class="section-kicker">OPTIONAL HUMAN SUPPORT</span>
         <h2>When you want accountability, Lellee can help connect you with a coach.</h2>
         <p>Coach cards can show specialties, availability and verified credentials. Matching can consider fit and capacity without exposing private journal or safety information.</p>
-        <a class="secondary-button" href="/app">Learn About Coaching</a>
+        <a class="secondary-button" href="#coaching">Learn About Coaching</a>
       </div>
       <div class="coach-card-preview">
         <div class="coach-photo-placeholder">L</div>
@@ -213,9 +493,9 @@
 
   <footer class="footer">
     <div class="footer-inner">
-      <img src="/lellee-approved-logo-final.jpg" alt="Lellee">
+      <img src="/lellee-approved-logo-final.jpg?v=20260814-1" alt="Lellee">
       <div><b>Explore</b><a href="#support-paths">Support Paths</a><a href="#how-it-works">How It Works</a><a href="#tools">Tools</a></div>
-      <div><b>Support</b><a href="/resources">Resources</a><a href="/app">Log In</a><a href="#coaching">Coaching</a></div>
+      <div><b>Support</b><a href="/resources">Resources</a><a href="/app?auth=signin">Log In</a><a href="#coaching">Coaching</a></div>
       <div><b>Legal</b><a href="/privacy.html">Privacy</a><a href="/terms.html">Terms</a><a href="/consumer-health-privacy.html">Consumer Health Privacy</a></div>
     </div>
     <div class="copyright">© 2026 Lellee. All rights reserved.</div>
@@ -227,7 +507,7 @@
       <div class="survey-progress"><span id="surveyProgressBar"></span></div>
 
       <section class="survey-step" data-step="intro">
-        <img class="survey-logo" src="/lellee-approved-logo-final.jpg" alt="Lellee">
+        <img class="survey-logo" src="/lellee-approved-logo-final.jpg?v=20260814-1" alt="Lellee">
         <span class="survey-kicker">START YOUR JOURNEY</span>
         <h2 id="surveyTitle">You don’t have to know exactly what you need yet.</h2>
         <p>Answer a few simple questions. Lellee will suggest a sensible place to begin. You stay in control of what you start.</p>
@@ -242,7 +522,10 @@
         <div id="surveyTopicChoices" class="survey-choices calm-topic-choices"></div>
         <button type="button" id="moreSupportPaths" class="more-support-paths" aria-expanded="false">See more support paths <span aria-hidden="true">⌄</span></button>
         <p class="survey-browse-note">You can explore first and create an account later if you want to save your progress.</p>
-        <div class="survey-actions calm-actions"><button type="button" class="secondary-button" id="keepExploring">Keep exploring</button><button class="primary-button" id="needsNext" disabled>Continue</button></div>
+        <div class="survey-actions calm-actions">
+          <button type="button" class="secondary-button" id="keepExploring">Keep exploring</button>
+          <button class="primary-button" id="needsNext" disabled>Continue</button>
+        </div>
       </section>
 
       <section class="survey-step hidden" data-step="priority">
@@ -290,7 +573,7 @@
         </div>
         <p class="result-note">This is a recommendation, not a diagnosis. Lellee has not enrolled you in anything.</p>
         <div class="survey-actions result-actions">
-          <a class="primary-button" id="continueToApp" href="/app">Continue to Lellee</a>
+          <a class="primary-button" id="continueToApp" href="/app?browse=1">Continue to Lellee</a>
           <button class="secondary-button" id="exploreAgain">Explore Other Options</button>
         </div>
       </section>
@@ -299,6 +582,427 @@
     </div>
   </dialog>
 
-  <script src="/master-landing.js?v=20260829-calm-journey-v1"></script>
+  <script>
+(() => {
+  const SUPABASE_URL = 'https://hkrrxscyhtxmbvxevfkw.supabase.co';
+  const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_QPwVWU-qNnc3GJb_FoFnlQ_kEHa3dtU';
+  const sb = window.supabase?.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+
+  const fallbackTopics = [
+    {topic_key:'caregiving',label:'Caregiving',description:'Support yourself while caring for a parent, partner or loved one.',icon_key:'heart',availability:'coming_soon'},
+    {topic_key:'housing-stability',label:'Housing Stability',description:'Get organized around housing, stability and the next practical step.',icon_key:'home',availability:'guided_exploration'},
+    {topic_key:'reentry',label:'Returning Home',description:'Rebuild after jail, prison, probation or another justice-system transition.',icon_key:'door',availability:'coming_soon'},
+    {topic_key:'work-new-beginnings',label:'Work & New Beginnings',description:'Return to work, find structure, build confidence and move toward income.',icon_key:'briefcase',availability:'guided_exploration'},
+    {topic_key:'recovery',label:'Recovery',description:'Build stability and support around alcohol or substance use.',icon_key:'leaf',availability:'available'},
+    {topic_key:'grief-loss',label:'Grief & Life After Loss',description:'Find your footing after a death, major loss or painful life change.',icon_key:'heart',availability:'guided_exploration'},
+    {topic_key:'independent-living',label:'Independent Living',description:'Build routines, daily skills, confidence and greater independence.',icon_key:'spark',availability:'guided_exploration'},
+    {topic_key:'family-support',label:'Family Support',description:'Navigate family stress, support someone you love and strengthen connection.',icon_key:'people',availability:'guided_exploration'}
+  ];
+
+  const icons = {
+    home:'⌂', heart:'♡', door:'↗', briefcase:'▣', leaf:'⌁', spark:'✦',
+    people:'◯', work:'▣', recovery:'⌁', housing:'⌂', caregiving:'♡',
+    grief:'♡', reentry:'↗', default:'✦'
+  };
+
+  let topics = fallbackTopics;
+  let survey = {sessionId:null, token:null, selected:new Set(), priority:null, supportStyle:null, result:null};
+  const dialog = document.getElementById('journeyDialog');
+  const topicGrid = document.getElementById('topicGrid');
+  const surveyError = document.getElementById('surveyError');
+  try{if(dialog?.open)dialog.close()}catch(_){}
+
+  function safeIcon(topic){
+    return icons[topic.icon_key] || icons[topic.topic_key] || icons.default;
+  }
+  function availabilityText(t){
+    if(t.availability === 'available') return 'Available now';
+    if(t.availability === 'coming_soon') return 'Coming soon — explore now';
+    return 'Explore with Lellee';
+  }
+  function topicDisplayRank(topic,index){
+    const rank=Number(topic?.display_rank);
+    return Number.isFinite(rank)?rank:1000+index;
+  }
+  function topicAppUrl(topic){
+    const key=String(topic?.topic_key||'').trim().toLowerCase().replace(/_/g,'-');
+    const q=new URLSearchParams();
+    if(key==='recovery') return '/recovery-preview.html';
+    if(key){
+      q.set('program',key);
+      return '/program-preview.html?'+q.toString();
+    }
+    q.set('browse','1');
+    return '/app?'+q.toString();
+  }
+  function renderTopics(){
+    if(!topicGrid)return;
+
+    const ranked=topics
+      .map((topic,index)=>({...topic,__index:index}))
+      .sort((a,b)=>topicDisplayRank(a,a.__index)-topicDisplayRank(b,b.__index));
+
+    const featured=ranked.slice(0,6);
+    const remaining=ranked.slice(6);
+
+    topicGrid.innerHTML='';
+    topicGrid.className='support-card-grid featured-support-grid';
+
+    featured.forEach((topic,index)=>{
+      const card=document.createElement('a');
+      card.className=`support-card tone-${index%6}`;
+      card.href=topicAppUrl(topic);
+      card.dataset.topicKey=topic.topic_key;
+      card.innerHTML=`<span class="support-icon">${safeIcon(topic)}</span>
+        <h3>${escapeHtml(topic.label)}</h3>
+        <p>${escapeHtml(topic.description||'')}</p>
+        <span class="card-action">${escapeHtml(availabilityText(topic))}</span>`;
+      topicGrid.appendChild(card);
+    });
+
+    document.getElementById('moreTopicLinks')?.remove();
+    if(remaining.length){
+      const wrap=document.createElement('div');
+      wrap.id='moreTopicLinks';
+      wrap.className='more-topic-wrap';
+      wrap.innerHTML='<span class="more-topic-heading">More support topics</span><div class="more-topic-list"></div>';
+      const list=wrap.querySelector('.more-topic-list');
+      remaining.forEach(topic=>{
+        const link=document.createElement('a');
+        link.className='more-topic-link';
+        link.href=topicAppUrl(topic);
+        link.dataset.topicKey=topic.topic_key;
+        link.innerHTML=`<span>${safeIcon(topic)}</span><b>${escapeHtml(topic.label)}</b>`;
+        list.appendChild(link);
+      });
+      topicGrid.insertAdjacentElement('afterend',wrap);
+    }
+  }
+  function escapeHtml(s=''){
+    return String(s).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+  }
+  async function loadTopics(){
+    if(!sb){ renderTopics(); return; }
+    try{
+      const {data,error} = await sb.rpc('get_public_support_topics');
+      if(error) throw error;
+      if(Array.isArray(data) && data.length) topics = data;
+    }catch(e){ console.warn('Using Lellee support-topic fallback.', e?.message || e); }
+    renderTopics();
+  }
+
+  document.getElementById('menuToggle')?.addEventListener('click', e => {
+    const nav = document.getElementById('siteNav');
+    if(!nav) return;
+    nav.classList.toggle('open');
+    e.currentTarget.setAttribute('aria-expanded', nav.classList.contains('open') ? 'true' : 'false');
+  });
+  document.getElementById('siteNav')?.addEventListener('click',event=>{
+    const link=event.target.closest('a');
+    if(!link || (link.getAttribute('href')||'').startsWith('#')) return;
+    document.getElementById('siteNav')?.classList.remove('open');
+    document.getElementById('menuToggle')?.setAttribute('aria-expanded','false');
+  });
+
+  // MENU/NAVIGATION REPAIR — 2026-08-28
+  // Start Your Journey opens the landing survey; it must not be hijacked into /app.
+  document.querySelectorAll('[data-start-survey]').forEach(el=>el.addEventListener('click',event=>{
+    event.preventDefault();
+    openSurvey();
+  }));
+
+  // Make every same-page menu link explicit and reliable, then close the mobile menu.
+  function goToLandingSection(hash){
+    if(!hash || hash.charAt(0)!=='#') return false;
+    const target=document.querySelector(hash);
+    if(!target) return false;
+    target.scrollIntoView({behavior:'smooth',block:'start'});
+    try{history.replaceState(null,'',hash)}catch(_){}
+    return true;
+  }
+  document.addEventListener('click',event=>{
+    const link=event.target.closest('a[href^="#"]');
+    if(!link) return;
+    const href=link.getAttribute('href');
+    if(!goToLandingSection(href)) return;
+    event.preventDefault();
+    const nav=document.getElementById('siteNav');
+    const toggle=document.getElementById('menuToggle');
+    nav?.classList.remove('open');
+    toggle?.setAttribute('aria-expanded','false');
+  });
+  document.getElementById('surveyClose')?.addEventListener('click', () => dialog.close());
+  document.getElementById('surveyBegin')?.addEventListener('click', async () => {
+    await ensureSurveySession();
+    buildNeedChoices();
+    showStep('needs');
+  });
+
+  document.querySelectorAll('[data-back]').forEach(btn => btn.addEventListener('click', () => showStep(btn.dataset.back)));
+
+  function referralFromUrl(){
+    const u = new URL(location.href);
+    return u.searchParams.get('ref') || u.searchParams.get('referral') || '';
+  }
+  async function ensureSurveySession(){
+    if(survey.sessionId && survey.token) return true;
+    if(!sb) return false;
+    clearError();
+    const {data,error} = await sb.rpc('create_journey_survey_session',{
+      p_source:'landing',
+      p_referral_code: referralFromUrl() || null
+    });
+    if(error){ showError('Lellee could not start the survey right now. Please try again.'); console.error(error); return false; }
+    survey.sessionId = data?.session_id;
+    survey.token = data?.session_token;
+    try{
+      sessionStorage.setItem('lelleeJourneySurvey', JSON.stringify({
+        session_id:survey.sessionId,
+        session_token:survey.token
+      }));
+    }catch(_){}
+    return Boolean(survey.sessionId && survey.token);
+  }
+
+  function openSurvey(){
+    extraPathsOpen=false;
+    resetSurveyUI(false);
+    dialog.showModal();
+    showStep('intro');
+  }
+  async function openSurveyWithTopic(key){
+    extraPathsOpen=false;
+    resetSurveyUI(false);
+    survey.selected.add(key);
+    dialog.showModal();
+    await ensureSurveySession();
+    buildNeedChoices();
+    showStep('needs');
+  }
+  function resetSurveyUI(full=true){
+    clearError();
+    if(full){
+      survey = {sessionId:null,token:null,selected:new Set(),priority:null,supportStyle:null,result:null};
+    }else{
+      survey.selected = new Set(survey.selected || []);
+      survey.priority = null; survey.supportStyle = null; survey.result = null;
+    }
+    document.querySelectorAll('.survey-step').forEach(s=>s.classList.add('hidden'));
+    document.querySelectorAll('[data-support-style]').forEach(b=>b.classList.remove('selected'));
+    const ctx=document.getElementById('surveyContext'); if(ctx) ctx.value='';
+  }
+  function showStep(name){
+    clearError();
+    document.querySelectorAll('.survey-step').forEach(s => s.classList.toggle('hidden', s.dataset.step !== name));
+    const pct = {intro:8,needs:28,priority:48,support:68,context:86,result:100}[name] || 8;
+    document.getElementById('surveyProgressBar').style.width = pct + '%';
+  }
+  const primaryTopicOrder = ['recovery','caregiving','reentry','housing-stability','work-new-beginnings','grief-loss'];
+  const modalToneByKey = {
+    'recovery':'calm-lavender','caregiving':'calm-blush','reentry':'calm-blue',
+    'housing-stability':'calm-peach','work-new-beginnings':'calm-gold','grief-loss':'calm-lilac',
+    'independent-living':'calm-sage','family-support':'calm-blush','financial-stability':'calm-teal',
+    'veteran-transition':'calm-blue'
+  };
+  let extraPathsOpen = false;
+
+  function orderedSurveyTopics(){
+    const available = topics.filter(t => t.topic_key !== 'not-sure');
+    const primary=[];
+    const seen=new Set();
+    primaryTopicOrder.forEach(key=>{
+      const topic=available.find(t=>t.topic_key===key);
+      if(topic && !seen.has(topic.topic_key)){primary.push(topic);seen.add(topic.topic_key)}
+    });
+    available.forEach(topic=>{
+      if(primary.length<6 && !seen.has(topic.topic_key)){primary.push(topic);seen.add(topic.topic_key)}
+    });
+    return {primary,extras:available.filter(t=>!seen.has(t.topic_key))};
+  }
+  function makeNeedChoice(t,isExtra=false){
+    const b=document.createElement('button');
+    b.type='button';b.dataset.topicKey=t.topic_key;
+    b.className=`calm-topic-card ${modalToneByKey[t.topic_key]||'calm-lavender'}${isExtra?' extra-topic':''}`;
+    b.hidden=Boolean(isExtra&&!extraPathsOpen);
+    const label=t.topic_key==='reentry'?'Reentry':t.label;
+    b.innerHTML=`<span class="calm-topic-icon" aria-hidden="true">${safeIcon(t)}</span><span class="calm-topic-copy"><b>${escapeHtml(label)}</b><small>${escapeHtml(t.description||'')}</small></span><span class="calm-selected-mark" aria-hidden="true">✓</span>`;
+    if(survey.selected.has(t.topic_key))b.classList.add('selected');
+    b.addEventListener('click',()=>{
+      if(survey.selected.has(t.topic_key))survey.selected.delete(t.topic_key);else survey.selected.add(t.topic_key);
+      if(survey.selected.has('not-sure'))survey.selected.delete('not-sure');
+      b.classList.toggle('selected',survey.selected.has(t.topic_key));
+      document.getElementById('needsNext').disabled=survey.selected.size===0;
+    });
+    return b;
+  }
+  function buildNeedChoices(){
+    const wrap=document.getElementById('surveyTopicChoices');
+    wrap.innerHTML='';
+    const {primary,extras}=orderedSurveyTopics();
+    primary.forEach(t=>wrap.appendChild(makeNeedChoice(t,false)));
+    extras.forEach(t=>wrap.appendChild(makeNeedChoice(t,true)));
+
+    const unsure=document.createElement('button');
+    unsure.type='button';unsure.dataset.topicKey='not-sure';
+    unsure.className='calm-topic-card calm-unsure extra-topic';
+    unsure.hidden=!extraPathsOpen;
+    unsure.innerHTML='<span class="calm-topic-icon" aria-hidden="true">✦</span><span class="calm-topic-copy"><b>I’m not sure yet</b><small>Help me figure out where to begin.</small></span><span class="calm-selected-mark" aria-hidden="true">✓</span>';
+    if(survey.selected.has('not-sure'))unsure.classList.add('selected');
+    unsure.addEventListener('click',()=>{
+      survey.selected.clear();survey.selected.add('not-sure');
+      buildNeedChoices();document.getElementById('needsNext').disabled=false;
+    });
+    wrap.appendChild(unsure);
+
+    const more=document.getElementById('moreSupportPaths');
+    if(more){
+      more.hidden=extras.length===0;
+      more.setAttribute('aria-expanded',extraPathsOpen?'true':'false');
+      more.innerHTML=extraPathsOpen?'Show fewer <span aria-hidden="true">⌃</span>':'See more support paths <span aria-hidden="true">⌄</span>';
+    }
+    document.getElementById('needsNext').disabled=survey.selected.size===0;
+  }
+  document.getElementById('moreSupportPaths')?.addEventListener('click',()=>{
+    extraPathsOpen=!extraPathsOpen;buildNeedChoices();
+  });
+  document.getElementById('keepExploring')?.addEventListener('click',()=>{
+    dialog.close();document.getElementById('support-paths')?.scrollIntoView({behavior:'smooth',block:'start'});
+  });
+  document.getElementById('needsNext')?.addEventListener('click', async () => {
+    if(!survey.selected.size) return;
+    if(!(await ensureSurveySession())) return;
+    const ok = await saveAnswer('needs',{topics:[...survey.selected]},false);
+    if(!ok) return;
+    buildPriorityChoices();
+    showStep('priority');
+  });
+  function buildPriorityChoices(){
+    const wrap=document.getElementById('priorityChoices'); wrap.innerHTML='';
+    [...survey.selected].forEach(key=>{
+      const t=topics.find(x=>x.topic_key===key) || {topic_key:key,label:key==='not-sure'?'I’m not sure':key};
+      const b=document.createElement('button'); b.type='button'; b.dataset.topicKey=key;
+      b.textContent=t.label;
+      b.addEventListener('click',()=>{
+        survey.priority=key;
+        wrap.querySelectorAll('button').forEach(x=>x.classList.toggle('selected',x===b));
+      });
+      wrap.appendChild(b);
+    });
+    if(!survey.selected.has('not-sure')){
+      const b=document.createElement('button');b.type='button';b.dataset.topicKey='';
+      b.textContent='I’m not sure which one should come first';
+      b.addEventListener('click',()=>{
+        survey.priority=null;
+        wrap.querySelectorAll('button').forEach(x=>x.classList.toggle('selected',x===b));
+      });
+      wrap.appendChild(b);
+    }
+  }
+  document.getElementById('priorityNext')?.addEventListener('click', async ()=>{
+    if(!(await ensureSurveySession())) return;
+    const ok=await saveAnswer('priority',{topic_key:survey.priority || ''},false);
+    if(ok) showStep('support');
+  });
+  document.querySelectorAll('[data-support-style]').forEach(btn=>btn.addEventListener('click',()=>{
+    survey.supportStyle=btn.dataset.supportStyle;
+    document.querySelectorAll('[data-support-style]').forEach(x=>x.classList.toggle('selected',x===btn));
+    document.getElementById('supportNext').disabled=false;
+  }));
+  document.getElementById('supportNext')?.addEventListener('click',async()=>{
+    if(!survey.supportStyle) return;
+    if(!(await ensureSurveySession())) return;
+    const ok=await saveAnswer('support_style',{style:survey.supportStyle},false);
+    if(ok) showStep('context');
+  });
+  document.getElementById('contextNext')?.addEventListener('click', async ()=>{
+    if(!(await ensureSurveySession())) return;
+    const btn=document.getElementById('contextNext'), working=document.getElementById('surveyWorking');
+    btn.disabled=true;working.classList.remove('hidden');clearError();
+    try{
+      const text=document.getElementById('surveyContext').value.trim();
+      if(text){
+        await saveAnswer('context',{text},true);
+        // No-log preview can surface topic matches without using the text for advertising or search indexing.
+        try{ await sb.rpc('preview_journey_text_route',{p_text:text}); }catch(_){}
+      }
+      const {data,error}=await sb.rpc('recommend_journey_route',{
+        p_session_id:survey.sessionId,
+        p_session_token:survey.token
+      });
+      if(error) throw error;
+      survey.result=data;
+      renderResult();
+      showStep('result');
+    }catch(e){
+      console.error(e); showError('Lellee could not create your recommendation right now. Please try again.');
+    }finally{btn.disabled=false;working.classList.add('hidden')}
+  });
+
+  async function saveAnswer(stepKey, answer, containsFreeText){
+    clearError();
+    try{
+      const {error}=await sb.rpc('save_journey_survey_answer',{
+        p_session_id:survey.sessionId,
+        p_session_token:survey.token,
+        p_step_key:stepKey,
+        p_answer:answer,
+        p_contains_free_text:Boolean(containsFreeText)
+      });
+      if(error) throw error;
+      return true;
+    }catch(e){console.error(e);showError('Lellee could not save that answer. Please try again.');return false}
+  }
+
+  function renderResult(){
+    const r=survey.result || {};
+    document.getElementById('resultPrimary').textContent=r.primary_label || 'Explore Lellee';
+    document.getElementById('resultReason').textContent=r.reason || 'Lellee can help you explore a few options and choose where to begin.';
+    const relatedWrap=document.getElementById('resultRelatedWrap'), related=document.getElementById('resultRelated');
+    const keys=Array.isArray(r.related_topic_keys)?r.related_topic_keys:[];
+    related.innerHTML='';
+    keys.forEach(k=>{
+      const t=topics.find(x=>x.topic_key===k);
+      const s=document.createElement('span');s.textContent=t?.label || k;related.appendChild(s);
+    });
+    relatedWrap.classList.toggle('hidden',keys.length===0);
+    const app=document.getElementById('continueToApp');
+    const key=String(r.primary_topic_key||'').trim().toLowerCase().replace(/_/g,'-');
+    const q=new URLSearchParams();
+    if(survey.sessionId) q.set('journeySurvey',survey.sessionId);
+    if(survey.token) q.set('journeyToken',survey.token);
+    if(key==='recovery'){
+      const carry=new URLSearchParams();
+      if(survey.sessionId) carry.set('journeySurvey',survey.sessionId);
+      if(survey.token) carry.set('journeyToken',survey.token);
+      app.href='/recovery-preview.html'+(carry.toString()?'?'+carry.toString():'');
+    }else if(key){
+      q.set('program',key);
+      app.href='/program-preview.html?'+q.toString();
+    }else{
+      q.set('browse','1');
+      app.href='/app?'+q.toString();
+    }
+  }
+  document.getElementById('exploreAgain')?.addEventListener('click',()=>{
+    survey.selected=new Set();survey.priority=null;survey.supportStyle=null;survey.result=null;
+    buildNeedChoices();showStep('needs');
+  });
+
+  function showError(msg){surveyError.textContent=msg;surveyError.classList.remove('hidden')}
+  function clearError(){surveyError.textContent='';surveyError.classList.add('hidden')}
+
+  loadTopics();
+
+  if('serviceWorker' in navigator){
+    window.addEventListener('load',async()=>{
+      try{
+        const registration=await navigator.serviceWorker.register('/service-worker.js',{updateViaCache:'none'});
+        await registration.update();
+      }catch(error){console.warn('Lellee service-worker update skipped.',error?.message||error)}
+    });
+  }
+})();
+
+  </script>
 </body>
 </html>
