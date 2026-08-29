@@ -1,31 +1,29 @@
-LELLEE PAGE RESPONSE + MENU FAILSAFE — 2026-08-28
+LELLEE — FAIL-SAFE MENU + PAGE RESPONSE REPAIR
+Date: August 28, 2026
 
-PURPOSE
-Restore responsive landing and app menus even when the Supabase CDN, browser storage, or optional feature modules are slow or unavailable.
+WHY THIS REPAIR IS NEEDED
+The app could stop executing before menu handlers were attached when:
+1. old/corrupted browser data could not be parsed,
+2. browser storage was blocked or unavailable, or
+3. the external Supabase browser library did not load.
+When that happened, every menu button looked dead even though the page was visible.
 
-UPLOAD TO THE GITHUB ROOT — replace these exact files:
+WHAT THIS BUILD DOES
+- Installs a menu handler before storage/account initialization.
+- Makes localStorage and sessionStorage failures non-blocking.
+- Removes unreadable Lellee browser data instead of freezing the page.
+- Allows guest browsing/menu navigation if account services are temporarily unavailable.
+- Prevents hidden/mobile overlays and decorative landing layers from blocking clicks.
+- Preserves the approved landing logo asset and sizing.
+
+UPLOAD THESE FILES TO THE GITHUB ROOT
 1. index.html
 2. landing.html
 3. service-worker.js
 4. reset-lellee-cache.html
 
-NO SUPABASE SQL.
+No Supabase SQL is required.
 
-FIXES
-- App navigation is bound by a dependency-free failsafe before Supabase or optional modules initialize.
-- Supabase now loads without blocking the page.
-- If Supabase is unavailable, Lellee remains usable in guest browse mode instead of crashing.
-- Browser-storage failures no longer stop the app JavaScript.
-- Optional feature scripts are ordered deferred downloads instead of sequential parser-blocking requests.
-- Hidden overlays cannot intercept clicks.
-- Landing menu links retain native hash navigation and remain clickable without Supabase.
-- Existing program-selection context and browse-first behavior are preserved.
-
-PROTECTED
-- Approved landing logo asset and exact approved sizing are unchanged.
-
-AFTER VERCEL SHOWS READY
-1. Close every open Lellee tab.
-2. Open https://www.lellee.com/reset-lellee-cache.html once.
-3. Test the landing header menus.
-4. Open /app?browse=1 and test Today, My Recovery, Tools and Journal.
+AFTER VERCEL IS READY
+Open https://www.lellee.com/reset-lellee-cache.html once.
+Then test the landing header menu and the /app sidebar/mobile navigation.
