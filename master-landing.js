@@ -25,7 +25,6 @@
   const dialog = document.getElementById('journeyDialog');
   const topicGrid = document.getElementById('topicGrid');
   const surveyError = document.getElementById('surveyError');
-  try{if(dialog?.open)dialog.close()}catch(_){}
 
   function safeIcon(topic){
     return icons[topic.icon_key] || icons[topic.topic_key] || icons.default;
@@ -35,57 +34,20 @@
     if(t.availability === 'coming_soon') return 'Coming soon — explore now';
     return 'Explore with Lellee';
   }
-  function topicDisplayRank(topic,index){
-    const rank=Number(topic?.display_rank);
-    return Number.isFinite(rank)?rank:1000+index;
-  }
-  function topicAppUrl(topic){
-    const q=new URLSearchParams();
-    if(topic?.topic_key)q.set('recommended',topic.topic_key);
-    return '/app'+(q.toString()?'?'+q.toString():'');
-  }
   function renderTopics(){
-    if(!topicGrid)return;
-
-    const ranked=topics
-      .map((topic,index)=>({...topic,__index:index}))
-      .sort((a,b)=>topicDisplayRank(a,a.__index)-topicDisplayRank(b,b.__index));
-
-    const featured=ranked.slice(0,6);
-    const remaining=ranked.slice(6);
-
-    topicGrid.innerHTML='';
-    topicGrid.className='support-card-grid featured-support-grid';
-
-    featured.forEach((topic,index)=>{
-      const card=document.createElement('a');
-      card.className=`support-card tone-${index%6}`;
-      card.href=topicAppUrl(topic);
-      card.dataset.topicKey=topic.topic_key;
-      card.innerHTML=`<span class="support-icon">${safeIcon(topic)}</span>
-        <h3>${escapeHtml(topic.label)}</h3>
-        <p>${escapeHtml(topic.description||'')}</p>
-        <span class="card-action">${escapeHtml(availabilityText(topic))}</span>`;
-      topicGrid.appendChild(card);
+    topicGrid.innerHTML = '';
+    topics.slice(0,12).forEach(t => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'topic-card';
+      btn.dataset.topicKey = t.topic_key;
+      btn.innerHTML = `<span class="topic-icon">${safeIcon(t)}</span>
+        <h3>${escapeHtml(t.label)}</h3>
+        <p>${escapeHtml(t.description || '')}</p>
+        <span class="topic-status">${availabilityText(t)}</span>`;
+      btn.addEventListener('click', () => openSurveyWithTopic(t.topic_key));
+      topicGrid.appendChild(btn);
     });
-
-    document.getElementById('moreTopicLinks')?.remove();
-    if(remaining.length){
-      const wrap=document.createElement('div');
-      wrap.id='moreTopicLinks';
-      wrap.className='more-topic-wrap';
-      wrap.innerHTML='<span class="more-topic-heading">More support topics</span><div class="more-topic-list"></div>';
-      const list=wrap.querySelector('.more-topic-list');
-      remaining.forEach(topic=>{
-        const link=document.createElement('a');
-        link.className='more-topic-link';
-        link.href=topicAppUrl(topic);
-        link.dataset.topicKey=topic.topic_key;
-        link.innerHTML=`<span>${safeIcon(topic)}</span><b>${escapeHtml(topic.label)}</b>`;
-        list.appendChild(link);
-      });
-      topicGrid.insertAdjacentElement('afterend',wrap);
-    }
   }
   function escapeHtml(s=''){
     return String(s).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
@@ -106,10 +68,7 @@
     e.currentTarget.setAttribute('aria-expanded', nav.classList.contains('open') ? 'true' : 'false');
   });
 
-  document.querySelectorAll('[data-start-survey]').forEach(el=>el.addEventListener('click',event=>{
-    event.preventDefault();
-    location.assign('/app');
-  }));
+  document.querySelectorAll('[data-start-survey]').forEach(el => el.addEventListener('click', () => openSurvey()));
   document.getElementById('surveyClose')?.addEventListener('click', () => dialog.close());
   document.getElementById('surveyBegin')?.addEventListener('click', async () => {
     await ensureSurveySession();
@@ -174,24 +133,49 @@
     const pct = {intro:8,needs:28,priority:48,support:68,context:86,result:100}[name] || 8;
     document.getElementById('surveyProgressBar').style.width = pct + '%';
   }
+  const primaryTopicOrder = ['recovery','caregiving','reentry','housing-stability','work-new-beginnings','grief-loss'];
+  const modalToneByKey = {
+    'recovery':'calm-lavender','caregiving':'calm-blush','reentry':'calm-blue',
+    'housing-stability':'calm-peach','work-new-beginnings':'calm-gold','grief-loss':'calm-lilac',
+    'independent-living':'calm-sage','family-support':'calm-blush','financial-stability':'calm-teal',
+    'veteran-transition':'calm-blue'
+  };
+  let extraPathsOpen = false;
+
+  function orderedSurveyTopics(){
+    const available = topics.filter(t => t.topic_key !== 'not-sure');
+    const primary = primaryTopicOrder.map(k => available.find(t => t.topic_key === k)).filter(Boolean);
+    const seen = new Set(primary.map(t=>t.topic_key));
+    const extras = available.filter(t => !seen.has(t.topic_key));
+    return {primary,extras};
+  }
+  function makeNeedChoice(t,isExtra=false){
+    const b = document.createElement('button');
+    b.type='button'; b.dataset.topicKey=t.topic_key;
+    b.className = `calm-topic-card ${modalToneByKey[t.topic_key] || 'calm-lavender'}${isExtra?' extra-topic':''}`;
+    b.hidden = Boolean(isExtra && !extraPathsOpen);
+    const label = t.topic_key === 'reentry' ? 'Reentry' : t.label;
+    b.innerHTML=`<span class="calm-topic-icon" aria-hidden="true">${safeIcon(t)}</span><span class="calm-topic-copy"><b>${escapeHtml(label)}</b><small>${escapeHtml(t.description || '')}</small></span><span class="calm-selected-mark" aria-hidden="true">✓</span>`;
+    if(survey.selected.has(t.topic_key)) b.classList.add('selected');
+    b.addEventListener('click', () => {
+      if(survey.selected.has(t.topic_key)) survey.selected.delete(t.topic_key); else survey.selected.add(t.topic_key);
+      if(survey.selected.has('not-sure')) survey.selected.delete('not-sure');
+      b.classList.toggle('selected', survey.selected.has(t.topic_key));
+      document.getElementById('needsNext').disabled = survey.selected.size === 0;
+    });
+    return b;
+  }
   function buildNeedChoices(){
     const wrap = document.getElementById('surveyTopicChoices');
     wrap.innerHTML = '';
-    topics.filter(t => t.topic_key !== 'not-sure').slice(0,16).forEach(t => {
-      const b = document.createElement('button');
-      b.type='button'; b.dataset.topicKey=t.topic_key;
-      b.innerHTML=`<b>${safeIcon(t)} ${escapeHtml(t.label)}</b><br><small>${escapeHtml(t.description || '')}</small>`;
-      if(survey.selected.has(t.topic_key)) b.classList.add('selected');
-      b.addEventListener('click', () => {
-        if(survey.selected.has(t.topic_key)) survey.selected.delete(t.topic_key); else survey.selected.add(t.topic_key);
-        b.classList.toggle('selected', survey.selected.has(t.topic_key));
-        document.getElementById('needsNext').disabled = survey.selected.size === 0;
-      });
-      wrap.appendChild(b);
-    });
+    const {primary,extras}=orderedSurveyTopics();
+    primary.forEach(t=>wrap.appendChild(makeNeedChoice(t,false)));
+    extras.forEach(t=>wrap.appendChild(makeNeedChoice(t,true)));
+
     const unsure = document.createElement('button');
     unsure.type='button'; unsure.dataset.topicKey='not-sure';
-    unsure.innerHTML='<b>✦ I’m not sure</b><br><small>Help me figure out where to begin.</small>';
+    unsure.className='calm-topic-card calm-unsure';
+    unsure.innerHTML='<span class="calm-topic-icon" aria-hidden="true">✦</span><span class="calm-topic-copy"><b>I’m not sure yet</b><small>Help me figure out where to begin.</small></span><span class="calm-selected-mark" aria-hidden="true">✓</span>';
     if(survey.selected.has('not-sure')) unsure.classList.add('selected');
     unsure.addEventListener('click',()=>{
       survey.selected.clear(); survey.selected.add('not-sure');
@@ -199,8 +183,23 @@
       document.getElementById('needsNext').disabled=false;
     });
     wrap.appendChild(unsure);
+
+    const more=document.getElementById('moreSupportPaths');
+    if(more){
+      more.hidden = extras.length===0;
+      more.setAttribute('aria-expanded',extraPathsOpen?'true':'false');
+      more.innerHTML = extraPathsOpen ? 'Show fewer <span aria-hidden="true">⌃</span>' : 'See more support paths <span aria-hidden="true">⌄</span>';
+    }
     document.getElementById('needsNext').disabled = survey.selected.size === 0;
   }
+  document.getElementById('moreSupportPaths')?.addEventListener('click',()=>{
+    extraPathsOpen=!extraPathsOpen;
+    buildNeedChoices();
+  });
+  document.getElementById('keepExploring')?.addEventListener('click',()=>{
+    dialog.close();
+    document.getElementById('support-paths')?.scrollIntoView({behavior:'smooth',block:'start'});
+  });
   document.getElementById('needsNext')?.addEventListener('click', async () => {
     if(!survey.selected.size) return;
     if(!(await ensureSurveySession())) return;
@@ -314,13 +313,4 @@
   function clearError(){surveyError.textContent='';surveyError.classList.add('hidden')}
 
   loadTopics();
-
-  if('serviceWorker' in navigator){
-    window.addEventListener('load',async()=>{
-      try{
-        const registration=await navigator.serviceWorker.register('/service-worker.js',{updateViaCache:'none'});
-        await registration.update();
-      }catch(error){console.warn('Lellee service-worker update skipped.',error?.message||error)}
-    });
-  }
 })();
