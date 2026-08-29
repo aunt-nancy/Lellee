@@ -1,8 +1,12 @@
-LELLEE STABLE NAVIGATION / NO-JUMP REPAIR QA — 2026-08-29
-PASS: All inline JavaScript blocks pass node --check.
-PASS: No window.scrollTo() calls remain in index.html.
-PASS: Browser scroll anchoring disabled for html/body/app/content/page containers.
-PASS: Existing single delegated primary data-page navigation remains present.
-PASS: Prior bounded MutationObserver freeze repair remains present.
-PASS: landing.html was not edited by this repair.
-PASS: service-worker cache version advanced.
+LELLEE HEADER PLANS & PRICING QA — 2026-08-29
+PASS: All inline JavaScript blocks in landing.html, index.html, and reset-lellee-cache.html pass node --check.
+PASS: Public landing header contains a native Plans & Pricing menu with 3 offerings.
+PASS: App/program-preview header contains a matching native Plans & Pricing menu with desktop and mobile presentation.
+PASS: Header menu shows Free $0, Premium $14.99/month or $149/year, Coach add-on $49.99/month + Premium, and additional 15-minute coaching check-ins at $19.99 each.
+PASS: Old visible $5.99/$59.99 and Lellee Plus subscription copy is removed from index.html and replaced with approved Lellee Premium pricing/copy.
+PASS: Existing internal IDs/classes/data keys containing "plus" remain unchanged so existing feature/payment integrations are not renamed or broken.
+PASS: No window.scrollTo() calls were reintroduced.
+PASS: Prior bounded coach-count MutationObserver protections remain present, including self-label mutation filtering.
+PASS: Approved public logo asset reference remains /lellee-approved-logo-final.jpg and desktop/mobile logo size locks remain 260x72 and 185x64 respectively.
+PASS: Public navigation spacing was tightened only at <=1120px to accommodate Plans & Pricing without changing the approved logo dimensions.
+PASS: Service-worker/reset cache version advanced to header-plans-pricing v5.
