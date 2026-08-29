@@ -150,7 +150,7 @@ dialog:not([open]){display:none!important;pointer-events:none!important}
 .coach-card-preview{display:flex;gap:18px;align-items:center;background:linear-gradient(135deg,#f7f3fb,#fff7fa)}
 .coach-photo-placeholder{width:76px;height:76px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(145deg,#5432a4,#d76aa5);color:#fff;font-family:Georgia,serif;font-size:2rem;flex:0 0 auto}.coach-badge{font-size:.6rem;font-weight:850;color:#6141a7;letter-spacing:.08em}.coach-card-preview h3{margin:5px 0;font-size:1.15rem;color:#2f2569}.coach-card-preview p{font-size:.71rem;color:#6e6776;margin:0}
 .final-cta{border-radius:16px;background:linear-gradient(115deg,#43298a,#6c46af 58%,#ca5f9b);color:#fff;padding:28px 32px;display:flex;align-items:center;justify-content:space-between;gap:24px;margin-bottom:18px}.final-cta b{font-family:Georgia,serif;font-size:1.35rem}.final-cta h2{font-size:1.55rem;margin:2px 0 4px}.final-cta p{margin:0;font-size:.76rem;color:#eee7fa}.light-button{background:#fff;color:#523294}
-.footer{background:#fff;border-top:1px solid #eee9f1;padding:28px 18px 18px}.footer-inner{max-width:1400px;margin:auto;display:grid;grid-template-columns:1.5fr repeat(3,.6fr);gap:26px}.footer-inner img{width:230px;height:110px;object-fit:contain}.footer-inner>div{display:grid;gap:6px;align-content:start;font-size:.72rem}.footer-inner a{text-decoration:none;color:#6b6573}.copyright{max-width:1400px;margin:18px auto 0;border-top:1px solid #eee9f1;padding-top:13px;color:#817b87;font-size:.66rem}
+.footer{background:#fff;border-top:1px solid #eee9f1;padding:28px 18px 18px}.footer-inner{max-width:1400px;margin:auto;display:grid;grid-template-columns:1.5fr repeat(4,.6fr);gap:26px}.footer-inner img{width:230px;height:110px;object-fit:contain}.footer-inner>div{display:grid;gap:6px;align-content:start;font-size:.72rem}.footer-inner a{text-decoration:none;color:#6b6573}.footer-inner span{color:#6b6573;line-height:1.45}.footer-coaching-price{font-weight:800;color:#4f3d78!important}.footer-coaching-extra{font-size:.66rem}.copyright{max-width:1400px;margin:18px auto 0;border-top:1px solid #eee9f1;padding-top:13px;color:#817b87;font-size:.66rem}
 .journey-dialog{width:min(760px,calc(100% - 28px));max-height:92vh;border:0;border-radius:22px;padding:0;box-shadow:0 30px 85px rgba(42,29,69,.28);overflow:auto;color:var(--ink)}
 .journey-dialog::backdrop{background:rgba(28,22,44,.55);backdrop-filter:blur(3px)}
 .dialog-shell{padding:34px;position:relative}.dialog-close{position:absolute;right:16px;top:16px;width:36px;height:36px;border-radius:50%;border:1px solid #e3dbe9;background:#fff;color:#554867;font-size:1.25rem}.survey-progress{height:5px;background:#eee8f3;border-radius:999px;margin:0 48px 25px 0;overflow:hidden}.survey-progress span{display:block;height:100%;width:8%;background:linear-gradient(90deg,#4f31a0,#d25e9c);transition:width .2s}
@@ -244,7 +244,7 @@ textarea{width:100%;border:1px solid #ddd4e5;border-radius:12px;padding:13px;col
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 </head>
-<body data-lellee-public-build="landing-header-plans-plus-pricing-2026-08-29">
+<body data-lellee-public-build="landing-header-plans-footer-coaching-2026-08-29">
   <a class="skip-link" href="#main">Skip to main content</a>
 
   <header class="topbar">
@@ -258,7 +258,6 @@ textarea{width:100%;border:1px solid #ddd4e5;border-radius:12px;padding:13px;col
         <a href="#how-it-works">How Lellee Works</a>
         <a href="#support-paths">Support Paths</a>
         <a href="#tools">Tools</a>
-        <a href="#coaching">Coaching</a>
         <details class="plans-nav">
           <summary>Plans &amp; Pricing</summary>
           <div class="plans-popover" aria-label="Lellee plans and pricing">
@@ -280,14 +279,7 @@ textarea{width:100%;border:1px solid #ddd4e5;border-radius:12px;padding:13px;col
               <span class="plan-price">$14.99/month or $149/year</span>
               <ul><li>Everything in Plus</li><li>Lellee Guide personalized guidance</li><li>Deeper insights, action plans, reports &amp; journey planning</li></ul>
             </section>
-            <section class="plan-mini">
-              <span class="plan-label">LELLEE COACH ADD-ON</span>
-              <strong>Human coaching support</strong>
-              <span class="plan-price">$49.99/month + Premium</span>
-              <ul><li>Private in-app messaging</li><li>Scheduled check-ins &amp; accountability</li><li>Shared-progress review and goal support</li></ul>
-              <span class="plan-extra">Additional 15-minute coaching check-ins: <b>$19.99 each</b>.</span>
-            </section>
-            <p class="plan-menu-note">Core safety and essential support remain available without a paid upgrade. Coaching is an optional add-on.</p>
+            <p class="plan-menu-note">Core safety and essential support remain available without a paid upgrade.</p>
           </div>
         </details>
         <a href="/resources">Resources</a>
@@ -479,7 +471,8 @@ textarea{width:100%;border:1px solid #ddd4e5;border-radius:12px;padding:13px;col
     <div class="footer-inner">
       <img src="/lellee-approved-logo-final.jpg?v=20260814-1" alt="Lellee">
       <div><b>Explore</b><a href="#support-paths">Support Paths</a><a href="#how-it-works">How It Works</a><a href="#tools">Tools</a></div>
-      <div><b>Support</b><a href="/resources">Resources</a><a href="/app?auth=signin">Log In</a><a href="#coaching">Coaching</a></div>
+      <div><b>Support</b><a href="/resources">Resources</a><a href="/app?auth=signin">Log In</a></div>
+      <div><b>Coaching</b><a href="#coaching">Learn About Coaching</a><span class="footer-coaching-price">$49.99/month + Premium</span><span class="footer-coaching-extra">Additional 15-minute check-ins: $19.99 each</span></div>
       <div><b>Legal</b><a href="/privacy.html">Privacy</a><a href="/terms.html">Terms</a><a href="/consumer-health-privacy.html">Consumer Health Privacy</a></div>
     </div>
     <div class="copyright">© 2026 Lellee. All rights reserved.</div>

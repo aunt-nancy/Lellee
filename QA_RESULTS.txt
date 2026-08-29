@@ -1,13 +1,13 @@
-LELLEE HEADER PLANS & PRICING PLUS RESTORATION QA — 2026-08-29
-PASS: Public landing header contains Free, Plus, Premium, and Coach add-on offerings.
-PASS: App/program-preview header contains the same four offerings.
+LELLEE HEADER SUBSCRIPTIONS + FOOTER COACHING QA — 2026-08-29
+PASS: Public header Plans & Pricing contains Lellee Free, Lellee Plus, and Lellee Premium only.
+PASS: App header Plans & Pricing contains Lellee Free, Lellee Plus, and Lellee Premium only.
+PASS: Public primary navigation no longer contains a separate Coaching header item.
+PASS: Public footer contains a dedicated Coaching group and link to the existing Coaching section.
+PASS: Footer Coaching shows $49.99/month + Premium.
+PASS: Footer Coaching shows additional 15-minute coaching check-ins at $19.99 each.
 PASS: Lellee Plus shows $5.99/month or $59.99/year.
 PASS: Lellee Premium shows $14.99/month or $149/year.
-PASS: Coach add-on shows $49.99/month + Premium; additional 15-minute check-ins show $19.99 each.
-PASS: Existing app side navigation again labels the existing Plus page “Lellee Plus.”
-PASS: Existing Plus membership page and Plus-gated feature locks are restored to Plus wording/pricing.
-PASS: Existing internal IDs/classes/data keys containing “plus” remain unchanged.
-PASS: Header dropdown remains native <details> with no new MutationObserver, scrollTo, or routing loop.
-PASS: Service-worker/reset cache version advanced to v6.
-
-PASS: Lellee Plus pricing correction is locked at $5.99/month or $59.99/year.
+PASS: Existing app side navigation still labels the existing Plus page Lellee Plus.
+PASS: Existing Plus membership page and Plus-gated feature locks remain unchanged.
+PASS: No new MutationObserver, forced scroll, routing loop, or auto-refresh code was added.
+PASS: Service-worker/reset cache version advanced to footer-coaching v7.
