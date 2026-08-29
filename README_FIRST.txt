@@ -1,33 +1,25 @@
-LELLEE — EXACT RECOVERY SIDEBAR MICRO-FIX — 2026-08-28
+LELLEE — DARK SIDEBAR LOGO WHITE-STRIP REMOVAL — 2026-08-28
 
-THIS IS NOT A REDESIGN.
-It starts from the already approved/locked Recovery navigation package and changes only the items the user explicitly requested.
+THIS IS A SURGICAL CORRECTION, NOT A REDESIGN.
 
-EXACT CHANGES
-1. Dark-background sidebar logo: increased by exactly 1 CSS point (1pt = 1.333 CSS px).
-   - Same image asset.
-   - Same 232px sidebar.
-   - Same center alignment.
-   - No transform scaling.
-2. Vertical dropdown menu: flattened.
-   - No raised/open-category card.
-   - No category border or filled open-state panel.
-   - No outer shadow on the active submenu row.
-   - A subtle nested guide line and flat inset active indicator preserve clarity.
-3. Public wording cleaned.
-   - No visible “Build 6” wording.
-   - Visible “Public Preview” and internal build wording removed; customer-facing exploration language used instead.
-   - Cache-refresh page uses customer-facing wording.
+WHAT WAS FOUND
+- The thin white line visible above the dark-background Recovery logo is inside the current logo artwork's upper blank margin.
+- It is not part of the approved vertical menu and is not caused by the page background.
+
+EXACT CHANGE
+- The page now covers only that measured upper strip with a clean navy sample from the same approved logo artwork.
+- The actual logo artwork is not replaced or redrawn.
+- The previously approved exact 1pt size increase remains unchanged.
+- Logo alignment and sidebar dimensions remain unchanged.
 
 PROTECTED / UNCHANGED
-- Approved six dropdown groups and all submenu offerings.
-- Native details/summary dropdown reliability.
-- Desktop sidebar width, background, placement, and hierarchy.
+- Approved flat Build 6 dropdown navigation.
+- Six dropdown groups and every submenu item.
+- Native details/summary fallback behavior.
+- Desktop and mobile menu operation.
+- Today | Journey | Explore | Tools | Help mobile dock.
 - Need Help Now / Get Help Now.
-- Approved iPhone/Android bottom navigation: Today | Journey | Explore | Tools | Help.
-- Mobile drawer behavior.
-- Browse-before-account rules.
-- Page-stability architecture.
+- Browse-before-account and page-stability behavior.
 - Landing page and landing-page logo.
 
 UPLOAD / REPLACE ONLY

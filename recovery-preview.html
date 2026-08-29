@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Lellee | Recovery Today</title>
-<!-- LELLEE APPROVED RECOVERY NAVIGATION LOCK + EXACT MICRO-CORRECTION — 2026-08-28
+<!-- LELLEE APPROVED RECOVERY NAVIGATION LOCK + LOGO ARTWORK CLEANUP — 2026-08-28
      Preserves the approved dropdown hierarchy and mobile Explore dock.
      The sidebar logo is increased by exactly 1 CSS point; no asset, alignment, or sidebar-width change.
      Dropdown groups are visually flat while retaining native <details>/<summary> reliability.
@@ -77,7 +77,26 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(85,49,166,.22);outli
   background:transparent!important;
   overflow:visible!important;
 }
-.logo-wrap a{display:flex;width:100%;align-items:center;justify-content:center;text-decoration:none}
+.logo-wrap a{position:relative;z-index:1;display:flex;width:100%;align-items:center;justify-content:center;text-decoration:none}
+/* The currently approved dark logo artwork contains one thin white strip in its
+   upper blank margin. Cover only that measured strip with the artwork's own
+   clean navy top area. The logo artwork, 1pt size increase, alignment, and
+   dropdown navigation remain unchanged. */
+.logo-wrap::after{
+  content:"";
+  position:absolute;
+  z-index:2;
+  left:2px;
+  right:2px;
+  top:14px;
+  height:15px;
+  pointer-events:none;
+  background-color:var(--b2-nav-bg);
+  background-image:url("/lellee-approved-logo-locked.png?v=20260817-locked");
+  background-repeat:no-repeat;
+  background-position:center top;
+  background-size:calc(218px + 1pt) auto;
+}
 .sidebar .approved-logo{
   display:block!important;
   width:calc(218px + 1pt)!important;
@@ -94,7 +113,7 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(85,49,166,.22);outli
   filter:none!important;
 }
 .b2-sidebar-close{
-  display:none;position:absolute;right:0;top:0;width:36px;height:36px;border:0;border-radius:50%;
+  z-index:3;display:none;position:absolute;right:0;top:0;width:36px;height:36px;border:0;border-radius:50%;
   background:rgba(255,255,255,.08);color:#fff;font-size:1.15rem;place-items:center
 }
 /* Approved proportions with native dropdown behavior.
