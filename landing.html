@@ -555,13 +555,13 @@ textarea{width:100%;border:1px solid #ddd4e5;border-radius:12px;padding:13px;col
   function topicAppUrl(topic){
     const key=String(topic?.topic_key||'').trim().toLowerCase().replace(/_/g,'-');
     const q=new URLSearchParams();
-    if(key && key!=='recovery'){
+    if(key==='recovery') return '/recovery-preview.html';
+    if(key){
       q.set('program',key);
       return '/program-preview.html?'+q.toString();
     }
     q.set('browse','1');
-    if(key)q.set('recommended',key);
-    return '/app'+(q.toString()?'?'+q.toString():'');
+    return '/app?'+q.toString();
   }
   function renderTopics(){
     if(!topicGrid)return;
@@ -852,11 +852,15 @@ textarea{width:100%;border:1px solid #ddd4e5;border-radius:12px;padding:13px;col
     const q=new URLSearchParams();
     if(survey.sessionId) q.set('journeySurvey',survey.sessionId);
     if(survey.token) q.set('journeyToken',survey.token);
-    if(key && key!=='recovery'){
+    if(key==='recovery'){
+      const carry=new URLSearchParams();
+      if(survey.sessionId) carry.set('journeySurvey',survey.sessionId);
+      if(survey.token) carry.set('journeyToken',survey.token);
+      app.href='/recovery-preview.html'+(carry.toString()?'?'+carry.toString():'');
+    }else if(key){
       q.set('program',key);
       app.href='/program-preview.html?'+q.toString();
     }else{
-      if(key) q.set('recommended',key);
       q.set('browse','1');
       app.href='/app?'+q.toString();
     }

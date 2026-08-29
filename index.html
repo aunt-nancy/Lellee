@@ -10,11 +10,16 @@
     const q=new URLSearchParams(location.search);
     const key=String(q.get('recommended')||q.get('program')||'').trim().toLowerCase().replace(/_/g,'-');
     const auth=String(q.get('auth')||'').trim().toLowerCase();
-    if(key && key!=='recovery' && auth!=='signin' && auth!=='signup'){
+    const browse=String(q.get('browse')||'').trim()==='1';
+    if(auth!=='signin' && auth!=='signup'){
       const next=new URLSearchParams();
-      next.set('program',key);
       ['journeySurvey','journeyToken'].forEach(name=>{const value=q.get(name);if(value)next.set(name,value)});
-      location.replace('/program-preview.html?'+next.toString());
+      if(key==='recovery' && browse){
+        location.replace('/recovery-preview.html'+(next.toString()?'?'+next.toString():''));
+      }else if(key && key!=='recovery'){
+        next.set('program',key);
+        location.replace('/program-preview.html?'+next.toString());
+      }
     }
   }catch(_){ }
 })();
