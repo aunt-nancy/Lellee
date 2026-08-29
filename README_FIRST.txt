@@ -1,27 +1,30 @@
-LELLEE — MAIN-THREAD FREEZE + MENU RESPONSE REPAIR
-Date: August 28, 2026
+LELLEE — CAREGIVING INTERACTION + PAGE STABILITY FIX
+August 28, 2026
 
-CONFIRMED ROOT CAUSE
-A body-wide MutationObserver used for the coach account-count privacy toggle changed its own label text inside the observer callback. That label replacement created another child-list mutation, which called the observer again. The cycle could continue without stopping, lock the browser's main thread, trigger “This page isn't responding,” and make the vertical/sidebar menus appear dead.
-
-WHAT THIS BUILD CHANGES
-- Replaces the self-triggering observer with a targeted, idempotent observer that reacts only to coach-dashboard content insertions.
-- Prevents the observer from reacting to its own status-label update.
-- Gives navigation one active owner after startup, while preserving the early fail-safe handler if the main app script ever stops before navigation initializes.
-- Removes duplicate menu routing and immediate smooth-scroll work on each menu click.
-- Retains safe localStorage/sessionStorage handling and hidden-overlay pointer protection.
-- Bumps the service-worker version and expands the one-time cache reset to clear both current and historical Lellee session keys.
-
-DESIGN LOCK PRESERVED
-The approved landing logo asset, dimensions, transform, alignment, background treatment, and logo-related CSS were not changed.
-
-UPLOAD THESE FILES TO THE GITHUB ROOT
+UPLOAD TO THE GITHUB ROOT
 1. index.html
-2. landing.html
-3. service-worker.js
-4. reset-lellee-cache.html
+2. service-worker.js
+3. reset-lellee-cache.html
 
-No Supabase SQL is required.
+NO SUPABASE SQL REQUIRED.
+DO NOT replace landing.html for this patch. The approved landing-page logo asset and sizing are intentionally untouched.
 
-AFTER VERCEL FINISHES DEPLOYING
-Open https://www.lellee.com/reset-lellee-cache.html once. It will clear the old service worker/cache and return to the landing page. Then test the left sidebar, vertical menu, mobile menu, Caregiving preview, and Settings page.
+WHAT THIS FIXES
+- Removes the self-triggering body-wide MutationObserver that could make the page jump/freeze.
+- Removes duplicate app navigation activation that could make one click fire twice and jump the page.
+- Uses one navigation path with a dependency-free fallback.
+- Removes smooth-scroll animation from app page changes.
+- Makes all four program-preview cards real buttons.
+- Caregiving card behavior:
+  * Caregiver check-in: explains that an account is required to use/save the private feature.
+  * Organize the load: explains that an account is required to save a personal caregiving plan.
+  * Boundaries & backup: opens a public preview and explains that an account is only needed to save personal choices.
+  * Find caregiver resources: opens a public/shared Caregiving resource preview without requiring an account.
+- Keeps non-Recovery shared resources program-neutral instead of dropping a Caregiving visitor into Recovery resources.
+
+AFTER VERCEL IS READY
+1. Close all open Lellee tabs.
+2. Open https://www.lellee.com/reset-lellee-cache.html once.
+3. Return to the landing page and select Caregiving.
+4. Click each of the four Caregiving cards once. Each must respond.
+5. Confirm the page no longer repeatedly jumps.

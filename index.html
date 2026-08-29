@@ -34,7 +34,7 @@
   --r2:24px;
 }
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
+html{scroll-behavior:auto}
 body{
   margin:0;background:var(--bg);color:var(--ink);
   font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
@@ -1097,6 +1097,26 @@ Includes the approved Lellee consumer experience from early recovery through lif
 .program-context-pill{display:inline-flex;align-items:center;gap:5px;margin-left:8px;padding:4px 8px;border-radius:999px;background:#efe8f7;color:#65409a;font-size:.62rem;font-weight:850}
 body.program-preview-mode .top-stats .mini-stat{min-width:110px}
 @media(max-width:720px){.program-preview-grid{grid-template-columns:1fr}.program-preview-hero{padding:20px 17px;border-radius:20px}.program-preview-hero h2{font-size:1.7rem}}
+/* PROGRAM PREVIEW INTERACTION LOCK — 2026-08-28
+   Preview cards must always respond. Private tools explain account requirements;
+   public preview/resource actions stay browseable without an account. */
+button.program-preview-card{width:100%;font:inherit;text-align:left;cursor:pointer;color:inherit}
+button.program-preview-card:hover{border-color:#bda9d0;box-shadow:0 8px 24px rgba(72,52,92,.09);transform:translateY(-1px)}
+button.program-preview-card:focus-visible{outline:3px solid rgba(101,64,154,.22);outline-offset:2px}
+.program-preview-card-action{display:block;margin-top:11px;color:#65409a;font-size:.69rem;font-weight:850}
+.program-preview-dialog{width:min(560px,calc(100% - 28px));border:0;border-radius:22px;padding:0;box-shadow:0 30px 90px rgba(35,25,51,.24);color:#30263f}
+.program-preview-dialog::backdrop{background:rgba(28,22,37,.46);backdrop-filter:blur(3px)}
+.program-preview-dialog-inner{padding:25px}
+.program-preview-dialog-head{display:flex;justify-content:space-between;align-items:flex-start;gap:15px}
+.program-preview-dialog-head h3{font-family:Georgia,serif;font-weight:500;font-size:1.65rem;margin:2px 0 7px}
+.program-preview-dialog-head p{margin:0;color:#6b6370;line-height:1.55}
+.program-preview-dialog-close{border:1px solid #e0dae5;background:#fff;width:38px;height:38px;border-radius:50%;font-size:1.3rem;color:#5e5269;cursor:pointer;flex:0 0 auto}
+.program-preview-account-note{margin-top:17px;padding:13px 14px;border-radius:13px;background:#f7f3fa;border:1px solid #e6ddeb;color:#5d5365;font-size:.78rem;line-height:1.5}
+.program-preview-dialog-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:18px}
+.program-shared-resource-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:15px 0}
+.program-shared-resource-grid article{background:#fff;border:1px solid #e8e4ea;border-radius:16px;padding:16px}
+.program-shared-resource-grid b{display:block;margin-bottom:5px}.program-shared-resource-grid p{margin:0;color:#746c79;font-size:.78rem;line-height:1.5}
+@media(max-width:720px){.program-shared-resource-grid{grid-template-columns:1fr}}
 </style>
 
 <style id="lellee-menu-navigation-repair-20260828">
@@ -5007,15 +5027,51 @@ body.program-preview-mode .top-stats .mini-stat{min-width:110px}
     <p id="programPreviewDescription">See how this Lellee support path can help before you create an account.</p>
   </div>
   <div class="program-preview-grid">
-    <article class="program-preview-card"><b id="programPreviewCard1Title">Start where you are</b><p id="programPreviewCard1Text">See the kinds of steps and support this program is designed to organize.</p></article>
-    <article class="program-preview-card"><b id="programPreviewCard2Title">Practical tools</b><p id="programPreviewCard2Text">Explore planning, resources and guided support without saving personal information.</p></article>
-    <article class="program-preview-card"><b id="programPreviewCard3Title">Keep your privacy</b><p id="programPreviewCard3Text">Browsing does not enroll you, create a profile, or move you into another Lellee program.</p></article>
-    <article class="program-preview-card"><b id="programPreviewCard4Title">Choose what comes next</b><p id="programPreviewCard4Text">You can explore another support path at any time.</p></article>
+    <button type="button" class="program-preview-card" data-program-preview-card="0"><b id="programPreviewCard1Title">Start where you are</b><p id="programPreviewCard1Text">See the kinds of steps and support this program is designed to organize.</p><span class="program-preview-card-action" id="programPreviewCard1Action">Open →</span></button>
+    <button type="button" class="program-preview-card" data-program-preview-card="1"><b id="programPreviewCard2Title">Practical tools</b><p id="programPreviewCard2Text">Explore planning, resources and guided support without saving personal information.</p><span class="program-preview-card-action" id="programPreviewCard2Action">Open →</span></button>
+    <button type="button" class="program-preview-card" data-program-preview-card="2"><b id="programPreviewCard3Title">Keep your privacy</b><p id="programPreviewCard3Text">Browsing does not enroll you, create a profile, or move you into another Lellee program.</p><span class="program-preview-card-action" id="programPreviewCard3Action">Open →</span></button>
+    <button type="button" class="program-preview-card" data-program-preview-card="3"><b id="programPreviewCard4Title">Choose what comes next</b><p id="programPreviewCard4Text">You can explore another support path at any time.</p><span class="program-preview-card-action" id="programPreviewCard4Action">Open →</span></button>
   </div>
   <div class="program-preview-note" id="programPreviewNote"><b>Browse first.</b> You do not need an account to look around. Lellee asks you to sign in only when you choose to save or personalize private information.</div>
   <div class="program-preview-actions">
     <button class="approved-small-action" data-page="resources">Browse Shared Resources</button>
     <button class="approved-link" id="programPreviewSignIn" type="button">Sign In When Ready</button>
+    <a class="approved-link" href="/#support-paths">Choose Another Support Path</a>
+  </div>
+</div>
+</section>
+
+<dialog id="programPreviewDetailDialog" class="program-preview-dialog" aria-labelledby="programPreviewDetailTitle">
+  <div class="program-preview-dialog-inner">
+    <div class="program-preview-dialog-head">
+      <div><span class="program-preview-status" id="programPreviewDetailStatus">PROGRAM PREVIEW</span><h3 id="programPreviewDetailTitle">Explore this support</h3><p id="programPreviewDetailText">Learn more before creating an account.</p></div>
+      <button type="button" class="program-preview-dialog-close" id="programPreviewDetailClose" aria-label="Close">×</button>
+    </div>
+    <div class="program-preview-account-note" id="programPreviewDetailNote"></div>
+    <div class="program-preview-dialog-actions">
+      <button type="button" class="approved-small-action" id="programPreviewDetailPrimary">Continue</button>
+      <button type="button" class="approved-link" id="programPreviewDetailSecondary">Keep Browsing</button>
+    </div>
+  </div>
+</dialog>
+
+<section class="page" id="page-program-resources-preview">
+<div class="approved-inner">
+  <div class="program-preview-hero">
+    <span class="program-preview-status">SHARED RESOURCES · PUBLIC PREVIEW</span>
+    <h2 id="programResourcePreviewTitle">Shared resources</h2>
+    <p id="programResourcePreviewDescription">Browse the types of practical support Lellee can organize for this support path. An account is not required to browse.</p>
+  </div>
+  <div class="program-shared-resource-grid">
+    <article><b>Local & community support</b><p>Explore community programs, local services and practical help relevant to this support path.</p></article>
+    <article><b>Benefits & practical services</b><p>See the kinds of public benefits, service systems and everyday supports Lellee can help organize.</p></article>
+    <article><b>Professional & peer support</b><p>Learn what kinds of professional, peer or community support may be available without enrolling in Recovery.</p></article>
+    <article><b>Urgent practical needs</b><p>Identify where to look when housing, food, transportation, safety or another immediate need must come first.</p></article>
+  </div>
+  <div class="program-preview-note"><b>No account needed to browse.</b> Lellee asks you to create an account only if you choose to save resources, personalize recommendations, or keep a private plan.</div>
+  <div class="program-preview-actions">
+    <button class="approved-small-action" data-page="today">Back to Program Overview</button>
+    <button class="approved-link" id="programResourcePreviewSignIn" type="button">Sign In to Save Later</button>
     <a class="approved-link" href="/#support-paths">Choose Another Support Path</a>
   </div>
 </div>
@@ -7311,30 +7367,37 @@ body.program-preview-mode .top-stats .mini-stat{min-width:110px}
     let target=document.getElementById('page-'+pageName);
     if(!target && pageName==='journey')target=document.getElementById('page-recovery');
     if(!target)return false;
-    document.querySelectorAll('.page').forEach(page=>page.classList.remove('active'));
-    target.classList.add('active');
+    const current=document.querySelector('.page.active');
+    if(current!==target){
+      document.querySelectorAll('.page').forEach(page=>page.classList.remove('active'));
+      target.classList.add('active');
+      try{window.scrollTo({top:0,left:0,behavior:'auto'})}catch(_){try{window.scrollTo(0,0)}catch(__){}}
+    }
     document.querySelectorAll('.nav-item,.mobile-bottom button[data-page]').forEach(control=>{
       control.classList.toggle('active',control.dataset.page===pageName);
     });
     document.getElementById('appSidebar')?.classList.remove('mobile-open');
     document.body.classList.remove('mobile-nav-open');
     document.getElementById('mobileMenuBtn')?.setAttribute('aria-expanded','false');
-    try{window.scrollTo(0,0)}catch(_){}
     return true;
   }
   window.LelleeDirectActivatePage=directActivate;
+  // This is the ONE delegated app-navigation listener. Once the full app is ready it
+  // hands navigation to showPage(); otherwise the dependency-free fallback remains usable.
   document.addEventListener('click',event=>{
-    // Once the primary router is ready, let its single delegated handler own navigation.
-    // If later app initialization fails, this early handler still keeps every visible menu usable.
-    if(window.LelleePrimaryNavigationReady===true)return;
     const target=event.target instanceof Element?event.target:null;
     const control=target?.closest('[data-page]');
     if(!control)return;
     const pageName=control.dataset.page;
-    const targetPage=document.getElementById('page-'+pageName) || (pageName==='journey'?document.getElementById('page-recovery'):null);
-    if(!pageName || !targetPage)return;
+    if(!pageName)return;
     event.preventDefault();
-    directActivate(pageName);
+    if(typeof window.LelleeShowPage==='function')window.LelleeShowPage(pageName);
+    else directActivate(pageName);
+    if(window.matchMedia?.('(max-width:820px)').matches){
+      document.getElementById('appSidebar')?.classList.remove('mobile-open');
+      document.body.classList.remove('mobile-nav-open');
+      document.getElementById('mobileMenuBtn')?.setAttribute('aria-expanded','false');
+    }
   },true);
 })();
 </script>
@@ -7514,24 +7577,34 @@ function renderBasics(){
   });
 }
 function showPage(name){
-  if(programBrowsePreviewMode && (name==='today' || RECOVERY_ONLY_BROWSE_PAGES.has(name)))name='program-preview';
+  if(programBrowsePreviewMode){
+    if(name==='resources')name='program-resources-preview';
+    else if(name==='today' || RECOVERY_ONLY_BROWSE_PAGES.has(name))name='program-preview';
+  }
   const requested=$(`#page-${name}`);
   const page=requested||$('#page-today');
   if(!page)return;
-  $$('.page').forEach(p=>p.classList.remove('active'));
-  page.classList.add('active');
-  const navName=name==='program-preview'?'today':name;
+  const current=document.querySelector('.page.active');
+  const changed=current!==page;
+  if(changed){
+    $$('.page').forEach(p=>p.classList.remove('active'));
+    page.classList.add('active');
+  }
+  const navName=(name==='program-preview')?'today':(name==='program-resources-preview'?'resources':name);
   $$('.nav-item,.mobile-bottom button[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===navName));
   if(name==='program-preview')renderProgramBrowseChrome();
-  try{
-    const url=new URL(location.href);
-    url.hash=navName==='today'?'':navName;
-    history.replaceState(null,'',url.pathname+url.search+url.hash);
-  }catch(_){}
-  try{window.scrollTo(0,0)}catch(_){}
+  if(name==='program-resources-preview')renderProgramResourcePreview();
+  if(changed){
+    try{
+      const url=new URL(location.href);
+      url.hash=navName==='today'?'':navName;
+      history.replaceState(null,'',url.pathname+url.search+url.hash);
+    }catch(_){}
+    try{window.scrollTo({top:0,left:0,behavior:'auto'})}catch(_){try{window.scrollTo(0,0)}catch(__){}}
+  }
 }
-// MENU/NAVIGATION REPAIR — 2026-08-28
-// Event delegation keeps static and dynamically-added menu items working.
+window.LelleeShowPage=showPage;
+// MENU/NAVIGATION REPAIR — single delegated navigation path lives in the early bootstrap.
 function setMobileNav(open){
   const sidebar=document.getElementById('appSidebar');
   const btn=document.getElementById('mobileMenuBtn');
@@ -7545,19 +7618,7 @@ document.getElementById('mobileMenuBtn')?.addEventListener('click',event=>{
   const sidebar=document.getElementById('appSidebar');
   setMobileNav(!sidebar?.classList.contains('mobile-open'));
 });
-document.addEventListener('click',event=>{
-  const control=(event.target instanceof Element)?event.target.closest('[data-page]'):null;
-  if(!control)return;
-  const pageName=control.dataset.page;
-  if(!pageName)return;
-  event.preventDefault();
-  showPage(pageName);
-  if(window.matchMedia('(max-width:820px)').matches)setMobileNav(false);
-});
 document.addEventListener('keydown',event=>{if(event.key==='Escape')setMobileNav(false)});
-window.LelleeNavigatePage=showPage;
-window.LelleeSetMobileNav=setMobileNav;
-window.LelleePrimaryNavigationReady=true;
 
 let activeActivity=null;
 const activityDialog=$('#activityDialog');
@@ -7712,7 +7773,7 @@ const PROGRAM_BROWSE_KEY='lellee_browse_program_v1';
 let activeBrowseProgram='recovery';
 let programBrowsePreviewMode=false;
 const PROGRAM_PREVIEWS={
-  caregiving:{label:'Caregiving',description:'Support yourself while caring for a parent, partner, child, or loved one.',cards:[['Caregiver check-in','Notice what you need while you are caring for someone else.'],['Organize the load','Keep appointments, responsibilities and practical next steps easier to see.'],['Boundaries & backup','Think through rest, boundaries, trusted helpers and backup support.'],['Find caregiver resources','Explore practical community and support resources without creating an account.']]},
+  caregiving:{label:'Caregiving',description:'Support yourself while caring for a parent, partner, child, or loved one.',cards:[['Caregiver check-in','Notice what you need while you are caring for someone else.'],['Organize the load','Keep appointments, responsibilities and practical next steps easier to see.'],['Boundaries & backup','Think through rest, boundaries, trusted helpers and backup support.'],['Find caregiver resources','Explore practical community and support resources without creating an account.']],actions:[{mode:'account',status:'PRIVATE FEATURE',actionLabel:'Create Account to Use',note:'A caregiver check-in can contain personal information and is designed to be saved privately. You can keep browsing without an account.'},{mode:'account',status:'PRIVATE FEATURE',actionLabel:'Create Account to Use',note:'Organizing appointments, responsibilities and a personal caregiving plan requires an account so Lellee can save it privately. Browsing does not require an account.'},{mode:'preview',status:'BROWSE PREVIEW',actionLabel:'Continue Browsing',note:'No account is required to read this preview. An account is only needed if you later choose to save your own boundaries, helpers or backup plan.'},{mode:'resources',status:'PUBLIC RESOURCES',actionLabel:'Browse Shared Resources',note:'No account is required to browse shared caregiving resource categories. Lellee asks you to sign in only if you choose to save or personalize resources.'}]},
   'housing-stability':{label:'Housing Stability',description:'Get organized around housing, stability and the next practical step.',cards:[['Know what is urgent','Separate immediate housing needs from steps that can wait.'],['Documents & deadlines','Keep track of applications, notices, appointments and follow-up.'],['Stability planning','Build a manageable plan around housing, income and daily needs.'],['Find housing resources','Explore public and community resources without being placed in Recovery.']]},
   reentry:{label:'Returning Home',description:'Rebuild after jail, prison, probation, parole, or another justice-system transition.',cards:[['First priorities','Organize identification, housing, supervision, transportation and immediate needs.'],['Rebuild routines','Create structure around appointments, work, family and daily responsibilities.'],['Practical reentry tools','Explore planning and resource tools designed around returning home.'],['Move forward your way','Browse without enrollment and choose which support you want to use.']]},
   'work-new-beginnings':{label:'Work & New Beginnings',description:'Return to work, find structure, build confidence and move toward income.',cards:[['Clarify the next step','Start with work readiness, job search, training or basic stability.'],['Organize the search','Keep applications, follow-ups and appointments in one place.'],['Build momentum','Break employment goals into realistic steps.'],['Explore work resources','Browse tools and resources before deciding whether to create an account.']]},
@@ -7743,15 +7804,66 @@ function captureBrowseProgram(){
   programBrowsePreviewMode=activeBrowseProgram!=='recovery';
   try{if(programBrowsePreviewMode)safeStoreSet(LELLEE_SESSION_STORAGE,PROGRAM_BROWSE_KEY,activeBrowseProgram);else safeStoreRemove(LELLEE_SESSION_STORAGE,PROGRAM_BROWSE_KEY)}catch(_){}
 }
+function previewActionFor(cfg,index){
+  const explicit=Array.isArray(cfg.actions)?cfg.actions[index]:null;
+  if(explicit)return explicit;
+  return {mode:'preview',status:'BROWSE PREVIEW',actionLabel:'Keep Browsing',note:'No account is required to read this public preview. Lellee asks you to sign in only if you choose a private feature that saves or personalizes information.'};
+}
 function renderProgramPreview(){
   if(!programBrowsePreviewMode)return;
   const cfg=programPreviewConfig();
   const set=(id,value)=>{const el=document.getElementById(id);if(el)el.textContent=value};
   set('programPreviewTitle',cfg.label);
   set('programPreviewDescription',cfg.description);
-  (cfg.cards||[]).slice(0,4).forEach((card,i)=>{set(`programPreviewCard${i+1}Title`,card[0]);set(`programPreviewCard${i+1}Text`,card[1])});
+  (cfg.cards||[]).slice(0,4).forEach((card,i)=>{
+    set(`programPreviewCard${i+1}Title`,card[0]);
+    set(`programPreviewCard${i+1}Text`,card[1]);
+    const action=previewActionFor(cfg,i);
+    set(`programPreviewCard${i+1}Action`,action.mode==='account'?'Account required to save →':(action.mode==='resources'?'Browse without account →':'Open preview →'));
+  });
   set('programPreviewNote','Browse first. You are exploring '+cfg.label+'. This preview does not enroll you, create an account, or switch you into the Recovery program. Sign in is only needed when you choose a private feature that saves or personalizes information.');
 }
+function renderProgramResourcePreview(){
+  const cfg=programPreviewConfig();
+  const title=document.getElementById('programResourcePreviewTitle');
+  const description=document.getElementById('programResourcePreviewDescription');
+  if(title)title.textContent=`${cfg.label} shared resources`;
+  if(description)description.textContent=`Browse public and shared resource categories related to ${cfg.label}. An account is not required to look around.`;
+}
+function openProgramPreviewCard(index){
+  if(!programBrowsePreviewMode)return;
+  const cfg=programPreviewConfig();
+  const card=(cfg.cards||[])[index];
+  if(!card)return;
+  const action=previewActionFor(cfg,index);
+  const dialog=document.getElementById('programPreviewDetailDialog');
+  const status=document.getElementById('programPreviewDetailStatus');
+  const title=document.getElementById('programPreviewDetailTitle');
+  const body=document.getElementById('programPreviewDetailText');
+  const note=document.getElementById('programPreviewDetailNote');
+  const primary=document.getElementById('programPreviewDetailPrimary');
+  if(status)status.textContent=action.status||'PROGRAM PREVIEW';
+  if(title)title.textContent=card[0];
+  if(body)body.textContent=card[1];
+  if(note)note.textContent=action.note||'';
+  if(primary){primary.textContent=action.actionLabel||'Continue';primary.dataset.previewMode=action.mode||'preview';}
+  if(dialog?.showModal)dialog.showModal();
+}
+document.addEventListener('click',event=>{
+  const card=(event.target instanceof Element)?event.target.closest('[data-program-preview-card]'):null;
+  if(!card)return;
+  event.preventDefault();
+  openProgramPreviewCard(Number(card.dataset.programPreviewCard||0));
+});
+document.getElementById('programPreviewDetailClose')?.addEventListener('click',()=>document.getElementById('programPreviewDetailDialog')?.close());
+document.getElementById('programPreviewDetailSecondary')?.addEventListener('click',()=>document.getElementById('programPreviewDetailDialog')?.close());
+document.getElementById('programPreviewDetailPrimary')?.addEventListener('click',event=>{
+  const mode=event.currentTarget.dataset.previewMode||'preview';
+  document.getElementById('programPreviewDetailDialog')?.close();
+  if(mode==='account')requireAccount('use and save this private '+programPreviewConfig().label+' feature');
+  else if(mode==='resources')showPage('resources');
+});
+document.getElementById('programResourcePreviewSignIn')?.addEventListener('click',()=>showAuthOverlay('signin'));
 function renderProgramBrowseChrome(){
   if(!programBrowsePreviewMode){document.body.classList.remove('program-preview-mode');return}
   document.body.classList.add('program-preview-mode');
@@ -7761,6 +7873,8 @@ function renderProgramBrowseChrome(){
   const mobile=document.querySelector('.mobile-title');if(mobile)mobile.textContent=cfg.label;
   const todayBtn=document.querySelector('.nav-item[data-page="today"]');if(todayBtn)todayBtn.innerHTML='<span class="nav-icon">▣</span>Program Overview';
   ['recovery','learn','tools','recovery-paths-v2','meetings','journal','progress','community','milestones','then-now','story','history','longterm'].forEach(page=>{document.querySelectorAll(`.sidebar [data-page="${page}"],.mobile-bottom [data-page="${page}"]`).forEach(el=>el.style.display='none')});
+  document.querySelectorAll('.sidebar [data-page="resources"],.mobile-bottom [data-page="resources"]').forEach(el=>{el.style.display='';el.innerHTML='<span class="nav-icon">◇</span>Shared Resources'});
+  renderProgramResourcePreview();
   const stats=document.querySelectorAll('.top-stats .mini-stat');
   if(stats[0])stats[0].innerHTML='<span class="stat-emoji">✦</span><div><b>Explore</b><small>Program preview</small></div>';
   if(stats[1])stats[1].innerHTML='<span class="stat-emoji">◇</span><div><b>Guest</b><small>No account required</small></div>';
@@ -8037,7 +8151,6 @@ async function initSupabase(){
 }
 initSupabase();
 </script>
-<!-- LELLEE MAIN-THREAD FREEZE + SINGLE-OWNER NAVIGATION REPAIR 2026-08-28 -->
 <!-- LELLEE GUEST BROWSE ACCESS FIX 2026-08-28 -->
 <!-- LELLEE PROGRAM SELECTION ROUTING FIX 2026-08-28 -->
 <!-- LELLEE MASTER INDEX
@@ -8442,20 +8555,6 @@ Transportation"></textarea></label>
   'use strict';
 
   const STORAGE_KEY = 'lellee_coach_account_count_visible';
-  const WATCH_SELECTOR = [
-    '#coachRevenueClients',
-    '#coachClientCount',
-    '#coachAccountCount',
-    '[data-coach-account-count]',
-    '[data-coach-client-count]',
-    '#page-coach-dashboard',
-    '#page-coach-revenue',
-    '[data-page="coach-dashboard"]'
-  ].join(',');
-
-  function readVisibility(){
-    try{return window.sessionStorage?.getItem(STORAGE_KEY)==='true'}catch(_){return false}
-  }
 
   function coachCountNodes(){
     const selectors = [
@@ -8480,50 +8579,21 @@ Transportation"></textarea></label>
   }
 
   function setVisibility(visible){
-    const hidden = !visible;
-    const ariaValue = visible ? 'false' : 'true';
     coachCountNodes().forEach(node => {
-      if(node.classList.contains('coach-account-count-hidden') !== hidden){
-        node.classList.toggle('coach-account-count-hidden', hidden);
-      }
-      if(node.getAttribute('aria-hidden') !== ariaValue){
-        node.setAttribute('aria-hidden', ariaValue);
-      }
+      node.classList.toggle('coach-account-count-hidden', !visible);
+      node.setAttribute('aria-hidden', visible ? 'false' : 'true');
     });
 
     const toggle = document.getElementById('coachAccountVisibilityToggle');
     const label = document.getElementById('coachAccountVisibilityLabel');
-    if (toggle && toggle.checked !== !!visible) toggle.checked = !!visible;
-    const nextLabel = visible ? 'On' : 'Off';
-    if (label && label.textContent !== nextLabel) label.textContent = nextLabel;
-  }
-
-  let scheduled = false;
-  function scheduleVisibility(){
-    if(scheduled)return;
-    scheduled = true;
-    const apply = () => {
-      scheduled = false;
-      setVisibility(readVisibility());
-    };
-    if(typeof window.requestAnimationFrame === 'function') window.requestAnimationFrame(apply);
-    else window.setTimeout(apply,0);
-  }
-
-  function mutationCanAffectCoachCounts(record){
-    const target = record.target instanceof Element ? record.target : null;
-    // Ignore the label text change made by setVisibility itself.
-    if(target?.id === 'coachAccountVisibilityLabel') return false;
-    if(target?.closest('#page-coach-dashboard,#page-coach-revenue,[data-page="coach-dashboard"]')) return true;
-    return Array.from(record.addedNodes || []).some(node => {
-      if(!(node instanceof Element)) return false;
-      return node.matches(WATCH_SELECTOR) || !!node.querySelector(WATCH_SELECTOR);
-    });
+    if (toggle) toggle.checked = !!visible;
+    if (label) label.textContent = visible ? 'On' : 'Off';
   }
 
   function init(){
     // Privacy-first: always start hidden in a fresh browser/session.
-    setVisibility(readVisibility());
+    const saved = (()=>{try{return window.sessionStorage?.getItem(STORAGE_KEY)==='true'}catch(_){return false}})();
+    setVisibility(saved);
 
     const toggle = document.getElementById('coachAccountVisibilityToggle');
     if (toggle && !toggle.dataset.bound){
@@ -8535,14 +8605,10 @@ Transportation"></textarea></label>
       });
     }
 
-    // Re-apply only when coach dashboard content is actually inserted.
-    // The previous body-wide observer rewrote its own label on every mutation,
-    // creating an endless MutationObserver loop that froze the whole page.
-    const observer = new MutationObserver(records => {
-      if(records.some(mutationCanAffectCoachCounts)) scheduleVisibility();
-    });
-    observer.observe(document.body, {childList:true, subtree:true});
-    window.addEventListener('pagehide', () => observer.disconnect(), {once:true});
+    // Do not observe the whole DOM here. setVisibility() changes DOM nodes itself, so a
+    // body-wide MutationObserver can recursively trigger and make the page jump/freeze.
+    // Dynamic coach renderers may call this explicit refresh hook when needed.
+    window.LelleeRefreshCoachAccountVisibility=()=>{let visible=false;try{visible=window.sessionStorage?.getItem(STORAGE_KEY)==='true'}catch(_){}setVisibility(visible)};
   }
 
   if (document.readyState === 'loading') {
