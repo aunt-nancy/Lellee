@@ -1,7 +1,27 @@
-LELLEE — RECOVERY VERTICAL MENU RESTORE — 2026-08-28
+LELLEE — APPROVED RECOVERY SIDEBAR REINSTATE
+Date: 2026-08-28
 
-PURPOSE
-Restores the established dark, grouped Lellee Recovery vertical navigation after the lightweight Recovery preview regressed to a flat white sidebar.
+WHY THIS PACKAGE EXISTS
+The prior Recovery preview repair recreated a sidebar instead of reinstating the approved navigation. This package corrects that.
+
+AUDITED SOURCE OF TRUTH
+- Approved Lellee interior design lock: 198px dark navy Recovery sidebar; purple active state; compact proportions; persistent Need Help Now.
+- Working Recovery dashboard screenshot from 2026-08-27: Daily expanded with Today, For You, My Recovery; Grow & Learn; Connect; Reflect & Track; Find Support; Account; Get Help Now.
+- Working Journal/Resources screenshots confirm Reflect & Track expands to Journal/Progress/Calendar and Find Support expands to Resources/Inbox.
+
+WHAT IS REINSTATED
+- Dark navy 198px Recovery sidebar.
+- Daily group with Today / For You / My Recovery.
+- Grow & Learn group with Learn / Tools / Recovery Paths.
+- Connect group with Meetings / Community.
+- Reflect & Track group with Journal / Progress / Calendar.
+- Find Support group with Resources / Inbox.
+- Account group with Sign in / Create account.
+- Persistent Need Help Now card and purple/pink action.
+- Approved compact navigation proportions and active purple treatment.
+
+IMPORTANT
+This remains the lightweight public Recovery preview so the page-stability fix stays intact. Private/saved items explain account requirements instead of becoming dead links.
 
 UPLOAD / REPLACE ONLY
 1. recovery-preview.html
@@ -9,19 +29,5 @@ UPLOAD / REPLACE ONLY
 3. reset-lellee-cache.html
 
 NO SUPABASE SQL.
-
-PRESERVED
-- Lightweight Recovery public-preview architecture and page-stability fix
-- Current white content background and approved Recovery color palette
-- Public browsing before account creation
-- Private-feature account prompts
-- Existing Recovery content and routes
-- Landing-page logo asset and locked landing-page sizing (landing.html is not included or changed)
-
-RESTORED SIDEBAR
-- Dark navy Lellee sidebar
-- Grouped Daily / Grow & Learn / Connect / Reflect & Track / Find Support / Account navigation
-- Bright purple active item
-- Need Help Now card linked to /safety.html
-- Mobile drawer behavior
-- No MutationObserver and no additional global navigation handler
+No landing.html or index.html change.
+Landing-page logo sizing is untouched.

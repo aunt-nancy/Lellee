@@ -21,177 +21,100 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(85,49,166,.22);outli
 @media(max-width:820px){.head-inner{min-height:74px;padding:0 14px;gap:10px}.brand{width:185px;height:64px;min-width:185px}.top-nav>a:not(.signin){display:none}.menu-btn{display:inline-block}.shell{grid-template-columns:1fr}.side{position:fixed;top:75px;left:0;bottom:0;width:min(300px,86vw);z-index:30;transform:translateX(-105%);transition:transform .18s ease;border-right:1px solid var(--line);box-shadow:14px 0 36px rgba(37,26,48,.16)}.side.open{transform:none}main{padding:24px 16px 55px}.activity-grid,.card-grid{grid-template-columns:1fr}.view{min-height:620px}.title-row{display:block}.title-row p{margin-top:8px}}
 
 /* ============================================================
-   RECOVERY VERTICAL MENU RESTORE — 2026-08-28
-   Restores the established dark grouped Lellee Recovery sidebar.
-   Intentionally scoped to the preview sidebar only.
+   APPROVED RECOVERY SIDEBAR REINSTATE — 2026-08-28
+   Audited against the approved Recovery dashboard visual system
+   and the 2026-08-27 working sidebar screenshot.
    ============================================================ */
-.shell{grid-template-columns:198px minmax(0,1fr)}
+@media(min-width:821px){
+  .site-head{margin-left:198px;position:sticky;top:0;z-index:19}
+  .site-head .head-inner{max-width:none;min-height:72px;padding:0 30px}
+  .site-head .brand{display:none}
+  .shell{max-width:none;margin:0;display:block;min-height:calc(100vh - 72px)}
+  .shell>main{margin-left:198px;padding-top:22px}
+}
 .side{
-  border-right:0;
-  padding:16px 12px 18px;
   background:linear-gradient(180deg,#0c1029 0%,#10112c 72%,#151534 100%);
   color:#fff;
+  border-right:0;
   box-shadow:10px 0 26px rgba(18,17,37,.08);
+  padding:18px 12px 20px;
   display:flex;
   flex-direction:column;
-  position:sticky;
-  top:85px;
-  align-self:start;
-  height:calc(100vh - 85px);
-  min-height:560px;
   overflow-y:auto;
   scrollbar-width:thin;
   scrollbar-color:rgba(255,255,255,.18) transparent;
 }
-.side-label{
-  font-size:.64rem;
-  font-weight:900;
-  letter-spacing:.12em;
-  color:#c9c8dc;
-  padding:2px 10px 10px;
+@media(min-width:821px){
+  .side{position:fixed;inset:0 auto 0 0;width:198px;height:100vh;z-index:25}
 }
-.nav-list{display:grid;gap:5px}
-.nav-section{
-  border:1px solid transparent;
-  border-radius:11px;
-  overflow:hidden;
+.side-brand{
+  height:87px;
+  padding:0 16px 12px;
+  display:flex;
+  align-items:flex-start;
+  justify-content:center;
 }
-.nav-section.is-open{
-  background:rgba(255,255,255,.035);
-  border-color:rgba(255,255,255,.08);
+.side-brand a{display:block;width:100%;text-decoration:none}
+.side-brand img{
+  display:block;
+  width:142px;
+  max-width:100%;
+  height:auto;
+  object-fit:contain;
+  margin:0 auto;
 }
+.nav-list{display:grid;gap:2px}
+.nav-section{border:1px solid transparent;border-radius:9px;overflow:hidden}
+.nav-section.is-open{background:rgba(255,255,255,.045);border-color:rgba(255,255,255,.10);padding-bottom:3px}
 .nav-group-btn{
-  width:100%;
-  border:0;
-  background:transparent;
-  color:#f7f5fb;
-  display:grid;
-  grid-template-columns:30px minmax(0,1fr) 14px;
-  align-items:center;
-  gap:9px;
-  text-align:left;
-  min-height:43px;
-  padding:6px 8px;
-  border-radius:9px;
-  font-size:.82rem;
-  font-weight:800;
+  width:100%;min-height:40px;border:0;background:transparent;color:#f5f4fb;
+  display:grid;grid-template-columns:26px minmax(0,1fr) 12px;align-items:center;gap:8px;
+  padding:6px 8px;border-radius:7px;text-align:left;font-size:.82rem;font-weight:800;letter-spacing:-.005em
 }
-.nav-group-btn:hover{background:rgba(255,255,255,.075)}
+.nav-group-btn:hover{background:rgba(255,255,255,.08)}
 .nav-icon-box{
-  width:30px;
-  height:30px;
-  display:grid;
-  place-items:center;
-  border-radius:8px;
-  background:rgba(126,90,189,.22);
-  color:#fff;
-  font-size:.82rem;
-  line-height:1;
+  width:26px;height:26px;border-radius:7px;display:grid;place-items:center;
+  background:rgba(105,75,161,.28);color:#fff;font-size:.74rem;font-weight:900;line-height:1
 }
-.nav-chevron{
-  color:#d6d2e2;
-  font-size:1.15rem;
-  line-height:1;
-  transform-origin:center;
-  transition:transform .12s ease;
-}
+.nav-chevron{color:#ddd8e7;font-size:.96rem;line-height:1;transition:transform .12s ease;transform-origin:center}
 .nav-group-btn[aria-expanded="true"] .nav-chevron{transform:rotate(90deg)}
-.nav-children{
-  display:grid;
-  gap:3px;
-  padding:0 5px 7px 39px;
-}
+.nav-children{display:grid;gap:1px;padding:0 5px 4px 34px}
 .nav-children.collapsed{display:none}
 .side .nav-item{
-  width:100%;
-  min-height:32px;
-  border:0;
-  background:transparent;
-  color:#e9e6f2;
-  border-radius:7px;
-  padding:7px 9px;
-  text-align:left;
-  font-size:.76rem;
-  font-weight:680;
-  line-height:1.2;
-  box-shadow:none;
-  text-decoration:none;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:8px;
+  width:100%;min-height:32px;border:0;background:transparent;color:#f0edf5;border-radius:7px;
+  padding:7px 9px;display:grid;grid-template-columns:18px minmax(0,1fr);align-items:center;gap:7px;
+  text-align:left;font-size:.73rem;font-weight:700;line-height:1.2;text-decoration:none;box-shadow:none
 }
 .side .nav-item:hover{background:rgba(255,255,255,.08);color:#fff}
 .side .nav-item.active{
-  background:linear-gradient(90deg,#6540b5,#8b4fd0);
-  color:#fff;
-  box-shadow:0 5px 14px rgba(74,41,116,.3);
-  font-weight:850;
+  background:linear-gradient(90deg,#7a36dc,#b14ce5);color:#fff;
+  box-shadow:0 5px 14px rgba(74,41,116,.26);font-weight:850
 }
-.side .nav-item.nav-private::after{
-  content:'Private';
-  font-size:.52rem;
-  letter-spacing:.02em;
-  color:#d8cee7;
-  opacity:.88;
+.nav-child-icon{width:18px;text-align:center;color:#efe8f6;font-size:.68rem;opacity:.95}
+.side-spacer{flex:1;min-height:15px}
+.help-card-approved{
+  border:1px solid rgba(255,255,255,.10);border-radius:10px;margin-top:12px;padding:14px;
+  background:rgba(255,255,255,.055);color:#fff
 }
-.side .nav-link{cursor:pointer}
-.side-spacer{flex:1;min-height:16px}
-.side-help-card{
-  border:1px solid rgba(255,255,255,.09);
-  border-radius:12px;
-  background:rgba(255,255,255,.06);
-  padding:13px;
-  color:#fff;
+.help-card-approved h4{font-size:.78rem;margin:0 0 4px}
+.help-card-approved p{font-size:.62rem;line-height:1.45;color:#d8d5e3;margin:0}
+.help-card-approved a{
+  display:block;margin-top:10px;border-radius:6px;background:linear-gradient(90deg,#7b3fd1,#dc59a5);
+  color:#fff;text-align:center;text-decoration:none;padding:8px 9px;font-size:.68rem;font-weight:900
 }
-.side-help-card b{display:block;font-size:.83rem;margin-bottom:4px}
-.side-help-card span{display:block;color:#d8d5e4;font-size:.67rem;line-height:1.42}
-.side-help-action{
-  display:block;
-  margin-top:10px;
-  border-radius:7px;
-  padding:8px 9px;
-  text-align:center;
-  text-decoration:none;
-  color:#fff;
-  font-size:.71rem;
-  font-weight:900;
-  background:linear-gradient(90deg,#7a47c7,#d858a0);
-  box-shadow:0 5px 14px rgba(91,47,160,.22);
-}
-.side-help-action:hover{filter:brightness(1.05)}
-.side .side-note{
-  margin-top:10px;
-  border:0;
-  border-radius:9px;
-  background:transparent;
-  padding:8px 5px 0;
-  color:#aaa8ba;
-  font-size:.62rem;
-  line-height:1.42;
-}
-.side .side-note b{color:#d8d6e2;margin-bottom:2px}
+.help-card-approved a:hover{filter:brightness(1.05)}
 @media(max-width:820px){
+  .site-head{margin-left:0}
+  .site-head .brand{display:flex}
   .shell{grid-template-columns:1fr}
   .side{
-    position:fixed;
-    top:75px;
-    left:0;
-    bottom:0;
-    width:min(300px,86vw);
-    height:auto;
-    min-height:0;
-    z-index:30;
-    transform:translateX(-105%);
-    transition:transform .18s ease;
-    border-right:0;
-    background:linear-gradient(180deg,#0c1029 0%,#10112c 72%,#151534 100%);
-    box-shadow:14px 0 36px rgba(18,17,37,.3);
-    overflow-y:auto;
+    position:fixed;top:75px;left:0;bottom:0;width:min(300px,86vw);height:auto;min-height:0;z-index:30;
+    transform:translateX(-105%);transition:transform .18s ease;box-shadow:14px 0 36px rgba(18,17,37,.30)
   }
   .side.open{transform:none}
+  .side-brand{display:none}
+  .shell>main{margin-left:0}
 }
-
 </style>
 </head>
 <body>
@@ -206,15 +129,17 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(85,49,166,.22);outli
   </div>
 </header>
 <div class="shell">
-  <aside class="side" id="sideNav" aria-label="Recovery preview menu">
-    <div class="side-label">RECOVERY</div>
+  <aside class="side" id="sideNav" aria-label="Recovery navigation">
+    <div class="side-brand"><a href="/" aria-label="Lellee home"><img src="/lellee-approved-logo-final.jpg?v=20260814-1" alt="Lellee — Your journey. Your support. Your way."></a></div>
     <nav class="nav-list" aria-label="Recovery sections">
       <section class="nav-section is-open" data-nav-section="daily">
         <button class="nav-group-btn" type="button" data-group-toggle="daily" aria-expanded="true">
           <span class="nav-icon-box" aria-hidden="true">✦</span><span>Daily</span><span class="nav-chevron" aria-hidden="true">›</span>
         </button>
         <div class="nav-children" data-group-panel="daily">
-          <button class="nav-item active" type="button" data-view="today">Today</button>
+          <button class="nav-item active" type="button" data-view="today"><span class="nav-child-icon">▣</span><span>Today</span></button>
+          <button class="nav-item" type="button" data-view="for-you"><span class="nav-child-icon">✦</span><span>For You</span></button>
+          <button class="nav-item" type="button" data-view="journey"><span class="nav-child-icon">♡</span><span>My Recovery</span></button>
         </div>
       </section>
 
@@ -223,9 +148,9 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(85,49,166,.22);outli
           <span class="nav-icon-box" aria-hidden="true">◇</span><span>Grow &amp; Learn</span><span class="nav-chevron" aria-hidden="true">›</span>
         </button>
         <div class="nav-children collapsed" data-group-panel="grow">
-          <button class="nav-item" type="button" data-view="journey">Your Journey</button>
-          <button class="nav-item" type="button" data-view="learn">Learn</button>
-          <button class="nav-item" type="button" data-view="tools">Tools</button>
+          <button class="nav-item" type="button" data-view="learn"><span class="nav-child-icon">◇</span><span>Learn</span></button>
+          <button class="nav-item" type="button" data-view="tools"><span class="nav-child-icon">⌁</span><span>Tools</span></button>
+          <button class="nav-item" type="button" data-view="paths"><span class="nav-child-icon">⌂</span><span>Recovery Paths</span></button>
         </div>
       </section>
 
@@ -234,7 +159,8 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(85,49,166,.22);outli
           <span class="nav-icon-box" aria-hidden="true">♡</span><span>Connect</span><span class="nav-chevron" aria-hidden="true">›</span>
         </button>
         <div class="nav-children collapsed" data-group-panel="connect">
-          <button class="nav-item" type="button" data-view="meetings">Meetings</button>
+          <button class="nav-item" type="button" data-view="meetings"><span class="nav-child-icon">▤</span><span>Meetings</span></button>
+          <button class="nav-item" type="button" data-view="community"><span class="nav-child-icon">◎</span><span>Community</span></button>
         </div>
       </section>
 
@@ -243,8 +169,9 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(85,49,166,.22);outli
           <span class="nav-icon-box" aria-hidden="true">↗</span><span>Reflect &amp; Track</span><span class="nav-chevron" aria-hidden="true">›</span>
         </button>
         <div class="nav-children collapsed" data-group-panel="reflect">
-          <button class="nav-item nav-private" type="button" data-private="Journal">Journal</button>
-          <button class="nav-item nav-private" type="button" data-private="Progress">Progress</button>
+          <button class="nav-item" type="button" data-private="Journal"><span class="nav-child-icon">▧</span><span>Journal</span></button>
+          <button class="nav-item" type="button" data-private="Progress"><span class="nav-child-icon">↗</span><span>Progress</span></button>
+          <button class="nav-item" type="button" data-private="Calendar"><span class="nav-child-icon">◷</span><span>Calendar</span></button>
         </div>
       </section>
 
@@ -253,7 +180,8 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(85,49,166,.22);outli
           <span class="nav-icon-box" aria-hidden="true">⌕</span><span>Find Support</span><span class="nav-chevron" aria-hidden="true">›</span>
         </button>
         <div class="nav-children collapsed" data-group-panel="support">
-          <button class="nav-item" type="button" data-view="resources">Resources</button>
+          <button class="nav-item" type="button" data-view="resources"><span class="nav-child-icon">◇</span><span>Resources</span></button>
+          <button class="nav-item" type="button" data-private="Inbox"><span class="nav-child-icon">✉</span><span>Inbox</span></button>
         </div>
       </section>
 
@@ -262,19 +190,17 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(85,49,166,.22);outli
           <span class="nav-icon-box" aria-hidden="true">⚙</span><span>Account</span><span class="nav-chevron" aria-hidden="true">›</span>
         </button>
         <div class="nav-children collapsed" data-group-panel="account">
-          <a class="nav-item nav-link" href="/app?auth=signin&amp;program=recovery">Sign in</a>
-          <a class="nav-item nav-link" href="/app?auth=signup&amp;program=recovery">Create account</a>
+          <a class="nav-item" href="/app?auth=signin&amp;program=recovery"><span class="nav-child-icon">◉</span><span>Sign in</span></a>
+          <a class="nav-item" href="/app?auth=signup&amp;program=recovery"><span class="nav-child-icon">＋</span><span>Create account</span></a>
         </div>
       </section>
     </nav>
-
     <div class="side-spacer"></div>
-    <div class="side-help-card">
-      <b>Need Help Now?</b>
-      <span>Immediate support tools and safety options when you need them.</span>
-      <a class="side-help-action" href="/safety.html">Get Help Now</a>
+    <div class="help-card-approved">
+      <h4>Need Help Now?</h4>
+      <p>Immediate support tools and crisis options when you need them.</p>
+      <a href="/safety.html">Get Help Now</a>
     </div>
-    <div class="side-note"><b>Browsing preview</b>No account is required to explore Recovery. Sign in only when you choose to save private information.</div>
   </aside>
 
   <main>
@@ -292,6 +218,16 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(85,49,166,.22);outli
       <div class="today-panel"><h2>One step is enough for today.</h2><p>Recovery does not have to be completed all at once. Lellee is designed to help you focus on the next useful step while keeping the larger journey visible.</p><div class="focus"><b>Public Recovery preview</b>Explore the Journey, Learn, Tools, Resources and Meetings menus. Sign in only when you are ready to save your own work.</div></div>
     </section>
 
+    <section class="view" id="view-for-you">
+      <span class="eyebrow">RECOVERY · FOR YOU</span>
+      <div class="title-row"><h1>For You</h1><p>A calm preview of the kinds of suggestions Lellee can surface based on the support you choose.</p></div>
+      <div class="card-grid">
+        <article class="info-card"><small>TODAY</small><h3>One useful next step</h3><p>Choose one manageable action instead of trying to solve everything at once.</p></article>
+        <article class="info-card"><small>SUPPORT</small><h3>Stay connected</h3><p>Use meetings, trusted people and practical resources before stress has to become a crisis.</p></article>
+      </div>
+      <div class="account-box"><b>Personalized “For You” suggestions are private.</b><p>You can browse this example without an account. Create an account only when you want Lellee to use your saved preferences and progress to personalize what appears here.</p><div class="actions"><a class="primary" href="/app?auth=signup&program=recovery">Create account</a><a class="secondary" href="/app?auth=signin&program=recovery">Sign in</a></div></div>
+    </section>
+
     <section class="view" id="view-journey">
       <span class="eyebrow">RECOVERY · YOUR JOURNEY</span><div class="title-row"><h1>Your Recovery Journey</h1><p>Lellee organizes the first year into manageable stages while keeping long-term recovery available beyond that.</p></div>
       <div class="card-grid">
@@ -303,6 +239,16 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(85,49,166,.22);outli
         <article class="info-card"><small>YEAR 2+</small><h3>Long-Term Recovery</h3><p>Continue building a meaningful life in recovery.</p></article>
       </div>
       <div class="account-box"><b>Your personal place in the journey is private.</b><p>Create an account when you want Lellee to remember your recovery date, progress, preferences or completed work.</p><div class="actions"><a class="primary" href="/app?auth=signup&program=recovery">Create account</a><a class="secondary" href="/app?auth=signin&program=recovery">Sign in</a></div></div>
+    </section>
+
+    <section class="view" id="view-paths">
+      <span class="eyebrow">RECOVERY · PATHS</span><div class="title-row"><h1>Recovery Paths</h1><p>Lellee can support different approaches without forcing one model on everyone.</p></div>
+      <div class="card-grid">
+        <article class="info-card"><small>SECULAR</small><h3>Skills &amp; practical support</h3><p>Use coping skills, routines, peer support and practical recovery planning.</p></article>
+        <article class="info-card"><small>SPIRITUAL</small><h3>Spiritual support</h3><p>Include meaning, reflection and spiritual practices when they fit you.</p></article>
+        <article class="info-card"><small>FAITH-BASED</small><h3>Faith-informed support</h3><p>Include faith-based material when you choose it.</p></article>
+        <article class="info-card"><small>MIXED</small><h3>Use what helps</h3><p>Combine approaches and adjust them as your recovery changes.</p></article>
+      </div>
     </section>
 
     <section class="view" id="view-learn">
@@ -322,6 +268,14 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(85,49,166,.22);outli
         <article class="info-card"><small>PAUSE</small><h3>HALT Check</h3><p>Ask whether you are hungry, angry, lonely or tired before making the next decision.</p></article>
         <article class="info-card"><small>URGES</small><h3>Delay the Decision</h3><p>Create time between an urge and an action. Change location, contact support or choose a short competing activity.</p></article>
         <article class="info-card"><small>SUPPORT</small><h3>Reach Out</h3><p>Keep a short list of people or services you can contact when recovery feels harder.</p><button type="button" data-private="Saved Support List">Save my list</button></article>
+      </div>
+    </section>
+
+    <section class="view" id="view-community">
+      <span class="eyebrow">RECOVERY · COMMUNITY</span><div class="title-row"><h1>Community</h1><p>Connection is available without turning Lellee into a noisy social-media feed.</p></div>
+      <div class="card-grid">
+        <article class="info-card"><small>CONNECTION</small><h3>Peer support</h3><p>Explore meetings and recovery communities that fit your preferences.</p></article>
+        <article class="info-card"><small>PRIVACY</small><h3>Your participation is your choice</h3><p>Joining, messaging or saving connections requires an account because those actions create private account data.</p><button type="button" data-private="Community Participation">Join when ready</button></article>
       </div>
     </section>
 
