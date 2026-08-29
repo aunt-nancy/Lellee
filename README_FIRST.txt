@@ -1,22 +1,16 @@
-LELLEE — STABLE ACCOUNT CREATION + SIGN-IN FIX
-Date: 2026-08-29
+LELLEE — EXISTING EMAIL + PASSWORD RECOVERY FIX
 
-WHY THIS REPAIR EXISTS
-The old /app?auth=signin route loaded the entire large Lellee application behind the sign-in card. Feature scripts, account checks, and late page initialization could keep changing the page after it appeared, causing visible jumping or delayed loading.
+Upload/replace only these GitHub-root files:
+1. auth.html
+2. service-worker.js
+3. reset-lellee-cache.html
 
-WHAT THIS PACKAGE DOES
-- Adds a lightweight standalone auth.html page.
-- Sends /app?auth=signin and /app?auth=signup to auth.html before the heavy app initializes.
-- Sends the three approved landing-page Log In/My Lellee links directly to auth.html.
-- Keeps account confirmation, sign-in, return-program context, legal acknowledgments, and Browse Lellee first.
-- Keeps the approved landing design, calm Journey modal, Recovery preview, Recovery menu/logo, and mobile navigation unchanged.
+What this corrects:
+- Detects Supabase's hidden/fake signup response for an email that already has an account.
+- Stops falsely saying a duplicate account was newly created.
+- Adds Forgot password and a complete password-reset flow.
+- Adds Resend confirmation email for genuinely unconfirmed new accounts.
+- Converts "Invalid login credentials" into a useful account-recovery instruction.
+- Preserves the stable standalone account-page layout and all approved Lellee designs.
 
-UPLOAD THESE FILES TO THE GITHUB ROOT
-1. auth.html (NEW)
-2. index.html
-3. landing.html
-4. service-worker.js
-5. reset-lellee-cache.html
-
-NO SQL.
-Do not replace recovery-preview.html, program-preview.html, or any locked Recovery design files.
+No SQL. Do not replace landing.html, index.html, or Recovery files.

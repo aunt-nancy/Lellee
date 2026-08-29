@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#2f176e">
-<meta name="description" content="Sign in to Lellee or create your Lellee account.">
-<title>Lellee — Sign in or create account</title>
+<meta name="description" content="Sign in to Lellee, create an account, or recover account access.">
+<title>Lellee — Account access</title>
 <link rel="preload" as="image" href="/lellee-approved-logo-final.jpg?v=20260814-1">
 <style>
 :root{
@@ -23,67 +23,20 @@ body{
     linear-gradient(145deg,#24105f 0%,#5522c0 55%,#28116d 100%);
   overflow-x:hidden;
 }
-body::before{
-  content:"";position:fixed;inset:0;pointer-events:none;
-  background:linear-gradient(120deg,rgba(255,255,255,.05),transparent 35%,rgba(255,255,255,.04));
-}
-button,input{font:inherit}
-a{color:inherit}
-.auth-shell{
-  position:relative;z-index:1;min-height:100svh;display:flex;justify-content:center;align-items:flex-start;
-  padding:clamp(24px,7vh,68px) 16px 32px;
-}
-.auth-card{
-  width:min(440px,100%);background:rgba(255,255,255,.985);border:1px solid rgba(255,255,255,.72);
-  border-radius:24px;padding:24px 25px 22px;box-shadow:0 28px 90px rgba(19,7,55,.34);
-  contain:layout paint;overflow:hidden;
-}
-.logo-frame{height:74px;display:grid;place-items:center;margin:0 0 5px}
-.logo-frame img{display:block;width:180px;height:74px;object-fit:contain}
-h1{font-size:1.55rem;line-height:1.15;margin:3px 0 6px;letter-spacing:-.025em}
-.intro{min-height:42px;margin:0 0 12px;color:var(--muted);font-size:.81rem;line-height:1.5}
-.field{display:grid;gap:6px;margin:12px 0}
-.field label{font-size:.76rem;font-weight:800;color:#453858}
-.field input{
-  width:100%;height:46px;border:1px solid var(--line);border-radius:11px;background:#fff;padding:0 12px;color:var(--ink);
-  outline:none;box-shadow:0 1px 0 rgba(77,44,152,.02);
-}
-.field input:focus{border-color:#a58ac7;box-shadow:0 0 0 3px rgba(103,64,174,.12)}
-.password-wrap{position:relative}.password-wrap input{padding-right:70px}
-.show-password{position:absolute;right:8px;top:50%;transform:translateY(-50%);border:0;background:transparent;color:#6c5688;font-size:.7rem;font-weight:800;padding:7px;cursor:pointer}
-.legal{
-  display:grid;gap:9px;margin:13px 0 4px;padding:13px;border:1px solid #e8dcec;border-radius:12px;
-  background:linear-gradient(145deg,#fbf8fd,#fff8fb);font-size:.7rem;line-height:1.42;color:#61576a;
-}
-.legal.hidden{display:none}
-.legal label{display:grid;grid-template-columns:18px 1fr;gap:8px;align-items:start}
-.legal input{width:16px;height:16px;margin:1px 0 0}
-.legal a{color:var(--purple-dark);font-weight:700}
-.actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:14px}
-.primary,.secondary,.browse{
-  min-height:43px;border-radius:10px;font-weight:820;cursor:pointer;transition:filter .15s ease,transform .15s ease;
-}
-.primary{border:0;background:linear-gradient(135deg,var(--purple-dark),#8552cf);color:#fff;box-shadow:0 8px 18px rgba(92,49,158,.2)}
-.secondary{border:1px solid #d8cce4;background:#fff;color:#5b4672}
-.primary:hover,.secondary:hover,.browse:hover{filter:brightness(.985)}
-.primary:active,.secondary:active,.browse:active{transform:translateY(1px)}
-.primary:disabled,.secondary:disabled{opacity:.62;cursor:wait}
-.status{
-  min-height:42px;margin:10px 0 0;padding:0;font-size:.74rem;line-height:1.45;color:var(--muted);
-  display:flex;align-items:center;
-}
-.status.error,.status.success{padding:9px 11px;border-radius:10px;align-items:flex-start}
-.status.error{color:var(--error);background:#fff1f4;border:1px solid #efc8d1}
-.status.success{color:var(--success);background:#eef8f2;border:1px solid #cfe6d8}
-.browse{width:100%;margin-top:7px;border:1px solid #d9d0e2;background:#faf8fc;color:#59466c}
-.browse-note{text-align:center;color:#81768a;font-size:.66rem;line-height:1.45;margin:8px 4px 0}
-.footer-links{display:flex;justify-content:center;flex-wrap:wrap;gap:12px;margin-top:13px;font-size:.62rem;color:#746a7e}
-.footer-links a{text-decoration:none}.footer-links a:hover{text-decoration:underline}
-.service-state{display:flex;align-items:center;justify-content:center;gap:6px;margin:8px 0 0;color:#83778e;font-size:.61rem;min-height:16px}
-.dot{width:7px;height:7px;border-radius:50%;background:#baadc6}.service-state.ready .dot{background:#48a16d}.service-state.error .dot{background:#c5566d}
-@media(max-width:520px){
-  .auth-shell{padding:18px 12px 24px}.auth-card{padding:20px 18px;border-radius:20px}.actions{grid-template-columns:1fr}.logo-frame{height:66px}.logo-frame img{height:66px;width:170px}
-}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(120deg,rgba(255,255,255,.05),transparent 35%,rgba(255,255,255,.04))}
+button,input{font:inherit}a{color:inherit}.hidden{display:none!important}
+.auth-shell{position:relative;z-index:1;min-height:100svh;display:flex;justify-content:center;align-items:flex-start;padding:clamp(24px,7vh,68px) 16px 32px}
+.auth-card{width:min(440px,100%);background:rgba(255,255,255,.985);border:1px solid rgba(255,255,255,.72);border-radius:24px;padding:24px 25px 22px;box-shadow:0 28px 90px rgba(19,7,55,.34);contain:layout paint;overflow:hidden}
+.logo-frame{height:74px;display:grid;place-items:center;margin:0 0 5px}.logo-frame img{display:block;width:180px;height:74px;object-fit:contain}
+h1{font-size:1.55rem;line-height:1.15;margin:3px 0 6px;letter-spacing:-.025em}.intro{min-height:42px;margin:0 0 12px;color:var(--muted);font-size:.81rem;line-height:1.5}
+.field{display:grid;gap:6px;margin:12px 0}.field label{font-size:.76rem;font-weight:800;color:#453858}.field input{width:100%;height:46px;border:1px solid var(--line);border-radius:11px;background:#fff;padding:0 12px;color:var(--ink);outline:none;box-shadow:0 1px 0 rgba(77,44,152,.02)}
+.field input:focus{border-color:#a58ac7;box-shadow:0 0 0 3px rgba(103,64,174,.12)}.password-wrap{position:relative}.password-wrap input{padding-right:70px}.show-password{position:absolute;right:8px;top:50%;transform:translateY(-50%);border:0;background:transparent;color:#6c5688;font-size:.7rem;font-weight:800;padding:7px;cursor:pointer}
+.utility-row{display:flex;justify-content:flex-end;min-height:26px;margin:-3px 1px 2px}.text-action{border:0;background:transparent;color:var(--purple-dark);font-size:.7rem;font-weight:800;padding:5px 0;cursor:pointer}.text-action:hover{text-decoration:underline}
+.legal{display:grid;gap:9px;margin:13px 0 4px;padding:13px;border:1px solid #e8dcec;border-radius:12px;background:linear-gradient(145deg,#fbf8fd,#fff8fb);font-size:.7rem;line-height:1.42;color:#61576a}.legal label{display:grid;grid-template-columns:18px 1fr;gap:8px;align-items:start}.legal input{width:16px;height:16px;margin:1px 0 0}.legal a{color:var(--purple-dark);font-weight:700}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:14px}.primary,.secondary,.browse,.resend{min-height:43px;border-radius:10px;font-weight:820;cursor:pointer;transition:filter .15s ease,transform .15s ease}.primary{border:0;background:linear-gradient(135deg,var(--purple-dark),#8552cf);color:#fff;box-shadow:0 8px 18px rgba(92,49,158,.2)}.secondary{border:1px solid #d8cce4;background:#fff;color:#5b4672}.primary:hover,.secondary:hover,.browse:hover,.resend:hover{filter:brightness(.985)}.primary:active,.secondary:active,.browse:active,.resend:active{transform:translateY(1px)}.primary:disabled,.secondary:disabled,.resend:disabled{opacity:.62;cursor:wait}
+.status{min-height:42px;margin:10px 0 0;padding:0;font-size:.74rem;line-height:1.45;color:var(--muted);display:flex;align-items:center}.status.error,.status.success{padding:9px 11px;border-radius:10px;align-items:flex-start}.status.error{color:var(--error);background:#fff1f4;border:1px solid #efc8d1}.status.success{color:var(--success);background:#eef8f2;border:1px solid #cfe6d8}
+.resend{width:100%;margin-top:7px;border:1px solid #cfc0df;background:#f7f1fb;color:#563e71}.browse{width:100%;margin-top:7px;border:1px solid #d9d0e2;background:#faf8fc;color:#59466c}.browse-note{text-align:center;color:#81768a;font-size:.66rem;line-height:1.45;margin:8px 4px 0}.footer-links{display:flex;justify-content:center;flex-wrap:wrap;gap:12px;margin-top:13px;font-size:.62rem;color:#746a7e}.footer-links a{text-decoration:none}.footer-links a:hover{text-decoration:underline}.service-state{display:flex;align-items:center;justify-content:center;gap:6px;margin:8px 0 0;color:#83778e;font-size:.61rem;min-height:16px}.dot{width:7px;height:7px;border-radius:50%;background:#baadc6}.service-state.ready .dot{background:#48a16d}.service-state.error .dot{background:#c5566d}
+@media(max-width:520px){.auth-shell{padding:18px 12px 24px}.auth-card{padding:20px 18px;border-radius:20px}.actions{grid-template-columns:1fr}.logo-frame{height:66px}.logo-frame img{height:66px;width:170px}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
 </style>
 </head>
@@ -94,8 +47,10 @@ h1{font-size:1.55rem;line-height:1.15;margin:3px 0 6px;letter-spacing:-.025em}
     <h1 id="authTitle">Sign in to Lellee</h1>
     <p class="intro" id="authIntro">Sign in to save your progress, journal, preferences, and personal plan.</p>
     <form id="authForm" novalidate>
-      <div class="field"><label for="email">Email</label><input id="email" type="email" autocomplete="email" inputmode="email" required></div>
-      <div class="field"><label for="password">Password</label><div class="password-wrap"><input id="password" type="password" minlength="8" autocomplete="current-password" required><button class="show-password" id="showPassword" type="button" aria-pressed="false">Show</button></div></div>
+      <div class="field" id="emailField"><label for="email">Email</label><input id="email" type="email" autocomplete="email" inputmode="email" required></div>
+      <div class="field" id="passwordField"><label for="password" id="passwordLabel">Password</label><div class="password-wrap"><input id="password" type="password" minlength="8" autocomplete="current-password" required><button class="show-password" data-password-target="password" type="button" aria-pressed="false">Show</button></div></div>
+      <div class="field hidden" id="confirmField"><label for="confirmPassword">Confirm new password</label><div class="password-wrap"><input id="confirmPassword" type="password" minlength="8" autocomplete="new-password"><button class="show-password" data-password-target="confirmPassword" type="button" aria-pressed="false">Show</button></div></div>
+      <div class="utility-row" id="signinUtilities"><button class="text-action" id="forgotButton" type="button">Forgot password?</button></div>
       <div class="legal hidden" id="legalNotice">
         <label><input id="adult" type="checkbox"><span>I confirm I am at least 18 years old.</span></label>
         <label><input id="agreements" type="checkbox"><span>I reviewed the <a href="/terms.html" target="_blank" rel="noopener">Terms</a>, <a href="/privacy.html" target="_blank" rel="noopener">Privacy Policy</a>, and <a href="/consumer-health-privacy.html" target="_blank" rel="noopener">Consumer Health Data Notice</a>.</span></label>
@@ -103,6 +58,7 @@ h1{font-size:1.55rem;line-height:1.15;margin:3px 0 6px;letter-spacing:-.025em}
       </div>
       <div class="actions"><button class="primary" id="submitButton" type="submit">Sign in</button><button class="secondary" id="modeButton" type="button">Create account</button></div>
       <div class="status" id="status" role="status" aria-live="polite"></div>
+      <button class="resend hidden" id="resendButton" type="button">Resend confirmation email</button>
     </form>
     <button class="browse" id="browseButton" type="button">Browse Lellee first</button>
     <p class="browse-note">No account is required to explore support paths, tools, resources, coaching information, or the Lellee experience.</p>
@@ -116,112 +72,120 @@ h1{font-size:1.55rem;line-height:1.15;margin:3px 0 6px;letter-spacing:-.025em}
   const SUPABASE_URL='https://hkrrxscyhtxmbvxevfkw.supabase.co';
   const SUPABASE_KEY='sb_publishable_QPwVWU-qNnc3GJb_FoFnlQ_kEHa3dtU';
   const params=new URLSearchParams(location.search);
-  let mode=(params.get('mode')||'signin').toLowerCase()==='signup'?'signup':'signin';
+  const requested=(params.get('mode')||'signin').toLowerCase();
+  const recoveryLink=requested==='reset'||params.get('type')==='recovery'||location.hash.includes('type=recovery');
+  let mode=['signup','forgot','reset'].includes(requested)?requested:'signin';
   const returnTarget=safeReturn(params.get('return')||'/app');
   const program=(params.get('program')||'').toLowerCase();
-  const title=document.getElementById('authTitle');
-  const intro=document.getElementById('authIntro');
-  const form=document.getElementById('authForm');
-  const email=document.getElementById('email');
-  const password=document.getElementById('password');
-  const legal=document.getElementById('legalNotice');
-  const submit=document.getElementById('submitButton');
-  const modeButton=document.getElementById('modeButton');
-  const status=document.getElementById('status');
-  const service=document.getElementById('serviceState');
-  let client=null;
-  let loading=false;
+  const title=$('authTitle'),intro=$('authIntro'),form=$('authForm'),email=$('email'),password=$('password'),confirmPassword=$('confirmPassword');
+  const emailField=$('emailField'),passwordField=$('passwordField'),confirmField=$('confirmField'),signinUtilities=$('signinUtilities');
+  const legal=$('legalNotice'),submit=$('submitButton'),modeButton=$('modeButton'),status=$('status'),service=$('serviceState'),resend=$('resendButton');
+  let client=null,loading=false,recoverySessionReady=false;
 
-  function safeReturn(value){
-    try{const u=new URL(value,location.origin);return u.origin===location.origin&&u.pathname.startsWith('/')?u.pathname+u.search+u.hash:'/app'}catch(_){return '/app'}
+  function $(id){return document.getElementById(id)}
+  function safeReturn(value){try{const u=new URL(value,location.origin);return u.origin===location.origin&&u.pathname.startsWith('/')?u.pathname+u.search+u.hash:'/app'}catch(_){return '/app'}}
+  function browseTarget(){if(program==='recovery')return '/recovery-preview.html';if(program&&program!=='recovery')return '/program-preview.html?program='+encodeURIComponent(program);return '/'}
+  function setStatus(message,type=''){status.textContent=message||'';status.className='status'+(type?' '+type:'')}
+  function setResend(show){resend.classList.toggle('hidden',!show)}
+  function modeCopy(next){
+    if(next==='signup')return ['Create your Lellee account','Create an account when you are ready to save and personalize Lellee.','Create account','Back to sign in'];
+    if(next==='forgot')return ['Reset your password','Enter your email and Lellee will send a secure password-reset link.','Send reset link','Back to sign in'];
+    if(next==='reset')return ['Choose a new password','Enter and confirm the new password you want to use for Lellee.','Save new password','Cancel'];
+    return ['Sign in to Lellee','Sign in to save your progress, journal, preferences, and personal plan.','Sign in','Create account'];
   }
-  function browseTarget(){
-    if(program==='recovery')return '/recovery-preview.html';
-    if(program&&program!=='recovery')return '/program-preview.html?program='+encodeURIComponent(program);
-    return '/';
+  function setMode(nextMode,message='',keepResend=false){
+    mode=['signup','forgot','reset'].includes(nextMode)?nextMode:'signin';
+    const [heading,copy,submitText,alternateText]=modeCopy(mode);
+    title.textContent=heading;intro.textContent=copy;submit.textContent=submitText;modeButton.textContent=alternateText;
+    emailField.classList.toggle('hidden',mode==='reset');
+    passwordField.classList.toggle('hidden',mode==='forgot');
+    confirmField.classList.toggle('hidden',mode!=='reset');
+    signinUtilities.classList.toggle('hidden',mode!=='signin');
+    legal.classList.toggle('hidden',mode!=='signup');
+    password.autocomplete=mode==='signin'?'current-password':'new-password';
+    password.required=mode!=='forgot';confirmPassword.required=mode==='reset';
+    if(!keepResend)setResend(false);setStatus(message);
+    try{const nextUrl=new URL(location.href);nextUrl.searchParams.set('mode',mode);history.replaceState(null,'',nextUrl.pathname+nextUrl.search+nextUrl.hash)}catch(_){}
   }
-  function setStatus(message,type=''){
-    status.textContent=message||'';status.className='status'+(type?' '+type:'');
-  }
-  function setMode(nextMode,message=''){
-    mode=nextMode==='signup'?'signup':'signin';
-    const signup=mode==='signup';
-    title.textContent=signup?'Create your Lellee account':'Sign in to Lellee';
-    intro.textContent=signup?'Create an account when you are ready to save and personalize Lellee.':'Sign in to save your progress, journal, preferences, and personal plan.';
-    submit.textContent=signup?'Create account':'Sign in';
-    modeButton.textContent=signup?'Back to sign in':'Create account';
-    password.autocomplete=signup?'new-password':'current-password';
-    legal.classList.toggle('hidden',!signup);
-    setStatus(message);
-    try{const nextUrl=new URL(location.href);nextUrl.searchParams.set('mode',mode);history.replaceState(null,'',nextUrl.pathname+nextUrl.search)}catch(_){}
-  }
-  function setBusy(busy){
-    loading=busy;submit.disabled=busy;modeButton.disabled=busy;
-    if(busy)submit.textContent=mode==='signup'?'Creating account…':'Signing in…';
-    else submit.textContent=mode==='signup'?'Create account':'Sign in';
-  }
+  function setBusy(busy){loading=busy;submit.disabled=busy;modeButton.disabled=busy;resend.disabled=busy;if(busy){submit.textContent=mode==='signup'?'Creating account…':mode==='forgot'?'Sending link…':mode==='reset'?'Saving password…':'Signing in…'}else submit.textContent=modeCopy(mode)[2]}
   function validate(){
-    if(!email.validity.valid){setStatus('Enter a valid email address.','error');email.focus();return false}
-    if(password.value.length<8){setStatus('Use a password with at least 8 characters.','error');password.focus();return false}
-    if(mode==='signup'){
-      const missing=['adult','agreements','safety'].some(id=>!document.getElementById(id).checked);
-      if(missing){setStatus('Please check all three account acknowledgments.','error');return false}
-    }
+    if(mode!=='reset'&&!email.validity.valid){setStatus('Enter a valid email address.','error');email.focus();return false}
+    if(mode!=='forgot'&&password.value.length<8){setStatus('Use a password with at least 8 characters.','error');password.focus();return false}
+    if(mode==='reset'&&password.value!==confirmPassword.value){setStatus('The two new passwords do not match.','error');confirmPassword.focus();return false}
+    if(mode==='signup'&&['adult','agreements','safety'].some(id=>!$(id).checked)){setStatus('Please check all three account acknowledgments.','error');return false}
     return true;
   }
-  function confirmationUrl(){
-    const u=new URL('/auth.html',location.origin);u.searchParams.set('confirmed','1');u.searchParams.set('return',returnTarget);if(program)u.searchParams.set('program',program);return u.href;
+  function confirmationUrl(){const u=new URL('/auth.html',location.origin);u.searchParams.set('confirmed','1');u.searchParams.set('return',returnTarget);if(program)u.searchParams.set('program',program);return u.href}
+  function recoveryUrl(){const u=new URL('/auth.html',location.origin);u.searchParams.set('mode','reset');u.searchParams.set('return',returnTarget);if(program)u.searchParams.set('program',program);return u.href}
+  function friendlyError(error,context=''){
+    const raw=(error?.message||'').trim(),msg=raw.toLowerCase();
+    if(msg.includes('invalid login credentials'))return 'This email may already have a Lellee account, but that password does not match. Use “Forgot password?” below the password field.';
+    if(msg.includes('email not confirmed'))return 'This account still needs email confirmation. Use “Resend confirmation email.”';
+    if(msg.includes('rate limit'))return 'Email sending is temporarily limited. Wait a few minutes, then try again.';
+    if(msg.includes('user already registered'))return 'This email already has a Lellee account. Sign in or use “Forgot password?”';
+    return raw||'The account request did not complete. Please try again.';
   }
-  function loadSupabase(){
-    return new Promise((resolve,reject)=>{
-      if(window.supabase?.createClient){resolve(window.supabase);return}
-      const script=document.createElement('script');
-      script.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';script.async=true;
-      script.onload=()=>window.supabase?.createClient?resolve(window.supabase):reject(new Error('Secure sign-in did not initialize.'));
-      script.onerror=()=>reject(new Error('The secure sign-in service could not load.'));
-      document.head.appendChild(script);
-      setTimeout(()=>reject(new Error('The secure sign-in service is taking too long to load.')),15000);
-    });
-  }
+  function loadSupabase(){return new Promise((resolve,reject)=>{if(window.supabase?.createClient){resolve(window.supabase);return}const script=document.createElement('script');script.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';script.async=true;script.onload=()=>window.supabase?.createClient?resolve(window.supabase):reject(new Error('Secure sign-in did not initialize.'));script.onerror=()=>reject(new Error('The secure sign-in service could not load.'));document.head.appendChild(script);setTimeout(()=>reject(new Error('The secure sign-in service is taking too long to load.')),15000)})}
   async function prepare(){
     try{
-      const lib=await loadSupabase();
-      client=lib.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+      const lib=await loadSupabase();client=lib.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
       service.className='service-state ready';service.innerHTML='<span class="dot"></span><span>Secure sign-in ready</span>';
+      client.auth.onAuthStateChange((event,session)=>{
+        if(event==='PASSWORD_RECOVERY'){recoverySessionReady=Boolean(session);setMode('reset','Secure reset link accepted. Choose your new password.');return}
+        if(event==='SIGNED_IN'&&session&&!loading&&!recoveryLink&&mode!=='reset')location.replace(returnTarget);
+      });
       const result=await client.auth.getSession();
+      if(recoveryLink||mode==='reset'){
+        if(result.data?.session){recoverySessionReady=true;setMode('reset','Choose a new password for this account.');}
+        else{setMode('reset','Open this page from the secure reset link sent to your email.');setStatus('The reset link has not been accepted yet. Request a new reset link if needed.','error')}
+        return;
+      }
       if(result.data?.session?.user){location.replace(returnTarget);return}
       if(params.get('confirmed')==='1')setStatus('Email confirmed. Sign in to continue.','success');
-    }catch(error){
-      service.className='service-state error';service.innerHTML='<span class="dot"></span><span>Sign-in service unavailable</span>';
-      setStatus(error.message+' Refresh the page and try again.','error');
-    }
+    }catch(error){service.className='service-state error';service.innerHTML='<span class="dot"></span><span>Sign-in service unavailable</span>';setStatus(error.message+' Refresh the page and try again.','error')}
   }
 
-  modeButton.addEventListener('click',()=>{if(!loading)setMode(mode==='signin'?'signup':'signin')});
-  document.getElementById('browseButton').addEventListener('click',()=>location.assign(browseTarget()));
-  document.getElementById('showPassword').addEventListener('click',event=>{
-    const show=password.type==='password';password.type=show?'text':'password';event.currentTarget.textContent=show?'Hide':'Show';event.currentTarget.setAttribute('aria-pressed',String(show));
+  modeButton.addEventListener('click',()=>{if(loading)return;if(mode==='signin')setMode('signup');else setMode('signin')});
+  $('forgotButton').addEventListener('click',()=>{if(!loading)setMode('forgot')});
+  $('browseButton').addEventListener('click',()=>location.assign(browseTarget()));
+  document.querySelectorAll('.show-password').forEach(button=>button.addEventListener('click',event=>{const target=$(event.currentTarget.dataset.passwordTarget);const show=target.type==='password';target.type=show?'text':'password';event.currentTarget.textContent=show?'Hide':'Show';event.currentTarget.setAttribute('aria-pressed',String(show))}));
+  resend.addEventListener('click',async()=>{
+    if(loading)return;if(!email.validity.valid){setStatus('Enter a valid email address first.','error');email.focus();return}if(!client){setStatus('Secure sign-in is still loading. Please wait a moment.','error');return}
+    setBusy(true);try{const {error}=await client.auth.resend({type:'signup',email:email.value.trim(),options:{emailRedirectTo:confirmationUrl()}});if(error)throw error;setStatus('Confirmation email requested. Check Inbox and Spam.','success')}catch(error){setStatus(friendlyError(error,'resend'),'error')}finally{setBusy(false);setResend(true)}
   });
   form.addEventListener('submit',async event=>{
-    event.preventDefault();if(loading||!validate())return;
-    if(!client){setStatus('Secure sign-in is still loading. Please wait a moment.','error');return}
-    setBusy(true);setStatus(mode==='signup'?'Creating your account…':'Signing you in…');
+    event.preventDefault();if(loading||!validate())return;if(!client){setStatus('Secure sign-in is still loading. Please wait a moment.','error');return}
+    setBusy(true);setStatus(mode==='signup'?'Creating your account…':mode==='forgot'?'Requesting a password-reset link…':mode==='reset'?'Saving your new password…':'Signing you in…');
     try{
-      const result=mode==='signin'
-        ? await client.auth.signInWithPassword({email:email.value.trim(),password:password.value})
-        : await client.auth.signUp({email:email.value.trim(),password:password.value,options:{emailRedirectTo:confirmationUrl()}});
-      if(result.error)throw result.error;
-      if(mode==='signup'&&!result.data?.session){
-        setMode('signin','Account created. Check your email to confirm the account, then sign in.');
-        setStatus('Account created. Check your email to confirm the account, then sign in.','success');
-        password.value='';
-      }else location.replace(returnTarget);
-    }catch(error){setStatus(error?.message||'The account request did not complete. Please try again.','error')}
+      const e=email.value.trim(),p=password.value;
+      if(mode==='forgot'){
+        const {error}=await client.auth.resetPasswordForEmail(e,{redirectTo:recoveryUrl()});if(error)throw error;
+        setStatus('Password-reset email requested. Check Inbox and Spam. If no account exists for this email, no message will be sent.','success');
+      }else if(mode==='reset'){
+        if(!recoverySessionReady){const session=await client.auth.getSession();recoverySessionReady=Boolean(session.data?.session)}
+        if(!recoverySessionReady)throw new Error('Open the secure password-reset link from your email before choosing a new password.');
+        const {error}=await client.auth.updateUser({password:p});if(error)throw error;setStatus('Password updated. Opening Lellee…','success');setTimeout(()=>location.replace(returnTarget),350);
+      }else if(mode==='signin'){
+        const result=await client.auth.signInWithPassword({email:e,password:p});if(result.error)throw result.error;location.replace(returnTarget);
+      }else{
+        const result=await client.auth.signUp({email:e,password:p,options:{emailRedirectTo:confirmationUrl(),data:{lellee_adult_confirmed:true,lellee_terms_privacy_reviewed:true,lellee_safety_acknowledged:true,lellee_account_acknowledged_at:new Date().toISOString()}}});
+        if(result.error)throw result.error;
+        const identities=result.data?.user?.identities;
+        if(Array.isArray(identities)&&identities.length===0){
+          const login=await client.auth.signInWithPassword({email:e,password:p});
+          if(!login.error&&login.data?.session){location.replace(returnTarget);return}
+          setMode('signin',friendlyError(login.error||new Error('Invalid login credentials')));
+          if((login.error?.message||'').toLowerCase().includes('email not confirmed'))setResend(true);
+          return;
+        }
+        if(result.data?.session){location.replace(returnTarget);return}
+        password.value='';setMode('signin','Account created. Check your email to confirm it, then sign in.',true);setStatus('Account created. Check Inbox and Spam for the confirmation email.','success');setResend(true);
+      }
+    }catch(error){const message=friendlyError(error,mode);setStatus(message,'error');if(message.toLowerCase().includes('confirmation'))setResend(true)}
     finally{setBusy(false)}
   });
 
-  setMode(mode);
-  prepare();
+  setMode(mode);prepare();
 })();
 </script>
 </body>

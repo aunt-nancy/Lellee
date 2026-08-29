@@ -1,4 +1,4 @@
-const LELLEE_SW_VERSION='lellee-stable-auth-page-2026-08-29-v1';
+const LELLEE_SW_VERSION='lellee-account-recovery-2026-08-29-v2';
 self.addEventListener('install',event=>self.skipWaiting());
 self.addEventListener('activate',event=>event.waitUntil((async()=>{
   const names=await caches.keys();
