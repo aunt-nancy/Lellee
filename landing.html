@@ -1,7 +1,6 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <!-- LELLEE_CALM_JOURNEY_INLINE_FORMAT_REPAIR 2026-08-29 -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Lellee | Your journey. Your support. Your way.</title>
@@ -216,71 +215,6 @@ textarea{width:100%;border:1px solid #ddd4e5;border-radius:12px;padding:13px;col
   .more-topic-list{justify-content:flex-start}
 }
 
-
-
-/* =========================================================
-   LELLEE CALM JOURNEY SELECTOR — MODAL ONLY — 2026-08-29
-   Preserves the approved landing header, 260px x 72px logo frame,
-   hero, navigation, routing, and all non-modal page formatting.
-   ========================================================= */
-.journey-dialog{
-  background:linear-gradient(145deg,#fbf8fd 0%,#fff9fb 55%,#f6f1fb 100%);
-}
-.journey-dialog::backdrop{background:rgba(48,34,67,.38);backdrop-filter:blur(7px)}
-.journey-dialog .dialog-shell{padding:31px 34px 27px}
-.journey-dialog .dialog-close{background:rgba(255,255,255,.88);border-color:#ded3e7;box-shadow:none}
-.journey-dialog .survey-progress{height:4px;background:#eee7f2;margin-bottom:21px}
-.journey-dialog .survey-progress span{background:linear-gradient(90deg,#7451b7,#d985ae)}
-.journey-dialog .survey-step[data-step="needs"] h2{
-  margin:4px auto 8px;text-align:center;max-width:620px;
-  font-family:Georgia,"Times New Roman",serif;font-weight:500;
-  font-size:clamp(1.85rem,3.3vw,2.55rem);line-height:1.08;color:#30215f
-}
-.journey-dialog .survey-step[data-step="needs"]>.survey-kicker,
-.journey-dialog .survey-step[data-step="needs"]>p{text-align:center;display:block}
-.journey-dialog .survey-step[data-step="needs"]>p{max-width:620px;margin:0 auto 9px;color:#756b7c}
-.browse-reassurance{font-size:.74rem!important;font-weight:750;color:#6f50a1!important;margin-bottom:16px!important}
-.calm-topic-choices{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-.calm-topic-choices button.calm-topic-card{
-  min-height:96px;padding:12px 13px;display:grid;grid-template-columns:40px 1fr 22px;
-  align-items:center;gap:11px;border-radius:14px;border:1px solid rgba(95,67,135,.13);
-  box-shadow:none!important;text-align:left;transition:transform .14s ease,border-color .14s ease
-}
-.calm-topic-choices button.calm-topic-card:hover{transform:translateY(-1px);border-color:rgba(106,72,151,.3)}
-.calm-topic-card[hidden]{display:none!important}
-.calm-topic-icon{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font-size:1.25rem;background:rgba(255,255,255,.67)}
-.calm-topic-copy{display:block;min-width:0}
-.calm-topic-copy b{display:block;font-size:.86rem;color:#302451;margin-bottom:3px}
-.calm-topic-copy small{display:block;font-size:.64rem;line-height:1.38;color:#655c6e;font-weight:500}
-.calm-selected-mark{opacity:0;color:#68469e;font-weight:900;font-size:1rem;text-align:center}
-.calm-topic-choices button.calm-topic-card.selected{border-color:#7958ad!important;box-shadow:inset 0 0 0 1px #7958ad!important}
-.calm-topic-card.selected .calm-selected-mark{opacity:1}
-.calm-lavender{background:linear-gradient(145deg,#f1eafb,#fbf8fd)!important}.calm-lavender .calm-topic-icon{color:#6c49ad}
-.calm-blush{background:linear-gradient(145deg,#fcecf2,#fff8fa)!important}.calm-blush .calm-topic-icon{color:#c75a87}
-.calm-blue{background:linear-gradient(145deg,#eaf2fc,#f8fbff)!important}.calm-blue .calm-topic-icon{color:#4b73b6}
-.calm-peach{background:linear-gradient(145deg,#fff0e5,#fff9f4)!important}.calm-peach .calm-topic-icon{color:#c97a45}
-.calm-gold{background:linear-gradient(145deg,#fff5df,#fffbf2)!important}.calm-gold .calm-topic-icon{color:#b88530}
-.calm-lilac{background:linear-gradient(145deg,#efeafa,#faf8fd)!important}.calm-lilac .calm-topic-icon{color:#7a5bac}
-.calm-sage{background:linear-gradient(145deg,#eaf4eb,#f8fbf7)!important}.calm-sage .calm-topic-icon{color:#568e60}
-.calm-teal{background:linear-gradient(145deg,#e7f5f3,#f8fcfb)!important}.calm-teal .calm-topic-icon{color:#438f88}
-.calm-unsure{background:linear-gradient(145deg,#f5effa,#fcfafd)!important}.calm-unsure .calm-topic-icon{color:#7654a7}
-.more-support-paths{display:block;margin:13px auto 0;border:0;background:transparent;color:#5e4096;font-size:.73rem;font-weight:850;padding:7px 11px}
-.survey-browse-note{font-size:.67rem!important;color:#817687!important;margin:8px auto 0!important}
-.calm-actions{justify-content:center!important;gap:11px;margin-top:15px!important}
-.calm-actions .primary-button,.calm-actions .secondary-button{min-width:180px}
-@media(max-width:560px){
-  .journey-dialog{width:calc(100% - 18px);max-height:94vh;border-radius:21px}
-  .journey-dialog .dialog-shell{padding:25px 15px calc(22px + env(safe-area-inset-bottom))}
-  .journey-dialog .survey-progress{margin-right:43px;margin-bottom:16px}
-  .journey-dialog .survey-step[data-step="needs"] h2{font-size:1.55rem}
-  .calm-topic-choices{grid-template-columns:1fr;gap:7px}
-  .calm-topic-choices button.calm-topic-card{min-height:72px;padding:10px 11px;grid-template-columns:34px 1fr 20px;gap:9px;border-radius:12px}
-  .calm-topic-icon{width:33px;height:33px;font-size:1rem}
-  .calm-topic-copy b{font-size:.78rem}.calm-topic-copy small{font-size:.6rem}
-  .calm-actions{display:grid!important;grid-template-columns:1fr 1fr;gap:8px}
-  .calm-actions .primary-button,.calm-actions .secondary-button{min-width:0;width:100%;padding:11px 8px}
-}
-
   </style>
   <!-- LELLEE LANDING LOGO SOURCE LOCK — 2026-08-28
        IMPORTANT: Do not add sizing transforms here.
@@ -307,7 +241,7 @@ textarea{width:100%;border:1px solid #ddd4e5;border-radius:12px;padding:13px;col
         <a href="#tools">Tools</a>
         <a href="#coaching">Coaching</a>
         <a href="/resources">Resources</a>
-        <a class="login-link" href="/auth.html?mode=signin&amp;return=%2Fapp">Log In</a>
+        <a class="login-link" href="/app?auth=signin">Log In</a>
         <button class="nav-cta" data-start-survey>Start Your Journey</button>
       </nav>
     </div>
@@ -426,7 +360,7 @@ textarea{width:100%;border:1px solid #ddd4e5;border-radius:12px;padding:13px;col
         <div class="quick-list">
           <a href="/resources"><span>⌂</span>Find Resources</a>
           <button data-start-survey><span>✦</span>Start My Journey</button>
-          <a href="/auth.html?mode=signin&amp;return=%2Fapp"><span>▣</span>My Lellee</a>
+          <a href="/app?auth=signin"><span>▣</span>My Lellee</a>
           <a href="#coaching"><span>♡</span>Explore Coaching</a>
         </div>
       </article>
@@ -495,7 +429,7 @@ textarea{width:100%;border:1px solid #ddd4e5;border-radius:12px;padding:13px;col
     <div class="footer-inner">
       <img src="/lellee-approved-logo-final.jpg?v=20260814-1" alt="Lellee">
       <div><b>Explore</b><a href="#support-paths">Support Paths</a><a href="#how-it-works">How It Works</a><a href="#tools">Tools</a></div>
-      <div><b>Support</b><a href="/resources">Resources</a><a href="/auth.html?mode=signin&amp;return=%2Fapp">Log In</a><a href="#coaching">Coaching</a></div>
+      <div><b>Support</b><a href="/resources">Resources</a><a href="/app?auth=signin">Log In</a><a href="#coaching">Coaching</a></div>
       <div><b>Legal</b><a href="/privacy.html">Privacy</a><a href="/terms.html">Terms</a><a href="/consumer-health-privacy.html">Consumer Health Privacy</a></div>
     </div>
     <div class="copyright">© 2026 Lellee. All rights reserved.</div>
@@ -515,17 +449,11 @@ textarea{width:100%;border:1px solid #ddd4e5;border-radius:12px;padding:13px;col
       </section>
 
       <section class="survey-step hidden" data-step="needs">
-        <span class="survey-kicker">LET’S FIND A GOOD PLACE TO BEGIN</span>
-        <h2>What would you like support with today?</h2>
-        <p>Choose the areas that fit. You can always explore other paths later.</p>
-        <p class="browse-reassurance">♡ You do not need an account to browse.</p>
-        <div id="surveyTopicChoices" class="survey-choices calm-topic-choices"></div>
-        <button type="button" id="moreSupportPaths" class="more-support-paths" aria-expanded="false">See more support paths <span aria-hidden="true">⌄</span></button>
-        <p class="survey-browse-note">You can explore first and create an account later if you want to save your progress.</p>
-        <div class="survey-actions calm-actions">
-          <button type="button" class="secondary-button" id="keepExploring">Keep exploring</button>
-          <button class="primary-button" id="needsNext" disabled>Continue</button>
-        </div>
+        <span class="survey-kicker">QUESTION 1</span>
+        <h2>What would you like help with right now?</h2>
+        <p>Select all that fit.</p>
+        <div id="surveyTopicChoices" class="survey-choices"></div>
+        <div class="survey-actions"><button class="primary-button" id="needsNext" disabled>Continue</button></div>
       </section>
 
       <section class="survey-step hidden" data-step="priority">
@@ -625,15 +553,10 @@ textarea{width:100%;border:1px solid #ddd4e5;border-radius:12px;padding:13px;col
     return Number.isFinite(rank)?rank:1000+index;
   }
   function topicAppUrl(topic){
-    const key=String(topic?.topic_key||'').trim().toLowerCase().replace(/_/g,'-');
     const q=new URLSearchParams();
-    if(key==='recovery') return '/recovery-preview.html';
-    if(key){
-      q.set('program',key);
-      return '/program-preview.html?'+q.toString();
-    }
     q.set('browse','1');
-    return '/app?'+q.toString();
+    if(topic?.topic_key)q.set('recommended',topic.topic_key);
+    return '/app'+(q.toString()?'?'+q.toString():'');
   }
   function renderTopics(){
     if(!topicGrid)return;
@@ -765,13 +688,11 @@ textarea{width:100%;border:1px solid #ddd4e5;border-radius:12px;padding:13px;col
   }
 
   function openSurvey(){
-    extraPathsOpen=false;
     resetSurveyUI(false);
     dialog.showModal();
     showStep('intro');
   }
   async function openSurveyWithTopic(key){
-    extraPathsOpen=false;
     resetSurveyUI(false);
     survey.selected.add(key);
     dialog.showModal();
@@ -797,77 +718,33 @@ textarea{width:100%;border:1px solid #ddd4e5;border-radius:12px;padding:13px;col
     const pct = {intro:8,needs:28,priority:48,support:68,context:86,result:100}[name] || 8;
     document.getElementById('surveyProgressBar').style.width = pct + '%';
   }
-  const primaryTopicOrder = ['recovery','caregiving','reentry','housing-stability','work-new-beginnings','grief-loss'];
-  const modalToneByKey = {
-    'recovery':'calm-lavender','caregiving':'calm-blush','reentry':'calm-blue',
-    'housing-stability':'calm-peach','work-new-beginnings':'calm-gold','grief-loss':'calm-lilac',
-    'independent-living':'calm-sage','family-support':'calm-blush','financial-stability':'calm-teal',
-    'veteran-transition':'calm-blue'
-  };
-  let extraPathsOpen = false;
-
-  function orderedSurveyTopics(){
-    const available = topics.filter(t => t.topic_key !== 'not-sure');
-    const primary=[];
-    const seen=new Set();
-    primaryTopicOrder.forEach(key=>{
-      const topic=available.find(t=>t.topic_key===key);
-      if(topic && !seen.has(topic.topic_key)){primary.push(topic);seen.add(topic.topic_key)}
-    });
-    available.forEach(topic=>{
-      if(primary.length<6 && !seen.has(topic.topic_key)){primary.push(topic);seen.add(topic.topic_key)}
-    });
-    return {primary,extras:available.filter(t=>!seen.has(t.topic_key))};
-  }
-  function makeNeedChoice(t,isExtra=false){
-    const b=document.createElement('button');
-    b.type='button';b.dataset.topicKey=t.topic_key;
-    b.className=`calm-topic-card ${modalToneByKey[t.topic_key]||'calm-lavender'}${isExtra?' extra-topic':''}`;
-    b.hidden=Boolean(isExtra&&!extraPathsOpen);
-    const label=t.topic_key==='reentry'?'Reentry':t.label;
-    b.innerHTML=`<span class="calm-topic-icon" aria-hidden="true">${safeIcon(t)}</span><span class="calm-topic-copy"><b>${escapeHtml(label)}</b><small>${escapeHtml(t.description||'')}</small></span><span class="calm-selected-mark" aria-hidden="true">✓</span>`;
-    if(survey.selected.has(t.topic_key))b.classList.add('selected');
-    b.addEventListener('click',()=>{
-      if(survey.selected.has(t.topic_key))survey.selected.delete(t.topic_key);else survey.selected.add(t.topic_key);
-      if(survey.selected.has('not-sure'))survey.selected.delete('not-sure');
-      b.classList.toggle('selected',survey.selected.has(t.topic_key));
-      document.getElementById('needsNext').disabled=survey.selected.size===0;
-    });
-    return b;
-  }
   function buildNeedChoices(){
-    const wrap=document.getElementById('surveyTopicChoices');
-    wrap.innerHTML='';
-    const {primary,extras}=orderedSurveyTopics();
-    primary.forEach(t=>wrap.appendChild(makeNeedChoice(t,false)));
-    extras.forEach(t=>wrap.appendChild(makeNeedChoice(t,true)));
-
-    const unsure=document.createElement('button');
-    unsure.type='button';unsure.dataset.topicKey='not-sure';
-    unsure.className='calm-topic-card calm-unsure extra-topic';
-    unsure.hidden=!extraPathsOpen;
-    unsure.innerHTML='<span class="calm-topic-icon" aria-hidden="true">✦</span><span class="calm-topic-copy"><b>I’m not sure yet</b><small>Help me figure out where to begin.</small></span><span class="calm-selected-mark" aria-hidden="true">✓</span>';
-    if(survey.selected.has('not-sure'))unsure.classList.add('selected');
+    const wrap = document.getElementById('surveyTopicChoices');
+    wrap.innerHTML = '';
+    topics.filter(t => t.topic_key !== 'not-sure').slice(0,16).forEach(t => {
+      const b = document.createElement('button');
+      b.type='button'; b.dataset.topicKey=t.topic_key;
+      b.innerHTML=`<b>${safeIcon(t)} ${escapeHtml(t.label)}</b><br><small>${escapeHtml(t.description || '')}</small>`;
+      if(survey.selected.has(t.topic_key)) b.classList.add('selected');
+      b.addEventListener('click', () => {
+        if(survey.selected.has(t.topic_key)) survey.selected.delete(t.topic_key); else survey.selected.add(t.topic_key);
+        b.classList.toggle('selected', survey.selected.has(t.topic_key));
+        document.getElementById('needsNext').disabled = survey.selected.size === 0;
+      });
+      wrap.appendChild(b);
+    });
+    const unsure = document.createElement('button');
+    unsure.type='button'; unsure.dataset.topicKey='not-sure';
+    unsure.innerHTML='<b>✦ I’m not sure</b><br><small>Help me figure out where to begin.</small>';
+    if(survey.selected.has('not-sure')) unsure.classList.add('selected');
     unsure.addEventListener('click',()=>{
-      survey.selected.clear();survey.selected.add('not-sure');
-      buildNeedChoices();document.getElementById('needsNext').disabled=false;
+      survey.selected.clear(); survey.selected.add('not-sure');
+      buildNeedChoices();
+      document.getElementById('needsNext').disabled=false;
     });
     wrap.appendChild(unsure);
-
-    const more=document.getElementById('moreSupportPaths');
-    if(more){
-      more.hidden=extras.length===0;
-      more.setAttribute('aria-expanded',extraPathsOpen?'true':'false');
-      more.innerHTML=extraPathsOpen?'Show fewer <span aria-hidden="true">⌃</span>':'See more support paths <span aria-hidden="true">⌄</span>';
-    }
-    document.getElementById('needsNext').disabled=survey.selected.size===0;
+    document.getElementById('needsNext').disabled = survey.selected.size === 0;
   }
-  document.getElementById('moreSupportPaths')?.addEventListener('click',()=>{
-    extraPathsOpen=!extraPathsOpen;buildNeedChoices();
-  });
-  document.getElementById('keepExploring')?.addEventListener('click',()=>{
-    dialog.close();document.getElementById('support-paths')?.scrollIntoView({behavior:'smooth',block:'start'});
-  });
   document.getElementById('needsNext')?.addEventListener('click', async () => {
     if(!survey.selected.size) return;
     if(!(await ensureSurveySession())) return;
@@ -966,22 +843,12 @@ textarea{width:100%;border:1px solid #ddd4e5;border-radius:12px;padding:13px;col
     });
     relatedWrap.classList.toggle('hidden',keys.length===0);
     const app=document.getElementById('continueToApp');
-    const key=String(r.primary_topic_key||'').trim().toLowerCase().replace(/_/g,'-');
     const q=new URLSearchParams();
     if(survey.sessionId) q.set('journeySurvey',survey.sessionId);
     if(survey.token) q.set('journeyToken',survey.token);
-    if(key==='recovery'){
-      const carry=new URLSearchParams();
-      if(survey.sessionId) carry.set('journeySurvey',survey.sessionId);
-      if(survey.token) carry.set('journeyToken',survey.token);
-      app.href='/recovery-preview.html'+(carry.toString()?'?'+carry.toString():'');
-    }else if(key){
-      q.set('program',key);
-      app.href='/program-preview.html?'+q.toString();
-    }else{
-      q.set('browse','1');
-      app.href='/app?'+q.toString();
-    }
+    if(r.primary_topic_key) q.set('recommended',r.primary_topic_key);
+    q.set('browse','1');
+    app.href='/app?'+q.toString();
   }
   document.getElementById('exploreAgain')?.addEventListener('click',()=>{
     survey.selected=new Set();survey.priority=null;survey.supportStyle=null;survey.result=null;
