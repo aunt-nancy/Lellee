@@ -4,6 +4,21 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/>
+<script id="lellee-public-program-preview-router-20260828">
+(() => {
+  try{
+    const q=new URLSearchParams(location.search);
+    const key=String(q.get('recommended')||q.get('program')||'').trim().toLowerCase().replace(/_/g,'-');
+    const auth=String(q.get('auth')||'').trim().toLowerCase();
+    if(key && key!=='recovery' && auth!=='signin' && auth!=='signup'){
+      const next=new URLSearchParams();
+      next.set('program',key);
+      ['journeySurvey','journeyToken'].forEach(name=>{const value=q.get(name);if(value)next.set(name,value)});
+      location.replace('/program-preview.html?'+next.toString());
+    }
+  }catch(_){ }
+})();
+</script>
 <meta content="#0b1028" name="theme-color"/>
 <meta content="Lellee — recovery support for every day." name="description"/>
 <style>

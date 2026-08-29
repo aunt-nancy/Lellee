@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Lellee | Explore Support</title>
+<meta name="description" content="Explore a Lellee support path before creating an account.">
+<meta name="theme-color" content="#f7f3fb">
+<style>
+:root{--ink:#21182f;--muted:#6d6473;--purple:#65409a;--purple2:#8058b0;--lav:#f4eef9;--line:#e8e0ec;--bg:#fbfafc;--shadow:0 12px 34px rgba(54,37,75,.08);--white:#fff}
+*{box-sizing:border-box}html{scroll-behavior:auto}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.5}button,a{font:inherit}button{cursor:pointer}a{color:inherit}.hidden{display:none!important}
+.site-head{background:#fff;border-bottom:1px solid var(--line)}.head-inner{max-width:1180px;margin:auto;min-height:84px;padding:0 26px;display:flex;align-items:center;gap:28px}.brand{width:260px;height:72px;min-width:260px;display:flex;align-items:center;overflow:hidden;text-decoration:none}.brand img{width:100%;height:100%;object-fit:contain;transform:none}.top-nav{margin-left:auto;display:flex;align-items:center;gap:20px}.top-nav a,.top-nav button{border:0;background:transparent;text-decoration:none;color:#554b5f;font-weight:750;font-size:.82rem}.top-nav .signin{border:1px solid #d8cde2;border-radius:999px;padding:9px 14px;color:var(--purple);background:#fff}
+main{max-width:1040px;margin:0 auto;padding:38px 26px 70px}.crumb{display:inline-flex;gap:7px;align-items:center;color:var(--purple);font-size:.74rem;font-weight:800;text-decoration:none;margin-bottom:16px}.hero{background:linear-gradient(145deg,#f6f0fa,#fffaf6);border:1px solid var(--line);border-radius:26px;padding:30px;box-shadow:var(--shadow)}.eyebrow{display:inline-flex;border-radius:999px;background:#eee5f6;color:var(--purple);font-size:.7rem;font-weight:850;letter-spacing:.04em;padding:7px 10px}.hero h1{font-family:Georgia,serif;font-weight:500;font-size:clamp(2rem,5vw,3rem);line-height:1.08;margin:13px 0 10px}.hero p{max-width:760px;color:var(--muted);font-size:1rem;margin:0}.guest-note{margin-top:18px;padding:13px 15px;border:1px solid #e5dcec;border-radius:14px;background:#fff;color:#5e5565;font-size:.82rem}
+.section{padding-top:28px;scroll-margin-top:18px}.section-head{margin-bottom:14px}.section-head h2{font-family:Georgia,serif;font-weight:500;font-size:1.7rem;margin:0 0 5px}.section-head p{margin:0;color:var(--muted)}.action-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.action-card{width:100%;border:1px solid var(--line);background:#fff;border-radius:18px;padding:18px;text-align:left;color:inherit;box-shadow:var(--shadow);min-height:150px}.action-card:hover{border-color:#bfaad1}.action-card:focus-visible,.primary:focus-visible,.secondary:focus-visible,.top-nav a:focus-visible,.top-nav button:focus-visible{outline:3px solid rgba(101,64,154,.2);outline-offset:2px}.action-card b{display:block;font-size:1rem;margin-bottom:6px}.action-card p{margin:0;color:var(--muted);font-size:.83rem}.action-card span{display:block;margin-top:13px;color:var(--purple);font-size:.76rem;font-weight:850}
+.resources{border:1px solid var(--line);background:#fff;border-radius:22px;padding:22px;box-shadow:var(--shadow)}.resource-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.resource{border:1px solid #ece6ef;border-radius:16px;padding:16px;background:#fefefe}.resource small{display:block;color:var(--purple);font-weight:850;letter-spacing:.04em;margin-bottom:5px}.resource b{display:block;margin-bottom:5px}.resource p{margin:0 0 10px;color:var(--muted);font-size:.8rem}.resource a{color:var(--purple);font-size:.78rem;font-weight:850}.resources-status{margin:0 0 12px;color:#4f4357;font-size:.82rem}
+.account-explain{border:1px solid var(--line);border-radius:18px;background:#f7f4f9;padding:18px}.account-explain b{display:block;margin-bottom:5px}.account-explain p{margin:0;color:var(--muted);font-size:.84rem}.page-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.primary,.secondary{border-radius:999px;padding:10px 15px;font-weight:800}.primary{border:1px solid var(--purple);background:var(--purple);color:#fff}.secondary{border:1px solid #d9cfdf;background:#fff;color:var(--purple)}
+.modal{position:fixed;inset:0;z-index:1000;background:rgba(27,21,35,.48);display:grid;place-items:center;padding:18px}.modal-card{width:min(560px,100%);background:#fff;border-radius:22px;box-shadow:0 26px 90px rgba(31,20,42,.28);padding:24px}.modal-head{display:flex;align-items:flex-start;gap:16px}.modal-copy{flex:1}.modal-copy small{color:var(--purple);font-weight:900;letter-spacing:.06em}.modal-copy h3{font-family:Georgia,serif;font-weight:500;font-size:1.65rem;margin:5px 0 8px}.modal-copy p{margin:0;color:var(--muted)}.close{width:38px;height:38px;border-radius:50%;border:1px solid #ded6e4;background:#fff;color:#5e5269;font-size:1.25rem}.modal-note{margin-top:16px;border-radius:13px;padding:13px 14px;background:#f7f3fa;border:1px solid #e6ddeb;color:#5d5365;font-size:.8rem}.modal-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:17px}
+footer{border-top:1px solid var(--line);background:#fff;padding:24px 26px;color:#706878;font-size:.78rem}.footer-inner{max-width:1040px;margin:auto;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}.footer-inner a{color:var(--purple)}
+@media(max-width:1120px){.brand{width:220px;min-width:220px}.top-nav{gap:13px}}
+@media(max-width:760px){.head-inner{min-height:74px;padding:0 14px;gap:10px;flex-wrap:wrap}.brand{width:185px;height:64px;min-width:185px}.top-nav{width:100%;margin:0;padding:0 0 10px;overflow-x:auto;gap:15px}.top-nav a,.top-nav button{white-space:nowrap}.action-grid,.resource-grid{grid-template-columns:1fr}main{padding:26px 16px 55px}.hero{padding:22px 18px;border-radius:21px}}
+</style>
+</head>
+<body>
+<header class="site-head">
+  <div class="head-inner">
+    <a class="brand" href="/" aria-label="Lellee home"><img src="/lellee-approved-logo-final.jpg?v=20260814-1" alt="Lellee — Your journey. Your support. Your way."></a>
+    <nav class="top-nav" aria-label="Preview navigation">
+      <a href="#overview">Overview</a>
+      <a href="#resources">Resources</a>
+      <a href="#accounts">Accounts</a>
+      <a href="/landing.html#support-paths">Other Support Paths</a>
+      <button type="button" class="signin" data-account-mode="signin">Sign in</button>
+    </nav>
+  </div>
+</header>
+<main>
+  <a class="crumb" href="/landing.html#support-paths">← Choose another support path</a>
+  <section class="hero" id="overview">
+    <span class="eyebrow">PUBLIC PREVIEW · NO ACCOUNT REQUIRED</span>
+    <h1 id="programTitle">Explore Lellee</h1>
+    <p id="programDescription">Browse this support path before deciding whether you want an account.</p>
+    <div class="guest-note"><b>Browse first.</b> Lellee asks you to create an account only when you choose a private feature that saves or personalizes information.</div>
+  </section>
+
+  <section class="section" aria-labelledby="startHeading">
+    <div class="section-head"><h2 id="startHeading">Where would you like to start?</h2><p>Each choice below does something immediately. Private features tell you when an account is required.</p></div>
+    <div class="action-grid" id="programActionGrid"></div>
+  </section>
+
+  <section class="section" id="resources" aria-labelledby="resourcesHeading" tabindex="-1">
+    <div class="section-head"><h2 id="resourcesHeading">Shared resources</h2><p id="resourcesIntro">Browse practical support without creating an account.</p></div>
+    <div class="resources">
+      <p class="resources-status" id="resourcesStatus">These are public starting points. Opening an outside resource does not create a Lellee account.</p>
+      <div class="resource-grid" id="resourceGrid"></div>
+    </div>
+  </section>
+
+  <section class="section" id="accounts" aria-labelledby="accountsHeading">
+    <div class="section-head"><h2 id="accountsHeading">When is an account required?</h2></div>
+    <div class="account-explain"><b>Only when Lellee needs to save something private for you.</b><p>Browsing program information and shared resources stays public. Personal check-ins, saved plans, private notes, progress and personalized recommendations require an account.</p><div class="page-actions"><button class="primary" type="button" data-account-mode="signup">Create account</button><button class="secondary" type="button" data-account-mode="signin">Sign in</button></div></div>
+  </section>
+</main>
+
+<div class="modal hidden" id="previewModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal-card">
+    <div class="modal-head"><div class="modal-copy"><small id="modalStatus">PROGRAM PREVIEW</small><h3 id="modalTitle">Explore this support</h3><p id="modalText"></p></div><button class="close" type="button" data-close-modal aria-label="Close">×</button></div>
+    <div class="modal-note" id="modalNote"></div>
+    <div class="modal-actions" id="modalActions"></div>
+  </div>
+</div>
+
+<footer><div class="footer-inner"><span>Lellee · Your journey. Your support. Your way.</span><span><a href="/privacy.html">Privacy</a> · <a href="/terms.html">Terms</a> · <a href="/safety.html">Safety</a></span></div></footer>
+<script>
+(() => {
+  const PROGRAMS={
+    caregiving:{label:'Caregiving',description:'Support yourself while caring for a parent, partner, child, or loved one.',cards:[
+      {title:'Caregiver Check-In',text:'Notice what you need while you are caring for someone else.',mode:'account',action:'Account required to use →',note:'A caregiver check-in can contain personal information and is designed to be saved privately.'},
+      {title:'Organize the Load',text:'Keep appointments, responsibilities and practical next steps easier to see.',mode:'account',action:'Account required to save →',note:'A personal caregiving plan requires an account so Lellee can save it privately.'},
+      {title:'Boundaries & Backup',text:'Think through rest, boundaries, trusted helpers and backup support.',mode:'preview',action:'Open public preview →',note:'No account is required to read this preview. An account is only needed if you later save your own boundaries or backup plan.'},
+      {title:'Find Caregiver Resources',text:'Open practical caregiving resources now. No account is required.',mode:'resources',action:'Browse resources now →'}]},
+    'housing-stability':{label:'Housing Stability',description:'Get organized around housing, stability and the next practical step.'},
+    reentry:{label:'Returning Home',description:'Rebuild after jail, prison, probation, parole, or another justice-system transition.'},
+    'work-new-beginnings':{label:'Work & New Beginnings',description:'Return to work, find structure, build confidence and move toward income.'},
+    'workforce-reentry':{label:'Work & New Beginnings',description:'Return to work, find structure, build confidence and move toward income.'},
+    'grief-loss':{label:'Grief & Life After Loss',description:'Find your footing after a death, major loss, or painful life change.'},
+    grief:{label:'Grief & Life After Loss',description:'Find your footing after a death, major loss, or painful life change.'},
+    'independent-living':{label:'Independent Living',description:'Build routines, daily skills, confidence and greater independence.'},
+    'family-support':{label:'Family Support',description:'Navigate family stress, support someone you love and strengthen connection.'},
+    'family-recovery':{label:'Family Support',description:'Navigate family stress, support someone you love and strengthen connection.'},
+    'financial-stability':{label:'Financial Stability',description:'Get organized around bills, benefits, income and the next practical money step.'},
+    'veteran-transition':{label:'Veteran Transition',description:'Navigate work, housing, benefits, family and community during a major transition.'},
+    'disability-independence':{label:'Disability & Independence',description:'Organize practical support, routines, benefits and greater day-to-day independence.'},
+    'kinship-caregiving':{label:'Kinship Caregiving',description:'Support relatives raising children while managing family, school, benefits and everyday needs.'}
+  };
+  const GENERIC_CARDS=[
+    {title:'Start Where You Are',text:'See what this support path is designed to help organize.',mode:'preview',action:'Open public preview →',note:'No account is required to browse this public preview.'},
+    {title:'Practical Next Steps',text:'Explore planning and shared tools before saving personal information.',mode:'preview',action:'Open public preview →',note:'You can browse first. Saving a personal plan requires an account.'},
+    {title:'Keep Your Privacy',text:'Browsing does not enroll you or move you into another Lellee program.',mode:'preview',action:'See how privacy works →',note:'Lellee keeps browsing separate from private saved information.'},
+    {title:'Find Shared Resources',text:'Browse public and community support starting points.',mode:'resources',action:'Browse resources now →'}
+  ];
+  const CARE_RESOURCES=[
+    {kind:'LOCAL HELP',title:'211',text:'Search local help for food, housing, transportation, health, utility and other community needs.',href:'https://www.211.org/',label:'Open 211 →'},
+    {kind:'CAREGIVER SUPPORT',title:'Family Caregiver Alliance',text:'Caregiver education, support, information and state-by-state family caregiving resources.',href:'https://www.caregiver.org/',label:'Open Family Caregiver Alliance →'},
+    {kind:'AGING & CARE',title:'Eldercare Locator',text:'A U.S. Administration for Community Living service for local aging and caregiver support.',href:'https://eldercare.acl.gov/',label:'Open Eldercare Locator →'},
+    {kind:'CAREGIVER EDUCATION',title:'Caregiver Action Network',text:'Practical caregiver information, tools and support resources.',href:'https://www.caregiveraction.org/',label:'Open Caregiver Action Network →'}
+  ];
+  const GENERIC_RESOURCES=[
+    {kind:'LOCAL HELP',title:'211',text:'Search local community services and practical support.',href:'https://www.211.org/',label:'Open 211 →'},
+    {kind:'PUBLIC BENEFITS',title:'Benefits.gov',text:'Explore U.S. government benefit and assistance programs.',href:'https://www.benefits.gov/',label:'Open Benefits.gov →'},
+    {kind:'COMMUNITY SUPPORT',title:'FindHelp',text:'Search local free and reduced-cost programs by ZIP code.',href:'https://www.findhelp.org/',label:'Open FindHelp →'},
+    {kind:'LELLEE',title:'Choose another support path',text:'Return to the public Lellee landing page and explore another area of support.',href:'/landing.html#support-paths',label:'View support paths →'}
+  ];
+  const clean=v=>String(v||'').trim().toLowerCase().replace(/_/g,'-');
+  const q=new URLSearchParams(location.search);
+  const key=clean(q.get('program')||q.get('recommended')||'caregiving');
+  const cfg=PROGRAMS[key]||{label:key.split('-').filter(Boolean).map(w=>w[0].toUpperCase()+w.slice(1)).join(' ')||'Lellee Support',description:'Explore this support path before creating an account.'};
+  const cards=cfg.cards||GENERIC_CARDS;
+  const title=document.getElementById('programTitle');
+  const description=document.getElementById('programDescription');
+  const intro=document.getElementById('resourcesIntro');
+  if(title)title.textContent=cfg.label;
+  if(description)description.textContent=cfg.description;
+  if(intro)intro.textContent=`Browse practical ${cfg.label.toLowerCase()} support without creating an account.`;
+  document.title=`Lellee | ${cfg.label}`;
+
+  const grid=document.getElementById('programActionGrid');
+  cards.forEach((card,index)=>{
+    const btn=document.createElement('button');
+    btn.type='button';btn.className='action-card';btn.dataset.actionIndex=String(index);
+    btn.innerHTML=`<b></b><p></p><span></span>`;
+    btn.querySelector('b').textContent=card.title;
+    btn.querySelector('p').textContent=card.text;
+    btn.querySelector('span').textContent=card.action;
+    grid.appendChild(btn);
+  });
+
+  const resources=key==='caregiving'?CARE_RESOURCES:GENERIC_RESOURCES;
+  const resourceGrid=document.getElementById('resourceGrid');
+  resources.forEach(item=>{
+    const article=document.createElement('article');article.className='resource';
+    article.innerHTML='<small></small><b></b><p></p><a></a>';
+    article.querySelector('small').textContent=item.kind;
+    article.querySelector('b').textContent=item.title;
+    article.querySelector('p').textContent=item.text;
+    const a=article.querySelector('a');a.href=item.href;a.textContent=item.label;
+    if(/^https?:/i.test(item.href)){a.target='_blank';a.rel='noopener noreferrer'}
+    resourceGrid.appendChild(article);
+  });
+
+  const modal=document.getElementById('previewModal');
+  const modalStatus=document.getElementById('modalStatus');
+  const modalTitle=document.getElementById('modalTitle');
+  const modalText=document.getElementById('modalText');
+  const modalNote=document.getElementById('modalNote');
+  const modalActions=document.getElementById('modalActions');
+  let lastFocus=null;
+  function closeModal(){modal.classList.add('hidden');document.body.style.overflow='';lastFocus?.focus?.()}
+  function accountUrl(mode){const p=new URLSearchParams();p.set('auth',mode);p.set('program',key);return '/app?'+p.toString()}
+  function showAccount(card){
+    lastFocus=document.activeElement;modalStatus.textContent='PRIVATE FEATURE';modalTitle.textContent=card?.title||'Account required';modalText.textContent=card?.text||'This feature saves private information.';modalNote.textContent=(card?.note||'This private feature requires an account.')+' You can keep browsing without one.';modalActions.innerHTML='';
+    const create=document.createElement('a');create.className='primary';create.href=accountUrl('signup');create.textContent='Create account';
+    const sign=document.createElement('a');sign.className='secondary';sign.href=accountUrl('signin');sign.textContent='Sign in';
+    const keep=document.createElement('button');keep.type='button';keep.className='secondary';keep.textContent='Keep browsing';keep.addEventListener('click',closeModal);
+    modalActions.append(create,sign,keep);modal.classList.remove('hidden');document.body.style.overflow='hidden';
+  }
+  function showPreview(card){
+    lastFocus=document.activeElement;modalStatus.textContent='PUBLIC PREVIEW';modalTitle.textContent=card.title;modalText.textContent=card.text;modalNote.textContent=card.note||'No account is required to read this preview.';modalActions.innerHTML='';
+    const keep=document.createElement('button');keep.type='button';keep.className='primary';keep.textContent='Keep browsing';keep.addEventListener('click',closeModal);modalActions.append(keep);modal.classList.remove('hidden');document.body.style.overflow='hidden';
+  }
+  function openResources(){
+    closeModal();
+    const section=document.getElementById('resources');
+    const status=document.getElementById('resourcesStatus');
+    if(status)status.textContent=`${cfg.label} resources are open below. No Lellee account is required to browse them.`;
+    try{history.replaceState(null,'',location.pathname+location.search+'#resources')}catch(_){ }
+    section?.scrollIntoView({block:'start',behavior:'auto'});section?.focus({preventScroll:true});
+  }
+  grid.addEventListener('click',event=>{
+    const btn=event.target.closest('[data-action-index]');if(!btn)return;
+    const card=cards[Number(btn.dataset.actionIndex)];if(!card)return;
+    if(card.mode==='account')showAccount(card);else if(card.mode==='resources')openResources();else showPreview(card);
+  });
+  document.querySelectorAll('[data-account-mode]').forEach(btn=>btn.addEventListener('click',()=>showAccount({title:btn.dataset.accountMode==='signup'?'Create your Lellee account':'Sign in to Lellee',text:'Use an account when you are ready to save private information.',note:'Browsing this support path and its shared resources does not require an account.'})));
+  document.querySelectorAll('[data-close-modal]').forEach(btn=>btn.addEventListener('click',closeModal));
+  modal.addEventListener('click',event=>{if(event.target===modal)closeModal()});
+  document.addEventListener('keydown',event=>{if(event.key==='Escape'&&!modal.classList.contains('hidden'))closeModal()});
+
+  if(location.hash==='#resources')setTimeout(()=>document.getElementById('resources')?.scrollIntoView({block:'start',behavior:'auto'}),0);
+})();
+</script>
+</body>
+</html>

@@ -553,9 +553,14 @@ textarea{width:100%;border:1px solid #ddd4e5;border-radius:12px;padding:13px;col
     return Number.isFinite(rank)?rank:1000+index;
   }
   function topicAppUrl(topic){
+    const key=String(topic?.topic_key||'').trim().toLowerCase().replace(/_/g,'-');
     const q=new URLSearchParams();
+    if(key && key!=='recovery'){
+      q.set('program',key);
+      return '/program-preview.html?'+q.toString();
+    }
     q.set('browse','1');
-    if(topic?.topic_key)q.set('recommended',topic.topic_key);
+    if(key)q.set('recommended',key);
     return '/app'+(q.toString()?'?'+q.toString():'');
   }
   function renderTopics(){
@@ -843,12 +848,18 @@ textarea{width:100%;border:1px solid #ddd4e5;border-radius:12px;padding:13px;col
     });
     relatedWrap.classList.toggle('hidden',keys.length===0);
     const app=document.getElementById('continueToApp');
+    const key=String(r.primary_topic_key||'').trim().toLowerCase().replace(/_/g,'-');
     const q=new URLSearchParams();
     if(survey.sessionId) q.set('journeySurvey',survey.sessionId);
     if(survey.token) q.set('journeyToken',survey.token);
-    if(r.primary_topic_key) q.set('recommended',r.primary_topic_key);
-    q.set('browse','1');
-    app.href='/app?'+q.toString();
+    if(key && key!=='recovery'){
+      q.set('program',key);
+      app.href='/program-preview.html?'+q.toString();
+    }else{
+      if(key) q.set('recommended',key);
+      q.set('browse','1');
+      app.href='/app?'+q.toString();
+    }
   }
   document.getElementById('exploreAgain')?.addEventListener('click',()=>{
     survey.selected=new Set();survey.priority=null;survey.supportStyle=null;survey.result=null;
