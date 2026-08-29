@@ -1,21 +1,8 @@
-LELLEE REPAIR QA — AUGUST 28, 2026
-
-Browser-engine regression test performed with Chromium 144 using the complete index markup and all inline application scripts.
-
-OLD BUILD RESULT
-- Page loaded initially.
-- One ordinary body child-list mutation triggered the coach account-count MutationObserver loop.
-- The browser stopped answering JavaScript evaluation requests.
-- Sidebar/menu clicks could no longer execute.
-
-REPAIRED BUILD RESULT
-- Document reached readyState: complete.
-- Primary navigation initialized successfully.
-- An ordinary body child-list mutation completed and the page remained responsive.
-- Sidebar Tools click activated page-tools.
-- Sidebar Settings click activated page-settings.
-- Coach visibility status remained privacy-first at Off.
-
-Static validation
-- All inline JavaScript blocks passed syntax checking.
-- ZIP integrity test passed for every included file.
+LELLEE STABLE NAVIGATION / NO-JUMP REPAIR QA — 2026-08-29
+PASS: All inline JavaScript blocks pass node --check.
+PASS: No window.scrollTo() calls remain in index.html.
+PASS: Browser scroll anchoring disabled for html/body/app/content/page containers.
+PASS: Existing single delegated primary data-page navigation remains present.
+PASS: Prior bounded MutationObserver freeze repair remains present.
+PASS: landing.html was not edited by this repair.
+PASS: service-worker cache version advanced.

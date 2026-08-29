@@ -1126,6 +1126,9 @@ body.program-preview-mode .top-stats .mini-stat{min-width:110px}
 /* A hidden overlay must never intercept taps/clicks. */
 .prod-overlay.hidden,.auth-overlay.hidden,[hidden]{display:none!important;pointer-events:none!important}
 .nav-item,.mobile-bottom button[data-page],#mobileMenuBtn{pointer-events:auto!important;touch-action:manipulation}
+/* LELLEE STABILITY LOCK — prevent browser scroll anchoring from moving the page while app chrome updates. */
+html,body,.app,.content,.page{overflow-anchor:none!important}
+
 </style>
 </head>
 <body><a class="skip-link" href="#mainContent">Skip to main content</a><a class="lellee-skip" href="#lelleeMain">Skip to main content</a>
@@ -7319,7 +7322,6 @@ body.program-preview-mode .top-stats .mini-stat{min-width:110px}
     document.getElementById('appSidebar')?.classList.remove('mobile-open');
     document.body.classList.remove('mobile-nav-open');
     document.getElementById('mobileMenuBtn')?.setAttribute('aria-expanded','false');
-    try{window.scrollTo(0,0)}catch(_){}
     return true;
   }
   window.LelleeDirectActivatePage=directActivate;
@@ -7514,6 +7516,7 @@ function renderBasics(){
   });
 }
 function showPage(name){
+  // Navigation must never force the window scroll position; this prevents visible page jumping.
   if(programBrowsePreviewMode && (name==='today' || RECOVERY_ONLY_BROWSE_PAGES.has(name)))name='program-preview';
   const requested=$(`#page-${name}`);
   const page=requested||$('#page-today');
@@ -7528,7 +7531,6 @@ function showPage(name){
     url.hash=navName==='today'?'':navName;
     history.replaceState(null,'',url.pathname+url.search+url.hash);
   }catch(_){}
-  try{window.scrollTo(0,0)}catch(_){}
 }
 // MENU/NAVIGATION REPAIR — 2026-08-28
 // Event delegation keeps static and dynamically-added menu items working.

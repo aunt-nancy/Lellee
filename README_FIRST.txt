@@ -1,27 +1,15 @@
-LELLEE — MAIN-THREAD FREEZE + MENU RESPONSE REPAIR
-Date: August 28, 2026
+Lellee stable navigation / no-jump repair — 2026-08-29
 
-CONFIRMED ROOT CAUSE
-A body-wide MutationObserver used for the coach account-count privacy toggle changed its own label text inside the observer callback. That label replacement created another child-list mutation, which called the observer again. The cycle could continue without stopping, lock the browser's main thread, trigger “This page isn't responding,” and make the vertical/sidebar menus appear dead.
+Purpose
+- Stop the stronger visible page jumping reported after the prior main-thread repair.
+- Keep the repaired vertical/side menu routing intact.
+- Do not change the approved landing logo artwork, size lock, or landing-page visual design.
 
-WHAT THIS BUILD CHANGES
-- Replaces the self-triggering observer with a targeted, idempotent observer that reacts only to coach-dashboard content insertions.
-- Prevents the observer from reacting to its own status-label update.
-- Gives navigation one active owner after startup, while preserving the early fail-safe handler if the main app script ever stops before navigation initializes.
-- Removes duplicate menu routing and immediate smooth-scroll work on each menu click.
-- Retains safe localStorage/sessionStorage handling and hidden-overlay pointer protection.
-- Bumps the service-worker version and expands the one-time cache reset to clear both current and historical Lellee session keys.
+What changed
+1. Removed forced window.scrollTo(0,0) from both the early fail-safe router and the primary router.
+2. Added overflow-anchor:none to the app/page containers so browser scroll anchoring cannot move the viewport while Lellee updates dynamic content.
+3. Preserved the single delegated data-page navigation handler and the bounded MutationObserver repair from the prior build.
+4. Updated the service-worker/reset cache version so this repair is not masked by stale browser code.
 
-DESIGN LOCK PRESERVED
-The approved landing logo asset, dimensions, transform, alignment, background treatment, and logo-related CSS were not changed.
-
-UPLOAD THESE FILES TO THE GITHUB ROOT
-1. index.html
-2. landing.html
-3. service-worker.js
-4. reset-lellee-cache.html
-
-No Supabase SQL is required.
-
-AFTER VERCEL FINISHES DEPLOYING
-Open https://www.lellee.com/reset-lellee-cache.html once. It will clear the old service worker/cache and return to the landing page. Then test the left sidebar, vertical menu, mobile menu, Caregiving preview, and Settings page.
+Deployment
+Upload every file in this ZIP to the repository root and replace matching files. Wait for Vercel to show Ready. Then open /reset-lellee-cache.html once.
