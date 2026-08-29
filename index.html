@@ -2,6 +2,26 @@
 
 <html lang="en">
 <head>
+<script id="lellee-stable-auth-route">
+(()=>{
+  try{
+    const current=new URL(window.location.href);
+    const mode=(current.searchParams.get('auth')||'').toLowerCase();
+    if(mode!=='signin'&&mode!=='signup')return;
+    const destination=new URL('/auth.html',current.origin);
+    destination.searchParams.set('mode',mode);
+    const returnUrl=new URL('/app',current.origin);
+    for(const [key,value] of current.searchParams.entries()){
+      if(key!=='auth')returnUrl.searchParams.append(key,value);
+    }
+    if(current.hash)returnUrl.hash=current.hash;
+    destination.searchParams.set('return',returnUrl.pathname+returnUrl.search+returnUrl.hash);
+    const program=current.searchParams.get('program');
+    if(program)destination.searchParams.set('program',program);
+    window.location.replace(destination.pathname+destination.search);
+  }catch(error){console.warn('Lellee auth route fallback',error)}
+})();
+</script>
 <meta charset="utf-8"/>
 <meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/>
 <script id="lellee-public-program-preview-router-20260828">

@@ -1,4 +1,4 @@
-const LELLEE_SW_VERSION='lellee-recovery-clean-embedded-logo-2026-08-28-v1';
+const LELLEE_SW_VERSION='lellee-stable-auth-page-2026-08-29-v1';
 self.addEventListener('install',event=>self.skipWaiting());
 self.addEventListener('activate',event=>event.waitUntil((async()=>{
   const names=await caches.keys();
@@ -13,7 +13,7 @@ self.addEventListener('fetch',event=>{
   if(url.origin!==self.location.origin)return;
   if(request.mode==='navigate'){
     event.respondWith(fetch(request,{cache:'no-store'}).catch(async()=>{
-      const fallback=url.pathname.startsWith('/app')?'/index.html':'/landing.html';
+      const fallback=url.pathname==='/auth.html'?'/auth.html':(url.pathname.startsWith('/app')?'/index.html':'/landing.html');
       try{return await fetch(fallback,{cache:'no-store'})}
       catch(_){return new Response('Lellee is temporarily unavailable.',{status:503,headers:{'Content-Type':'text/plain; charset=utf-8'}})}
     }));

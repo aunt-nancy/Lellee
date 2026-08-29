@@ -3,4 +3,4 @@
   if('caches'in window){const names=await caches.keys();await Promise.all(names.map(n=>caches.delete(n)))}
   try{const raw=localStorage.getItem('lellee-v1-site');if(raw){const parsed=JSON.parse(raw);if(!parsed||typeof parsed!=='object'||Array.isArray(parsed))throw new Error('Invalid Lellee data')}}catch(storageError){try{localStorage.removeItem('lellee-v1-site')}catch(_){}console.warn('Removed unreadable Lellee browser data.',storageError)}
   try{sessionStorage.removeItem('lellee-program-browse');sessionStorage.removeItem('lellee_browse_program_v1');sessionStorage.removeItem('lellee-coach-account-visibility')}catch(_){}
-}catch(e){console.warn(e)}location.replace('/landing.html?fresh=20260829-calm-inline-format-v3')})();</script></body></html>
+}catch(e){console.warn(e)}location.replace('/landing.html?fresh=20260829-stable-auth-v1')})();</script></body></html>
