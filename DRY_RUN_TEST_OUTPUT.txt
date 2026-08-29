@@ -1,0 +1,15 @@
+DRY RUN: No Supabase changes will be made.
+
+============================================================
+LELLEE TEMPORARY LOGIN CREDENTIALS
+============================================================
+STANDARD USER LOGIN: https://www.lellee.com/app?auth=signin
+Email:    qa.user.082926@lellee.com
+Password: e65%D0JdtX6f23ssk47z@o
+
+ADMIN LOGIN:         https://www.lellee.com/app?auth=signin
+Email:    qa.admin.082926@lellee.com
+Password: al^eYC9dK3OC#1+SuO%sA^
+After Admin signs in, the role-protected Admin item should appear in Lellee navigation.
+============================================================
+
