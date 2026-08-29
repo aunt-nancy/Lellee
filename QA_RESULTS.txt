@@ -1,12 +1,13 @@
-LELLEE HEADER PLANS & PRICING QA — 2026-08-29
-PASS: All inline JavaScript blocks in landing.html, index.html, and reset-lellee-cache.html pass node --check.
-PASS: Public landing header contains a native Plans & Pricing menu with 3 offerings.
-PASS: App/program-preview header contains a matching native Plans & Pricing menu with desktop and mobile presentation.
-PASS: Header menu shows Free $0, Premium $14.99/month or $149/year, Coach add-on $49.99/month + Premium, and additional 15-minute coaching check-ins at $19.99 each.
-PASS: Old visible $5.99/$59.99 and Lellee Plus subscription copy is removed from index.html and replaced with approved Lellee Premium pricing/copy.
-PASS: Existing internal IDs/classes/data keys containing "plus" remain unchanged so existing feature/payment integrations are not renamed or broken.
-PASS: No window.scrollTo() calls were reintroduced.
-PASS: Prior bounded coach-count MutationObserver protections remain present, including self-label mutation filtering.
-PASS: Approved public logo asset reference remains /lellee-approved-logo-final.jpg and desktop/mobile logo size locks remain 260x72 and 185x64 respectively.
-PASS: Public navigation spacing was tightened only at <=1120px to accommodate Plans & Pricing without changing the approved logo dimensions.
-PASS: Service-worker/reset cache version advanced to header-plans-pricing v5.
+LELLEE HEADER PLANS & PRICING PLUS RESTORATION QA — 2026-08-29
+PASS: Public landing header contains Free, Plus, Premium, and Coach add-on offerings.
+PASS: App/program-preview header contains the same four offerings.
+PASS: Lellee Plus shows $5.99/month or $59.99/year.
+PASS: Lellee Premium shows $14.99/month or $149/year.
+PASS: Coach add-on shows $49.99/month + Premium; additional 15-minute check-ins show $19.99 each.
+PASS: Existing app side navigation again labels the existing Plus page “Lellee Plus.”
+PASS: Existing Plus membership page and Plus-gated feature locks are restored to Plus wording/pricing.
+PASS: Existing internal IDs/classes/data keys containing “plus” remain unchanged.
+PASS: Header dropdown remains native <details> with no new MutationObserver, scrollTo, or routing loop.
+PASS: Service-worker/reset cache version advanced to v6.
+
+PASS: Lellee Plus pricing correction is locked at $5.99/month or $59.99/year.

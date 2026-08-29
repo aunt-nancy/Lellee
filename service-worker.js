@@ -1,4 +1,4 @@
-const LELLEE_SW_VERSION='lellee-header-plans-pricing-2026-08-29-v5';
+const LELLEE_SW_VERSION='lellee-header-plans-plus-pricing-2026-08-29-v6';
 self.addEventListener('install',event=>self.skipWaiting());
 self.addEventListener('activate',event=>event.waitUntil((async()=>{
   const names=await caches.keys();

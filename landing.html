@@ -59,7 +59,7 @@ button{cursor:pointer}
 .plans-nav>summary::after{content:"⌄";font-size:.72rem;color:#7a6a8d;transition:transform .15s ease}
 .plans-nav[open]>summary{color:var(--purple)}
 .plans-nav[open]>summary::after{transform:rotate(180deg)}
-.plans-popover{position:absolute;right:-165px;top:calc(100% + 20px);width:min(690px,calc(100vw - 32px));display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;background:#fff;border:1px solid #e6deeb;border-radius:16px;padding:13px;box-shadow:0 20px 55px rgba(38,26,60,.16);z-index:90;color:#272035;text-align:left}
+.plans-popover{position:absolute;right:-165px;top:calc(100% + 20px);width:min(760px,calc(100vw - 32px));display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;background:#fff;border:1px solid #e6deeb;border-radius:16px;padding:13px;box-shadow:0 20px 55px rgba(38,26,60,.16);z-index:90;color:#272035;text-align:left}
 .plan-mini{border:1px solid #eee8f2;border-radius:13px;padding:14px;background:#fcfbfd;min-width:0}
 .plan-mini.featured{background:linear-gradient(145deg,#f6f1fb,#fff8fb);border-color:#d9c9e8}
 .plan-mini .plan-label{display:block;font-size:.59rem;letter-spacing:.09em;font-weight:850;color:#7552a4;margin-bottom:4px}
@@ -244,7 +244,7 @@ textarea{width:100%;border:1px solid #ddd4e5;border-radius:12px;padding:13px;col
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 </head>
-<body data-lellee-public-build="landing-header-plans-pricing-2026-08-29">
+<body data-lellee-public-build="landing-header-plans-plus-pricing-2026-08-29">
   <a class="skip-link" href="#main">Skip to main content</a>
 
   <header class="topbar">
@@ -268,11 +268,17 @@ textarea{width:100%;border:1px solid #ddd4e5;border-radius:12px;padding:13px;col
               <span class="plan-price">$0</span>
               <ul><li>Guided core support</li><li>Help Me Right Now + core tools</li><li>Journal, planner, milestones &amp; resources</li></ul>
             </section>
+            <section class="plan-mini">
+              <span class="plan-label">LELLEE PLUS</span>
+              <strong>Expanded reflection tools</strong>
+              <span class="plan-price">$5.99/month or $59.99/year</span>
+              <ul><li>Everything in Free</li><li>Recovery Review+, Then &amp; Now+, Journal+ &amp; Story+</li><li>Custom reminders &amp; deeper personalization</li></ul>
+            </section>
             <section class="plan-mini featured">
               <span class="plan-label">LELLEE PREMIUM</span>
-              <strong>Deeper personalization</strong>
+              <strong>Advanced personalized support</strong>
               <span class="plan-price">$14.99/month or $149/year</span>
-              <ul><li>Everything in Free</li><li>Recovery Review+, Journal+ &amp; Story+</li><li>Custom reminders &amp; deeper personalization</li></ul>
+              <ul><li>Everything in Plus</li><li>Lellee Guide personalized guidance</li><li>Deeper insights, action plans, reports &amp; journey planning</li></ul>
             </section>
             <section class="plan-mini">
               <span class="plan-label">LELLEE COACH ADD-ON</span>
