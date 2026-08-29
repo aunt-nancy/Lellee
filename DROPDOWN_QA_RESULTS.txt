@@ -1,0 +1,23 @@
+LELLEE BUILD 6 DROPDOWN QA — PASS
+
+Desktop
+PASS — Daily: 3 submenu items
+PASS — Grow & Learn: 4 submenu items
+PASS — Connect: 2 submenu items
+PASS — Reflect & Track: 3 submenu items
+PASS — Find Support: 2 submenu items
+PASS — Account: 6 submenu items
+PASS — Single-open accordion behavior
+PASS — Tools view navigation
+PASS — Private-feature account prompt
+
+Mobile
+PASS — Menu drawer opens and closes
+PASS — Dropdown expands inside mobile drawer
+PASS — Resources view opens and drawer closes
+
+Failsafe
+PASS — Dropdown opens/closes with JavaScript disabled
+PASS — Navigation startup audit returned true
+PASS — No page errors
+PASS — No console errors

@@ -4,7 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Lellee | Recovery Today</title>
-<!-- BLUE APPROVED RECOVERY FORMAT RESTORE: source of truth is Lellee_APPROVED_DESIGN_MASTER and the user-approved blue Recovery dashboard mockup. -->
+<!-- LELLEE BUILD 6 RECOVERY DESIGN + NATIVE DROPDOWN LOCK — 2026-08-28
+     Build 6 did not replace the Recovery shell; it was loaded after Builds 2–5.
+     This lightweight public preview restores the exact Build 2 shell/navigation design inherited by Build 6,
+     while intentionally omitting the old full-app observers/storage startup paths that caused freezing.
+     Dropdown categories use native <details>/<summary> controls so they still open even if optional JavaScript fails. -->
 <meta name="description" content="Explore Lellee Recovery before creating an account.">
 <meta name="theme-color" content="#f7f3fb">
 <style>
@@ -21,50 +25,153 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(85,49,166,.22);outli
 @media(max-width:1120px){.brand{width:220px;min-width:220px}.activity-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:820px){.head-inner{min-height:74px;padding:0 14px;gap:10px}.brand{width:185px;height:64px;min-width:185px}.top-nav>a:not(.signin){display:none}.menu-btn{display:inline-block}.shell{grid-template-columns:1fr}.side{position:fixed;top:75px;left:0;bottom:0;width:min(300px,86vw);z-index:30;transform:translateX(-105%);transition:transform .18s ease;border-right:1px solid var(--line);box-shadow:14px 0 36px rgba(37,26,48,.16)}.side.open{transform:none}main{padding:24px 16px 55px}.activity-grid,.card-grid{grid-template-columns:1fr}.view{min-height:620px}.title-row{display:block}.title-row p{margin-top:8px}}
 
+
 /* ============================================================
-   LELLEE BLUE APPROVED RECOVERY FORMAT — RESTORED 2026-08-28
-   Source of truth: Lellee_APPROVED_DESIGN_MASTER + approved
-   Recovery dashboard mockup. Flat primary navigation; no grouped
-   replacement navigation.
+   LELLEE BUILD 6 — EXACT RECOVERY SHELL RESTORE · 2026-08-28
+   Build 6 explicitly loaded after Builds 2–5. Its Recovery navigation
+   therefore inherited Build 2's 232px dark accordion shell.
+
+   VISUAL SOURCE: public repo build-2-shell.css / build-2-shell.js.
+   STABILITY RULE: visual structure only. No MutationObserver, no localStorage,
+   no Supabase dependency and no feature-script startup dependency are used here.
    ============================================================ */
+:root{
+  --b2-sidebar-width:232px;
+  --b2-nav-bg:#0d1029;
+  --b2-nav-bg-2:#161538;
+  --b2-nav-line:rgba(255,255,255,.085);
+  --b2-nav-text:#f8f5fb;
+  --b2-nav-muted:#cfc8da;
+  --b2-nav-active:#8a62b1;
+  --b2-nav-active-2:#694594;
+  --b2-focus:#d9b6ea;
+}
 @media(min-width:821px){
-  .site-head{margin-left:198px;position:sticky;top:0;z-index:19}
-  .site-head .head-inner{max-width:none;min-height:72px;padding:0 30px}
+  .site-head{margin-left:var(--b2-sidebar-width);position:sticky;top:0;z-index:19}
+  .site-head .head-inner{max-width:none;min-height:84px;padding:0 30px}
   .site-head .brand{display:none}
-  .shell{max-width:none;display:block;min-height:calc(100vh - 72px)}
-  .shell>main{margin-left:198px;min-height:calc(100vh - 72px)}
-  .side{position:fixed;inset:0 auto 0 0;width:198px;height:100vh;z-index:25}
+  .shell{max-width:none;display:block;min-height:calc(100vh - 85px)}
+  .shell>main{margin-left:var(--b2-sidebar-width);min-height:calc(100vh - 85px)}
+  .sidebar{position:fixed!important;inset:0 auto 0 0!important;height:100vh!important;transform:none!important;z-index:25!important}
 }
-.side{
-  width:198px;padding:18px 12px 20px;
-  background:linear-gradient(180deg,#0c1029 0%,#10112c 72%,#151534 100%);
-  color:#fff;display:flex;flex-direction:column;
-  border-right:0;box-shadow:10px 0 26px rgba(18,17,37,.08);
-  overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.18) transparent
+.sidebar{
+  width:var(--b2-sidebar-width)!important;
+  padding:14px 12px 18px!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  scrollbar-width:thin;
+  scrollbar-color:rgba(255,255,255,.2) transparent;
+  background:linear-gradient(180deg,var(--b2-nav-bg) 0%,#11122f 68%,var(--b2-nav-bg-2) 100%)!important;
+  color:#fff!important;
+  border-right:0!important;
+  box-shadow:10px 0 30px rgba(18,17,37,.1)!important;
+  display:flex!important;
+  flex-direction:column!important;
 }
-.side-brand{height:87px;padding:0 16px 12px;display:flex;align-items:flex-start;justify-content:center}
-.side-brand a{display:block;width:100%;text-decoration:none}
-.side-brand img{display:block;width:142px!important;max-width:100%;height:auto!important;object-fit:contain;margin:0 auto}
-.nav-list{display:grid;gap:2px}
-.side .nav-item{
-  width:100%;min-height:36px;border:0;color:#f5f4fb;background:transparent;text-align:left;
-  padding:8px 11px;border-radius:7px;display:flex;align-items:center;gap:10px;
-  font-size:.82rem;font-weight:520;letter-spacing:-.005em;text-decoration:none;box-shadow:none
+/* Build 2 / Build 6 inherited approved sidebar artwork treatment. */
+.logo-wrap{
+  position:relative;
+  height:126px!important;
+  min-height:126px!important;
+  padding:2px 2px 14px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  background:transparent!important;
+  overflow:visible!important;
 }
-.side .nav-item:hover{background:rgba(255,255,255,.08);color:#fff}
-.side .nav-item.active{background:linear-gradient(90deg,#56347f,#65438d);box-shadow:0 5px 14px rgba(74,41,116,.2);color:#fff}
-.nav-icon{width:20px;text-align:center;opacity:.96;color:#fff}
-.side-spacer{flex:1;min-height:15px}
-.help-card-approved{border-radius:10px;margin-top:12px;padding:14px;background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.06);color:#fff}
-.help-card-approved h4{font-size:.78rem;margin:0 0 4px}
-.help-card-approved p{font-size:.62rem;line-height:1.45;color:#d8d5e3;margin:0}
-.help-card-approved a{display:block;margin-top:10px;border-radius:6px;background:#633995;color:#fff;text-align:center;text-decoration:none;padding:8px 9px;font-size:.68rem;font-weight:900}
-.help-card-approved a:hover{filter:brightness(1.05)}
+.logo-wrap a{display:flex;width:100%;align-items:center;justify-content:center;text-decoration:none}
+.sidebar .approved-logo{
+  display:block!important;
+  width:218px!important;
+  max-width:100%!important;
+  max-height:108px!important;
+  height:auto!important;
+  object-fit:contain!important;
+  object-position:center!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  filter:none!important;
+}
+.b2-sidebar-close{
+  display:none;position:absolute;right:0;top:0;width:36px;height:36px;border:0;border-radius:50%;
+  background:rgba(255,255,255,.08);color:#fff;font-size:1.15rem;place-items:center
+}
+/* Exact Build 2 proportions with native dropdown behavior.
+   <details>/<summary> keeps every category usable even if optional JS fails. */
+.nav-list{display:flex!important;flex-direction:column!important;gap:7px!important;min-height:0}
+.nav-category{
+  border:1px solid transparent;border-radius:11px;overflow:hidden;background:transparent;
+  transition:background .16s ease,border-color .16s ease
+}
+.nav-category[open]{background:rgba(255,255,255,.045);border-color:var(--b2-nav-line)}
+.nav-category-toggle{
+  width:100%;min-height:43px;border:0;border-radius:10px;background:transparent;color:var(--b2-nav-text);
+  padding:10px 10px;display:grid;grid-template-columns:24px 1fr 18px;align-items:center;gap:9px;text-align:left;
+  font-size:.88rem;line-height:1.2;font-weight:760;letter-spacing:.005em;cursor:pointer;list-style:none;user-select:none
+}
+.nav-category-toggle::-webkit-details-marker{display:none}
+.nav-category-toggle::marker{content:""}
+.nav-category-toggle:hover,.nav-category-toggle:focus-visible{background:rgba(255,255,255,.07)}
+.nav-category-toggle .b2-cat-icon{
+  width:24px;height:24px;border-radius:7px;display:grid;place-items:center;background:rgba(255,255,255,.07);
+  color:#eee2f6;font-size:.78rem
+}
+.nav-category-toggle .b2-cat-chevron{justify-self:end;color:#c9bfd1;font-size:.78rem;transition:transform .18s ease}
+.nav-category[open] .b2-cat-chevron{transform:rotate(90deg)}
+.nav-category-items{display:block}
+.nav-category-items-inner{min-height:0;display:grid;gap:3px;padding:0 6px 7px}
+.sidebar .nav-category .nav-item{
+  display:flex!important;width:100%;min-height:37px!important;margin:0!important;padding:8px 10px 8px 13px!important;
+  border:0!important;border-radius:8px!important;background:transparent!important;box-shadow:none!important;color:#ebe7f0!important;
+  font-size:.79rem!important;line-height:1.25!important;font-weight:570!important;letter-spacing:0!important;opacity:1!important;
+  align-items:center;gap:10px;text-align:left;text-decoration:none
+}
+.sidebar .nav-category .nav-item:hover{background:rgba(255,255,255,.07)!important;color:#fff!important}
+.sidebar .nav-category .nav-item.active{
+  background:linear-gradient(90deg,var(--b2-nav-active-2),var(--b2-nav-active))!important;color:#fff!important;
+  font-weight:760!important;box-shadow:0 6px 18px rgba(40,23,65,.22)!important
+}
+.sidebar .nav-category .nav-icon{width:20px!important;min-width:20px!important;color:#d9cde2!important;opacity:1!important;text-align:center!important}
+.sidebar .nav-category .nav-item.active .nav-icon{color:#fff!important}
+.nav-category[data-category="account"] .nav-item[data-page="plus"]{
+  margin-top:5px!important;border-top:1px solid rgba(255,255,255,.08)!important;border-radius:0 0 8px 8px!important;
+  padding-top:11px!important;color:#f4dff1!important
+}
+.side-spacer{flex:0 0 10px!important;min-height:10px!important}
+.help-card{
+  margin:8px 0 0!important;padding:14px!important;border:1px solid rgba(255,255,255,.075)!important;
+  border-radius:11px!important;background:rgba(255,255,255,.05)!important;color:#fff!important
+}
+.help-card h4{font-size:.88rem!important;margin:0 0 6px!important;color:#fff!important}
+.help-card p{font-size:.72rem!important;line-height:1.48!important;color:#ddd7e4!important;margin:0!important}
+.side-help{
+  width:100%;display:grid;place-items:center;min-height:40px!important;margin-top:10px;border:0!important;
+  font-size:.76rem!important;border-radius:8px!important;background:linear-gradient(135deg,#7750a0,#a56e9d)!important;
+  color:#fff!important;text-decoration:none!important;font-weight:850
+}
+.b2-sidebar-backdrop{display:none}
 @media(max-width:820px){
-  .site-head{margin-left:0}.site-head .brand{display:flex}.shell{grid-template-columns:1fr}
-  .side{position:fixed;top:75px;left:0;bottom:0;width:min(300px,86vw);height:auto;min-height:0;z-index:30;transform:translateX(-105%);transition:transform .18s ease;box-shadow:14px 0 36px rgba(18,17,37,.30)}
-  .side.open{transform:none}.side-brand{display:none}.shell>main{margin-left:0}
+  .site-head{margin-left:0}.site-head .brand{display:flex}.shell{grid-template-columns:1fr}.shell>main{margin-left:0}
+  .sidebar{
+    display:flex!important;position:fixed!important;inset:0 auto 0 0!important;width:min(88vw,320px)!important;height:100vh!important;
+    transform:translateX(-105%)!important;transition:transform .22s ease!important;z-index:1200!important;
+    box-shadow:16px 0 42px rgba(8,7,20,.28)!important
+  }
+  .sidebar.b2-mobile-open,.sidebar.open{transform:translateX(0)!important}
+  .b2-sidebar-close{display:grid}
+  .b2-sidebar-backdrop{position:fixed;inset:0;z-index:1190;background:rgba(8,7,20,.48);backdrop-filter:blur(3px)}
+  .b2-sidebar-backdrop.open{display:block}
+  body.b2-menu-open{overflow:hidden}
+  .logo-wrap{height:118px!important;min-height:118px!important}
+  .sidebar .approved-logo{width:218px!important;max-height:102px!important}
 }
+@media(prefers-reduced-motion:reduce){
+  .nav-category,.nav-category-toggle .b2-cat-chevron,.sidebar{transition:none!important;animation:none!important}
+}
+
 </style>
 </head>
 <body>
@@ -79,27 +186,71 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(85,49,166,.22);outli
   </div>
 </header>
 <div class="shell">
-  <aside class="side" id="sideNav" aria-label="Recovery navigation">
-    <div class="side-brand"><a href="/" aria-label="Lellee home"><img src="/lellee-approved-logo-locked.png" alt="Lellee"></a></div>
+  <aside class="side sidebar" id="sideNav" aria-label="Recovery navigation">
+    <div class="logo-wrap">
+      <a href="/" aria-label="Lellee home"><img class="approved-logo" src="/lellee-approved-logo-locked.png?v=20260817-locked" alt="Lellee — Your journey. Your support. Your way."></a>
+      <button class="b2-sidebar-close" id="sideClose" type="button" aria-label="Close navigation menu">×</button>
+    </div>
     <nav class="nav-list" aria-label="Recovery sections">
-      <button class="nav-item active" type="button" data-view="today"><span class="nav-icon">▣</span><span>Today</span></button>
-      <button class="nav-item" type="button" data-view="journey"><span class="nav-icon">♡</span><span>My Recovery</span></button>
-      <button class="nav-item" type="button" data-view="tools"><span class="nav-icon">⌁</span><span>Tools</span></button>
-      <button class="nav-item" type="button" data-view="paths"><span class="nav-icon">⌂</span><span>Recovery Paths</span></button>
-      <button class="nav-item" type="button" data-view="meetings"><span class="nav-icon">▤</span><span>Meetings</span></button>
-      <button class="nav-item" type="button" data-private="Journal"><span class="nav-icon">▧</span><span>Journal</span></button>
-      <button class="nav-item" type="button" data-private="Progress"><span class="nav-icon">↗</span><span>Progress</span></button>
-      <button class="nav-item" type="button" data-view="resources"><span class="nav-icon">◇</span><span>Resources</span></button>
-      <button class="nav-item" type="button" data-view="community"><span class="nav-icon">♧</span><span>Community</span></button>
-      <button class="nav-item" type="button" data-private="Settings"><span class="nav-icon">⚙</span><span>Settings</span></button>
+      <details class="nav-category" data-category="daily" open>
+        <summary class="nav-category-toggle"><span class="b2-cat-icon">✦</span><span>Daily</span><span class="b2-cat-chevron">›</span></summary>
+        <div class="nav-category-items"><div class="nav-category-items-inner">
+          <button class="nav-item active" type="button" data-page="today" data-view="today"><span class="nav-icon">▣</span><span>Today</span></button>
+          <button class="nav-item" type="button" data-page="for-you" data-view="for-you"><span class="nav-icon">✦</span><span>For You</span></button>
+          <button class="nav-item" type="button" data-page="recovery" data-view="journey"><span class="nav-icon">♡</span><span>My Recovery</span></button>
+        </div></div>
+      </details>
+      <details class="nav-category" data-category="grow">
+        <summary class="nav-category-toggle"><span class="b2-cat-icon">◇</span><span>Grow &amp; Learn</span><span class="b2-cat-chevron">›</span></summary>
+        <div class="nav-category-items"><div class="nav-category-items-inner">
+          <button class="nav-item" type="button" data-page="learn" data-view="learn"><span class="nav-icon">◇</span><span>Learn</span></button>
+          <button class="nav-item" type="button" data-page="expert-guided-practices" data-preview="Expert-Guided Practices"><span class="nav-icon">◎</span><span>Expert-Guided Practices</span></button>
+          <button class="nav-item" type="button" data-page="tools" data-view="tools"><span class="nav-icon">⌁</span><span>Tools</span></button>
+          <button class="nav-item" type="button" data-page="recovery-paths-v2" data-view="paths"><span class="nav-icon">⌂</span><span>Recovery Paths</span></button>
+        </div></div>
+      </details>
+      <details class="nav-category" data-category="connect">
+        <summary class="nav-category-toggle"><span class="b2-cat-icon">♡</span><span>Connect</span><span class="b2-cat-chevron">›</span></summary>
+        <div class="nav-category-items"><div class="nav-category-items-inner">
+          <button class="nav-item" type="button" data-page="meetings" data-view="meetings"><span class="nav-icon">▤</span><span>Meetings</span></button>
+          <button class="nav-item" type="button" data-page="community" data-view="community"><span class="nav-icon">♧</span><span>Community</span></button>
+        </div></div>
+      </details>
+      <details class="nav-category" data-category="reflect">
+        <summary class="nav-category-toggle"><span class="b2-cat-icon">↗</span><span>Reflect &amp; Track</span><span class="b2-cat-chevron">›</span></summary>
+        <div class="nav-category-items"><div class="nav-category-items-inner">
+          <button class="nav-item" type="button" data-page="journal" data-private="Journal"><span class="nav-icon">▧</span><span>Journal</span></button>
+          <button class="nav-item" type="button" data-page="progress" data-private="Progress"><span class="nav-icon">↗</span><span>Progress</span></button>
+          <button class="nav-item" type="button" data-page="calendar" data-private="Calendar"><span class="nav-icon">◷</span><span>Calendar</span></button>
+        </div></div>
+      </details>
+      <details class="nav-category" data-category="support">
+        <summary class="nav-category-toggle"><span class="b2-cat-icon">⌕</span><span>Find Support</span><span class="b2-cat-chevron">›</span></summary>
+        <div class="nav-category-items"><div class="nav-category-items-inner">
+          <button class="nav-item" type="button" data-page="resources" data-view="resources"><span class="nav-icon">◇</span><span>Resources</span></button>
+          <button class="nav-item" type="button" data-page="inbox" data-private="Inbox"><span class="nav-icon">✉</span><span>Inbox</span></button>
+        </div></div>
+      </details>
+      <details class="nav-category" data-category="account">
+        <summary class="nav-category-toggle"><span class="b2-cat-icon">⚙</span><span>Account</span><span class="b2-cat-chevron">›</span></summary>
+        <div class="nav-category-items"><div class="nav-category-items-inner">
+          <button class="nav-item" type="button" data-page="workspace-home" data-private="Workspaces"><span class="nav-icon">◇</span><span>Workspaces</span></button>
+          <button class="nav-item" type="button" data-page="global-search" data-preview="Search Lellee"><span class="nav-icon">⌕</span><span>Search</span></button>
+          <button class="nav-item" type="button" data-page="plus" data-preview="Lellee Plus"><span class="nav-icon">✦</span><span>Lellee Plus</span></button>
+          <button class="nav-item" type="button" data-page="language-accessibility" data-preview="Language & Accessibility"><span class="nav-icon">◎</span><span>Language &amp; Accessibility</span></button>
+          <button class="nav-item" type="button" data-page="settings" data-private="Settings"><span class="nav-icon">⚙</span><span>Settings</span></button>
+          <button class="nav-item" type="button" data-page="help-center" data-preview="Lellee Help Center"><span class="nav-icon">?</span><span>Help</span></button>
+        </div></div>
+      </details>
     </nav>
     <div class="side-spacer"></div>
-    <div class="help-card-approved">
+    <div class="help-card">
       <h4>Need Help Now?</h4>
       <p>Immediate support tools and crisis options when you need them.</p>
-      <a href="/safety.html">Get Help Now</a>
+      <a class="side-help" href="/safety.html">Get Help Now</a>
     </div>
   </aside>
+  <div class="b2-sidebar-backdrop" id="sideBackdrop" aria-hidden="true"></div>
 
   <main>
     <section class="view active" id="view-today">
@@ -212,35 +363,192 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(85,49,166,.22);outli
   'use strict';
   const side=document.getElementById('sideNav');
   const menu=document.getElementById('menuBtn');
+  const closeBtn=document.getElementById('sideClose');
+  const backdrop=document.getElementById('sideBackdrop');
   const modal=document.getElementById('modal');
   const status=document.getElementById('modalStatus');
   const title=document.getElementById('modalTitle');
   const text=document.getElementById('modalText');
   const note=document.getElementById('modalNote');
   const actions=document.getElementById('modalActions');
+  const groups=[...document.querySelectorAll('details.nav-category')];
   let lastFocus=null;
+  let coordinatingGroups=false;
 
-  function setMenu(open){side?.classList.toggle('open',!!open);menu?.setAttribute('aria-expanded',open?'true':'false')}
-  menu?.addEventListener('click',()=>setMenu(!side?.classList.contains('open')));
-  function showView(name){
-    const target=document.getElementById('view-'+name);if(!target)return;
-    document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v===target));
-    document.querySelectorAll('[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===name));
-    setMenu(false);
+  function setMenu(open){
+    const isOpen=Boolean(open);
+    side?.classList.toggle('open',isOpen);
+    side?.classList.toggle('b2-mobile-open',isOpen);
+    backdrop?.classList.toggle('open',isOpen);
+    document.body.classList.toggle('b2-menu-open',isOpen);
+    menu?.setAttribute('aria-expanded',String(isOpen));
+    backdrop?.setAttribute('aria-hidden',String(!isOpen));
+    if(isOpen){
+      const first=side?.querySelector('.nav-category-toggle');
+      window.requestAnimationFrame(()=>first?.focus());
+    }
   }
-  document.addEventListener('click',event=>{
-    const view=event.target.closest('[data-view]');if(view){event.preventDefault();showView(view.dataset.view);return}
-    const privateBtn=event.target.closest('[data-private]');if(privateBtn){event.preventDefault();showPrivate(privateBtn.dataset.private);return}
-    const previewBtn=event.target.closest('[data-preview]');if(previewBtn){event.preventDefault();showPreview(previewBtn.dataset.preview)}
+
+  function syncGroup(group,index=groups.indexOf(group)){
+    if(!group)return;
+    const summary=group.querySelector(':scope > .nav-category-toggle');
+    const panel=group.querySelector(':scope > .nav-category-items');
+    const key=group.dataset.category||String(index+1);
+    if(summary&&!summary.id)summary.id=`recovery-nav-${key}-toggle`;
+    if(panel&&!panel.id)panel.id=`recovery-nav-${key}-panel`;
+    if(summary&&panel){
+      summary.setAttribute('aria-controls',panel.id);
+      summary.setAttribute('aria-expanded',String(group.open));
+      panel.setAttribute('aria-labelledby',summary.id);
+      panel.setAttribute('aria-hidden',String(!group.open));
+      panel.setAttribute('role','group');
+    }
+  }
+
+  function coordinateGroup(group){
+    if(!group||coordinatingGroups)return;
+    coordinatingGroups=true;
+    if(group.open){
+      groups.forEach(other=>{if(other!==group&&other.open)other.open=false});
+    }
+    groups.forEach(syncGroup);
+    coordinatingGroups=false;
+  }
+
+  function openGroupFor(item){
+    const group=item?.closest('details.nav-category');
+    if(!group)return;
+    group.open=true;
+    coordinateGroup(group);
+  }
+
+  function setActiveItem(item){
+    document.querySelectorAll('.sidebar .nav-item').forEach(button=>button.classList.toggle('active',button===item));
+    openGroupFor(item);
+  }
+
+  function findViewNavItem(name){
+    return [...document.querySelectorAll('.sidebar [data-view]')].find(item=>item.dataset.view===name)||null;
+  }
+
+  function showView(name,item){
+    const target=document.getElementById(`view-${name}`);
+    if(!target)return;
+    document.querySelectorAll('.view').forEach(view=>view.classList.toggle('active',view===target));
+    const navItem=item||findViewNavItem(name);
+    if(navItem)setActiveItem(navItem);
+    setMenu(false);
+    window.scrollTo({top:0,behavior:'auto'});
+  }
+
+  function closeModal(){
+    modal?.classList.add('hidden');
+    document.body.style.overflow='';
+    lastFocus?.focus?.();
+  }
+
+  function fillButtons(includeAccount=true){
+    if(!actions)return;
+    actions.innerHTML='';
+    if(includeAccount){
+      const create=document.createElement('a');
+      create.className='primary';
+      create.href='/app?auth=signup&program=recovery';
+      create.textContent='Create account';
+      const sign=document.createElement('a');
+      sign.className='secondary';
+      sign.href='/app?auth=signin&program=recovery';
+      sign.textContent='Sign in';
+      actions.append(create,sign);
+    }
+    const keep=document.createElement('button');
+    keep.type='button';
+    keep.className='secondary';
+    keep.textContent='Keep browsing';
+    keep.addEventListener('click',closeModal);
+    actions.append(keep);
+  }
+
+  function showPrivate(feature){
+    lastFocus=document.activeElement;
+    status.textContent='PRIVATE FEATURE';
+    title.textContent=feature;
+    text.textContent=`${feature} saves personal Recovery information, so a Lellee account is required.`;
+    note.textContent='You do not need an account to keep browsing Recovery, Tools, Resources, Meetings or general learning content.';
+    fillButtons(true);
+    modal.classList.remove('hidden');
+    document.body.style.overflow='hidden';
+    window.requestAnimationFrame(()=>document.getElementById('modalClose')?.focus());
+  }
+
+  function showPreview(topic){
+    lastFocus=document.activeElement;
+    status.textContent='PUBLIC PREVIEW';
+    title.textContent=topic;
+    text.textContent='This area is part of the Lellee experience. You can keep browsing without an account; Lellee only asks you to sign in when an action saves or personalizes your information.';
+    note.textContent='This Build 6 public preview keeps account-only functionality separate so the page stays responsive.';
+    fillButtons(false);
+    modal.classList.remove('hidden');
+    document.body.style.overflow='hidden';
+    window.requestAnimationFrame(()=>document.getElementById('modalClose')?.focus());
+  }
+
+  // Native <details>/<summary> makes every dropdown work without JavaScript.
+  // These listeners add single-open accordion behavior and accessible state syncing.
+  groups.forEach((group,index)=>{
+    syncGroup(group,index);
+    group.addEventListener('toggle',()=>coordinateGroup(group));
   });
-  function closeModal(){modal.classList.add('hidden');document.body.style.overflow='';lastFocus?.focus?.()}
-  function fillButtons(includeAccount=true){actions.innerHTML='';if(includeAccount){
-    const create=document.createElement('a');create.className='primary';create.href='/app?auth=signup&program=recovery';create.textContent='Create account';
-    const sign=document.createElement('a');sign.className='secondary';sign.href='/app?auth=signin&program=recovery';sign.textContent='Sign in';actions.append(create,sign);
-  }const keep=document.createElement('button');keep.type='button';keep.className='secondary';keep.textContent='Keep browsing';keep.addEventListener('click',closeModal);actions.append(keep)}
-  function showPrivate(feature){lastFocus=document.activeElement;status.textContent='PRIVATE FEATURE';title.textContent=feature; text.textContent=`${feature} saves personal Recovery information, so a Lellee account is required.`;note.textContent='You do not need an account to keep browsing Recovery, Tools, Resources, Meetings or general learning content.';fillButtons(true);modal.classList.remove('hidden');document.body.style.overflow='hidden'}
-  function showPreview(topic){lastFocus=document.activeElement;status.textContent='PUBLIC PREVIEW';title.textContent=topic;text.textContent='This topic is available to browse without an account. Lellee only asks you to sign in when you choose to save or personalize your work.';note.textContent='Keep browsing, or create an account later when you want Lellee to remember your progress.';fillButtons(false);modal.classList.remove('hidden');document.body.style.overflow='hidden'}
-  document.getElementById('modalClose')?.addEventListener('click',closeModal);modal?.addEventListener('click',event=>{if(event.target===modal)closeModal()});document.addEventListener('keydown',event=>{if(event.key==='Escape'){closeModal();setMenu(false)}});
+
+  menu?.addEventListener('click',()=>setMenu(!side?.classList.contains('open')));
+  closeBtn?.addEventListener('click',()=>{setMenu(false);menu?.focus()});
+  backdrop?.addEventListener('click',()=>{setMenu(false);menu?.focus()});
+
+  document.querySelectorAll('[data-view]').forEach(item=>{
+    item.addEventListener('click',event=>{
+      event.preventDefault();
+      showView(item.dataset.view,item);
+    });
+  });
+  document.querySelectorAll('[data-private]').forEach(item=>{
+    item.addEventListener('click',event=>{
+      event.preventDefault();
+      openGroupFor(item);
+      showPrivate(item.dataset.private);
+    });
+  });
+  document.querySelectorAll('[data-preview]').forEach(item=>{
+    item.addEventListener('click',event=>{
+      event.preventDefault();
+      openGroupFor(item);
+      showPreview(item.dataset.preview);
+    });
+  });
+
+  document.getElementById('modalClose')?.addEventListener('click',closeModal);
+  modal?.addEventListener('click',event=>{if(event.target===modal)closeModal()});
+  document.addEventListener('keydown',event=>{
+    if(event.key==='Escape'){
+      if(!modal?.classList.contains('hidden'))closeModal();
+      else if(side?.classList.contains('open')){setMenu(false);menu?.focus()}
+    }
+  });
+  window.addEventListener('resize',()=>{if(window.innerWidth>820&&side?.classList.contains('open'))setMenu(false)},{passive:true});
+
+  // Startup audit: six named dropdowns, each with a summary and at least one item.
+  const expected=['daily','grow','connect','reflect','support','account'];
+  const results=expected.map(key=>{
+    const group=document.querySelector(`details.nav-category[data-category="${key}"]`);
+    return {key,present:Boolean(group),toggle:Boolean(group?.querySelector(':scope > summary.nav-category-toggle')),items:group?.querySelectorAll('.nav-item').length||0};
+  });
+  const audit={ok:results.every(result=>result.present&&result.toggle&&result.items>0),results};
+  window.LelleeRecoveryNavigationAudit=audit;
+  document.documentElement.dataset.recoveryNavReady=String(audit.ok);
+  if(!audit.ok)console.error('Lellee Recovery navigation audit failed.',audit);
+
+  // Build 6-era navigation begins with Daily open and Today selected.
+  const initial=findViewNavItem('today');
+  if(initial)setActiveItem(initial);
 })();
 </script>
 </body>
