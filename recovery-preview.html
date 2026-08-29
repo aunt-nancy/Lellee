@@ -4,11 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Lellee | Recovery Today</title>
-<!-- LELLEE BUILD 6 RECOVERY DESIGN + NATIVE DROPDOWN LOCK — 2026-08-28
+<!-- LELLEE BUILD 6 RECOVERY DESIGN + NATIVE DROPDOWN LOCK + IPHONE DISCOVERY — 2026-08-28
      Build 6 did not replace the Recovery shell; it was loaded after Builds 2–5.
      This lightweight public preview restores the exact Build 2 shell/navigation design inherited by Build 6,
      while intentionally omitting the old full-app observers/storage startup paths that caused freezing.
-     Dropdown categories use native <details>/<summary> controls so they still open even if optional JavaScript fails. -->
+     Dropdown categories use native <details>/<summary> controls so they still open even if optional JavaScript fails.
+     iPhone adds a persistent bottom navigation with an obvious Explore button that opens this exact approved drawer. -->
 <meta name="description" content="Explore Lellee Recovery before creating an account.">
 <meta name="theme-color" content="#f7f3fb">
 <style>
@@ -168,6 +169,34 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(85,49,166,.22);outli
   .logo-wrap{height:118px!important;min-height:118px!important}
   .sidebar .approved-logo{width:218px!important;max-height:102px!important}
 }
+
+/* iPhone/mobile discoverability only. The approved Build 6 vertical menu itself is unchanged. */
+.mobile-recovery-dock{display:none}
+@media(max-width:820px){
+  .menu-btn{display:none!important}
+  main{padding-bottom:112px!important}
+  footer{padding-bottom:98px}
+  .mobile-recovery-dock{
+    position:fixed;left:10px;right:10px;bottom:calc(8px + env(safe-area-inset-bottom));z-index:1100;
+    display:grid;grid-template-columns:repeat(5,minmax(0,1fr));align-items:end;gap:3px;
+    min-height:66px;padding:7px 6px 6px;border:1px solid #ded5e7;border-radius:19px;
+    background:rgba(255,255,255,.97);box-shadow:0 10px 34px rgba(22,16,50,.18);backdrop-filter:blur(16px)
+  }
+  .mobile-recovery-dock button,.mobile-recovery-dock a{
+    min-width:0;min-height:48px;border:0;border-radius:12px;background:transparent;color:#665c70;text-decoration:none;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:5px 2px;
+    font-size:.62rem;font-weight:800;line-height:1.1
+  }
+  .mobile-recovery-dock .dock-icon{font-size:1.12rem;line-height:1}
+  .mobile-recovery-dock button.active{background:#f2ecf7;color:#593784}
+  .mobile-recovery-dock .dock-explore{
+    min-height:60px;margin-top:-15px;border-radius:18px;background:linear-gradient(145deg,#684092,#8d5eaa);color:#fff;
+    box-shadow:0 8px 18px rgba(83,48,119,.27);border:3px solid #fff
+  }
+  .mobile-recovery-dock .dock-explore .dock-icon{font-size:1.35rem}
+  .mobile-recovery-dock .dock-explore span:last-child{font-size:.68rem}
+  .mobile-recovery-dock .dock-help{color:#733f70}
+}
 @media(prefers-reduced-motion:reduce){
   .nav-category,.nav-category-toggle .b2-cat-chevron,.sidebar{transition:none!important;animation:none!important}
 }
@@ -178,7 +207,7 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(85,49,166,.22);outli
 <header class="site-head">
   <div class="head-inner">
     <a class="brand" href="/" aria-label="Lellee home"><img src="/lellee-approved-logo-final.jpg?v=20260814-1" alt="Lellee — Your journey. Your support. Your way."></a>
-    <button class="menu-btn" id="menuBtn" type="button" aria-expanded="false" aria-controls="sideNav">☰ Menu</button>
+    <button class="menu-btn" id="menuBtn" type="button" aria-expanded="false" aria-controls="sideNav">☰ Explore</button>
     <nav class="top-nav" aria-label="Recovery preview actions">
       <a href="/landing.html#support-paths">Other Support Paths</a>
       <a class="signin" href="/app?auth=signin&program=recovery">Sign in</a>
@@ -350,6 +379,14 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(85,49,166,.22);outli
   </main>
 </div>
 
+<nav class="mobile-recovery-dock" aria-label="Recovery quick navigation">
+  <button type="button" class="dock-item active" data-mobile-view="today" aria-label="Today"><span class="dock-icon">▣</span><span>Today</span></button>
+  <button type="button" class="dock-item" data-mobile-view="journey" aria-label="My Recovery"><span class="dock-icon">♡</span><span>Journey</span></button>
+  <button type="button" class="dock-item dock-explore" id="mobileExplore" aria-label="Explore all Recovery offerings" aria-expanded="false" aria-controls="sideNav"><span class="dock-icon">☰</span><span>Explore</span></button>
+  <button type="button" class="dock-item" data-mobile-view="tools" aria-label="Recovery Tools"><span class="dock-icon">⌁</span><span>Tools</span></button>
+  <a class="dock-item dock-help" href="/safety.html" aria-label="Get Help Now"><span class="dock-icon">♡</span><span>Help</span></a>
+</nav>
+
 <div class="modal hidden" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
   <div class="modal-card">
     <div class="modal-head"><div class="modal-copy"><small id="modalStatus">PRIVATE FEATURE</small><h3 id="modalTitle">Account required</h3><p id="modalText"></p></div><button class="close" type="button" id="modalClose" aria-label="Close">×</button></div>
@@ -363,6 +400,7 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(85,49,166,.22);outli
   'use strict';
   const side=document.getElementById('sideNav');
   const menu=document.getElementById('menuBtn');
+  const mobileExplore=document.getElementById('mobileExplore');
   const closeBtn=document.getElementById('sideClose');
   const backdrop=document.getElementById('sideBackdrop');
   const modal=document.getElementById('modal');
@@ -382,6 +420,7 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(85,49,166,.22);outli
     backdrop?.classList.toggle('open',isOpen);
     document.body.classList.toggle('b2-menu-open',isOpen);
     menu?.setAttribute('aria-expanded',String(isOpen));
+    mobileExplore?.setAttribute('aria-expanded',String(isOpen));
     backdrop?.setAttribute('aria-hidden',String(!isOpen));
     if(isOpen){
       const first=side?.querySelector('.nav-category-toggle');
@@ -437,6 +476,7 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(85,49,166,.22);outli
     document.querySelectorAll('.view').forEach(view=>view.classList.toggle('active',view===target));
     const navItem=item||findViewNavItem(name);
     if(navItem)setActiveItem(navItem);
+    document.querySelectorAll('.mobile-recovery-dock [data-mobile-view]').forEach(button=>button.classList.toggle('active',button.dataset.mobileView===name));
     setMenu(false);
     window.scrollTo({top:0,behavior:'auto'});
   }
@@ -501,6 +541,10 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(85,49,166,.22);outli
   });
 
   menu?.addEventListener('click',()=>setMenu(!side?.classList.contains('open')));
+  mobileExplore?.addEventListener('click',()=>setMenu(!side?.classList.contains('open')));
+  document.querySelectorAll('.mobile-recovery-dock [data-mobile-view]').forEach(button=>{
+    button.addEventListener('click',()=>showView(button.dataset.mobileView));
+  });
   closeBtn?.addEventListener('click',()=>{setMenu(false);menu?.focus()});
   backdrop?.addEventListener('click',()=>{setMenu(false);menu?.focus()});
 
@@ -530,7 +574,7 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(85,49,166,.22);outli
   document.addEventListener('keydown',event=>{
     if(event.key==='Escape'){
       if(!modal?.classList.contains('hidden'))closeModal();
-      else if(side?.classList.contains('open')){setMenu(false);menu?.focus()}
+      else if(side?.classList.contains('open')){setMenu(false);(window.innerWidth<=820?mobileExplore:menu)?.focus()}
     }
   });
   window.addEventListener('resize',()=>{if(window.innerWidth>820&&side?.classList.contains('open'))setMenu(false)},{passive:true});
