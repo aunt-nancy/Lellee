@@ -1,4 +1,4 @@
-const LELLEE_SW_VERSION='lellee-failsafe-menu-page-response-2026-08-28-v2';
+const LELLEE_SW_VERSION='lellee-main-thread-freeze-menu-repair-2026-08-28-v3';
 self.addEventListener('install',event=>self.skipWaiting());
 self.addEventListener('activate',event=>event.waitUntil((async()=>{
   const names=await caches.keys();

@@ -1,0 +1,21 @@
+LELLEE REPAIR QA — AUGUST 28, 2026
+
+Browser-engine regression test performed with Chromium 144 using the complete index markup and all inline application scripts.
+
+OLD BUILD RESULT
+- Page loaded initially.
+- One ordinary body child-list mutation triggered the coach account-count MutationObserver loop.
+- The browser stopped answering JavaScript evaluation requests.
+- Sidebar/menu clicks could no longer execute.
+
+REPAIRED BUILD RESULT
+- Document reached readyState: complete.
+- Primary navigation initialized successfully.
+- An ordinary body child-list mutation completed and the page remained responsive.
+- Sidebar Tools click activated page-tools.
+- Sidebar Settings click activated page-settings.
+- Coach visibility status remained privacy-first at Off.
+
+Static validation
+- All inline JavaScript blocks passed syntax checking.
+- ZIP integrity test passed for every included file.
