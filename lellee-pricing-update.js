@@ -100,11 +100,10 @@
   setTimeout(applyPricing,1000);
 
   /* ==========================================================
-     SYSTEM CONSOLIDATION RUNTIME BOUNDARY — 2026-09-03
-     The legacy feature chain may load page-specific data, but
-     this guarded function is the single public navigation entry.
+     SYSTEM CONSOLIDATION RUNTIME BOUNDARY — 2026-09-04
+     One public navigation entry + permission-aware Account menu.
      ========================================================== */
-  const RUNTIME_VERSION='2026-09-03-system1';
+  const RUNTIME_VERSION='2026-09-04-system2-admin-entry';
   const legacyRouter=typeof window.showPage==='function'?window.showPage:null;
   const coreRouter=typeof window.LelleeNavigatePage==='function'?window.LelleeNavigatePage:null;
   let navigating=false;
@@ -125,11 +124,81 @@
     logo.removeAttribute('srcset');
   }
 
+  function accountMenuInner(){
+    return document.querySelector('.nav-category[data-category="account"] .nav-category-items-inner');
+  }
+
+  function makeAccountButton(page,label,icon,id){
+    const b=document.createElement('button');
+    b.type='button';
+    b.className='nav-item';
+    b.dataset.page=page;
+    if(id)b.id=id;
+    b.innerHTML=`<span class="nav-icon">${icon}</span><span>${label}</span>`;
+    return b;
+  }
+
+  function ensureAccountNavigation(){
+    const inner=accountMenuInner();
+    if(!inner)return false;
+
+    let workspace=inner.querySelector('[data-page="workspace-home"]');
+    if(!workspace){
+      workspace=makeAccountButton('workspace-home','Workspaces','▦','workspaceNavItem');
+      const search=inner.querySelector('[data-page="global-search"]');
+      inner.insertBefore(workspace,search||inner.firstChild);
+    }
+    workspace.classList.remove('hidden','b2-nav-unused','b2-nav-duplicate');
+
+    let admin=inner.querySelector('[data-page="admin"]');
+    if(!admin){
+      admin=makeAccountButton('admin','Admin','A','adminNavItem');
+      admin.classList.add('hidden');
+      inner.appendChild(admin);
+    }else if(!admin.id){
+      admin.id='adminNavItem';
+    }
+
+    if(window.LelleeAdminContext?.isAdmin===true)admin.classList.remove('hidden');
+    return true;
+  }
+
+  async function refreshAdminNavigation(){
+    ensureAccountNavigation();
+    const admin=document.getElementById('adminNavItem');
+    if(!admin)return false;
+    const ctx=window.LelleeAuthContext;
+    const user=ctx?.getCurrentUser?.();
+    if(!ctx?.client||!user){
+      admin.classList.add('hidden');
+      return false;
+    }
+    try{
+      const {data,error}=await ctx.client.rpc('is_lellee_admin');
+      const allowed=!error&&data===true;
+      window.LelleeAdminContext={...(window.LelleeAdminContext||{}),isAdmin:allowed};
+      admin.classList.toggle('hidden',!allowed);
+      return allowed;
+    }catch(_){
+      admin.classList.add('hidden');
+      return false;
+    }
+  }
+
   function syncHash(page){
     if(!pageExists(page))return;
     const next=`${location.pathname}${location.search}#${encodeURIComponent(page)}`;
     const current=`${location.pathname}${location.search}${location.hash}`;
     if(next!==current)history.replaceState(history.state,'',next);
+  }
+
+  function clearEntryParameter(){
+    try{
+      const url=new URL(location.href);
+      if(!url.searchParams.has('page'))return;
+      url.searchParams.delete('page');
+      history.replaceState(history.state,'',url.pathname+(url.searchParams.toString()?`?${url.searchParams.toString()}`:'')+url.hash);
+    }catch(_){ }
   }
 
   function emitPageChange(page,source='navigation'){
@@ -164,6 +233,7 @@
       navigationCount+=1;
       syncHash(active);
       stabilizeLogo();
+      ensureAccountNavigation();
       emitPageChange(active,'navigation');
     }
 
@@ -186,6 +256,7 @@
     sessionOwner:'index.html / LelleeAuthContext',
     logoOwner:'lellee-approved-logo-transparent.svg',
     serviceWorkerOwner:'/service-worker.js',
+    accountAccessOwner:'canonical runtime + is_lellee_admin',
     get activePage(){return activePage()},
     get navigationCount(){return navigationCount},
     get lastError(){return lastError}
@@ -199,14 +270,31 @@
     if(pageExists(page) && page!==activePage())canonicalNavigate(page);
   });
 
-  let requested='';
-  try{requested=decodeURIComponent(location.hash.replace(/^#/,''))}catch{requested=location.hash.replace(/^#/,'')}
+  let hashRequested='';
+  try{hashRequested=decodeURIComponent(location.hash.replace(/^#/,''))}catch{hashRequested=location.hash.replace(/^#/,'')}
+  let queryRequested='';
+  try{
+    const q=new URLSearchParams(location.search).get('page')||'';
+    if(q==='admin'||q==='workspace-home')queryRequested=q;
+  }catch(_){ }
+  const requested=queryRequested||hashRequested;
+
+  ensureAccountNavigation();
+  refreshAdminNavigation();
+  setTimeout(refreshAdminNavigation,700);
+  setTimeout(refreshAdminNavigation,1800);
+
   if(requested && requested!=='today' && pageExists(requested)){
-    setTimeout(()=>{if(!userInteracted && activePage()!==requested)canonicalNavigate(requested)},850);
+    setTimeout(async()=>{
+      if(requested==='admin')await refreshAdminNavigation();
+      if(!userInteracted && activePage()!==requested)canonicalNavigate(requested);
+      if(queryRequested)clearEntryParameter();
+    },850);
   }
 
   setTimeout(()=>{
     stabilizeLogo();
+    ensureAccountNavigation();
     const active=activePage();
     if(active){syncHash(active);emitPageChange(active,'runtime-ready')}
     console.info(`Lellee system runtime ${RUNTIME_VERSION} active`);
