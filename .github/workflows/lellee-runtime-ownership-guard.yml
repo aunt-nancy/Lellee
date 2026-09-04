@@ -13,6 +13,7 @@ on:
       - 'service-worker.js'
       - 'sw.js'
       - 'vercel.json'
+      - 'LELLEE_MASTER_LOGO_LOCK.json'
       - '.github/workflows/lellee-runtime-ownership-guard.yml'
   pull_request:
     branches: [main]
@@ -24,6 +25,7 @@ on:
       - 'service-worker.js'
       - 'sw.js'
       - 'vercel.json'
+      - 'LELLEE_MASTER_LOGO_LOCK.json'
       - '.github/workflows/lellee-runtime-ownership-guard.yml'
 
 permissions:
@@ -58,6 +60,7 @@ jobs:
           pricing=text('lellee-pricing-update.js')
           worker=text('service-worker.js')
           config=json.loads(text('vercel.json'))
+          logo_lock=json.loads(text('LELLEE_MASTER_LOGO_LOCK.json'))
 
           checks=[
               ('Build 2 must not request the legacy blue logo', 'lellee-approved-logo-locked.png' not in b2),
@@ -72,6 +75,8 @@ jobs:
               ('Canonical navigation runtime must be installed', 'LelleeRuntimeOwnership' in pricing and 'canonicalNavigate' in pricing),
               ('Canonical pricing must remain approved', all(v in pricing for v in ['5.99','59.99','14.99','149.00','49.99','19.99'])),
               ('Service worker must be the consolidated network-first worker', 'lellee-system-consolidation-2026-09-03-v1' in worker and "cache:'no-store'" in worker),
+              ('Master logo metadata must name the canonical transparent asset', logo_lock.get('approved_asset')=='lellee-approved-logo-transparent.svg'),
+              ('Master logo metadata must preserve the approved source artwork', logo_lock.get('approved_source_artwork')=='lellee-approved-logo-original.jpg'),
           ]
           for label,ok in checks:
               if not ok: errors.append(label)
