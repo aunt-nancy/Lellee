@@ -17,10 +17,6 @@
     {
       "source": "/app/:path*",
       "destination": "/index.html"
-    },
-    {
-      "source": "/resources",
-      "destination": "/index.html"
     }
   ],
   "headers": [
