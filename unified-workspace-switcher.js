@@ -5,6 +5,7 @@
   const esc=(v='')=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const ACTIVE_KEY='lellee_active_workspace_v1';
   const RECENT_KEY='lellee_workspace_recent_v1';
+  const ADMIN_TAB_KEY='lellee_admin_tab_v1';
 
   const PAGE_LABELS={
     today:'Today',
@@ -29,6 +30,12 @@
     'organization-forms':'Organization Forms',
     'organization-quickstart':'Organization Quick Start',
     admin:'Admin',
+    analytics:'Analytics & Insights',
+    'program-builder':'Program Builder',
+    'program-demand':'Program Demand',
+    'content-studio':'Content Studio',
+    'safety-profile-builder':'Safety Profiles',
+    'platform-health':'Platform Health',
     'agent-workbench':'Agent Workbench',
     'growth-center':'Growth Center',
     'revenue-ops':'Revenue Operations',
@@ -42,7 +49,7 @@
     personal:new Set(['today','program-switcher','inbox','life-admin','global-search','help-center','settings','account','my-access','calendar','for-you','community','milestones','then-now','story','history','longterm','plus']),
     coach:new Set(['coach-business','coach-dashboard','coach-analytics','coach-revenue','coach-scheduler','coach-automation','coach-credentials','coach-quickstart','my-coaching']),
     organization:new Set(['organization-setup','organization-dashboard','organization-analytics','organization-commerce','organization-outreach','organization-automation','organization-integrations','organization-forms','organization-quickstart','sponsored-access']),
-    admin:new Set(['admin','agent-workbench','growth-center','revenue-ops','release-candidate','organization-admin','coach-admin','my-staff-work','program-demand','program-builder'])
+    admin:new Set(['admin','analytics','program-builder','program-demand','content-studio','safety-profile-builder','platform-health','agent-workbench','growth-center','revenue-ops','release-candidate','organization-admin','coach-admin','my-staff-work'])
   };
 
   const QUICK={
@@ -72,17 +79,67 @@
       ['organization-integrations','Data Exchange','Staged roster/reporting/integration preparation.'],
       ['organization-forms','Forms','Operational forms and aggregate surveys.'],
       ['organization-quickstart','Quick Start','See the next organization setup step.']
-    ],
-    admin:[
-      ['admin','Admin Home','Platform administration.'],
-      ['agent-workbench','Agent Workbench','Queue and review human-controlled agent work.'],
-      ['growth-center','Growth Center','Human-owned partnership pipeline.'],
-      ['revenue-ops','Revenue Operations','Plans, commerce preparation and revenue reporting.'],
-      ['organization-admin','Organization Admin','Review organization and licensing access.'],
-      ['coach-admin','Coach Admin','Review coaching-business access.'],
-      ['release-candidate','Release Candidate','Recovery release readiness without turning launch gates on.']
     ]
   };
+
+  const ADMIN_TABS=[
+    {
+      key:'overview',
+      label:'Overview',
+      items:[
+        ['admin','Admin Home','Platform administration and priority controls.'],
+        ['platform-health','Platform Health','Integration and system health checks.'],
+        ['release-candidate','Release Candidate','Recovery release readiness without turning launch gates on.'],
+        ['my-staff-work','My Staff Work','Your assigned operational work.']
+      ]
+    },
+    {
+      key:'people',
+      label:'People',
+      items:[
+        ['organization-admin','Organization Admin','Review organization and licensing access.'],
+        ['coach-admin','Coach Admin','Review coaching-business access.']
+      ]
+    },
+    {
+      key:'programs',
+      label:'Programs',
+      items:[
+        ['program-builder','Program Builder','Build and maintain Lellee programs.'],
+        ['program-demand','Program Demand','Review demand and program opportunity signals.']
+      ]
+    },
+    {
+      key:'content',
+      label:'Content',
+      items:[
+        ['content-studio','Content Studio','Create, review and publish program content.']
+      ]
+    },
+    {
+      key:'operations',
+      label:'Operations',
+      items:[
+        ['agent-workbench','Agent Workbench','Queue and review human-controlled agent work.'],
+        ['growth-center','Growth Center','Human-owned partnership pipeline.'],
+        ['revenue-ops','Revenue Operations','Plans, commerce preparation and revenue reporting.']
+      ]
+    },
+    {
+      key:'safety',
+      label:'Safety',
+      items:[
+        ['safety-profile-builder','Safety Profiles','Program safety controls and review.']
+      ]
+    },
+    {
+      key:'analytics',
+      label:'Analytics',
+      items:[
+        ['analytics','Analytics & Insights','Platform performance and operating insights.']
+      ]
+    }
+  ];
 
   let access={
     personal:{available:true,label:'Personal',status:'Available',detail:'Your private Lellee programs, tools, messages, resources and progress.',entry:'today',role:'Account owner'},
@@ -90,6 +147,9 @@
     organization:{available:false,label:'Organization',status:'Not connected',detail:'Manage sponsored access, cohorts and aggregate organization operations.',entry:'organization-dashboard',setup:'organization-setup'},
     admin:{available:false,label:'Admin',status:'Not connected',detail:'Platform administration and human-reviewed operational work.',entry:'admin'}
   };
+
+  let quickObserver=null;
+  let quickRenderQueued=false;
 
   function bridge(){return window.LelleeAuthContext?.client?window.LelleeAuthContext:null}
   function user(){return bridge()?.getCurrentUser?.()||null}
@@ -135,7 +195,6 @@
     const c=bridge(),u=user();if(!c||!u)return;
     const client=c.client;
 
-    // Coach. Missing tables are treated as "not connected", not as a fatal app error.
     try{
       const m=await client.from('coach_business_members').select('business_id,role,status').eq('user_id',u.id).eq('status','active').limit(1);
       if(!m.error && m.data?.[0]){
@@ -148,7 +207,6 @@
       }
     }catch(_){}
 
-    // Organization.
     try{
       const m=await client.from('organization_members').select('organization_id,role,status').eq('user_id',u.id).eq('status','active').limit(1);
       if(!m.error && m.data?.[0]){
@@ -161,7 +219,6 @@
       }
     }catch(_){}
 
-    // Admin. Prefer the existing helper so table-level RLS does not need to be broadened.
     try{
       const a=await client.rpc('is_lellee_admin');
       if(!a.error && a.data===true){
@@ -169,13 +226,11 @@
       }
     }catch(_){}
 
-    // If a remembered workspace is no longer available, safely fall back to Personal.
     const current=getWorkspace();
     if(current!=='personal'&&!access[current]?.available){
       try{localStorage.setItem(ACTIVE_KEY,'personal')}catch(_){}
     }
 
-    // Existing sidebar coach shortcut should reflect actual connected role.
     const coachNav=$('#coachNavItem');
     if(coachNav)coachNav.classList.toggle('hidden',!access.coach.available);
 
@@ -224,6 +279,65 @@
     </article>`;
   }
 
+  function ensureAdminTabStyles(){
+    if($('#lelleeAdminWorkspaceTabsStyle'))return;
+    const style=document.createElement('style');
+    style.id='lelleeAdminWorkspaceTabsStyle';
+    style.textContent=`
+      .workspace-admin-tabs{grid-column:1/-1;display:grid;gap:12px;min-width:0}
+      .workspace-admin-tabbar{display:flex;flex-wrap:wrap;gap:7px;align-items:center}
+      .workspace-admin-tab{border:1px solid var(--line);background:var(--white);color:var(--ink);border-radius:999px;padding:8px 11px;font-size:.67rem;font-weight:850;line-height:1}
+      .workspace-admin-tab:hover{background:var(--lav)}
+      .workspace-admin-tab.active{background:var(--lav);border-color:var(--lav2);color:var(--purple)}
+      .workspace-admin-panel{display:grid;gap:10px}
+      .workspace-admin-panel .workspace-quick-entry{margin:0}
+      @media(max-width:820px){
+        .workspace-admin-tabbar{flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch}
+        .workspace-admin-tab{flex:0 0 auto}
+      }`;
+    document.head.appendChild(style);
+  }
+
+  function getAdminTab(){
+    let key='overview';
+    try{key=localStorage.getItem(ADMIN_TAB_KEY)||'overview'}catch(_){}
+    return ADMIN_TABS.some(x=>x.key===key)?key:'overview';
+  }
+
+  function renderAdminQuick(quick){
+    if(!quick)return;
+    ensureAdminTabStyles();
+    const selected=getAdminTab();
+    const tab=ADMIN_TABS.find(x=>x.key===selected)||ADMIN_TABS[0];
+    quick.innerHTML=`
+      <div class="workspace-admin-tabs">
+        <div class="workspace-admin-tabbar" role="tablist" aria-label="Admin sections">
+          ${ADMIN_TABS.map(x=>`<button type="button" class="workspace-admin-tab ${x.key===tab.key?'active':''}" role="tab" aria-selected="${x.key===tab.key?'true':'false'}" data-admin-workspace-tab="${esc(x.key)}">${esc(x.label)}</button>`).join('')}
+        </div>
+        <div class="workspace-admin-panel" role="tabpanel" aria-label="${esc(tab.label)}">
+          ${tab.items.map(x=>`
+            <article class="workspace-quick-entry">
+              <div><b>${esc(x[1])}</b><small>${esc(x[2])}</small></div>
+              <button data-workspace-quick-page="${esc(x[0])}">Open</button>
+            </article>`).join('')}
+        </div>
+      </div>`;
+  }
+
+  function ensureQuickOwnership(){
+    const quick=$('#workspaceQuickGrid');
+    if(!quick||quickObserver)return;
+    quickObserver=new MutationObserver(()=>{
+      if(getWorkspace()!=='admin'||quick.querySelector('.workspace-admin-tabs')||quickRenderQueued)return;
+      quickRenderQueued=true;
+      queueMicrotask(()=>{
+        quickRenderQueued=false;
+        if(getWorkspace()==='admin'&&!quick.querySelector('.workspace-admin-tabs'))renderAdminQuick(quick);
+      });
+    });
+    quickObserver.observe(quick,{childList:true});
+  }
+
   function renderWorkspaceHome(){
     const host=$('#workspaceCardGrid');if(!host)return;
     const current=getWorkspace(),a=access[current]||access.personal;
@@ -234,7 +348,6 @@
     const keys=['personal','coach','organization','admin'].filter(k=>access[k].available);
     host.innerHTML=keys.map(cardHtml).join('');
 
-    // Keep optional business-role creation visible without cluttering the primary workspace cards.
     const missing=[];
     if(!access.coach.available)missing.push(['coach-business','Coach Business']);
     if(!access.organization.available)missing.push(['organization-setup','Organization']);
@@ -257,9 +370,13 @@
       </div>`).join(''):`<div class="workspace-recent-entry"><div><b>No recent workspace activity yet.</b><small>Your recent workspace destinations will appear here.</small></div></div>`;
 
     const quick=$('#workspaceQuickGrid');
-    const items=QUICK[current]||QUICK.personal;
-    if(quick)quick.innerHTML=items.map(x=>`
-      <article class="workspace-quick-entry"><div><b>${esc(x[1])}</b><small>${esc(x[2])}</small></div><button data-workspace-quick-page="${esc(x[0])}">Open</button></article>`).join('');
+    if(current==='admin')renderAdminQuick(quick);
+    else{
+      const items=QUICK[current]||QUICK.personal;
+      if(quick)quick.innerHTML=items.map(x=>`
+        <article class="workspace-quick-entry"><div><b>${esc(x[1])}</b><small>${esc(x[2])}</small></div><button data-workspace-quick-page="${esc(x[0])}">Open</button></article>`).join('');
+    }
+    ensureQuickOwnership();
   }
 
   function renderAccessPage(){
@@ -287,6 +404,14 @@
   function setText(id,v){const e=$('#'+id);if(e)e.textContent=v}
 
   document.addEventListener('click',e=>{
+    const tab=e.target.closest('[data-admin-workspace-tab]');
+    if(tab){
+      e.preventDefault();e.stopImmediatePropagation();
+      try{localStorage.setItem(ADMIN_TAB_KEY,tab.dataset.adminWorkspaceTab)}catch(_){}
+      renderAdminQuick($('#workspaceQuickGrid'));
+      return;
+    }
+
     const open=e.target.closest('[data-workspace-open]');
     if(open){
       e.preventDefault();e.stopImmediatePropagation();
@@ -322,6 +447,7 @@
 
   function boot(){
     ensureContextButton();
+    ensureQuickOwnership();
     let tries=0;
     const timer=setInterval(async()=>{
       tries++;
@@ -341,5 +467,5 @@
 
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
 
-  window.LelleeUnifiedWorkspaces={loadAccess,renderWorkspaceHome,renderAccessPage};
+  window.LelleeUnifiedWorkspaces={loadAccess,renderWorkspaceHome,renderAccessPage,renderAdminQuick};
 })();
