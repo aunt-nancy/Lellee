@@ -15,6 +15,10 @@
       "destination": "/lellee-approved-logo-transparent.svg"
     },
     {
+      "source": "/lellee-approved-logo-locked.png",
+      "destination": "/lellee-approved-logo-transparent.svg"
+    },
+    {
       "source": "/app",
       "destination": "/index.html"
     },
