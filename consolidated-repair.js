@@ -61,8 +61,8 @@
   function repairExpertPractices(){
     const button=$('.nav-category[data-category="grow"] [data-page="expert-guided-practices"]');
     if(!button||button.dataset.b7Repair==='true')return;
-    const fresh=button.cloneNode(true);fresh.dataset.b7Repair='true';button.replaceWith(fresh);
-    fresh.addEventListener('click',e=>{e.preventDefault();e.stopImmediatePropagation();activate('expert-guided-practices');$('.nav-category[data-category="grow"]')?.classList.add('open')},true);
+    const fresh=button.cloneNode(true);fresh.dataset.b7Repair='true';fresh.classList.remove('b2-nav-placeholder');button.replaceWith(fresh);
+    fresh.addEventListener('click',e=>{e.preventDefault();e.stopImmediatePropagation();if(typeof window.showPage==='function')window.showPage('expert-guided-practices');else activate('expert-guided-practices');$('.nav-category[data-category="grow"]')?.classList.add('open')},true);
   }
 
   function addProfessionalPromo(){
