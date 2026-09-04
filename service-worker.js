@@ -1,6 +1,7 @@
-const LELLEE_SW_VERSION='lellee-header-plans-footer-coaching-2026-08-29-v7';
+const LELLEE_SW_VERSION='lellee-system-consolidation-2026-09-03-v1';
 self.addEventListener('install',event=>self.skipWaiting());
 self.addEventListener('activate',event=>event.waitUntil((async()=>{
+  // Consolidation rule: no historical shell/cache may survive a worker update.
   const names=await caches.keys();
   await Promise.all(names.map(name=>caches.delete(name)));
   await self.clients.claim();
@@ -34,7 +35,7 @@ self.addEventListener('notificationclick',event=>{
   const target=event.notification?.data?.url||'/app';
   event.waitUntil((async()=>{
     const windows=await self.clients.matchAll({type:'window',includeUncontrolled:true});
-    for(const client of windows){if('focus' in client){await client.navigate(target);return client.focus()}}
+    for(const client of windows){if('focus'in client){await client.navigate(target);return client.focus()}}
     return self.clients.openWindow(target);
   })());
 });

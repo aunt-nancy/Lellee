@@ -1,0 +1,101 @@
+name: Lellee Runtime Ownership Guard
+
+on:
+  push:
+    branches:
+      - main
+      - 'consolidation/**'
+    paths:
+      - 'build-2-shell.js'
+      - 'consolidated-repair.js'
+      - 'lellee-pricing-update.js'
+      - 'pwa-runtime.js'
+      - 'service-worker.js'
+      - 'sw.js'
+      - 'vercel.json'
+      - 'LELLEE_MASTER_LOGO_LOCK.json'
+      - '.github/workflows/lellee-runtime-ownership-guard.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'build-2-shell.js'
+      - 'consolidated-repair.js'
+      - 'lellee-pricing-update.js'
+      - 'pwa-runtime.js'
+      - 'service-worker.js'
+      - 'sw.js'
+      - 'vercel.json'
+      - 'LELLEE_MASTER_LOGO_LOCK.json'
+      - '.github/workflows/lellee-runtime-ownership-guard.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  runtime-ownership:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: JavaScript syntax checks
+        run: |
+          node --check build-2-shell.js
+          node --check consolidated-repair.js
+          node --check lellee-pricing-update.js
+          node --check pwa-runtime.js
+          node --check service-worker.js
+          node --check sw.js
+      - name: Ownership regression checks
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+
+          def text(path):
+              return Path(path).read_text(encoding='utf-8')
+
+          errors=[]
+          b2=text('build-2-shell.js')
+          repair=text('consolidated-repair.js')
+          pwa=text('pwa-runtime.js')
+          pricing=text('lellee-pricing-update.js')
+          worker=text('service-worker.js')
+          config=json.loads(text('vercel.json'))
+          logo_lock=json.loads(text('LELLEE_MASTER_LOGO_LOCK.json'))
+
+          checks=[
+              ('Build 2 must not request the legacy blue logo', 'lellee-approved-logo-locked.png' not in b2),
+              ('Build 2 must not force window scrolling', 'window.scrollTo' not in b2),
+              ('Build 2 must not restore pages through an auth-overlay observer', 'new MutationObserver(restorePage)' not in b2),
+              ('Late repair must not force window scrolling', 'window.scrollTo' not in repair),
+              ('Late repair must not inject the old Today professional promo', 'addProfessionalPromo' not in repair and 'b7ProfessionalPromo' not in repair),
+              ('Late repair must not run the old every-click repair sweep', 'repairDynamic' not in repair),
+              ('PWA runtime must register the canonical worker', "register('/service-worker.js'" in pwa),
+              ('PWA runtime must not register the compatibility worker', "register('/sw.js'" not in pwa),
+              ('PWA runtime must not auto-reload on controller change', "controllerchange',()=>location.reload" not in pwa and 'controllerchange",()=>location.reload' not in pwa),
+              ('Canonical navigation runtime must be installed', 'LelleeRuntimeOwnership' in pricing and 'canonicalNavigate' in pricing),
+              ('Canonical pricing must remain approved', all(v in pricing for v in ['5.99','59.99','14.99','149.00','49.99','19.99'])),
+              ('Service worker must be the consolidated network-first worker', 'lellee-system-consolidation-2026-09-03-v1' in worker and "cache:'no-store'" in worker),
+              ('Master logo metadata must name the canonical transparent asset', logo_lock.get('approved_asset')=='lellee-approved-logo-transparent.svg'),
+              ('Master logo metadata must preserve the approved source artwork', logo_lock.get('approved_source_artwork')=='lellee-approved-logo-original.jpg'),
+          ]
+          for label,ok in checks:
+              if not ok: errors.append(label)
+
+          rewrites=config.get('rewrites',[])
+          redirects=config.get('redirects',[])
+          rewrite_sources={x.get('source') for x in rewrites}
+          redirects_by_source={x.get('source'):x.get('destination','') for x in redirects}
+          for legacy in ['/lellee-approved-logo-final.jpg','/lellee-approved-logo-locked.png']:
+              if legacy in rewrite_sources:
+                  errors.append(f'{legacy} must not be a rewrite')
+              if 'lellee-approved-logo-transparent.svg' not in redirects_by_source.get(legacy,''):
+                  errors.append(f'{legacy} must redirect to the canonical transparent logo')
+          if not any(x.get('source')=='/app' and x.get('destination')=='/index.html' for x in rewrites):
+              errors.append('/app must rewrite to /index.html')
+
+          if errors:
+              print('RUNTIME OWNERSHIP GUARD FAILED:')
+              for error in errors: print(' -',error)
+              raise SystemExit(1)
+          print('Lellee runtime ownership guard passed.')
+          PY

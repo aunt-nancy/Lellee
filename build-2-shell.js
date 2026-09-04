@@ -3,25 +3,15 @@
 
   const PAGE_KEY = 'lellee:last-page:v2';
   const CATEGORY_KEY = 'lellee:last-nav-category:v2';
+  const LOGO_SRC = '/lellee-approved-logo-transparent.svg?v=20260903-system1';
+
   const CATEGORY_MAP = {
-    daily: {
-      label: 'Daily', icon: '✦', pages: ['today', 'for-you', 'recovery']
-    },
-    grow: {
-      label: 'Grow & Learn', icon: '◇', pages: ['learn', 'expert-guided-practices', 'tools', 'recovery-paths-v2']
-    },
-    connect: {
-      label: 'Connect', icon: '♡', pages: ['meetings', 'community']
-    },
-    reflect: {
-      label: 'Reflect & Track', icon: '↗', pages: ['journal', 'progress', 'calendar']
-    },
-    support: {
-      label: 'Find Support', icon: '⌕', pages: ['resources', 'inbox']
-    },
-    account: {
-      label: 'Account', icon: '⚙', pages: ['workspace-home', 'global-search', 'plus', 'settings', 'help-center', 'admin']
-    }
+    daily: { label: 'Daily', icon: '✦', pages: ['today', 'for-you', 'recovery'] },
+    grow: { label: 'Grow & Learn', icon: '◇', pages: ['learn', 'expert-guided-practices', 'tools', 'recovery-paths-v2'] },
+    connect: { label: 'Connect', icon: '♡', pages: ['meetings', 'community'] },
+    reflect: { label: 'Reflect & Track', icon: '↗', pages: ['journal', 'progress', 'calendar'] },
+    support: { label: 'Find Support', icon: '⌕', pages: ['resources', 'inbox'] },
+    account: { label: 'Account', icon: '⚙', pages: ['workspace-home', 'global-search', 'plus', 'settings', 'help-center', 'admin'] }
   };
 
   const RELATED_CATEGORY = {
@@ -38,8 +28,8 @@
   };
 
   let navList;
-  let categoryNodes = new Map();
-  let restoreAttempted = false;
+  const categoryNodes = new Map();
+  let backdrop;
 
   function preferredButton(page) {
     const all = [...document.querySelectorAll(`.sidebar .nav-item[data-page="${CSS.escape(page)}"]`)];
@@ -75,14 +65,25 @@
     content.appendChild(section);
   }
 
+  function navigateTo(page) {
+    const router = window.LelleeNavigatePage || window.showPage;
+    if (typeof router === 'function') {
+      router(page);
+      return true;
+    }
+    const target = document.getElementById(`page-${page}`);
+    if (!target) return false;
+    document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
+    target.classList.add('active');
+    return true;
+  }
+
   function makePlaceholderButton() {
     const button = document.createElement('button');
     button.type = 'button';
     button.className = 'nav-item b2-nav-placeholder';
     button.dataset.page = 'expert-guided-practices';
     button.innerHTML = '<span class="nav-icon">▧</span>Expert-Guided Practices';
-    // APPROVED RESTORE: this button is created after the core static
-    // data-page bindings, so it must own its navigation handler.
     button.addEventListener('click', event => {
       event.preventDefault();
       event.stopPropagation();
@@ -96,8 +97,7 @@
     categoryNodes.forEach((node, key) => {
       const open = key === name;
       node.classList.toggle('open', open);
-      const toggle = node.querySelector('.nav-category-toggle');
-      toggle?.setAttribute('aria-expanded', String(open));
+      node.querySelector('.nav-category-toggle')?.setAttribute('aria-expanded', String(open));
     });
     if (persist) localStorage.setItem(CATEGORY_KEY, name);
   }
@@ -111,19 +111,24 @@
     return active?.id?.replace(/^page-/, '') || 'today';
   }
 
-  function updateCategoryForActivePage() {
-    const page = activePageName();
+  function updateCategoryForActivePage(pageName = activePageName()) {
+    const page = pageName || activePageName();
     openCategory(categoryForPage(page));
     document.querySelectorAll('.sidebar .nav-item[data-page]').forEach(button => {
       button.classList.toggle('active', button.dataset.page === page);
     });
+    const mobileTitle = document.querySelector('.mobile-title');
+    if (mobileTitle) {
+      const target = document.getElementById(`page-${page}`);
+      const label = preferredButton(page)?.textContent?.trim() || target?.querySelector('h2')?.textContent?.trim() || 'Lellee';
+      mobileTitle.textContent = label.replace(/Build 3$/, '').trim();
+    }
   }
 
   function buildAccordion() {
     navList = document.querySelector('.sidebar .nav-list');
     if (!navList || navList.dataset.build2Ready === 'true') return;
     navList.dataset.build2Ready = 'true';
-
     createExpertPracticesPage();
 
     const selected = new Map();
@@ -133,7 +138,6 @@
       if (button) selected.set(page, button);
     });
 
-    // Hide any legacy entries that are intentionally nested elsewhere.
     [...navList.querySelectorAll(':scope > .nav-item')].forEach(button => {
       if (![...selected.values()].includes(button)) button.classList.add('b2-nav-unused');
     });
@@ -154,7 +158,6 @@
       items.className = 'nav-category-items';
       const inner = document.createElement('div');
       inner.className = 'nav-category-items-inner';
-
       config.pages.forEach(page => {
         const button = selected.get(page);
         if (button) inner.appendChild(button);
@@ -176,82 +179,18 @@
     });
 
     navList.replaceChildren(fragment);
-
     const active = activePageName();
     const savedCategory = localStorage.getItem(CATEGORY_KEY);
     openCategory(savedCategory || categoryForPage(active), false);
-    updateCategoryForActivePage();
+    updateCategoryForActivePage(active);
   }
 
-  function activatePage(page) {
-    const target = document.getElementById(`page-${page}`);
-    if (!target) return false;
-    document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
-    target.classList.add('active');
-    document.querySelectorAll('.nav-item,.mobile-bottom button[data-page]').forEach(button => {
-      button.classList.toggle('active', button.dataset.page === page);
-    });
-    const mobileTitle = document.querySelector('.mobile-title');
-    if (mobileTitle) {
-      const label = preferredButton(page)?.textContent?.trim() || target.querySelector('h2')?.textContent?.trim() || 'Lellee';
-      mobileTitle.textContent = label.replace(/Build 3$/, '').trim();
-    }
-    openCategory(categoryForPage(page));
-    window.scrollTo({ top: 0, behavior: 'auto' });
-    return true;
-  }
-
-  function navigateTo(page) {
-    const buttons = [...document.querySelectorAll(`[data-page="${CSS.escape(page)}"]`)];
-    const existing = buttons.find(button => !button.classList.contains('b2-nav-placeholder'));
-    if (existing) {
-      existing.click();
-      setTimeout(() => activatePage(page), 25);
-      return true;
-    }
-    return activatePage(page);
-  }
-
-  function rememberPage(page) { /* Core recovery router owns per-user resume state. */ }
-
-  function restorePage() { /* Core recovery router restores the last safe page. */ }
-
-  function watchPageState() {
-    document.addEventListener('click', event => {
-      const pageButton = event.target.closest('[data-page]');
-      if (pageButton?.dataset.page) {
-        rememberPage(pageButton.dataset.page);
-        setTimeout(updateCategoryForActivePage, 40);
-        closeMobileMenu();
-      }
-    }, true);
-
-    const content = document.querySelector('.content');
-    if (content) {
-      new MutationObserver(updateCategoryForActivePage).observe(content, {
-        subtree: true,
-        attributes: true,
-        attributeFilter: ['class']
-      });
-    }
-
-    const overlay = document.getElementById('authOverlay');
-    if (overlay) {
-      new MutationObserver(restorePage).observe(overlay, { attributes: true, attributeFilter: ['class'] });
-    }
-
-    document.getElementById('signOutBtn')?.addEventListener('click', () => {
-      localStorage.removeItem(PAGE_KEY);
-      localStorage.removeItem(CATEGORY_KEY);
-    });
-  }
-
-  let backdrop;
   function openMobileMenu() {
     document.querySelector('.sidebar')?.classList.add('b2-mobile-open');
     backdrop?.classList.add('open');
     document.body.classList.add('b2-menu-open');
   }
+
   function closeMobileMenu() {
     document.querySelector('.sidebar')?.classList.remove('b2-mobile-open');
     backdrop?.classList.remove('open');
@@ -261,7 +200,8 @@
   function setupMobileDrawer() {
     const sidebar = document.querySelector('.sidebar');
     const logoWrap = sidebar?.querySelector('.logo-wrap');
-    if (!sidebar || !logoWrap) return;
+    if (!sidebar || !logoWrap || logoWrap.dataset.b2DrawerReady === 'true') return;
+    logoWrap.dataset.b2DrawerReady = 'true';
 
     const close = document.createElement('button');
     close.type = 'button';
@@ -284,24 +224,40 @@
       newButton.addEventListener('click', openMobileMenu);
       oldButton.replaceWith(newButton);
     }
-
-    window.addEventListener('keydown', event => {
-      if (event.key === 'Escape') closeMobileMenu();
-    });
+    window.addEventListener('keydown', event => { if (event.key === 'Escape') closeMobileMenu(); });
   }
 
   function setSidebarLogo() {
     const logo = document.querySelector('.sidebar .approved-logo');
     if (!logo) return;
-    logo.src = '/lellee-approved-logo-locked.png?v=20260817-locked';
+    const next = new URL(LOGO_SRC, location.origin).href;
+    if (logo.src !== next) logo.src = LOGO_SRC;
     logo.removeAttribute('srcset');
     logo.alt = 'Lellee — Your journey. Your support. Your way.';
   }
 
+  function watchPageState() {
+    document.addEventListener('click', event => {
+      const pageButton = event.target.closest?.('[data-page]');
+      if (!pageButton?.dataset.page) return;
+      setTimeout(() => updateCategoryForActivePage(), 0);
+      closeMobileMenu();
+    }, true);
+
+    document.addEventListener('lellee:pagechange', event => {
+      updateCategoryForActivePage(event.detail?.page || activePageName());
+      closeMobileMenu();
+    });
+
+    document.getElementById('signOutBtn')?.addEventListener('click', () => {
+      localStorage.removeItem(PAGE_KEY);
+      localStorage.removeItem(CATEGORY_KEY);
+    });
+  }
+
   function voiceLanguage() {
     const lang = (document.documentElement.lang || navigator.language || 'en').toLowerCase();
-    if (lang.startsWith('es')) return 'es-US';
-    return 'en-US';
+    return lang.startsWith('es') ? 'es-US' : 'en-US';
   }
 
   function voiceStatus(message) {
@@ -329,8 +285,8 @@
     if (!eligibleVoiceField(field) || field.dataset.voiceReady === 'true') return;
     const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!Recognition) return;
-
     field.dataset.voiceReady = 'true';
+
     const wrapper = document.createElement('span');
     wrapper.className = `b2-voice-wrap${field instanceof HTMLTextAreaElement ? ' b2-textarea' : ''}`;
     field.parentNode.insertBefore(wrapper, field);
@@ -350,11 +306,7 @@
       recognition.interimResults = false;
       recognition.continuous = false;
       recognition.maxAlternatives = 1;
-
-      recognition.onstart = () => {
-        button.classList.add('listening');
-        voiceStatus('Listening… Speak now.');
-      };
+      recognition.onstart = () => { button.classList.add('listening'); voiceStatus('Listening… Speak now.'); };
       recognition.onresult = event => {
         const text = event.results?.[0]?.[0]?.transcript?.trim();
         if (!text) return;
@@ -377,13 +329,15 @@
     const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!Recognition) return;
     document.querySelectorAll('textarea,input[type="text"]').forEach(enhanceVoiceField);
-    new MutationObserver(mutations => {
+    const observer = new MutationObserver(mutations => {
       mutations.forEach(mutation => mutation.addedNodes.forEach(node => {
         if (!(node instanceof Element)) return;
         if (node.matches?.('textarea,input[type="text"]')) enhanceVoiceField(node);
         node.querySelectorAll?.('textarea,input[type="text"]').forEach(enhanceVoiceField);
       }));
-    }).observe(document.body, { childList: true, subtree: true });
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+    window.addEventListener('pagehide', () => observer.disconnect(), { once: true });
   }
 
   function initialize() {
@@ -392,13 +346,9 @@
     setupMobileDrawer();
     watchPageState();
     setupVoiceInput();
-    setTimeout(restorePage, 200);
-    window.addEventListener('load', () => setTimeout(restorePage, 150), { once: true });
+    console.info('Lellee Build 2 consolidated shell 2026-09-03 loaded');
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initialize, { once: true });
-  } else {
-    initialize();
-  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initialize, { once: true });
+  else initialize();
 })();
