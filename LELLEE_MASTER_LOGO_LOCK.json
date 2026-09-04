@@ -1,12 +1,18 @@
 {
-  "change": "Master Lellee logo lock",
-  "approved_asset": "lellee-approved-logo-locked.png",
+  "change": "Master Lellee logo lock — system consolidation 2026-09-03",
+  "approved_asset": "lellee-approved-logo-transparent.svg",
+  "approved_source_artwork": "lellee-approved-logo-original.jpg",
+  "artwork_rule": "Preserve the approved Lellee artwork, colors, proportions, sizing and placement. Only the white background treatment may be transparent for dark-shell use.",
   "applies_to": [
     "master /app shell",
     "landing",
     "recovery",
     "login/brand images"
   ],
-  "legacy_logo_files_removed": [],
-  "deployment": "Replace the existing deployment with the full contents of this ZIP."
+  "legacy_aliases": [
+    "lellee-approved-logo-final.jpg",
+    "lellee-approved-logo-locked.png"
+  ],
+  "legacy_alias_rule": "Legacy runtime requests redirect to lellee-approved-logo-transparent.svg and must not be assigned by JavaScript.",
+  "deployment": "Use the repository canonical asset and runtime ownership guard; do not restore an older logo package or patch stack."
 }
