@@ -1,5 +1,6 @@
 /* Lellee same-page refresh patch
-   Purpose: preserve the currently open app section across browser refreshes.
+   Purpose: preserve the currently open app section across browser refreshes
+   without competing with normal dashboard/session rendering.
    This file does not change Supabase, auth, billing, content, or Vercel routing.
 */
 (() => {
@@ -27,23 +28,22 @@
     if (!pageExists(name)) return;
     const next = `${location.pathname}${location.search}#${encodeURIComponent(name)}`;
     const current = `${location.pathname}${location.search}${location.hash}`;
-    if (current !== next) {
-      history.replaceState(history.state, '', next);
-    }
+    if (current !== next) history.replaceState(history.state, '', next);
   };
 
   let requested = hashPage();
   if (!pageExists(requested)) requested = null;
 
-  // When reloading a section URL such as /app#journal, protect that target
-  // from any startup code that temporarily opens Today.
-  let restoreLock = Boolean(requested);
+  // Today is the normal signed-in landing page. Never lock or repeatedly
+  // restore it during startup; doing so competes with dashboard rendering.
+  let restoreLock = Boolean(requested && requested !== 'today');
 
   const restoreRequestedPage = () => {
     if (!restoreLock || !requested || typeof window.showPage !== 'function') return;
-    if (activePage() !== requested) {
-      window.showPage(requested);
-    }
+    if (activePage() !== requested) window.showPage(requested);
+    restoreLock = false;
+    const current = activePage();
+    if (current) writePageToUrl(current);
   };
 
   const releaseRestoreLock = () => {
@@ -53,41 +53,31 @@
     if (current) writePageToUrl(current);
   };
 
-  // Once the person begins interacting, normal app navigation takes over.
   document.addEventListener('pointerdown', releaseRestoreLock, { capture: true, once: true });
   document.addEventListener('keydown', releaseRestoreLock, { capture: true, once: true });
 
-  // Watch the existing app's page classes. We do not replace showPage().
-  // After navigation, mirror the active section into the URL hash.
+  // Only observe actual app page class changes. The previous body-wide
+  // subtree observer fired for every dashboard card/status class mutation.
   const observer = new MutationObserver(() => {
     const current = activePage();
     if (!current) return;
-
-    if (restoreLock) {
-      if (current !== requested) queueMicrotask(restoreRequestedPage);
-    } else {
-      writePageToUrl(current);
-    }
+    if (!restoreLock) writePageToUrl(current);
   });
 
   const start = () => {
-    observer.observe(document.body, {
-      subtree: true,
-      attributes: true,
-      attributeFilter: ['class']
+    document.querySelectorAll('.page[id^="page-"]').forEach((page) => {
+      observer.observe(page, { attributes: true, attributeFilter: ['class'] });
     });
 
-    // Covers async session/profile loading without changing that code.
-    [0, 50, 150, 350, 750, 1500, 3000, 5000].forEach((ms) => {
-      setTimeout(restoreRequestedPage, ms);
-    });
+    // One bounded restore for a non-Today deep link after startup settles.
+    if (restoreLock) setTimeout(restoreRequestedPage, 900);
 
-    // Fresh /app visit: record whatever page Lellee normally chooses.
-    if (!requested) {
+    // Fresh /app visit or /app#today: record the page Lellee itself chooses.
+    if (!restoreLock) {
       setTimeout(() => {
         const current = activePage();
         if (current) writePageToUrl(current);
-      }, 1200);
+      }, 900);
     }
   };
 
@@ -102,6 +92,8 @@
       window.showPage(next);
     }
   });
+
+  window.addEventListener('pagehide', () => observer.disconnect(), { once: true });
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', start, { once: true });
