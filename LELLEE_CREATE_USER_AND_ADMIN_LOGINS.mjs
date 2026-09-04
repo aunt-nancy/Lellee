@@ -11,8 +11,8 @@
  *
  * SECURITY
  * - Requires SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY as environment variables.
- * - The service_role key is NEVER written into this file.
- * - DO NOT upload this private provisioning package to GitHub or Vercel.
+ * - Requires LELLEE_QA_USER_PASSWORD and LELLEE_QA_ADMIN_PASSWORD as environment variables.
+ * - The service_role key and QA passwords are NEVER written into this file.
  * - Change both temporary passwords after testing, or delete the QA accounts.
  *
  * REQUIREMENTS
@@ -23,13 +23,13 @@
 
 const USER = {
   email: 'qa.user.082926@lellee.com',
-  password: 'e65%D0JdtX6f23ssk47z@o',
+  password: process.env.LELLEE_QA_USER_PASSWORD || '',
   displayName: 'Lellee QA User',
 };
 
 const ADMIN = {
   email: 'qa.admin.082926@lellee.com',
-  password: 'al^eYC9dK3OC#1+SuO%sA^',
+  password: process.env.LELLEE_QA_ADMIN_PASSWORD || '',
   displayName: 'Lellee QA Admin',
 };
 
@@ -43,8 +43,10 @@ function requireEnv() {
   const missing = [];
   if (!SUPABASE_URL) missing.push('SUPABASE_URL');
   if (!SERVICE_ROLE) missing.push('SUPABASE_SERVICE_ROLE_KEY');
+  if (!USER.password) missing.push('LELLEE_QA_USER_PASSWORD');
+  if (!ADMIN.password) missing.push('LELLEE_QA_ADMIN_PASSWORD');
   if (missing.length) {
-    console.error(`\nSTOP: Missing ${missing.join(' and ')}.`);
+    console.error(`\nSTOP: Missing ${missing.join(', ')}.`);
     console.error('Set them only in your local terminal/session, then run this script again.');
     process.exit(1);
   }
@@ -106,13 +108,12 @@ async function createOrResetUser(account) {
         },
       });
     } catch (err) {
-      // A user may have appeared between lookup and create. Re-check once.
       existing = await findAuthUser(account.email);
       if (!existing) throw err;
     }
   }
 
-  console.log(`Setting known temporary password for ${account.email} ...`);
+  console.log(`Setting temporary password from environment for ${account.email} ...`);
   const updated = await api(`/auth/v1/admin/users/${encodeURIComponent(existing.id)}`, {
     method: 'PUT',
     body: {
@@ -164,15 +165,15 @@ async function bestEffortDisplayName(user) {
 function printCredentials() {
   const loginUrl = `${SITE_URL}/app?auth=signin`;
   console.log('\n============================================================');
-  console.log('LELLEE TEMPORARY LOGIN CREDENTIALS');
+  console.log('LELLEE QA LOGIN DETAILS');
   console.log('============================================================');
   console.log(`STANDARD USER LOGIN: ${loginUrl}`);
   console.log(`Email:    ${USER.email}`);
-  console.log(`Password: ${USER.password}`);
+  console.log('Password: supplied through LELLEE_QA_USER_PASSWORD');
   console.log('');
   console.log(`ADMIN LOGIN:         ${loginUrl}`);
   console.log(`Email:    ${ADMIN.email}`);
-  console.log(`Password: ${ADMIN.password}`);
+  console.log('Password: supplied through LELLEE_QA_ADMIN_PASSWORD');
   console.log('After Admin signs in, the role-protected Admin item should appear in Lellee navigation.');
   console.log('============================================================\n');
 }
@@ -215,7 +216,7 @@ async function main() {
   console.log('SUCCESS: admin QA user has active admin role.');
   printCredentials();
   console.log('SECURITY: Change the temporary passwords after testing or delete these QA accounts.');
-  console.log('SECURITY: Never put the service_role key in index.html, landing.html, GitHub, or Vercel client-side variables.\n');
+  console.log('SECURITY: Never put the service_role key or QA passwords in index.html, landing.html, GitHub, or Vercel client-side variables.\n');
 }
 
 main().catch(err => {
