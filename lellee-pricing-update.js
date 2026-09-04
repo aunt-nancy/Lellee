@@ -1,7 +1,6 @@
 (function(){
   'use strict';
 
-  // Canonical Lellee consumer pricing approved for this branch.
   const LELLEE_PRICES = Object.freeze({
     free: { monthly: 0 },
     plus: { monthly: 5.99, annual: 59.99 },
@@ -22,8 +21,7 @@
     setText('#plusPriceMonthly', money(LELLEE_PRICES.plus.monthly));
     const pricePill=$('#plusPriceMonthly')?.nextElementSibling;
     if(pricePill && pricePill.tagName==='SMALL' && pricePill.textContent!=='/month') pricePill.textContent='/month';
-    setText('#plusComparePrice', money(LELLEE_PRICES.plus.monthly));
-
+    setText('#plusComparePrice', money(LELEE_PRICES.plus.monthly));
     const choice=$('#plusPlanChoice');
     if(choice){
       const monthly=choice.querySelector('option[value="monthly"]');
@@ -31,15 +29,12 @@
       if(monthly && monthly.textContent!=='Monthly — $5.99/month') monthly.textContent='Monthly — $5.99/month';
       if(annual && annual.textContent!=='Annual — $59.99/year') annual.textContent='Annual — $59.99/year';
     }
-
     const m=$('#adminPlusMonthly'), a=$('#adminPlusAnnual');
-    if(m && (!m.value || String(m.value) !== '5.99')) m.value='5.99';
-    if(a && (!a.value || String(a.value) !== '59.99')) a.value='59.99';
-
+    if(m && (!m.value || String(m.value)!=='5.99')) m.value='5.99';
+    if(a && (!a.value || String(a.value)!=='59.99')) a.value='59.99';
     const pm=$('#adminPremiumMonthly'), pa=$('#adminPremiumAnnual');
     if(pm && (!pm.value || String(pm.value)==='0')) pm.value='14.99';
     if(pa && (!pa.value || String(pa.value)==='0')) pa.value='149';
-
     const premiumChoice=$('#premiumPlanChoice');
     if(premiumChoice){
       const monthly=premiumChoice.querySelector('option[value="monthly"]');
@@ -63,7 +58,6 @@
   }
 
   function fixNamedPlanCards(){
-    // Restrict replacements to elements whose own card clearly names the product.
     const cards=$$('article,.commerce-plan-card,.plus-compare-card,.final-checkout-card,.pricing-card,.plan-card,.access-card');
     for(const card of cards){
       const text=(card.textContent||'').replace(/\s+/g,' ').trim();
@@ -79,16 +73,14 @@
   }
 
   function fixLiteralOldPlusPrices(){
-    // Only rewrite stale Plus values when the surrounding element explicitly says Plus.
     const all=$$('body *');
     for(const el of all){
       if(el.children.length) continue;
       const t=(el.textContent||'').trim();
-      if(!['$5.99','$59.99','TBD','unapproved','unapproved'].includes(t)) continue;
+      if(!['$5.99','$59.99','TBD','unapproved'].includes(t)) continue;
       const ctx=el.closest('article,.commerce-plan-card,.plus-compare-card,.pricing-card,.plan-card,section,div');
       if(ctx && /LELLEE\s+PLUS|PLUS\s+MEMBERSHIP|FREE\s+VS\s+PLUS/i.test((ctx.textContent||''))){
-        if(t==='$59.99') el.textContent='$59.99';
-        else el.textContent='$5.99';
+        el.textContent=t==='$59.99'?'$59.99':'$5.99';
       }
     }
   }
@@ -103,13 +95,121 @@
     plusPage.appendChild(note);
   }
 
-  function applyPricing(){
-    fixPlus();
-    fixNamedPlanCards();
-    fixLiteralOldPlusPrices();
-    addPricingNote();
-  }
-  // Pricing is canonical and finite. Avoid a document-wide MutationObserver that can create a render loop.
+  function applyPricing(){fixPlus();fixNamedPlanCards();fixLiteralOldPlusPrices();addPricingNote()}
   setTimeout(applyPricing,250);
   setTimeout(applyPricing,1000);
+
+  /* ==========================================================
+     SYSTEM CONSOLIDATION RUNTIME BOUNDARY — 2026-09-03
+     The legacy feature chain may load page-specific data, but
+     this guarded function is the single public navigation entry.
+     ========================================================== */
+  const RUNTIME_VERSION='2026-09-03-system1';
+  const legacyRouter=typeof window.showPage==='function'?window.showPage:null;
+  const coreRouter=typeof window.LelleeNavigatePage==='function'?window.LelleeNavigatePage:null;
+  let navigating=false;
+  let pendingPage=null;
+  let navigationCount=0;
+  let lastError=null;
+  let userInteracted=false;
+
+  const activePage=()=>document.querySelector('.page.active[id^="page-"]')?.id?.replace(/^page-/,'')||null;
+  const pageExists=page=>Boolean(page&&document.getElementById(`page-${page}`));
+
+  function stabilizeLogo(){
+    const logo=document.querySelector('.sidebar .approved-logo');
+    if(!logo)return;
+    const src='/lellee-approved-logo-transparent.svg?v=20260903-system1';
+    const expected=new URL(src,location.origin).href;
+    if(logo.src!==expected)logo.src=src;
+    logo.removeAttribute('srcset');
+  }
+
+  function syncHash(page){
+    if(!pageExists(page))return;
+    const next=`${location.pathname}${location.search}#${encodeURIComponent(page)}`;
+    const current=`${location.pathname}${location.search}${location.hash}`;
+    if(next!==current)history.replaceState(history.state,'',next);
+  }
+
+  function emitPageChange(page,source='navigation'){
+    if(!page)return;
+    document.dispatchEvent(new CustomEvent('lellee:pagechange',{detail:{page,source,version:RUNTIME_VERSION}}));
+  }
+
+  function canonicalNavigate(page){
+    if(!page)return false;
+    if(navigating){
+      if(page!==activePage())pendingPage=page;
+      return false;
+    }
+    navigating=true;
+    let result=true;
+    try{
+      if(legacyRouter)result=legacyRouter(page);
+      else if(coreRouter)result=coreRouter(page);
+      else result=false;
+    }catch(err){
+      lastError=err;
+      console.error('Lellee canonical navigation hook error:',err);
+      if(activePage()!==page && coreRouter){
+        try{coreRouter(page)}catch(coreErr){lastError=coreErr;console.error('Lellee core navigation error:',coreErr);result=false}
+      }
+    }finally{
+      navigating=false;
+    }
+
+    const active=activePage();
+    if(active){
+      navigationCount+=1;
+      syncHash(active);
+      stabilizeLogo();
+      emitPageChange(active,'navigation');
+    }
+
+    const queued=pendingPage;
+    pendingPage=null;
+    if(queued && queued!==active)queueMicrotask(()=>canonicalNavigate(queued));
+    return result;
+  }
+
+  if(coreRouter){
+    window.LelleeCoreNavigatePage=coreRouter;
+    window.LelleeLegacyPageHooks=legacyRouter;
+    window.showPage=canonicalNavigate;
+    window.LelleeNavigatePage=canonicalNavigate;
+  }
+
+  window.LelleeRuntimeOwnership={
+    version:RUNTIME_VERSION,
+    navigationOwner:'canonical runtime -> core index router',
+    sessionOwner:'index.html / LelleeAuthContext',
+    logoOwner:'lellee-approved-logo-transparent.svg',
+    serviceWorkerOwner:'/service-worker.js',
+    get activePage(){return activePage()},
+    get navigationCount(){return navigationCount},
+    get lastError(){return lastError}
+  };
+
+  document.addEventListener('pointerdown',()=>{userInteracted=true},{capture:true,once:true});
+  document.addEventListener('keydown',()=>{userInteracted=true},{capture:true,once:true});
+  window.addEventListener('hashchange',()=>{
+    let page='';
+    try{page=decodeURIComponent(location.hash.replace(/^#/,''))}catch{page=location.hash.replace(/^#/,'')}
+    if(pageExists(page) && page!==activePage())canonicalNavigate(page);
+  });
+
+  // One bounded deep-link restore. Never repeatedly fight the app startup.
+  let requested='';
+  try{requested=decodeURIComponent(location.hash.replace(/^#/,''))}catch{requested=location.hash.replace(/^#/,'')}
+  if(requested && requested!=='today' && pageExists(requested)){
+    setTimeout(()=>{if(!userInteracted && activePage()!==requested)canonicalNavigate(requested)},850);
+  }
+
+  setTimeout(()=>{
+    stabilizeLogo();
+    const active=activePage();
+    if(active){syncHash(active);emitPageChange(active,'runtime-ready')}
+    console.info(`Lellee system runtime ${RUNTIME_VERSION} active`);
+  },0);
 })();
