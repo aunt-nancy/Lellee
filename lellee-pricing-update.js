@@ -21,7 +21,7 @@
     setText('#plusPriceMonthly', money(LELLEE_PRICES.plus.monthly));
     const pricePill=$('#plusPriceMonthly')?.nextElementSibling;
     if(pricePill && pricePill.tagName==='SMALL' && pricePill.textContent!=='/month') pricePill.textContent='/month';
-    setText('#plusComparePrice', money(LELEE_PRICES.plus.monthly));
+    setText('#plusComparePrice', money(LELLEE_PRICES.plus.monthly));
     const choice=$('#plusPlanChoice');
     if(choice){
       const monthly=choice.querySelector('option[value="monthly"]');
@@ -199,7 +199,6 @@
     if(pageExists(page) && page!==activePage())canonicalNavigate(page);
   });
 
-  // One bounded deep-link restore. Never repeatedly fight the app startup.
   let requested='';
   try{requested=decodeURIComponent(location.hash.replace(/^#/,''))}catch{requested=location.hash.replace(/^#/,'')}
   if(requested && requested!=='today' && pageExists(requested)){
