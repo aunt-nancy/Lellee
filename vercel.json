@@ -11,15 +11,15 @@
   ],
   "rewrites": [
     {
+      "source": "/lellee-approved-logo-final.jpg",
+      "destination": "/lellee-approved-logo-transparent.svg"
+    },
+    {
       "source": "/app",
       "destination": "/index.html"
     },
     {
       "source": "/app/:path*",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/resources",
       "destination": "/index.html"
     }
   ],
