@@ -5,7 +5,7 @@
 .sidebar .nav-category-items .nav-item{min-height:30px!important;padding:5px 10px 5px 29px!important;line-height:1.18!important}
 .sidebar .nav-category{margin-bottom:1px!important}
 .sidebar .nav-category-toggle{min-height:36px!important}
-.sidebar .nav-item[data-page="workspace-home"],
+/* Workspaces is an approved Account destination and must remain visible on mobile/desktop. */
 .sidebar .nav-item[data-page="professional-hub"],
 .sidebar .nav-item[data-b5-page="professional-hub"]{display:none!important}
 
@@ -20,7 +20,7 @@
 #page-plus .plus-review-preview p,
 #page-plus .plus-preview-lines b{font-size:max(.74rem,12px)!important;line-height:1.48!important}
 #page-plus .plus-price-pill small{font-size:max(.68rem,11px)!important}
-.b5-training-card p,.b5-training-card small,.b5-card p,.b5-empty,.b6-page p,.b6-page small{font-size:max(.72rem,11.5px)!important;line-height:1.5!important}
+.b5-training-card p,.b5-training-card small,.b5-card p,.b6-page p,.b6-page small{font-size:max(.72rem,11.5px)!important;line-height:1.5!important}
 
 /* Clear interactive state for Recovery Review. */
 .plus-review-preview{cursor:pointer;transition:.15s ease}

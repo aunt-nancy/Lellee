@@ -5,9 +5,11 @@ on:
     branches:
       - main
       - 'consolidation/**'
+      - 'repair/**'
     paths:
       - 'build-2-shell.js'
       - 'consolidated-repair.js'
+      - 'consolidated-repair.css'
       - 'lellee-pricing-update.js'
       - 'pwa-runtime.js'
       - 'service-worker.js'
@@ -20,6 +22,7 @@ on:
     paths:
       - 'build-2-shell.js'
       - 'consolidated-repair.js'
+      - 'consolidated-repair.css'
       - 'lellee-pricing-update.js'
       - 'pwa-runtime.js'
       - 'service-worker.js'
@@ -56,6 +59,7 @@ jobs:
           errors=[]
           b2=text('build-2-shell.js')
           repair=text('consolidated-repair.js')
+          repair_css=text('consolidated-repair.css')
           pwa=text('pwa-runtime.js')
           pricing=text('lellee-pricing-update.js')
           worker=text('service-worker.js')
@@ -69,10 +73,13 @@ jobs:
               ('Late repair must not force window scrolling', 'window.scrollTo' not in repair),
               ('Late repair must not inject the old Today professional promo', 'addProfessionalPromo' not in repair and 'b7ProfessionalPromo' not in repair),
               ('Late repair must not run the old every-click repair sweep', 'repairDynamic' not in repair),
+              ('Workspaces must not be hidden from the Account navigation', '.nav-item[data-page="workspace-home"]' not in repair_css),
               ('PWA runtime must register the canonical worker', "register('/service-worker.js'" in pwa),
               ('PWA runtime must not register the compatibility worker', "register('/sw.js'" not in pwa),
               ('PWA runtime must not auto-reload on controller change', "controllerchange',()=>location.reload" not in pwa and 'controllerchange",()=>location.reload' not in pwa),
               ('Canonical navigation runtime must be installed', 'LelleeRuntimeOwnership' in pricing and 'canonicalNavigate' in pricing),
+              ('Admin entry route must survive startup', "q==='admin'||q==='workspace-home'" in pricing and 'clearEntryParameter' in pricing),
+              ('Account navigation must guarantee Workspaces and permission-aware Admin', 'ensureAccountNavigation' in pricing and 'refreshAdminNavigation' in pricing and 'is_lellee_admin' in pricing),
               ('Canonical pricing must remain approved', all(v in pricing for v in ['5.99','59.99','14.99','149.00','49.99','19.99'])),
               ('Service worker must be the consolidated network-first worker', 'lellee-system-consolidation-2026-09-03-v1' in worker and "cache:'no-store'" in worker),
               ('Master logo metadata must name the canonical transparent asset', logo_lock.get('approved_asset')=='lellee-approved-logo-transparent.svg'),
