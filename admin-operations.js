@@ -9,9 +9,10 @@ let isAdmin=false,resources=[],news=[],sponsors=[],editingResource=null,editingN
 async function checkAdmin(){
   if(!currentUser)return false;
   try{
-    const {data:r}=await sb.from('admin_user_roles').select('role').eq('user_id',currentUser.id).maybeSingle();
-    isAdmin=!!r&&['admin','editor'].includes(r.role);
+    const {data:r,error}=await sb.rpc('is_lellee_admin');
+    isAdmin=!error&&r===true;
   }catch(e){isAdmin=false}
+  window.LelleeAdminContext={isAdmin};
   q('#adminNavItem')?.classList.toggle('hidden',!isAdmin);
   q('#adminUnauthorized')?.classList.toggle('hidden',isAdmin);
   q('#adminContent')?.classList.toggle('hidden',!isAdmin);
@@ -96,7 +97,7 @@ async function deleteSponsor(){if(!editingSponsor||!confirm('Delete this sponsor
 async function loadSettings(){
   const {data:r}=await sb.from('app_public_settings').select('key,value').in('key',['plus_monthly_price','plus_annual_price','sponsorship_enabled','recovery_news_enabled']);
   const m=Object.fromEntries((r||[]).map(x=>[x.key,x.value]));
-  q('#adminPlusMonthly').value=m.plus_monthly_price||'3.99';q('#adminPlusAnnual').value=m.plus_annual_price||'39.99';q('#adminSponsorshipEnabled').value=m.sponsorship_enabled||'true';q('#adminNewsEnabled').value=m.recovery_news_enabled||'true';
+  q('#adminPlusMonthly').value=m.plus_monthly_price||'5.99';q('#adminPlusAnnual').value=m.plus_annual_price||'59.99';q('#adminSponsorshipEnabled').value=m.sponsorship_enabled||'true';q('#adminNewsEnabled').value=m.recovery_news_enabled||'true';
 }
 async function saveSettings(){
   const rows=[['plus_monthly_price',q('#adminPlusMonthly').value],['plus_annual_price',q('#adminPlusAnnual').value],['sponsorship_enabled',q('#adminSponsorshipEnabled').value],['recovery_news_enabled',q('#adminNewsEnabled').value]].map(([key,value])=>({key,value,updated_at:new Date().toISOString()}));
