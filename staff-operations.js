@@ -19,8 +19,8 @@ function setStaffTab(tab){
  ['dashboard','team','queues','approvals','handoffs','sops'].forEach(x=>q('#staffPanel'+x[0].toUpperCase()+x.slice(1))?.classList.toggle('hidden',x!==tab));
 }
 async function checkAdmin(){
- const {data}=await sb.from('admin_user_roles').select('role,active').eq('user_id',currentUser.id).maybeSingle();
- isAdmin=!!data?.active&&['admin','editor'].includes(data.role);
+ if(typeof currentUser==='undefined'||!currentUser){isAdmin=false;return false;}
+ try{const {data,error}=await sb.rpc('is_lellee_admin');isAdmin=!error&&data===true}catch(_){isAdmin=false}
  return isAdmin;
 }
 async function loadStaffOps(){
@@ -37,6 +37,7 @@ async function loadStaffOps(){
  q('#staffSopList').innerHTML=(d.sops||[]).map(x=>row('S',x.title,`${x.category} · ${x.status}`,x.owner_label||'')).join('');
 }
 async function addStaff(){
+ if(!await checkAdmin())return toast('Administrator access required.',true);
  const email=prompt('Existing Lellee account email:');if(!email)return;
  const roles=await sb.from('staff_roles').select('role_key,name').eq('active',true).order('name');
  if(roles.error)return toast(roles.error.message,true);
@@ -46,6 +47,7 @@ async function addStaff(){
  if(error)return toast(error.message,true);toast('Staff role assigned.');loadStaffOps();
 }
 async function addHandoff(){
+ if(!await checkAdmin())return toast('Administrator access required.',true);
  const title=prompt('Handoff title:');if(!title)return;
  const note=prompt('Operational handoff note:','')||null;
  const {error}=await sb.from('staff_handoffs').insert({title,note,from_user_id:currentUser.id,status:'open',created_by:currentUser.id});
