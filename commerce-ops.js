@@ -53,7 +53,11 @@ async function loadOrgCommerce(){
  q('#orgCommerceLicenseList').innerHTML=(d.licenses||[]).map(x=>row('◇',x.program_name,`${x.status} · ${x.seat_limit} seats`,money(x.configured_value))).join('');
  q('#orgCommerceQuoteList').innerHTML=(d.quotes||[]).length?(d.quotes||[]).map(x=>row('▣',x.quote_name,`${x.status} · ${x.term_label||''}`,money(x.total_amount))).join(''):'<div class="approved-resource-empty">No quotes yet.</div>';
 }
-async function checkAdmin(){const {data}=await sb.from('admin_user_roles').select('role,active').eq('user_id',currentUser.id).maybeSingle();isAdmin=!!data?.active&&['admin','editor'].includes(data.role);return isAdmin}
+async function checkAdmin(){
+ if(typeof currentUser==='undefined'||!currentUser){isAdmin=false;return false;}
+ try{const {data,error}=await sb.rpc('is_lellee_admin');isAdmin=!error&&data===true}catch(_){isAdmin=false}
+ return isAdmin;
+}
 async function loadRevenueOps(){
  if(!await checkAdmin())return;
  const d=await rpc('get_revenue_ops_summary');if(!d)return;
@@ -74,6 +78,7 @@ function setCommerceTab(tab){
  ['plans','entitlements','coaching','organizations','sponsorships','products','discounts','settings'].forEach(x=>q('#commercePanel'+x[0].toUpperCase()+x.slice(1))?.classList.toggle('hidden',x!==tab));
 }
 async function simplePromptInsert(table,fields){
+ if(!await checkAdmin())return toast('Administrator access required.',true);
  const payload={};
  for(const [key,label,def] of fields){
   const v=prompt(label,def||'');if(v===null)return;
@@ -84,7 +89,7 @@ async function simplePromptInsert(table,fields){
 q('#commerceAddProduct')?.addEventListener('click',()=>simplePromptInsert('commerce_products',[['name','Product name','Lellee Journal'],['product_type','Type: journal, printed_story, giveaway, merchandise','journal'],['price_amount','Price','12.99']]));
 q('#commerceAddSponsorPackage')?.addEventListener('click',()=>simplePromptInsert('commerce_sponsorship_packages',[['name','Package name','Featured Resource'],['placement_type','Placement type','resource_listing'],['price_amount','Price','99']]));
 q('#commerceAddDiscount')?.addEventListener('click',()=>simplePromptInsert('commerce_discount_rules',[['name','Rule name','Community Scholarship'],['discount_type','Type: percent, fixed, free_access, grant','percent'],['discount_value','Value','25']]));
-q('#commerceAddPlan')?.addEventListener('click',()=>toast('Use the seeded Free/Plus plans first; additional plan creation can be added when needed.'));
+q('#commerceAddPlan')?.addEventListener('click',async()=>{if(!await checkAdmin())return toast('Administrator access required.',true);toast('Use the seeded Free/Plus plans first; additional plan creation can be added when needed.')});
 qa('[data-commerce-tab]').forEach(b=>b.onclick=()=>setCommerceTab(b.dataset.commerceTab));
 
 if(typeof showPage==='function'){
