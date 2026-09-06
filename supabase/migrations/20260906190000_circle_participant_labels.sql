@@ -32,4 +32,4 @@ $fn$;
 revoke all on function public.get_my_circle_participants() from public,anon,authenticated;
 grant execute on function public.get_my_circle_participants() to authenticated,service_role;
 comment on function public.get_my_circle_participants() is
-  'Account-email labels only for the verified caller\'s current own/incoming Circle relationships. No arbitrary ID or email parameter; no unrelated Admin bypass; no private content.';
+  'Account-email labels only for current relationships of the verified caller. No arbitrary ID or email parameter; no unrelated Admin bypass; no private content.';
