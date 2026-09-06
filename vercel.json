@@ -9,6 +9,22 @@
       "permanent": false
     },
     {
+      "source": "/app",
+      "has": [
+        { "type": "query", "key": "auth", "value": "signin" }
+      ],
+      "destination": "/auth.html?mode=signin",
+      "permanent": false
+    },
+    {
+      "source": "/app",
+      "has": [
+        { "type": "query", "key": "auth", "value": "signup" }
+      ],
+      "destination": "/auth.html?mode=signup",
+      "permanent": false
+    },
+    {
       "source": "/lellee-approved-logo-final.jpg",
       "destination": "/lellee-approved-logo-transparent.svg?v=20260903-system1",
       "permanent": false
