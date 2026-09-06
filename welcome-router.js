@@ -2,7 +2,7 @@
 (()=>{
 'use strict';
 const q=s=>document.querySelector(s),qa=s=>[...document.querySelectorAll(s)];
-const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot',"'":'&#39;'}[m]));
 const toast=(m,bad=false)=>{const t=q('#globalToast');if(t){t.textContent=m;t.classList.remove('hidden');if(bad)t.style.background='#7f2634';setTimeout(()=>{t.classList.add('hidden');t.style.background=''},2500)}};
 let selectedProgram=null,isAdmin=false;
 
@@ -56,8 +56,11 @@ async function loadProgramCatalogLinks(){
  });
 }
 async function checkAdmin(){
- const {data}=await sb.from('admin_user_roles').select('role,active').eq('user_id',currentUser.id).maybeSingle();
- isAdmin=!!data?.active&&['admin','editor'].includes(data.role);
+ if(!currentUser){isAdmin=false;return false;}
+ try{
+   const {data,error}=await sb.rpc('is_lellee_admin');
+   isAdmin=!error&&data===true;
+ }catch(_){isAdmin=false;}
  return isAdmin;
 }
 async function loadDemand(){
