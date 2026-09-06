@@ -2,8 +2,8 @@
 (() => {
   'use strict';
   if (window.LelleeCircleUI) return;
-  const VERSION = '2026-09-06-circle-ui-1';
-  const PROJECT = 'https://vnfjszmhmcxkxegzvivg.supabase.co';
+  const VERSION = '2026-09-06-circle-ui-2';
+  const PROJECT = 'https://hkrrxscyhtxmbvxevfkw.supabase.co';
   const pages = ['trusted-circle', 'supporter-dashboard', 'collaboration-ops'];
   const $ = s => document.querySelector(s);
   const $$ = s => [...document.querySelectorAll(s)];
@@ -86,7 +86,6 @@
       attachAuth(); const {c, user} = context();
       message('Loading your current permissions…');
       if (page === 'collaboration-ops') {
-        // Canonical Admin RPC. The database independently checks authorization.
         const allowed = await result(c.rpc('is_lellee_admin'));
         if (!current(ticket, user, page)) return false;
         if (allowed !== true) throw new Error('Admin access is required.');
@@ -218,7 +217,6 @@
   async function create(kind) {
     if (state.busy) return; state.busy = true;
     try {
-      // Refresh before opening a person picker; no first-person or program defaults.
       const refreshed = await refresh(); if (!refreshed || !state.data || active() !== 'trusted-circle') return;
       const c = context().c;
       if (kind === 'invite') {
@@ -247,7 +245,6 @@
             let query=c.from('trusted_circle_shares').select('id').eq('relationship_id',payload.relationship_id).eq('scope_key',payload.scope_key);
             query=payload.program_id===null?query.is('program_id',null):query.eq('program_id',payload.program_id);
             const rows=await result(query);
-            // No silent upsert or automatic reactivation of an earlier consent record.
             if ((rows||[]).length) throw new Error('A permission record already exists for this category and program. Use Manage permission history to remove the old grant before creating a replacement.');
             if (u!==uid() || !f.isConnected) throw new Error('Account or page changed. Nothing was submitted.');
             return result(c.from('trusted_circle_shares').insert(payload));
@@ -337,7 +334,6 @@
       state.authKnown=true;state.authUser=next;
       if(changed||event==='SIGNED_OUT') {
         clear();
-        // Never await Supabase inside its Auth callback.
         if(next)setTimeout(()=>{if(next===uid()&&active()&&!document.hidden)refresh();},0);
         else message('Sign in to use your private Trusted Circle.');
       }
