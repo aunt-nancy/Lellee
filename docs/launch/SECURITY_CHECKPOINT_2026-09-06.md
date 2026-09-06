@@ -7,6 +7,9 @@ The anonymous SECURITY DEFINER execution gate passes. The complete security and 
 This record summarizes direct catalog queries, inspected function definitions, SQL role-simulation tests, and Supabase Security Advisor results from this session; it is not an independent penetration test.
 No frontend HTML, JavaScript, CSS, logo assets, pricing, Auth URL settings, or Stripe configuration was changed in this security branch.
 
+Subsequent checkpoint: [Legacy private-record isolation and 21 additional grouped tests](LEGACY_DATA_SECURITY_2026-09-06.md).
+The original four-table test below did not include the three legacy tables reviewed there and must not be treated as whole-database certification.
+
 ## What was corrected
 
 The initial migration revoked direct EXECUTE from `anon`, but 74 functions still inherited EXECUTE through `PUBLIC`. The original finding was 75 anonymously callable public-schema SECURITY DEFINER functions; the initial revocation closed only one.
