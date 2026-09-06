@@ -6,6 +6,7 @@ on:
       - main
       - 'consolidation/**'
       - 'repair/**'
+      - 'admin/**'
     paths:
       - 'build-2-shell.js'
       - 'consolidated-repair.js'
@@ -16,6 +17,12 @@ on:
       - 'sw.js'
       - 'vercel.json'
       - 'LELLEE_MASTER_LOGO_LOCK.json'
+      - 'welcome-router.js'
+      - 'program-builder.js'
+      - 'staff-operations.js'
+      - 'commerce-ops.js'
+      - 'onboarding-help.js'
+      - 'supabase/migrations/20260905_admin_authorization_consolidation.sql'
       - '.github/workflows/lellee-runtime-ownership-guard.yml'
   pull_request:
     branches: [main]
@@ -29,6 +36,12 @@ on:
       - 'sw.js'
       - 'vercel.json'
       - 'LELLEE_MASTER_LOGO_LOCK.json'
+      - 'welcome-router.js'
+      - 'program-builder.js'
+      - 'staff-operations.js'
+      - 'commerce-ops.js'
+      - 'onboarding-help.js'
+      - 'supabase/migrations/20260905_admin_authorization_consolidation.sql'
       - '.github/workflows/lellee-runtime-ownership-guard.yml'
 
 permissions:
@@ -47,6 +60,11 @@ jobs:
           node --check pwa-runtime.js
           node --check service-worker.js
           node --check sw.js
+          node --check welcome-router.js
+          node --check program-builder.js
+          node --check staff-operations.js
+          node --check commerce-ops.js
+          node --check onboarding-help.js
       - name: Ownership regression checks
         run: |
           python3 - <<'PY'
@@ -99,6 +117,35 @@ jobs:
                   errors.append(f'{legacy} must redirect to the canonical transparent logo')
           if not any(x.get('source')=='/app' and x.get('destination')=='/index.html' for x in rewrites):
               errors.append('/app must rewrite to /index.html')
+
+          admin_files=[
+              'welcome-router.js',
+              'program-builder.js',
+              'staff-operations.js',
+              'commerce-ops.js',
+              'onboarding-help.js',
+          ]
+          for path in admin_files:
+              source=text(path)
+              if "rpc('is_lellee_admin')" not in source:
+                  errors.append(f'{path} must use canonical is_lellee_admin RPC')
+              if "from('admin_user_roles')" in source:
+                  errors.append(f'{path} must not read admin_user_roles directly')
+
+          migration_path=Path('supabase/migrations/20260905_admin_authorization_consolidation.sql')
+          if not migration_path.exists():
+              errors.append('Admin authorization consolidation migration must exist')
+          else:
+              migration=migration_path.read_text(encoding='utf-8')
+              for required in [
+                  'create table if not exists public.admin_user_roles',
+                  'alter table public.admin_user_roles enable row level security',
+                  'create or replace function public.is_lellee_admin()',
+                  'revoke all on table public.admin_user_roles from authenticated',
+                  'grant execute on function public.is_lellee_admin() to authenticated',
+              ]:
+                  if required not in migration:
+                      errors.append(f'Admin migration missing required control: {required}')
 
           if errors:
               print('RUNTIME OWNERSHIP GUARD FAILED:')
