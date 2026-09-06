@@ -31,7 +31,7 @@
   if(T.hold)return new Promise(resolve=>T.resolvers.push(()=>resolve(response)));
   return new Promise(resolve=>setTimeout(()=>resolve(response),T.delay));
  }
- const c={supabaseUrl:'https://vnfjszmhmcxkxegzvivg.supabase.co',auth:{onAuthStateChange(cb){T.subscriptions++;T.cb=cb;setTimeout(()=>cb('INITIAL_SESSION',T.user?{user:{id:T.user}}:null),0);return {data:{subscription:{unsubscribe(){T.subscriptions--;}}}};}},
+ const c={supabaseUrl:'https://hkrrxscyhtxmbvxevfkw.supabase.co',auth:{onAuthStateChange(cb){T.subscriptions++;T.cb=cb;setTimeout(()=>cb('INITIAL_SESSION',T.user?{user:{id:T.user}}:null),0);return {data:{subscription:{unsubscribe(){T.subscriptions--;}}}};}},
   rpc(name,args){T.log.push({name,args,user:T.user});const user=T.user;let data=null;
     if(name==='is_lellee_admin')data=T.admin;
     else if(name==='get_my_trusted_circle_summary')data=summary(false,user);
