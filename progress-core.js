@@ -100,7 +100,11 @@ async function shareWithCoach(){
  const {error:e}=await sb.from('coach_shared_items').insert({relationship_id:rel.id,client_user_id:currentUser.id,program_id:programId,share_type:'progress_summary',title:'Progress Summary',shared_content:JSON.stringify(summary),source_reference:'progress-core:'+new Date().toISOString()});
  if(e)return toast(e.message,true);toast('Progress snapshot shared with your coach.');
 }
-async function checkAdmin(){const {data}=await sb.from('admin_user_roles').select('role,active').eq('user_id',currentUser.id).maybeSingle();isAdmin=!!data?.active&&['admin','editor'].includes(data.role);return isAdmin}
+async function checkAdmin(){
+ if(typeof currentUser==='undefined'||!currentUser){isAdmin=false;return false;}
+ try{const {data,error}=await sb.rpc('is_lellee_admin');isAdmin=!error&&data===true}catch(_){isAdmin=false}
+ return isAdmin;
+}
 async function loadOutcomeBuilder(){
  if(!await checkAdmin())return;
  const {data,error}=await sb.from('program_outcome_domains').select('*,programs(name,slug)').order('program_id').order('display_order');
@@ -113,7 +117,6 @@ async function loadOutcomeBuilder(){
 async function openOutcomeDomain(){
  if(!await checkAdmin())return;
  const {data:programs}=await sb.from('programs').select('id,name').in('status',['active','pilot','planned']).order('display_order');
- const pOptions=(programs||[]).map(x=>x.id);
  editorMode='outcome';editingId=null;
  q('#progressEditorKicker').textContent='OUTCOME DOMAIN';q('#progressEditorTitle').textContent='Add Outcome Domain';
  q('#progressEditorFields').innerHTML=`
@@ -125,6 +128,7 @@ async function openOutcomeDomain(){
  q('#progressEditorDelete').classList.add('hidden');q('#progressCoreEditor').classList.remove('hidden');
 }
 async function saveOutcome(){
+ if(!await checkAdmin())return toast('Administrator access required.',true);
  const payload={program_id:field('program_id'),domain_key:field('domain_key')?.trim(),label:field('label')?.trim(),measurement_style:field('measurement_style')||'self_rating',description:field('description')?.trim()||null,active:true};
  if(!payload.program_id||!payload.domain_key||!payload.label)return toast('Program, key and label are required.',true);
  const {error}=await sb.from('program_outcome_domains').insert(payload);if(error)return toast(error.message,true);closeEditor();loadOutcomeBuilder();toast('Outcome domain added.');
