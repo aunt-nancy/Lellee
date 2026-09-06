@@ -102,8 +102,9 @@ async function newCohort(){
  if(error)return toast(error.message,true);loadCohorts();
 }
 async function checkAdmin(){
- const {data}=await sb.from('admin_user_roles').select('role,active').eq('user_id',currentUser.id).maybeSingle();
- isAdmin=!!data?.active&&['admin','editor'].includes(data.role);return isAdmin;
+ if(typeof currentUser==='undefined'||!currentUser){isAdmin=false;return false;}
+ try{const {data,error}=await sb.rpc('is_lellee_admin');isAdmin=!error&&data===true}catch(_){isAdmin=false}
+ return isAdmin;
 }
 async function loadCoachAdmin(){
  if(!await checkAdmin())return;
@@ -118,10 +119,12 @@ async function loadCoachAdmin(){
  qa('[data-toggle-market]').forEach(b=>b.onclick=()=>toggleMarket(b.dataset.toggleMarket));
 }
 async function approveCoach(id){
+ if(!await checkAdmin())return toast('Administrator access required.',true);
  const {error}=await sb.from('coach_businesses').update({status:'approved',approved_at:new Date().toISOString(),approved_by:currentUser.id}).eq('id',id);
  if(error)return toast(error.message,true);loadCoachAdmin();
 }
 async function toggleMarket(id){
+ if(!await checkAdmin())return toast('Administrator access required.',true);
  const row=[...qa('[data-toggle-market]')].find(x=>x.dataset.toggleMarket===id);
  const show=row?.textContent==='Show';
  if(show&&(await setting('coach_public_marketplace_enabled'))!=='true')return toast('Global coach marketplace is still OFF.',true);
