@@ -22,6 +22,11 @@ on:
       - 'staff-operations.js'
       - 'commerce-ops.js'
       - 'onboarding-help.js'
+      - 'trusted-circle.js'
+      - 'community-peer.js'
+      - 'security-continuity.js'
+      - 'release-reliability.js'
+      - 'analytics-insights.js'
       - 'supabase/migrations/20260905_admin_authorization_consolidation.sql'
       - '.github/workflows/lellee-runtime-ownership-guard.yml'
   pull_request:
@@ -41,6 +46,11 @@ on:
       - 'staff-operations.js'
       - 'commerce-ops.js'
       - 'onboarding-help.js'
+      - 'trusted-circle.js'
+      - 'community-peer.js'
+      - 'security-continuity.js'
+      - 'release-reliability.js'
+      - 'analytics-insights.js'
       - 'supabase/migrations/20260905_admin_authorization_consolidation.sql'
       - '.github/workflows/lellee-runtime-ownership-guard.yml'
 
@@ -65,6 +75,11 @@ jobs:
           node --check staff-operations.js
           node --check commerce-ops.js
           node --check onboarding-help.js
+          node --check trusted-circle.js
+          node --check community-peer.js
+          node --check security-continuity.js
+          node --check release-reliability.js
+          node --check analytics-insights.js
       - name: Ownership regression checks
         run: |
           python3 - <<'PY'
@@ -124,6 +139,11 @@ jobs:
               'staff-operations.js',
               'commerce-ops.js',
               'onboarding-help.js',
+              'trusted-circle.js',
+              'community-peer.js',
+              'security-continuity.js',
+              'release-reliability.js',
+              'analytics-insights.js',
           ]
           for path in admin_files:
               source=text(path)
