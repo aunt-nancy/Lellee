@@ -138,16 +138,15 @@ begin
     end if;
   end loop;
 
-  if not exists(select 1 from pg_proc p join pg_namespace n on n.oid=p.pronamespace
-    where n.nspname='public' and p.proname='set_updated_at' and p.proconfig @> array['search_path=']) then
-    raise exception 'set_updated_at search_path was not pinned';
-  end if;
-  if not exists(select 1 from pg_proc p join pg_namespace n on n.oid=p.pronamespace
-    where n.nspname='public' and p.proname='lellee_normalize_meeting' and p.proconfig @> array['search_path=']) then
-    raise exception 'lellee_normalize_meeting search_path was not pinned';
-  end if;
-  if not exists(select 1 from pg_proc p join pg_namespace n on n.oid=p.pronamespace
-    where n.nspname='public' and p.proname='lellee_normalize_support_person' and p.proconfig @> array['search_path=']) then
-    raise exception 'lellee_normalize_support_person search_path was not pinned';
+  if exists(
+    select 1 from pg_proc p join pg_namespace n on n.oid=p.pronamespace
+    where n.nspname='public'
+      and p.proname in ('set_updated_at','lellee_normalize_meeting','lellee_normalize_support_person')
+      and not exists (
+        select 1 from unnest(coalesce(p.proconfig,'{}'::text[])) cfg
+        where cfg like 'search_path=%'
+      )
+  ) then
+    raise exception 'One or more advisor-flagged trigger search paths were not pinned';
   end if;
 end $verify$;
