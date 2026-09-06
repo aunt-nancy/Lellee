@@ -27,6 +27,10 @@ on:
       - 'security-continuity.js'
       - 'release-reliability.js'
       - 'analytics-insights.js'
+      - 'trust-support.js'
+      - 'scheduling-crm.js'
+      - 'progress-core.js'
+      - 'personalization-experience.js'
       - 'supabase/migrations/20260905_admin_authorization_consolidation.sql'
       - '.github/workflows/lellee-runtime-ownership-guard.yml'
   pull_request:
@@ -51,6 +55,10 @@ on:
       - 'security-continuity.js'
       - 'release-reliability.js'
       - 'analytics-insights.js'
+      - 'trust-support.js'
+      - 'scheduling-crm.js'
+      - 'progress-core.js'
+      - 'personalization-experience.js'
       - 'supabase/migrations/20260905_admin_authorization_consolidation.sql'
       - '.github/workflows/lellee-runtime-ownership-guard.yml'
 
@@ -80,6 +88,10 @@ jobs:
           node --check security-continuity.js
           node --check release-reliability.js
           node --check analytics-insights.js
+          node --check trust-support.js
+          node --check scheduling-crm.js
+          node --check progress-core.js
+          node --check personalization-experience.js
       - name: Ownership regression checks
         run: |
           python3 - <<'PY'
@@ -144,6 +156,10 @@ jobs:
               'security-continuity.js',
               'release-reliability.js',
               'analytics-insights.js',
+              'trust-support.js',
+              'scheduling-crm.js',
+              'progress-core.js',
+              'personalization-experience.js',
           ]
           for path in admin_files:
               source=text(path)
