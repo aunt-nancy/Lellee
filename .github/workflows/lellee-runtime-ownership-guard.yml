@@ -140,8 +140,10 @@ jobs:
           for legacy in ['/lellee-approved-logo-final.jpg','/lellee-approved-logo-locked.png']:
               if legacy in rewrite_sources:
                   errors.append(f'{legacy} must not be a rewrite')
-              if 'lellee-approved-logo-transparent.svg' not in redirects_by_source.get(legacy,''):
-                  errors.append(f'{legacy} must redirect to the canonical transparent logo')
+          if 'lellee-approved-logo-original.jpg' not in redirects_by_source.get('/lellee-approved-logo-final.jpg',''):
+              errors.append('/lellee-approved-logo-final.jpg must redirect to the approved original landing artwork')
+          if 'lellee-approved-logo-transparent.svg' not in redirects_by_source.get('/lellee-approved-logo-locked.png',''):
+              errors.append('/lellee-approved-logo-locked.png must redirect to the canonical transparent logo')
           if not any(x.get('source')=='/app' and x.get('destination')=='/index.html' for x in rewrites):
               errors.append('/app must rewrite to /index.html')
 
