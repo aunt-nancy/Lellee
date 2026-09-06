@@ -110,7 +110,11 @@ async function addOrgFollowup(){
 }
 function setOrgTab(tab){qa('[data-org-crm-tab]').forEach(b=>b.classList.toggle('active',b.dataset.orgCrmTab===tab));['outreach','announcements','followups','history'].forEach(x=>q('#orgCrmPanel'+x[0].toUpperCase()+x.slice(1))?.classList.toggle('hidden',x!==tab))}
 
-async function checkAdmin(){const {data}=await sb.from('admin_user_roles').select('role,active').eq('user_id',currentUser.id).maybeSingle();isAdmin=!!data?.active&&['admin','editor'].includes(data.role);return isAdmin}
+async function checkAdmin(){
+ if(typeof currentUser==='undefined'||!currentUser){isAdmin=false;return false;}
+ try{const {data,error}=await sb.rpc('is_lellee_admin');isAdmin=!error&&data===true}catch(_){isAdmin=false}
+ return isAdmin;
+}
 async function loadAdminComms(){
  if(!await checkAdmin())return;
  const d=await rpc('get_admin_communications_summary');if(!d)return;
@@ -119,6 +123,7 @@ async function loadAdminComms(){
  q('#adminAnnouncementList').innerHTML=(d.announcements||[]).map(x=>row('✦',x.title,`${x.audience_type} · ${x.status} · ${new Date(x.created_at).toLocaleDateString()}`,'Open')).join('')||'<div class="approved-resource-empty">No communications yet.</div>';
 }
 async function newAdminAnnouncement(){
+ if(!await checkAdmin())return toast('Administrator access required.',true);
  const title=prompt('Announcement title:');if(!title)return;
  const body=prompt('Announcement message:');if(!body)return;
  const {error}=await sb.from('workspace_announcements').insert({workspace_type:'admin',audience_type:'all_users',title,body,status:'draft',created_by:currentUser.id});
