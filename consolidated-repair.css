@@ -9,6 +9,25 @@
 .sidebar .nav-item[data-page="professional-hub"],
 .sidebar .nav-item[data-b5-page="professional-hub"]{display:none!important}
 
+/* Stability final: paint the approved sidebar logo at its final production dimensions
+   from the first frame. index.html contains an older late inline correction with these
+   same values; matching them here prevents the late parser-stage resize/reflow. */
+.logo-wrap{
+  height:112px!important;
+  min-height:112px!important;
+  padding:0 8px 12px!important;
+  align-items:flex-start!important;
+  overflow:visible!important;
+}
+.sidebar .approved-logo{
+  width:184px!important;
+  max-width:none!important;
+  height:auto!important;
+  object-fit:contain!important;
+  transform:scale(1.08)!important;
+  transform-origin:left top!important;
+}
+
 /* Small text repair: preserve headings, make supporting copy readable. */
 #page-plus .plus-feature-grid p,
 #page-plus .plus-feature-grid small,
@@ -55,6 +74,7 @@
 
 @media(max-width:820px){
   .sidebar .nav-category-items .nav-item{min-height:42px!important;padding-top:9px!important;padding-bottom:9px!important}
+  .sidebar .approved-logo{width:170px!important}
   .b7-professional-promo{display:block}
   .b7-professional-promo button{margin-top:12px;width:100%}
   #thenNowResultV2 .b7-arrow{transform:rotate(90deg)}
