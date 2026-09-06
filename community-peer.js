@@ -66,7 +66,11 @@ function wireActions(){
  qa('[data-community-action="report-post"]').forEach(b=>b.onclick=()=>reportPost(b.dataset.communityId));
 }
 
-async function checkAdmin(){const {data}=await sb.from('admin_user_roles').select('role,active').eq('user_id',currentUser.id).maybeSingle();isAdmin=!!data?.active&&['admin','editor'].includes(data.role);return isAdmin}
+async function checkAdmin(){
+ if(typeof currentUser==='undefined'||!currentUser){isAdmin=false;return false;}
+ try{const {data,error}=await sb.rpc('is_lellee_admin');isAdmin=!error&&data===true}catch(_){isAdmin=false}
+ return isAdmin;
+}
 function setCommunityOpsTab(tab){qa('[data-community-ops-tab]').forEach(b=>b.classList.toggle('active',b.dataset.communityOpsTab===tab));['groups','events','reports','roles','health'].forEach(x=>q('#communityOpsPanel'+x[0].toUpperCase()+x.slice(1))?.classList.toggle('hidden',x!==tab))}
 async function loadCommunityOps(){
  if(!await checkAdmin())return;
@@ -80,6 +84,7 @@ async function loadCommunityOps(){
  q('#communityOpsHealthList').innerHTML=(d.health||[]).map(x=>row(x.status==='ok'?'✓':'!',x.label,x.detail,x.status,x.status==='ok'?'':'attention')).join('');
 }
 async function addGroup(){
+ if(!await checkAdmin())return toast('Administrator access required.',true);
  const name=prompt('Group name:');if(!name)return;
  const type=prompt('Group type: discussion, accountability, education, social','discussion')||'discussion';
  const delivery=prompt('Delivery: virtual, in_person, hybrid','virtual')||'virtual';
@@ -88,6 +93,7 @@ async function addGroup(){
  if(error)return toast(error.message,true);loadCommunityOps();
 }
 async function addEvent(){
+ if(!await checkAdmin())return toast('Administrator access required.',true);
  const title=prompt('Event title:');if(!title)return;const when=prompt('Date/time YYYY-MM-DD HH:MM:');if(!when)return;
  const {error}=await sb.from('community_events').insert({title,starts_at:when.replace(' ','T'),delivery_mode:'virtual',status:'draft',created_by:currentUser.id});
  if(error)return toast(error.message,true);loadCommunityOps();

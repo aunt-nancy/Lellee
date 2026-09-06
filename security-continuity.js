@@ -14,7 +14,11 @@ async function rpc(name,args={}){
 function row(icon,title,detail,status='',klass='',action='',id=''){
  return `<div class="security-row ${klass}"><div class="security-icon">${icon}</div><div><b>${esc(title)}</b><small>${esc(detail||'')}</small></div>${action?`<button data-security-action="${esc(action)}" data-security-id="${esc(id)}">${esc(status||'Open')}</button>`:`<em>${esc(status||'')}</em>`}</div>`;
 }
-async function checkAdmin(){const {data}=await sb.from('admin_user_roles').select('role,active').eq('user_id',currentUser.id).maybeSingle();isAdmin=!!data?.active&&['admin','editor'].includes(data.role);return isAdmin}
+async function checkAdmin(){
+ if(typeof currentUser==='undefined'||!currentUser){isAdmin=false;return false;}
+ try{const {data,error}=await sb.rpc('is_lellee_admin');isAdmin=!error&&data===true}catch(_){isAdmin=false}
+ return isAdmin;
+}
 
 async function loadMySecurity(){
  const d=await rpc('get_my_security_center');if(!d)return;
@@ -62,16 +66,19 @@ async function loadSecurityOps(){
  q('#securityIncidentList').innerHTML=(d.incidents||[]).map(x=>row('!',x.title,`${x.severity} · ${x.status} · ${new Date(x.created_at).toLocaleDateString()}`,x.affected_area||'',x.severity==='critical'?'critical':'attention')).join('')||'<div class="approved-resource-empty">No security incidents.</div>';
 }
 async function runBaseline(){
+ if(!await checkAdmin())return toast('Administrator access required.',true);
  const d=await rpc('run_security_baseline_checks');if(!d)return toast('Security baseline could not run.',true);
  toast(`Security baseline: ${d.passed||0} passed, ${d.failed||0} need attention.`);
  loadSecurityOps();
 }
 async function createAccessReview(){
+ if(!await checkAdmin())return toast('Administrator access required.',true);
  const name=prompt('Access review name:','Quarterly Privileged Access Review');if(!name)return;
  const d=await rpc('create_privileged_access_review',{p_name:name});if(!d)return toast('Could not create review.',true);
  toast('Access review created.');loadSecurityOps();
 }
 async function addRestoreDrill(){
+ if(!await checkAdmin())return toast('Administrator access required.',true);
  const label=prompt('Restore drill label:','Supabase restore drill');if(!label)return;
  const result=prompt('Result: pass, attention, fail','pass')||'pass';
  const notes=prompt('Notes:','')||null;
@@ -79,6 +86,7 @@ async function addRestoreDrill(){
  if(error)return toast(error.message,true);loadSecurityOps();
 }
 async function addSecurityIncident(){
+ if(!await checkAdmin())return toast('Administrator access required.',true);
  const title=prompt('Security incident title:');if(!title)return;
  const severity=prompt('Severity: low, medium, high, critical','medium')||'medium';
  const area=prompt('Affected area:','account/access')||null;

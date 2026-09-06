@@ -56,7 +56,11 @@ function wireRecActions(){
  qa('[data-rec-snooze]').forEach(b=>b.onclick=async()=>{await rpc('record_recommendation_action',{p_recommendation_id:b.dataset.recSnooze,p_action:'snoozed'});loadForYou()});
  qa('[data-rec-dismiss]').forEach(b=>b.onclick=async()=>{await rpc('record_recommendation_action',{p_recommendation_id:b.dataset.recDismiss,p_action:'dismissed'});loadForYou()});
 }
-async function checkAdmin(){const {data}=await sb.from('admin_user_roles').select('role,active').eq('user_id',currentUser.id).maybeSingle();isAdmin=!!data?.active&&['admin','editor'].includes(data.role);return isAdmin}
+async function checkAdmin(){
+ if(typeof currentUser==='undefined'||!currentUser){isAdmin=false;return false;}
+ try{const {data,error}=await sb.rpc('is_lellee_admin');isAdmin=!error&&data===true}catch(_){isAdmin=false}
+ return isAdmin;
+}
 function setExperienceTab(tab){qa('[data-experience-tab]').forEach(b=>b.classList.toggle('active',b.dataset.experienceTab===tab));['rules','tags','localization','presets','guardrails'].forEach(x=>q('#experiencePanel'+x[0].toUpperCase()+x.slice(1))?.classList.toggle('hidden',x!==tab))}
 async function loadStudio(){
  if(!await checkAdmin())return;
@@ -70,11 +74,13 @@ async function loadStudio(){
  q('#experienceGuardrailList').innerHTML=(d.guardrails||[]).map(x=>`<article class="personalization-guardrail"><b>${x.enabled?'✓ ':'! '}${esc(x.label)}</b><small>${esc(x.detail)}</small></article>`).join('');
 }
 async function addRule(){
+ if(!await checkAdmin())return toast('Administrator access required.',true);
  const name=prompt('Rule name:');if(!name)return;const type=prompt('Recommendation type: content, tool, resource, task, goal, learning, program','content')||'content';const title=prompt('Recommendation title:');if(!title)return;const page=prompt('Page to open:','today')||'today';
  const {error}=await sb.from('experience_recommendation_rules').insert({name,recommendation_type:type,title,action_page:page,status:'draft',priority:100,created_by:currentUser.id});
  if(error)return toast(error.message,true);loadStudio();
 }
 async function addTag(){
+ if(!await checkAdmin())return toast('Administrator access required.',true);
  const key=prompt('Tag key (example: short_action):');if(!key)return;const label=prompt('Tag label:','Short Action');if(!label)return;const category=prompt('Category:','experience')||'experience';
  const {error}=await sb.from('experience_tags').insert({tag_key:key,label,category});
  if(error)return toast(error.message,true);loadStudio();

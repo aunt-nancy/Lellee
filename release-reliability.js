@@ -14,7 +14,11 @@ async function rpc(name,args={}){
 function row(icon,title,detail,status='',klass=''){
  return `<div class="release-row ${klass}"><div class="release-icon">${icon}</div><div><b>${esc(title)}</b><small>${esc(detail||'')}</small></div><em>${esc(status||'')}</em></div>`;
 }
-async function checkAdmin(){const {data}=await sb.from('admin_user_roles').select('role,active').eq('user_id',currentUser.id).maybeSingle();isAdmin=!!data?.active&&['admin','editor'].includes(data.role);return isAdmin}
+async function checkAdmin(){
+ if(typeof currentUser==='undefined'||!currentUser){isAdmin=false;return false;}
+ try{const {data,error}=await sb.rpc('is_lellee_admin');isAdmin=!error&&data===true}catch(_){isAdmin=false}
+ return isAdmin;
+}
 
 async function loadQa(){
  if(!await checkAdmin())return;
@@ -26,6 +30,7 @@ async function loadQa(){
  q('#qaResultList').innerHTML=(d.results||[]).map(x=>row(x.status==='pass'?'✓':'!',x.test_name,`${x.status} · ${new Date(x.created_at).toLocaleString()}`,x.suite_name,x.status==='pass'?'ok':'attention')).join('');
 }
 async function runChecks(){
+ if(!await checkAdmin())return toast('Administrator access required.',true);
  const d=await rpc('run_platform_preflight_checks');if(!d)return toast('Platform checks could not run.',true);
  toast(`Platform checks complete: ${d.passed||0} passed, ${d.failed||0} failed.`);
  loadQa();
@@ -43,6 +48,7 @@ async function loadPilotOps(){
  q('#pilotOpsReadinessList').innerHTML=(d.readiness||[]).map(x=>row(x.status==='ready'?'✓':'○',x.program_name,x.detail,x.status,x.status==='ready'?'ok':'attention')).join('');
 }
 async function addPilotCohort(){
+ if(!await checkAdmin())return toast('Administrator access required.',true);
  const name=prompt('Pilot cohort name:');if(!name)return;
  const {data:programs}=await sb.from('programs').select('id,name,slug').in('status',['planned','pilot']).order('display_order');
  if(!programs?.length)return toast('No planned/pilot programs available.',true);
@@ -64,6 +70,7 @@ async function loadRelease(){
  q('#releaseRollbackList').innerHTML=(d.rollbacks||[]).map(x=>row('↶',x.release_name,x.notes,new Date(x.created_at).toLocaleDateString())).join('')||'<div class="approved-resource-empty">No rollback notes.</div>';
 }
 async function addReleaseCandidate(){
+ if(!await checkAdmin())return toast('Administrator access required.',true);
  const name=prompt('Release candidate name:','Lellee Release Candidate');if(!name)return;
  const version=prompt('Version label:','1.0.0-rc')||null;
  const type=prompt('Release type: platform, program, hotfix','platform')||'platform';

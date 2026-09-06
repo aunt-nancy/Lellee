@@ -14,7 +14,11 @@ async function rpc(name,args={}){
 function row(icon,title,detail,status='',klass=''){
  return `<div class="forms-row ${klass}"><div class="forms-icon">${icon}</div><div><b>${esc(title)}</b><small>${esc(detail||'')}</small></div><em>${esc(status||'')}</em></div>`;
 }
-async function checkAdmin(){const {data}=await sb.from('admin_user_roles').select('role,active').eq('user_id',currentUser.id).maybeSingle();isAdmin=!!data?.active&&['admin','editor'].includes(data.role);return isAdmin}
+async function checkAdmin(){
+ if(typeof currentUser==='undefined'||!currentUser){isAdmin=false;return false;}
+ try{const {data,error}=await sb.rpc('is_lellee_admin');isAdmin=!error&&data===true}catch(_){isAdmin=false}
+ return isAdmin;
+}
 
 function setMyFormsTab(tab){qa('[data-my-forms-tab]').forEach(b=>b.classList.toggle('active',b.dataset.myFormsTab===tab));['assigned','completed','surveys'].forEach(x=>q('#myFormsPanel'+x[0].toUpperCase()+x.slice(1))?.classList.toggle('hidden',x!==tab))}
 async function loadMyForms(){
@@ -84,6 +88,7 @@ async function loadFormsStudio(){
  q('#formsStudioPrivacyList').innerHTML=(d.guardrails||[]).map(x=>`<article class="forms-guardrail"><b>${x.enabled?'✓ ':'! '}${esc(x.label)}</b><small>${esc(x.detail)}</small></article>`).join('');
 }
 async function addForm(){
+ if(!await checkAdmin())return toast('Administrator access required.',true);
  const title=prompt('Form title:');if(!title)return;
  const type=prompt('Type: intake, checkin, survey, acknowledgment, consent, assessment, feedback','intake')||'intake';
  const {error}=await sb.from('form_definitions').insert({title,form_type:type,status:'draft',created_by:currentUser.id,privacy_mode:'private_user'});

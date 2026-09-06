@@ -7,9 +7,8 @@ const toast=(m,bad=false)=>{const t=q('#globalToast');if(t){t.textContent=m;t.cl
 let isAdmin=false,rows=[],editing=null,currentStep='identity';
 
 async function checkAdmin(){
- if(!currentUser)return false;
- const {data}=await sb.from('admin_user_roles').select('role,active').eq('user_id',currentUser.id).maybeSingle();
- isAdmin=!!data?.active&&['admin','editor'].includes(data.role);
+ if(!currentUser){isAdmin=false;return false;}
+ try{const {data,error}=await sb.rpc('is_lellee_admin');isAdmin=!error&&data===true}catch(_){isAdmin=false}
  q('#programBuilderUnauthorized')?.classList.toggle('hidden',isAdmin);
  q('#programBuilderContent')?.classList.toggle('hidden',!isAdmin);
  return isAdmin;
@@ -82,6 +81,7 @@ function updateReadiness(){
  q('#pbLaunchPercent').textContent=p+'%';q('#pbLaunchBar').style.width=p+'%';
 }
 async function saveProgram(){
+ if(!await checkAdmin())return toast('Administrator access required.',true);
  const name=q('#pbName').value.trim(),slug=q('#pbSlug').value.trim().toLowerCase().replace(/[^a-z0-9-]/g,'-').replace(/-+/g,'-');
  if(!name||!slug)return toast('Program name and slug are required.',true);
  const launch=Object.fromEntries(qa('[data-pb-launch]').map(x=>[x.dataset.pbLaunch,x.checked]));
@@ -116,6 +116,7 @@ async function syncModules(id,slug){
  if(selected.length)await sb.from('program_modules').insert(selected.map((k,i)=>({program_id:pid,module_key:k,label:labels[k]||k,enabled:true,display_order:(i+1)*10})));
 }
 async function deleteProgram(){
+ if(!await checkAdmin())return toast('Administrator access required.',true);
  if(!editing||editing.slug==='recovery')return;
  if(!confirm(`Delete planned program "${editing.name}"? This should only be used for programs with no user data.`))return;
  const {error}=await sb.from('programs').delete().eq('id',editing.id);

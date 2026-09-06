@@ -91,7 +91,11 @@ function wireQuickstart(){
  });
 }
 
-async function checkAdmin(){const {data}=await sb.from('admin_user_roles').select('role,active').eq('user_id',currentUser.id).maybeSingle();isAdmin=!!data?.active&&['admin','editor'].includes(data.role);return isAdmin}
+async function checkAdmin(){
+ if(typeof currentUser==='undefined'||!currentUser){isAdmin=false;return false;}
+ try{const {data,error}=await sb.rpc('is_lellee_admin');isAdmin=!error&&data===true}catch(_){isAdmin=false}
+ return isAdmin;
+}
 function setKnowledgeTab(tab){
  qa('[data-knowledge-tab]').forEach(b=>b.classList.toggle('active',b.dataset.knowledgeTab===tab));
  ['articles','onboarding','tips','glossary','releases','quality'].forEach(x=>q('#knowledgePanel'+x[0].toUpperCase()+x.slice(1))?.classList.toggle('hidden',x!==tab));
@@ -109,6 +113,7 @@ async function loadKnowledgeStudio(){
  q('#knowledgeQualityList').innerHTML=(d.quality||[]).map(x=>`<article class="help-guardrail"><b>${x.enabled?'✓ ':'! '}${esc(x.label)}</b><small>${esc(x.detail)}</small></article>`).join('');
 }
 async function addArticle(){
+ if(!await checkAdmin())return toast('Administrator access required.',true);
  const title=prompt('Help article title:');if(!title)return;
  const body=prompt('Short help article text:');if(!body)return;
  const {data:cat}=await sb.from('help_categories').select('category_key').eq('active',true).order('display_order').limit(1).maybeSingle();

@@ -57,7 +57,11 @@ async function loadSupport(){
  q('#userReleaseNotes').innerHTML=(releases.data||[]).length?(releases.data||[]).map(x=>row('R',x.title,`${x.version_label||''} · ${new Date(x.published_at).toLocaleDateString()}`)).join(''):'<div class="approved-resource-empty">No release notes yet.</div>';
 }
 
-async function checkAdmin(){const {data}=await sb.from('admin_user_roles').select('role,active').eq('user_id',currentUser.id).maybeSingle();isAdmin=!!data?.active&&['admin','editor'].includes(data.role);return isAdmin}
+async function checkAdmin(){
+ if(typeof currentUser==='undefined'||!currentUser){isAdmin=false;return false;}
+ try{const {data,error}=await sb.rpc('is_lellee_admin');isAdmin=!error&&data===true}catch(_){isAdmin=false}
+ return isAdmin;
+}
 async function loadSupportOps(){
  if(!await checkAdmin())return;
  const d=await rpc('get_support_ops_summary');if(!d)return;
@@ -85,11 +89,13 @@ async function loadTrustOps(){
 }
 function setTrustOpsTab(tab){qa('[data-trust-ops-tab]').forEach(b=>b.classList.toggle('active',b.dataset.trustOpsTab===tab));['audit','releases','incidents'].forEach(x=>q('#trustOpsPanel'+x[0].toUpperCase()+x.slice(1))?.classList.toggle('hidden',x!==tab))}
 async function addRelease(){
+ if(!await checkAdmin())return toast('Administrator access required.',true);
  const title=prompt('Release title:');if(!title)return;const version=prompt('Version label:','')||null;const body=prompt('What changed?','')||null;
  const {error}=await sb.from('release_notes').insert({title,version_label:version,body,status:'draft',public_visible:false,created_by:currentUser.id});
  if(error)return toast(error.message,true);loadTrustOps();
 }
 async function addIncident(){
+ if(!await checkAdmin())return toast('Administrator access required.',true);
  const title=prompt('Incident title:');if(!title)return;const sev=prompt('Severity: low, medium, high, critical','medium')||'medium';const desc=prompt('Operational description:','')||null;
  const {error}=await sb.from('operational_incidents').insert({title,severity:sev,description:desc,status:'open',created_by:currentUser.id});
  if(error)return toast(error.message,true);loadTrustOps();
