@@ -42,7 +42,7 @@ function renderWorkspaceHome(data){
  qa('[data-recent-page]').forEach(b=>b.onclick=async()=>{await setWorkspace(b.dataset.recentWorkspace);showPage(b.dataset.recentPage)});
 
  const quick=quickFor(activeWorkspace);
- q('#workspaceQuickGrid')&&(q('#workspaceQuickGrid').innerHTML=quick.map(x=>`<button data-quick-page="${x.page}"><b>${esc(x.label)}</</b><small>${esc(x.help)}</small></button>`).join(''));
+ q('#workspaceQuickGrid')&&(q('#workspaceQuickGrid').innerHTML=quick.map(x=>`<button data-quick-page="${x.page}"><b>${esc(x.label)}</b><small>${esc(x.help)}</small></button>`).join(''));
  qa('[data-quick-page]').forEach(b=>b.onclick=()=>showPage(b.dataset.quickPage));
 }
 function quickFor(k){
