@@ -42,7 +42,7 @@ function renderWorkspaceHome(data){
  qa('[data-recent-page]').forEach(b=>b.onclick=async()=>{await setWorkspace(b.dataset.recentWorkspace);showPage(b.dataset.recentPage)});
 
  const quick=quickFor(activeWorkspace);
- q('#workspaceQuickGrid')&&(q('#workspaceQuickGrid').innerHTML=quick.map(x=>`<button data-quick-page="${x.page}"><b>${esc(x.label)}</b><small>${esc(x.help)}</small></button>`).join(''));
+ q('#workspaceQuickGrid')&&(q('#workspaceQuickGrid').innerHTML=quick.map(x=>`<button data-quick-page="${x.page}"><b>${esc(x.label)}</</b><small>${esc(x.help)}</small></button>`).join(''));
  qa('[data-quick-page]').forEach(b=>b.onclick=()=>showPage(b.dataset.quickPage));
 }
 function quickFor(k){
@@ -108,8 +108,9 @@ function renderSearch(rows){
 function searchIcon(t){return ({program:'P',content:'▤',resource:'⌂',goal:'✓',task:'○'})[t]||'⌕'}
 
 async function checkAdmin(){
- const {data}=await sb.from('admin_user_roles').select('role,active').eq('user_id',currentUser.id).maybeSingle();
- isAdmin=!!data?.active&&['admin','editor'].includes(data.role);return isAdmin;
+ if(typeof currentUser==='undefined'||!currentUser){isAdmin=false;return false;}
+ try{const {data,error}=await sb.rpc('is_lellee_admin');isAdmin=!error&&data===true}catch(_){isAdmin=false}
+ return isAdmin;
 }
 async function loadHealth(){
  if(!await checkAdmin())return;
