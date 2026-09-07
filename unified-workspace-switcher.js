@@ -42,14 +42,54 @@
     'release-candidate':'Release Candidate',
     'organization-admin':'Organization Admin',
     'coach-admin':'Coach Admin',
-    'my-staff-work':'My Staff Work'
+    'my-staff-work':'My Staff Work',
+    'resource-admin':'Resource Quality',
+    'pilot-enrollment-admin':'Pilot Enrollment',
+    'communications-admin':'Communications Admin',
+    'support-ops':'Support Operations',
+    'privacy-ops':'Privacy Operations',
+    'trust-ops':'Trust & Audit',
+    'automation-studio':'Automation Studio',
+    'experience-studio':'Experience Studio',
+    'qa-center':'QA Center',
+    'pilot-operations':'Pilot Operations',
+    'release-center':'Release Center',
+    'reliability-center':'Reliability',
+    'security-operations':'Security & Continuity',
+    'integration-center':'Integration Center',
+    'community-ops':'Community Operations',
+    'forms-studio':'Forms Studio',
+    'credentialing-center':'Credentialing',
+    'staff-operations':'Staff Operations',
+    'collaboration-ops':'Collaboration Operations',
+    'knowledge-studio':'Knowledge Studio',
+    'provider-network-ops':'Provider Network',
+    'communications-ops':'Communications Operations',
+    'platform-integrity':'Platform Integrity',
+    'admin-agent-operations':'Agent Controls',
+    'agent-operations':'Agent Operations',
+    'contract-operations':'Contract Operations',
+    'customer-success':'Customer Success',
+    'revenue-operations':'Revenue Operations',
+    'executive-intelligence':'Executive Intelligence',
+    'data-governance':'Data Governance',
+    'product-discovery':'Product Discovery',
+    'search-taxonomy':'Search & Taxonomy',
+    'physical-commerce':'Physical Commerce',
+    'supply-chain':'Supply Chain',
+    'pwa-operations':'PWA & Mobile'
   };
+
+  const ADMIN_PAGE_IDS=[
+    'admin','analytics','program-builder','program-demand','content-studio','safety-profile-builder','platform-health','agent-workbench','growth-center','revenue-ops','release-candidate','organization-admin','coach-admin','my-staff-work',
+    'resource-admin','pilot-enrollment-admin','communications-admin','support-ops','privacy-ops','trust-ops','automation-studio','experience-studio','qa-center','pilot-operations','release-center','reliability-center','security-operations','integration-center','community-ops','forms-studio','credentialing-center','staff-operations','collaboration-ops','knowledge-studio','provider-network-ops','communications-ops','platform-integrity','admin-agent-operations','agent-operations','contract-operations','customer-success','revenue-operations','executive-intelligence','data-governance','product-discovery','search-taxonomy','physical-commerce','supply-chain','pwa-operations'
+  ];
 
   const WORKSPACE_PAGES={
     personal:new Set(['today','program-switcher','inbox','life-admin','global-search','help-center','settings','account','my-access','calendar','for-you','community','milestones','then-now','story','history','longterm','plus']),
     coach:new Set(['coach-business','coach-dashboard','coach-analytics','coach-revenue','coach-scheduler','coach-automation','coach-credentials','coach-quickstart','my-coaching']),
     organization:new Set(['organization-setup','organization-dashboard','organization-analytics','organization-commerce','organization-outreach','organization-automation','organization-integrations','organization-forms','organization-quickstart','sponsored-access']),
-    admin:new Set(['admin','analytics','program-builder','program-demand','content-studio','safety-profile-builder','platform-health','agent-workbench','growth-center','revenue-ops','release-candidate','organization-admin','coach-admin','my-staff-work'])
+    admin:new Set(ADMIN_PAGE_IDS)
   };
 
   const QUICK={
@@ -83,60 +123,89 @@
   };
 
   const ADMIN_TABS=[
+    {key:'overview',label:'Overview',items:[['admin','Admin Home','Platform administration and priority controls.'],['platform-health','Platform Health','Integration and system health checks.'],['release-candidate','Release Candidate','Recovery release readiness without turning launch gates on.'],['my-staff-work','My Staff Work','Your assigned operational work.']]},
+    {key:'people',label:'People',items:[['organization-admin','Organization Admin','Review organization and licensing access.'],['coach-admin','Coach Admin','Review coaching-business access.']]},
+    {key:'programs',label:'Programs',items:[['program-builder','Program Builder','Build and maintain Lellee programs.'],['program-demand','Program Demand','Review demand and program opportunity signals.']]},
+    {key:'content',label:'Content',items:[['content-studio','Content Studio','Create, review and publish program content.']]},
+    {key:'operations',label:'Operations',items:[['agent-workbench','Agent Workbench','Queue and review human-controlled agent work.'],['growth-center','Growth Center','Human-owned partnership pipeline.'],['revenue-ops','Revenue Operations','Plans, commerce preparation and revenue reporting.']]},
+    {key:'safety',label:'Safety',items:[['safety-profile-builder','Safety Profiles','Program safety controls and review.']]},
+    {key:'analytics',label:'Analytics',items:[['analytics','Analytics & Insights','Platform performance and operating insights.']]}
+  ];
+
+  const ADMIN_HOME_GROUPS=[
     {
-      key:'overview',
-      label:'Overview',
+      key:'programs-content',label:'Programs & Content',icon:'01',detail:'Programs, content, resources, forms, knowledge and search.',
       items:[
-        ['admin','Admin Home','Platform administration and priority controls.'],
-        ['platform-health','Platform Health','Integration and system health checks.'],
-        ['release-candidate','Release Candidate','Recovery release readiness without turning launch gates on.'],
-        ['my-staff-work','My Staff Work','Your assigned operational work.']
+        {label:'Program Builder',pages:[['program-builder','Open']]},
+        {label:'Content Studio',pages:[['content-studio','Open']]},
+        {label:'Resource Quality',pages:[['resource-admin','Open']]},
+        {label:'Experience Studio',pages:[['experience-studio','Open']]},
+        {label:'Knowledge Studio',pages:[['knowledge-studio','Open']]},
+        {label:'Forms Studio',pages:[['forms-studio','Open']]},
+        {label:'Search & Taxonomy',pages:[['search-taxonomy','Open']]}
       ]
     },
     {
-      key:'people',
-      label:'People',
+      key:'people-partners',label:'People & Partners',icon:'02',detail:'Coach, organization, credential, provider and staff administration.',
       items:[
-        ['organization-admin','Organization Admin','Review organization and licensing access.'],
-        ['coach-admin','Coach Admin','Review coaching-business access.']
+        {label:'Coach Approvals',pages:[['coach-admin','Open']]},
+        {label:'Organizations',pages:[['organization-admin','Open']]},
+        {label:'Credentialing',pages:[['credentialing-center','Open']]},
+        {label:'Provider Network',pages:[['provider-network-ops','Open']]},
+        {label:'Staff Operations',pages:[['staff-operations','Open']]},
+        {label:'Collaboration',pages:[['collaboration-ops','Open']]},
+        {label:'Customer Success',pages:[['customer-success','Open']]}
       ]
     },
     {
-      key:'programs',
-      label:'Programs',
+      key:'operations-automation',label:'Operations & Automation',icon:'03',detail:'Operational workflows, automation, agents, communications and pilots.',
       items:[
-        ['program-builder','Program Builder','Build and maintain Lellee programs.'],
-        ['program-demand','Program Demand','Review demand and program opportunity signals.']
+        {label:'Agent Operations',pages:[['admin-agent-operations','Controls'],['agent-operations','Operations'],['agent-workbench','Workbench']]},
+        {label:'Automation Studio',pages:[['automation-studio','Open']]},
+        {label:'Communications',pages:[['communications-admin','Admin'],['communications-ops','Operations']]},
+        {label:'Support Operations',pages:[['support-ops','Open']]},
+        {label:'Community Operations',pages:[['community-ops','Open']]},
+        {label:'Pilots',pages:[['pilot-enrollment-admin','Enrollment'],['pilot-operations','Operations']]}
       ]
     },
     {
-      key:'content',
-      label:'Content',
+      key:'safety-privacy',label:'Safety, Privacy & Trust',icon:'04',detail:'Safety controls, privacy, audit and quality assurance.',
       items:[
-        ['content-studio','Content Studio','Create, review and publish program content.']
+        {label:'Safety Profiles',pages:[['safety-profile-builder','Open']]},
+        {label:'Privacy Operations',pages:[['privacy-ops','Open']]},
+        {label:'Trust & Audit',pages:[['trust-ops','Open']]},
+        {label:'QA Center',pages:[['qa-center','Open']]}
       ]
     },
     {
-      key:'operations',
-      label:'Operations',
+      key:'growth-revenue',label:'Growth, Revenue & Commerce',icon:'05',detail:'Growth, revenue, contracts, commerce, sourcing and product discovery.',
       items:[
-        ['agent-workbench','Agent Workbench','Queue and review human-controlled agent work.'],
-        ['growth-center','Growth Center','Human-owned partnership pipeline.'],
-        ['revenue-ops','Revenue Operations','Plans, commerce preparation and revenue reporting.']
+        {label:'Growth Center',pages:[['growth-center','Open']]},
+        {label:'Revenue Operations',pages:[['revenue-ops','Core'],['revenue-operations','Operations']]},
+        {label:'Contract Operations',pages:[['contract-operations','Open']]},
+        {label:'Physical Commerce',pages:[['physical-commerce','Open']]},
+        {label:'Supply Chain',pages:[['supply-chain','Open']]},
+        {label:'Product Discovery',pages:[['product-discovery','Open']]}
       ]
     },
     {
-      key:'safety',
-      label:'Safety',
+      key:'data-intelligence',label:'Data & Intelligence',icon:'06',detail:'Analytics, executive intelligence and data governance.',
       items:[
-        ['safety-profile-builder','Safety Profiles','Program safety controls and review.']
+        {label:'Analytics & Insights',pages:[['analytics','Open']]},
+        {label:'Executive Intelligence',pages:[['executive-intelligence','Open']]},
+        {label:'Data Governance',pages:[['data-governance','Open']]}
       ]
     },
     {
-      key:'analytics',
-      label:'Analytics',
+      key:'platform-release',label:'Platform & Release',icon:'07',detail:'Platform health, reliability, security, integrations and release operations.',
       items:[
-        ['analytics','Analytics & Insights','Platform performance and operating insights.']
+        {label:'Platform Health',pages:[['platform-health','Open']]},
+        {label:'Reliability',pages:[['reliability-center','Open']]},
+        {label:'Platform Integrity',pages:[['platform-integrity','Open']]},
+        {label:'Security & Continuity',pages:[['security-operations','Open']]},
+        {label:'Integration Center',pages:[['integration-center','Open']]},
+        {label:'Release',pages:[['release-candidate','Candidate'],['release-center','Center']]},
+        {label:'PWA & Mobile',pages:[['pwa-operations','Open']]}
       ]
     }
   ];
@@ -237,6 +306,7 @@
     updateContextButton(getWorkspace());
     renderWorkspaceHome();
     renderAccessPage();
+    renderAdminHomeConsolidation();
   }
 
   function title(v){return String(v||'').replaceAll('_',' ').replace(/\b\w/g,c=>c.toUpperCase())}
@@ -298,6 +368,69 @@
     document.head.appendChild(style);
   }
 
+  function ensureAdminHomeStyles(){
+    if($('#lelleeAdminHomeConsolidationStyle'))return;
+    const style=document.createElement('style');
+    style.id='lelleeAdminHomeConsolidationStyle';
+    style.textContent=`
+      #page-admin .admin-home-consolidated-head{display:block!important;align-items:stretch!important;padding-bottom:14px}
+      .admin-home-top{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;margin-bottom:13px}
+      .admin-home-top h2{font-size:1rem;margin:3px 0 3px}.admin-home-top p{margin:0;color:#77727b;font-size:.67rem;line-height:1.45;max-width:700px}
+      .admin-home-attention{display:flex;align-items:center;gap:7px;flex-wrap:wrap;padding:9px 10px;border:1px solid #e6dfea;background:#fbf9fd;border-radius:10px;margin-bottom:12px}
+      .admin-home-attention b{font-size:.62rem;color:#5d4774;margin-right:3px}.admin-home-attention button{border:1px solid #ddd3e6;background:#fff;color:#5a3d7d;border-radius:8px;padding:6px 8px;font-size:.56rem;font-weight:850}
+      .admin-home-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(205px,1fr));gap:9px}
+      .admin-home-card{border:1px solid #e3dce8;background:#fff;border-radius:12px;padding:12px;text-align:left;color:#31293a;min-height:92px;display:grid;grid-template-columns:34px 1fr auto;gap:9px;align-items:start;box-shadow:0 3px 10px rgba(40,28,52,.035)}
+      .admin-home-card:hover{border-color:#cdbbe0;background:#fdfbff}.admin-home-card.active{border-color:#8f6ab5;background:#f6f0fb}
+      .admin-home-num{width:32px;height:32px;border-radius:9px;background:#eee6f7;color:#65409a;display:grid;place-items:center;font-size:.58rem;font-weight:900}
+      .admin-home-card b{display:block;font-size:.7rem;margin-bottom:3px}.admin-home-card small{display:block;color:#766e7b;font-size:.56rem;line-height:1.35}.admin-home-arrow{font-size:.72rem;color:#806795;margin-top:4px}
+      .admin-home-detail{margin-top:11px;border:1px solid #e3dce8;background:#fbfafc;border-radius:12px;padding:12px;display:none}
+      .admin-home-detail.open{display:block}.admin-home-detail-head{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:8px}.admin-home-detail-head b{font-size:.72rem}.admin-home-detail-head small{font-size:.56rem;color:#78707c}
+      .admin-home-tool-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+      .admin-home-tool-row{border:1px solid #e5dfe9;background:#fff;border-radius:9px;padding:9px 10px;display:flex;justify-content:space-between;align-items:center;gap:8px;min-width:0}
+      .admin-home-tool-row>span{font-size:.62rem;font-weight:800;color:#403647}.admin-home-tool-actions{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}.admin-home-tool-actions button{border:1px solid #ddd4e3;background:#fff;color:#5c4771;border-radius:7px;padding:5px 7px;font-size:.52rem;font-weight:850;white-space:nowrap}
+      @media(max-width:760px){.admin-home-top{display:block}.admin-home-top .admin-role-pill{display:inline-block;margin-top:8px}.admin-home-tool-list{grid-template-columns:1fr}}
+      @media(max-width:520px){.admin-home-grid{grid-template-columns:1fr}.admin-home-card{min-height:0}.admin-home-tool-row{display:block}.admin-home-tool-actions{justify-content:flex-start;margin-top:7px}}
+    `;
+    document.head.appendChild(style);
+  }
+
+  function renderAdminHomeGroup(key){
+    const group=ADMIN_HOME_GROUPS.find(x=>x.key===key);
+    const panel=$('#adminHomeGroupDetail');
+    if(!group||!panel)return;
+    document.querySelectorAll('[data-admin-home-group]').forEach(b=>b.classList.toggle('active',b.dataset.adminHomeGroup===key));
+    panel.classList.add('open');
+    panel.innerHTML=`
+      <div class="admin-home-detail-head"><b>${esc(group.label)}</b><small>${esc(group.detail)}</small></div>
+      <div class="admin-home-tool-list">
+        ${group.items.map(item=>`<div class="admin-home-tool-row"><span>${esc(item.label)}</span><div class="admin-home-tool-actions">${item.pages.map(p=>`<button type="button" data-page="${esc(p[0])}">${esc(p[1])}</button>`).join('')}</div></div>`).join('')}
+      </div>`;
+  }
+
+  function renderAdminHomeConsolidation(){
+    const page=$('#page-admin');
+    const head=page?.querySelector('.approved-inner-head');
+    if(!head)return;
+    ensureAdminHomeStyles();
+    head.classList.add('admin-home-consolidated-head');
+    head.innerHTML=`
+      <div class="admin-home-top">
+        <div><span class="approved-kicker">ADMIN</span><h2>Operate Lellee without touching the database directly</h2><p>Use seven control areas instead of dozens of separate Admin buttons. Detailed tools appear only when you open a category.</p></div>
+        <span class="admin-role-pill" id="adminRoleBadge">ADMIN</span>
+      </div>
+      <div class="admin-home-attention" aria-label="Needs attention">
+        <b>Needs Attention</b>
+        <button type="button" data-page="coach-admin">Coach Approvals</button>
+        <button type="button" data-page="organization-admin">Organizations</button>
+        <button type="button" data-page="trust-ops">Trust & Audit</button>
+        <button type="button" data-page="qa-center">QA Center</button>
+      </div>
+      <div class="admin-home-grid" aria-label="Admin control areas">
+        ${ADMIN_HOME_GROUPS.map(g=>`<button type="button" class="admin-home-card" data-admin-home-group="${esc(g.key)}"><span class="admin-home-num">${esc(g.icon)}</span><span><b>${esc(g.label)}</b><small>${esc(g.detail)}</small></span><span class="admin-home-arrow">›</span></button>`).join('')}
+      </div>
+      <div class="admin-home-detail" id="adminHomeGroupDetail" aria-live="polite"></div>`;
+  }
+
   function getAdminTab(){
     let key='overview';
     try{key=localStorage.getItem(ADMIN_TAB_KEY)||'overview'}catch(_){}
@@ -315,11 +448,7 @@
           ${ADMIN_TABS.map(x=>`<button type="button" class="workspace-admin-tab ${x.key===tab.key?'active':''}" role="tab" aria-selected="${x.key===tab.key?'true':'false'}" data-admin-workspace-tab="${esc(x.key)}">${esc(x.label)}</button>`).join('')}
         </div>
         <div class="workspace-admin-panel" role="tabpanel" aria-label="${esc(tab.label)}">
-          ${tab.items.map(x=>`
-            <article class="workspace-quick-entry">
-              <div><b>${esc(x[1])}</b><small>${esc(x[2])}</small></div>
-              <button data-workspace-quick-page="${esc(x[0])}">Open</button>
-            </article>`).join('')}
+          ${tab.items.map(x=>`<article class="workspace-quick-entry"><div><b>${esc(x[1])}</b><small>${esc(x[2])}</small></div><button data-workspace-quick-page="${esc(x[0])}">Open</button></article>`).join('')}
         </div>
       </div>`;
   }
@@ -363,18 +492,13 @@
 
     const recent=$('#workspaceRecentList');
     const rows=recentRows().filter(x=>access[x.workspace]?.available || x.workspace==='personal');
-    if(recent)recent.innerHTML=rows.length?rows.map(x=>`
-      <div class="workspace-recent-entry">
-        <div><b>${esc(PAGE_LABELS[x.page])}</b><small>${esc(access[x.workspace]?.label||'Personal')} · ${new Date(x.at).toLocaleString()}</small></div>
-        <button data-workspace-recent-page="${esc(x.page)}">Open</button>
-      </div>`).join(''):`<div class="workspace-recent-entry"><div><b>No recent workspace activity yet.</b><small>Your recent workspace destinations will appear here.</small></div></div>`;
+    if(recent)recent.innerHTML=rows.length?rows.map(x=>`<div class="workspace-recent-entry"><div><b>${esc(PAGE_LABELS[x.page])}</b><small>${esc(access[x.workspace]?.label||'Personal')} · ${new Date(x.at).toLocaleString()}</small></div><button data-workspace-recent-page="${esc(x.page)}">Open</button></div>`).join(''):`<div class="workspace-recent-entry"><div><b>No recent workspace activity yet.</b><small>Your recent workspace destinations will appear here.</small></div></div>`;
 
     const quick=$('#workspaceQuickGrid');
     if(current==='admin')renderAdminQuick(quick);
     else{
       const items=QUICK[current]||QUICK.personal;
-      if(quick)quick.innerHTML=items.map(x=>`
-        <article class="workspace-quick-entry"><div><b>${esc(x[1])}</b><small>${esc(x[2])}</small></div><button data-workspace-quick-page="${esc(x[0])}">Open</button></article>`).join('');
+      if(quick)quick.innerHTML=items.map(x=>`<article class="workspace-quick-entry"><div><b>${esc(x[1])}</b><small>${esc(x[2])}</small></div><button data-workspace-quick-page="${esc(x[0])}">Open</button></article>`).join('');
     }
     ensureQuickOwnership();
   }
@@ -386,42 +510,21 @@
       const a=access[k];
       const available=a.available||k==='personal';
       const name=a.businessName?`${a.label} · ${a.businessName}`:a.label;
-      return `<article class="workspace-access-entry">
-        <div>
-          <b>${esc(name)}</b>
-          <small>${esc(a.detail)}</small>
-          <div class="workspace-access-meta">
-            <span class="workspace-access-tag">${available?'CONNECTED':'NOT CONNECTED'}</span>
-            <span class="workspace-access-tag">${esc(a.status)}</span>
-            ${a.role?`<span class="workspace-access-tag">${esc(title(a.role))}</span>`:''}
-          </div>
-        </div>
-        ${available?`<button data-workspace-open="${k}">Open</button>`:(a.setup?`<button data-page="${a.setup}">Set up</button>`:'')}
-      </article>`;
+      return `<article class="workspace-access-entry"><div><b>${esc(name)}</b><small>${esc(a.detail)}</small><div class="workspace-access-meta"><span class="workspace-access-tag">${available?'CONNECTED':'NOT CONNECTED'}</span><span class="workspace-access-tag">${esc(a.status)}</span>${a.role?`<span class="workspace-access-tag">${esc(title(a.role))}</span>`:''}</div></div>${available?`<button data-workspace-open="${k}">Open</button>`:(a.setup?`<button data-page="${a.setup}">Set up</button>`:'')}</article>`;
     }).join('');
   }
 
   function setText(id,v){const e=$('#'+id);if(e)e.textContent=v}
 
   document.addEventListener('click',e=>{
+    const group=e.target.closest('[data-admin-home-group]');
+    if(group){e.preventDefault();e.stopImmediatePropagation();renderAdminHomeGroup(group.dataset.adminHomeGroup);return}
+
     const tab=e.target.closest('[data-admin-workspace-tab]');
-    if(tab){
-      e.preventDefault();e.stopImmediatePropagation();
-      try{localStorage.setItem(ADMIN_TAB_KEY,tab.dataset.adminWorkspaceTab)}catch(_){}
-      renderAdminQuick($('#workspaceQuickGrid'));
-      return;
-    }
+    if(tab){e.preventDefault();e.stopImmediatePropagation();try{localStorage.setItem(ADMIN_TAB_KEY,tab.dataset.adminWorkspaceTab)}catch(_){}renderAdminQuick($('#workspaceQuickGrid'));return}
 
     const open=e.target.closest('[data-workspace-open]');
-    if(open){
-      e.preventDefault();e.stopImmediatePropagation();
-      const w=open.dataset.workspaceOpen;
-      if(access[w]?.available){
-        setWorkspace(w);
-        nav(access[w].entry);
-      }
-      return;
-    }
+    if(open){e.preventDefault();e.stopImmediatePropagation();const w=open.dataset.workspaceOpen;if(access[w]?.available){setWorkspace(w);nav(access[w].entry)}return}
 
     const recent=e.target.closest('[data-workspace-recent-page]');
     if(recent){e.preventDefault();e.stopImmediatePropagation();nav(recent.dataset.workspaceRecentPage);return}
@@ -435,19 +538,18 @@
     const page=e.target.closest('[data-page]');
     if(page){
       const p=page.dataset.page,w=workspaceForPage(p);
-      if(w && access[w]?.available){
-        try{localStorage.setItem(ACTIVE_KEY,w)}catch(_){}
-        updateContextButton(w);
-      }
+      if(w && access[w]?.available){try{localStorage.setItem(ACTIVE_KEY,w)}catch(_){}updateContextButton(w)}
       if(PAGE_LABELS[p])recordRecent(p,w||getWorkspace());
       if(p==='workspace-home')setTimeout(renderWorkspaceHome,25);
       if(p==='workspace-access')setTimeout(renderAccessPage,25);
+      if(p==='admin')setTimeout(renderAdminHomeConsolidation,25);
     }
   },true);
 
   function boot(){
     ensureContextButton();
     ensureQuickOwnership();
+    renderAdminHomeConsolidation();
     let tries=0;
     const timer=setInterval(async()=>{
       tries++;
@@ -456,10 +558,7 @@
         await loadAccess();
         const active=$('.page.active')?.id?.replace('page-','');
         const w=workspaceForPage(active);
-        if(w&&access[w]?.available){
-          try{localStorage.setItem(ACTIVE_KEY,w)}catch(_){}
-          updateContextButton(w);
-        }
+        if(w&&access[w]?.available){try{localStorage.setItem(ACTIVE_KEY,w)}catch(_){}updateContextButton(w)}
       }
       if(tries>240)clearInterval(timer);
     },250);
@@ -467,5 +566,5 @@
 
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
 
-  window.LelleeUnifiedWorkspaces={loadAccess,renderWorkspaceHome,renderAccessPage,renderAdminQuick};
+  window.LelleeUnifiedWorkspaces={loadAccess,renderWorkspaceHome,renderAccessPage,renderAdminQuick,renderAdminHomeConsolidation};
 })();
