@@ -69,8 +69,8 @@ h1{font-size:1.55rem;line-height:1.15;margin:3px 0 6px;letter-spacing:-.025em}.i
 <script>
 (()=>{
   'use strict';
-  const SUPABASE_URL='https://vnfjszmhmcxkxegzvivg.supabase.co';
-  const SUPABASE_KEY='sb_publishable_5s7SB5PmfKyHOSMKG6GCkA_s7Q_PLxG';
+  const SUPABASE_URL='https://hkrrxscyhtxmbvxevfkw.supabase.co';
+  const SUPABASE_KEY='sb_publishable_QPwVWU-qNnc3GJb_FoFnlQ_kEHa3dtU';
   const params=new URLSearchParams(location.search);
   const requested=(params.get('mode')||'signin').toLowerCase();
   const recoveryLink=requested==='reset'||params.get('type')==='recovery'||location.hash.includes('type=recovery');
@@ -115,8 +115,8 @@ h1{font-size:1.55rem;line-height:1.15;margin:3px 0 6px;letter-spacing:-.025em}.i
     if(mode==='signup'&&['adult','agreements','safety'].some(id=>!$(id).checked)){setStatus('Please check all three account acknowledgments.','error');return false}
     return true;
   }
-  function confirmationUrl(){const u=new URL('/auth.html',location.origin);u.searchParams.set('confirmed','1');u.searchParams.set('return',returnTarget);if(program)u.searchParams.set('program',program);return u.href}
-  function recoveryUrl(){const u=new URL('/auth.html',location.origin);u.searchParams.set('mode','reset');u.searchParams.set('return',returnTarget);if(program)u.searchParams.set('program',program);return u.href}
+  function confirmationUrl(){return 'https://lellee.com/auth.html'}
+  function recoveryUrl(){return 'https://lellee.com/auth.html'}
   function friendlyError(error,context=''){
     const raw=(error?.message||'').trim(),msg=raw.toLowerCase();
     if(msg.includes('invalid login credentials'))return 'This email may already have a Lellee account, but that password does not match. Use “Forgot password?” below the password field.';
