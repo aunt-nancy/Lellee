@@ -14,7 +14,11 @@ async function rpc(name,args={}){
 function row(icon,title,detail,status='',klass=''){
  return `<div class="integration-row ${klass}"><div class="integration-icon">${icon}</div><div><b>${esc(title)}</b><small>${esc(detail||'')}</small></div><em>${esc(status||'')}</em></div>`;
 }
-async function checkAdmin(){const {data}=await sb.from('admin_user_roles').select('role,active').eq('user_id',currentUser.id).maybeSingle();isAdmin=!!data?.active&&['admin','editor'].includes(data.role);return isAdmin}
+async function checkAdmin(){
+ if(typeof currentUser==='undefined'||!currentUser){isAdmin=false;return false;}
+ try{const {data,error}=await sb.rpc('is_lellee_admin');isAdmin=!error&&data===true}catch(_){isAdmin=false}
+ return isAdmin;
+}
 
 async function loadPortability(){
  const d=await rpc('get_my_data_portability_summary');if(!d)return;
