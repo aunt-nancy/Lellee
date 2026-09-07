@@ -109,6 +109,30 @@
       ]
     },
     {
+      "source": "/unified-workspace-switcher.js",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
+      ]
+    },
+    {
+      "source": "/forms-credentials.js",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
+      ]
+    },
+    {
+      "source": "/build-5-professional.js",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
+      ]
+    },
+    {
+      "source": "/build-5-professional.css",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
+      ]
+    },
+    {
       "source": "/landing.html",
       "headers": [
         { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
