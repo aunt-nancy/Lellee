@@ -31,7 +31,11 @@
   async function loadControls(root){
     const c=bridge();
     if(!root||!c?.getCurrentUser?.())return;
-    root.innerHTML='<div class="agent-admin-loading">Loading agent controls…</div>';
+    const firstLoad=!root.querySelector('.agent-admin-shell');
+    if(firstLoad){
+      root.style.minHeight='70vh';
+      root.innerHTML='<div class="agent-admin-loading">Loading agent controls…</div>';
+    }
     const {data,error}=await c.client.rpc('get_agent_control_center_v1');
     if(error){root.innerHTML=`<div class="agent-admin-loading">Agent Controls could not load: ${esc(error.message)}</div>`;return}
     root.innerHTML=render(data||{});
@@ -77,7 +81,7 @@
   let last='';
   setInterval(()=>{
     const active=document.querySelector('.page.active')?.id||'';
-    if(active===last&&active!=='page-admin-agent-operations'&&active!=='page-agent-workbench')return;
+    if(active===last)return;
     last=active;
     if(active==='page-admin-agent-operations')loadControls(document.getElementById('adminAgentOperationsRoot'));
     if(active==='page-agent-workbench')setTimeout(repairWorkbenchRoster,350);
