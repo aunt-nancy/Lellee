@@ -8,9 +8,8 @@ const toast=(m,bad=false)=>{const t=q('#globalToast');if(t){t.textContent=m;t.cl
 let isAdmin=false,programs=[],items=[],stages=[],editingItem=null,editingStage=null,editorTab='content';
 
 async function checkAdmin(){
- if(!currentUser)return false;
- const {data}=await sb.from('admin_user_roles').select('role,active').eq('user_id',currentUser.id).maybeSingle();
- isAdmin=!!data?.active&&['admin','editor'].includes(data.role);
+ if(typeof currentUser==='undefined'||!currentUser){isAdmin=false;return false;}
+ try{const {data,error}=await sb.rpc('is_lellee_admin');isAdmin=!error&&data===true}catch(_){isAdmin=false}
  return isAdmin;
 }
 async function loadPrograms(){
