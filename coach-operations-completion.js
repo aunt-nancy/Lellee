@@ -156,15 +156,23 @@
     setText('coachAutomationDue',s.followups_due||0);
     setText('coachAutomationCreated',s.tasks_created||0);
     setText('coachAutomationRuns',s.recent_runs||0);
+    const add=$('#coachAutomationAddRule');
     const rl=$('#coachAutomationRuleList');
+    const rr=$('#coachAutomationRunList');
+    if(a.enabled===false){
+      if(add){add.disabled=true;add.hidden=true}
+      if(rl) rl.innerHTML=`<div class="coach-ops-warning"><b>Coach Automation OFF</b><br>${esc(a.message||'Coach Automation is not enabled in the current release.')}</div>`;
+      if(rr) rr.innerHTML='<div class="coach-ops-empty">Automation runs are unavailable while Coach Automation is off.</div>';
+      return;
+    }
+    if(add){add.disabled=false;add.hidden=false}
     if(rl) rl.innerHTML=(a.rules||[]).length?(a.rules||[]).map(x=>`
       <article class="coach-ops-item"><div class="coach-ops-row"><div><b>${esc(x.name)}</b><small>${esc(title(x.trigger_event))} → create follow-up</small></div><span class="coach-ops-pill">${esc(title(x.status))}</span></div>
       <div class="coach-ops-actions"><button data-toggle-rule="${x.id}" class="primary">${x.status==='active'?'Pause':'Activate'}</button></div></article>`).join(''):
-      '<div class="coach-ops-empty">No automation rules yet. Add a safe operational rule.</div>';
-    const rr=$('#coachAutomationRunList');
+      '<div class="coach-ops-empty">No automation rules yet.</div>';
     if(rr) rr.innerHTML=(a.runs||[]).length?(a.runs||[]).map(x=>`
       <article class="coach-ops-item"><div class="coach-ops-row"><div><b>${esc(x.rule_name)}</b><small>${esc(dt(x.created_at))}</small></div><span class="coach-ops-pill">${esc(title(x.status))}</span></div></article>`).join(''):
-      '<div class="coach-ops-empty">No automation runs yet. Runs appear after a matching operational event occurs.</div>';
+      '<div class="coach-ops-empty">No automation runs yet.</div>';
   }
 
   function ensureCredentialButtons(){
@@ -325,6 +333,7 @@
   }
 
   function openAutomation(){
+    if(state.ctx?.automation?.enabled===false){alert(state.ctx.automation.message||'Coach Automation is not enabled in the current release.');return}
     openDialog('Add Automation Rule','Only privacy-safe operational triggers are available. The current action creates a coach follow-up.',`
       <form id="coachOpsAutomationForm"><div class="coach-ops-form">
         <label class="wide">Rule name<input id="opsAutoName" required></label>
@@ -336,6 +345,7 @@
       </div><div class="coach-ops-footer"><button type="button" data-coach-ops-close>Cancel</button><button class="primary" type="submit">Save rule</button></div></form>`);
   }
   async function saveAutomation(){
+    if(state.ctx?.automation?.enabled===false)throw new Error(state.ctx.automation.message||'Coach Automation is not enabled in the current release.');
     const trigger=$('#opsAutoTrigger').value;
     const delay=Number($('#opsAutoDelay').value||24);
     const cfg=trigger==='group_start_due'?{days_before:Math.max(0,Math.min(30,Math.round(delay/24))),title:$('#opsAutoTitle').value.trim()||'Prepare for group start'}:{due_hours:delay,title:$('#opsAutoTitle').value.trim()||'Coach follow-up'};
@@ -344,6 +354,7 @@
     closeDialog();await loadPage('coach-automation');
   }
   async function toggleRule(id){
+    if(state.ctx?.automation?.enabled===false)throw new Error(state.ctx.automation.message||'Coach Automation is not enabled in the current release.');
     const r=(state.ctx?.automation?.rules||[]).find(x=>x.id===id);if(!r)return;
     const {error}=await sb().from('automation_rules').update({status:r.status==='active'?'paused':'active',updated_at:new Date().toISOString()}).eq('id',id);if(error)throw error;
     await loadPage('coach-automation');
