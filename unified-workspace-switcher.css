@@ -115,6 +115,9 @@
   transform:translateY(-1px);
 }
 
+/* Pilot enrollment was consolidated into Pilot Operations. */
+[data-page="pilot-enrollment-admin"]{display:none!important}
+
 @media(max-width:1100px){
   #page-admin .approved-inner-head{grid-template-columns:repeat(4,minmax(0,1fr))}
 }
