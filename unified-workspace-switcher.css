@@ -118,6 +118,29 @@
 /* Pilot enrollment was consolidated into Pilot Operations. */
 [data-page="pilot-enrollment-admin"]{display:none!important}
 
+/* ADMIN READABILITY — approximately +2pt on the Admin page only */
+#page-admin .admin-home-top h2{font-size:1.12rem!important}
+#page-admin .admin-home-top p{font-size:.80rem!important;line-height:1.55!important}
+#page-admin .admin-home-attention b{font-size:.74rem!important}
+#page-admin .admin-home-attention button{font-size:.68rem!important;padding:8px 10px!important}
+#page-admin .admin-home-card b{font-size:.82rem!important}
+#page-admin .admin-home-card small{font-size:.69rem!important;line-height:1.48!important}
+#page-admin .admin-home-num{font-size:.70rem!important}
+#page-admin .admin-home-detail-head b{font-size:.84rem!important}
+#page-admin .admin-home-detail-head small{font-size:.69rem!important}
+#page-admin .admin-home-tool-row>span{font-size:.75rem!important}
+#page-admin .admin-home-tool-actions button{font-size:.66rem!important;padding:7px 9px!important}
+#page-admin .approved-kicker{font-size:.72rem!important}
+#page-admin .approved-small-action,
+#page-admin .approved-link,
+#page-admin button{font-size:.72rem}
+#page-admin small{font-size:.70rem;line-height:1.45}
+#page-admin label,
+#page-admin input,
+#page-admin select,
+#page-admin textarea{font-size:.74rem}
+#page-admin .approved-inner-head>.approved-small-action{min-height:46px}
+
 @media(max-width:1100px){
   #page-admin .approved-inner-head{grid-template-columns:repeat(4,minmax(0,1fr))}
 }
@@ -135,5 +158,5 @@
   .workspace-recent-entry button,.workspace-access-entry button{margin-top:8px}
   .workspace-context-button{padding:6px 8px;font-size:.56rem}
   #page-admin .approved-inner-head{grid-template-columns:1fr}
-  #page-admin .approved-inner-head>.approved-small-action{min-height:39px}
+  #page-admin .approved-inner-head>.approved-small-action{min-height:43px}
 }
