@@ -79,9 +79,28 @@
     const training=document.getElementById('page-training-center');
     if(training){
       const intro=training.querySelector('.b5-page-head p');
-      if(intro)intro.textContent='Independent bundles use a 40% down-payment gate plus sequential learning gates. Lellee Coaches may serve under approved W-2 or 1099 arrangements and advance through required training, competency and privilege gates.';
+      if(intro)intro.textContent='Independent training may use payment gates and sequential learning gates. Lellee Coaches may serve under approved W-2 or 1099 arrangements and advance through required training, competency and privilege gates.';
       const staffFilter=training.querySelector('[data-b5-training-filter="staff"]');
       if(staffFilter)staffFilter.textContent='Lellee Coaches';
+
+      training.querySelectorAll('.b5-course-card').forEach(card=>{
+        const dts=[...card.querySelectorAll('.b5-course-meta dt')];
+        const forDt=dts.find(x=>x.textContent.trim()==='For');
+        const forValue=forDt?.nextElementSibling;
+        if(forValue){
+          const value=forValue.textContent.trim();
+          if(/^Staff\s*\/\s*independent$/i.test(value))forValue.textContent='Lellee Coach / independent';
+          else if(/^Staff$/i.test(value))forValue.textContent='Lellee Coach';
+        }
+
+        const accessDt=dts.find(x=>x.textContent.trim()==='Access');
+        const accessValue=accessDt?.nextElementSibling;
+        const priceMatch=card.textContent.match(/\$(\d+(?:\.\d{2})?)/);
+        const price=priceMatch?Number(priceMatch[1]):0;
+        if(accessValue&&price>79&&/Paid in full/i.test(accessValue.textContent)){
+          accessValue.textContent='Payment plan available · 40% down';
+        }
+      });
     }
 
     const hub=document.getElementById('page-professional-hub');
@@ -131,10 +150,11 @@
   let last='';
   setInterval(()=>{
     const active=document.querySelector('.page.active')?.id||'';
-    if(active===last)return;
-    last=active;
-    if(active==='page-admin-agent-operations')loadControls(document.getElementById('adminAgentOperationsRoot'));
-    if(active==='page-agent-workbench')setTimeout(repairWorkbenchRoster,350);
-    if(['page-training-center','page-professional-hub','page-staff-coach-workspace','page-coach-business','page-coach-dashboard','page-coaches'].includes(active))setTimeout(repairProfessionalCoachCopy,80);
+    if(active!==last){
+      last=active;
+      if(active==='page-admin-agent-operations')loadControls(document.getElementById('adminAgentOperationsRoot'));
+      if(active==='page-agent-workbench')setTimeout(repairWorkbenchRoster,350);
+    }
+    if(['page-training-center','page-professional-hub','page-staff-coach-workspace','page-coach-business','page-coach-dashboard','page-coaches'].includes(active))repairProfessionalCoachCopy();
   },350);
 })();
