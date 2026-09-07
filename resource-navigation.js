@@ -80,7 +80,11 @@ function setPlanTab(tab){
  planTab=tab;qa('[data-resource-plan-tab]').forEach(b=>b.classList.toggle('active',b.dataset.resourcePlanTab===tab));
  q('#resourcePlanSaved').classList.toggle('hidden',tab!=='saved');q('#resourcePlanReferrals').classList.toggle('hidden',tab!=='referrals');q('#resourcePlanSuggestions').classList.toggle('hidden',tab!=='suggestions');
 }
-async function checkAdmin(){const {data}=await sb.from('admin_user_roles').select('role,active').eq('user_id',currentUser.id).maybeSingle();isAdmin=!!data?.active&&['admin','editor'].includes(data.role);return isAdmin}
+async function checkAdmin(){
+ if(typeof currentUser==='undefined'||!currentUser){isAdmin=false;return false;}
+ try{const {data,error}=await sb.rpc('is_lellee_admin');isAdmin=!error&&data===true}catch(_){isAdmin=false}
+ return isAdmin;
+}
 async function loadAdmin(){
  if(!await checkAdmin())return;
  const {data,error}=await sb.from('service_resources').select('id,name,category_key,city,state,published,sponsored,verified_at,programs(name),resource_categories(label)').order('name');
