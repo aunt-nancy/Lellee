@@ -40,7 +40,11 @@ async function loadOrgAutomation(){
  q('#orgAutomationRuleList').innerHTML=(d.rules||[]).map(x=>row('▣',x.name,`${x.trigger_event} → ${x.action_type}`,x.status,x.id)).join('')||'<div class="approved-resource-empty">No organization automations.</div>';
  q('#orgAutomationRunList').innerHTML=(d.runs||[]).map(x=>row('✓',x.rule_name,`${x.status} · ${new Date(x.created_at).toLocaleString()}`)).join('')||'<div class="approved-resource-empty">No recent runs.</div>';
 }
-async function checkAdmin(){const {data}=await sb.from('admin_user_roles').select('role,active').eq('user_id',currentUser.id).maybeSingle();isAdmin=!!data?.active&&['admin','editor'].includes(data.role);return isAdmin}
+async function checkAdmin(){
+ if(typeof currentUser==='undefined'||!currentUser){isAdmin=false;return false;}
+ try{const {data,error}=await sb.rpc('is_lellee_admin');isAdmin=!error&&data===true}catch(_){isAdmin=false}
+ return isAdmin;
+}
 async function loadStudio(){
  if(!await checkAdmin())return;
  const d=await rpc('get_automation_studio_summary');if(!d)return;
