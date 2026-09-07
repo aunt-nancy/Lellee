@@ -145,8 +145,9 @@ async function loadSponsoredAccess(){
 }
 
 async function checkAdmin(){
- const {data}=await sb.from('admin_user_roles').select('role,active').eq('user_id',currentUser.id).maybeSingle();
- isAdmin=!!data?.active&&['admin','editor'].includes(data.role);return isAdmin;
+ if(typeof currentUser==='undefined'||!currentUser){isAdmin=false;return false;}
+ try{const {data,error}=await sb.rpc('is_lellee_admin');isAdmin=!error&&data===true}catch(_){isAdmin=false}
+ return isAdmin;
 }
 
 async function loadAdmin(){
