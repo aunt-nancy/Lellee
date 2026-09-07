@@ -71,14 +71,14 @@ async function savePrivacyMode(){
  const payload={user_id:currentUser.id,private_notification_previews:q('#privacyModeNotifications').checked,hide_program_name:q('#privacyModeProgramName').checked,quick_exit_enabled:q('#privacyModeQuickExit').checked,auto_clear_enabled:q('#privacyModeAutoClear').checked,updated_at:new Date().toISOString()};
  const {error}=await sb.from('user_privacy_mode').upsert(payload,{onConflict:'user_id'});
  if(error)return toast(error.message,true);
- // keep notification preference aligned
  await sb.from('notification_preferences').upsert({user_id:currentUser.id,private_push_previews:payload.private_notification_previews,updated_at:new Date().toISOString()},{onConflict:'user_id'});
  q('#privacyModeMsg').textContent='Saved.';toast('Privacy Mode saved.');
 }
 
 async function checkAdmin(){
- const {data}=await sb.from('admin_user_roles').select('role,active').eq('user_id',currentUser.id).maybeSingle();
- isAdmin=!!data?.active&&['admin','editor'].includes(data.role);return isAdmin;
+ if(typeof currentUser==='undefined'||!currentUser){isAdmin=false;return false;}
+ try{const {data,error}=await sb.rpc('is_lellee_admin');isAdmin=!error&&data===true}catch(_){isAdmin=false}
+ return isAdmin;
 }
 async function loadPrograms(){
  if(!await checkAdmin())return;
