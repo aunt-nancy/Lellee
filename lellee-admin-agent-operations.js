@@ -75,6 +75,56 @@
     const q=document.getElementById('agentCCQueueMissions');if(q)q.style.display='none';
   }
 
+  function repairProfessionalCoachCopy(){
+    const training=document.getElementById('page-training-center');
+    if(training){
+      const intro=training.querySelector('.b5-page-head p');
+      if(intro)intro.textContent='Independent bundles use a 40% down-payment gate plus sequential learning gates. Lellee Coaches may serve under approved W-2 or 1099 arrangements and advance through required training, competency and privilege gates.';
+      const staffFilter=training.querySelector('[data-b5-training-filter="staff"]');
+      if(staffFilter)staffFilter.textContent='Lellee Coaches';
+    }
+
+    const hub=document.getElementById('page-professional-hub');
+    if(hub){
+      const intro=hub.querySelector('.b5-page-head p');
+      if(intro)intro.textContent='A Lellee Coach may work with Lellee under an approved W-2 or 1099 arrangement. An independent professional operates their own business and may use separate Lellee business and training tools.';
+      const note=hub.querySelector('.b5-clarity-note');
+      if(note)note.innerHTML='<b>Titles stay clear:</b> completing independent training alone does not make someone a “Lellee Coach.” That title requires an approved Lellee W-2 or 1099 engagement plus the applicable learning and role-privilege gates.';
+    }
+
+    const workforce=document.getElementById('page-staff-coach-workspace');
+    if(workforce){
+      const heading=workforce.querySelector('.b5-page-head h2');
+      const intro=workforce.querySelector('.b5-page-head p');
+      if(heading)heading.textContent='Training, supervision and authorized privileges.';
+      if(intro)intro.textContent='Applying does not create an employment or contractor relationship. Lellee must approve and activate a coach record before role training or member assignments become available.';
+    }
+
+    const business=document.getElementById('page-coach-business');
+    if(business){
+      const p=business.querySelector('.approved-inner-head p');
+      if(p)p.textContent='Independent professionals work for themselves. They are not Lellee Coaches unless separately engaged by Lellee under an approved W-2 or 1099 arrangement, and they must use accurate credentials and scope descriptions.';
+    }
+
+    const dashboard=document.getElementById('page-coach-dashboard');
+    if(dashboard){
+      const p=dashboard.querySelector('.approved-inner-head p');
+      if(p)p.textContent='Manage your own clients, groups, services and communication. This independent business workspace is separate from any W-2 or 1099 Lellee Coach engagement.';
+    }
+
+    const coaches=document.getElementById('page-coaches');
+    if(coaches){
+      const kicker=coaches.querySelector('.approved-kicker');
+      const heading=coaches.querySelector('.approved-inner-head h2');
+      const intro=coaches.querySelector('.approved-inner-head p');
+      if(kicker)kicker.textContent='LELLEE COACHES · W-2 & 1099';
+      if(heading)heading.textContent='Human coaching from approved Lellee Coaches.';
+      if(intro)intro.textContent='The consumer Lellee Coach add-on connects eligible Premium members with trained Lellee Coaches serving under approved W-2 or 1099 arrangements. Independent professionals who are not engaged by Lellee remain a separate business category.';
+      const panel=coaches.querySelector('#b5ConsumerCoachPanel p');
+      if(panel)panel.textContent='Lellee Coaches are trained and supervised by Lellee and may serve under approved W-2 or 1099 arrangements. The add-on is $49.99/month in addition to Lellee Premium at $14.99/month. Additional 15-minute sessions are $19.99. Billing remains off until the launch gate is approved.';
+    }
+  }
+
   async function mount({root}={}){await loadControls(root||document.getElementById('adminAgentOperationsRoot'))}
   window.LelleeAdminAgentOperations=Object.freeze({mount,refresh:mount});
 
@@ -85,5 +135,6 @@
     last=active;
     if(active==='page-admin-agent-operations')loadControls(document.getElementById('adminAgentOperationsRoot'));
     if(active==='page-agent-workbench')setTimeout(repairWorkbenchRoster,350);
+    if(['page-training-center','page-professional-hub','page-staff-coach-workspace','page-coach-business','page-coach-dashboard','page-coaches'].includes(active))setTimeout(repairProfessionalCoachCopy,80);
   },350);
 })();
