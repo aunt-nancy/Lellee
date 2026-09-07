@@ -1,7 +1,7 @@
 (function(){
   'use strict';
 
-  const esc=value=>String(value??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[ch]));
+  const esc=value=>String(value??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot',"'":'&#039;'}[ch]));
   const bridge=()=>window.LelleeAuthContext?.client?window.LelleeAuthContext:null;
 
   function capabilitiesByAgent(items){
@@ -144,8 +144,18 @@
     }
   }
 
+  function loadActivatedRuntimes(){
+    if(document.getElementById('lelleeDocumentVaultStorageRuntime'))return;
+    const script=document.createElement('script');
+    script.id='lelleeDocumentVaultStorageRuntime';
+    script.src='/document-vault-storage.js?v=20260907-1';
+    script.defer=true;
+    (document.head||document.documentElement).appendChild(script);
+  }
+
   async function mount({root}={}){await loadControls(root||document.getElementById('adminAgentOperationsRoot'))}
   window.LelleeAdminAgentOperations=Object.freeze({mount,refresh:mount});
+  loadActivatedRuntimes();
 
   let last='';
   setInterval(()=>{
