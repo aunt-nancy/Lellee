@@ -39,6 +39,20 @@ PASS at schema/runtime integration level:
 - `journey_account_intakes` has user-scoped RLS and a unique `(user_id, topic_key)` key, supporting reusable private Program Pack setup.
 - Caregiving, Reentry, Housing Stability and Building Independence each now have their own internal setup questions and saved-answer flow.
 
+## Privacy / data-isolation verification
+
+PASS at policy level:
+- `journey_account_intakes` — own-row select/insert/update/delete.
+- `program_goals` — own-row ALL policy.
+- `program_progress_checkins` — own-row ALL policy.
+- `user_saved_resources` — own-row ALL policy.
+- `resource_referrals` — own-row ALL policy.
+- `program_enrollments` — own-row SELECT.
+- `user_program_state` — own-row SELECT.
+- Trusted-circle recipient access is restricted to active, accepted relationships and specific allowed scopes under program collaboration settings.
+- Recipient-visible scopes currently restrict reads to `shared_tasks` and `shared_appointments`; unrelated journals/messages are not exposed by these policies.
+- Cross-program sharing remains off by default.
+
 Still pending:
 - authenticated browser end-to-end testing of every onboarding/shared-tool return path;
 - mobile/iPhone visual QA;
@@ -56,6 +70,8 @@ All safety profiles remain draft. No safety route was published automatically.
 - Building Independence: standard review, with accessibility/privacy review required.
 
 Each program now has three draft routes covering its practical/elevated support needs plus an immediate-danger boundary. Draft status is intentional; public or external beta use remains blocked until required review is complete.
+
+A consolidated resource/safety review package is now stored in `WAVE_1_RESOURCE_SAFETY_REVIEW_2026-09-11.md` so these decisions can be reviewed in one batch rather than program by program.
 
 ## Verified resource candidates — still unpublished
 
@@ -81,19 +97,19 @@ No resource candidate was marked `published=true`; human approval remains a laun
 
 ## Current QA disposition
 
-| Program | Runtime | Onboarding | Shared tools | Backend pack | Safety | Resources | Browser E2E | Beta-ready |
-|---|---|---|---|---|---|---|---|---|
-| Caregiving | PASS | IMPLEMENTED | CONNECTED | PASS | REVIEW REQUIRED | DRAFTS READY | PENDING | NO |
-| Reentry | PASS | IMPLEMENTED | CONNECTED | PASS | REVIEW REQUIRED | DRAFTS READY | PENDING | NO |
-| Housing Stability | PASS | IMPLEMENTED | CONNECTED | PASS | REVIEW REQUIRED | DRAFTS READY | PENDING | NO |
-| Building Independence | PASS | IMPLEMENTED | CONNECTED | PASS | REVIEW REQUIRED | DRAFTS READY | PENDING | NO |
+| Program | Runtime | Onboarding | Shared tools | Backend pack | Privacy/RLS | Safety | Resources | Browser E2E | Beta-ready |
+|---|---|---|---|---|---|---|---|---|---|
+| Caregiving | PASS | IMPLEMENTED | CONNECTED | PASS | PASS | REVIEW REQUIRED | DRAFTS READY | PENDING | NO |
+| Reentry | PASS | IMPLEMENTED | CONNECTED | PASS | PASS | REVIEW REQUIRED | DRAFTS READY | PENDING | NO |
+| Housing Stability | PASS | IMPLEMENTED | CONNECTED | PASS | PASS | REVIEW REQUIRED | DRAFTS READY | PENDING | NO |
+| Building Independence | PASS | IMPLEMENTED | CONNECTED | PASS | PASS | REVIEW REQUIRED | DRAFTS READY | PENDING | NO |
 
 ## Next execution block
 
-1. Run authenticated internal end-to-end navigation/data tests across setup, Today, shared tools and return paths.
-2. Batch resource-candidate approval in one review instead of one-by-one questions.
-3. Prepare safety wording for required specialist/human review without publishing it prematurely.
-4. Run mobile/iPhone visual QA.
+1. Obtain one consolidated product approval for the eight verified resource candidates and 12 draft safety-route working copies, while keeping resources unpublished and safety routes draft until beta/specialist gates are met.
+2. Run authenticated internal end-to-end navigation/data tests across setup, Today, shared tools and return paths.
+3. Run mobile/iPhone visual QA.
+4. Define the final beta-user access rule and beta cohort.
 5. Move individual programs to beta only after their own gates pass.
 
 Printable blueprint remains deferred until the end of the full process, per approved instruction.
