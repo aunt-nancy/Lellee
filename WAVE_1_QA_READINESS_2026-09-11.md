@@ -12,8 +12,10 @@ Public release status: **NOT LIVE — all four remain `planned`**
 - Shared tools connected from the Program Pack: Document Vault, Calendar/Reminders, Resources, Trusted People, program-scoped Goals/Progress.
 - Shared-tool entry stores Wave 1 program context without changing the user’s primary program.
 - Cross-program sharing remains off by default.
-- Latest cache-key loader deployed through `pwa-runtime.js`.
-- Vercel status for the QA2 loader commit was confirmed successful.
+- Reusable program-specific onboarding runtime is now implemented for all four Wave 1 programs.
+- Onboarding answers save to the existing private `journey_account_intakes` table and do not enroll the user, change the primary program, or read private Journal content.
+- Latest onboarding/runtime loader deployed through `pwa-runtime.js`.
+- Vercel status for the onboarding loader commit was confirmed successful.
 
 ## Backend readiness matrix
 
@@ -34,11 +36,12 @@ PASS at schema/runtime integration level:
 - Wave 1 program IDs can scope goals/check-ins separately from Recovery.
 - Program modules are now populated for the approved Program Pack structure.
 - Four missing resource categories were added: Accessibility, Basic Needs, Personal Safety, Independent Living.
+- `journey_account_intakes` has user-scoped RLS and a unique `(user_id, topic_key)` key, supporting reusable private Program Pack setup.
+- Caregiving, Reentry, Housing Stability and Building Independence each now have their own internal setup questions and saved-answer flow.
 
 Still pending:
-- authenticated browser end-to-end testing of every shared-tool return path;
+- authenticated browser end-to-end testing of every onboarding/shared-tool return path;
 - mobile/iPhone visual QA;
-- program-specific onboarding implementation;
 - verified resource publication approval;
 - safety-route human/specialist review and publication;
 - final beta-user access rules and beta cohort test.
@@ -78,19 +81,19 @@ No resource candidate was marked `published=true`; human approval remains a laun
 
 ## Current QA disposition
 
-| Program | Runtime | Shared tools | Backend pack | Safety | Resources | Browser E2E | Beta-ready |
-|---|---|---|---|---|---|---|---|
-| Caregiving | PASS | CONNECTED | PASS | REVIEW REQUIRED | DRAFTS READY | PENDING | NO |
-| Reentry | PASS | CONNECTED | PASS | REVIEW REQUIRED | DRAFTS READY | PENDING | NO |
-| Housing Stability | PASS | CONNECTED | PASS | REVIEW REQUIRED | DRAFTS READY | PENDING | NO |
-| Building Independence | PASS | CONNECTED | PASS | REVIEW REQUIRED | DRAFTS READY | PENDING | NO |
+| Program | Runtime | Onboarding | Shared tools | Backend pack | Safety | Resources | Browser E2E | Beta-ready |
+|---|---|---|---|---|---|---|---|---|
+| Caregiving | PASS | IMPLEMENTED | CONNECTED | PASS | REVIEW REQUIRED | DRAFTS READY | PENDING | NO |
+| Reentry | PASS | IMPLEMENTED | CONNECTED | PASS | REVIEW REQUIRED | DRAFTS READY | PENDING | NO |
+| Housing Stability | PASS | IMPLEMENTED | CONNECTED | PASS | REVIEW REQUIRED | DRAFTS READY | PENDING | NO |
+| Building Independence | PASS | IMPLEMENTED | CONNECTED | PASS | REVIEW REQUIRED | DRAFTS READY | PENDING | NO |
 
 ## Next execution block
 
-1. Implement the reusable program-specific onboarding runtime for all four Wave 1 programs.
-2. Run authenticated internal end-to-end navigation/data tests.
-3. Batch resource-candidate approval in one review instead of one-by-one questions.
-4. Prepare safety wording for required specialist/human review without publishing it prematurely.
+1. Run authenticated internal end-to-end navigation/data tests across setup, Today, shared tools and return paths.
+2. Batch resource-candidate approval in one review instead of one-by-one questions.
+3. Prepare safety wording for required specialist/human review without publishing it prematurely.
+4. Run mobile/iPhone visual QA.
 5. Move individual programs to beta only after their own gates pass.
 
 Printable blueprint remains deferred until the end of the full process, per approved instruction.
