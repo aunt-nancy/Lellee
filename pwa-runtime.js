@@ -123,3 +123,12 @@ console.info('Lellee canonical PWA runtime 2026-09-03 loaded');
   s.dataset.lelleeWave1Runtime='1';
   document.head.appendChild(s);
 })();
+
+(()=>{
+  if(document.querySelector('script[data-lellee-wave1-onboarding]'))return;
+  const s=document.createElement('script');
+  s.src='/wave1-onboarding-runtime.js?v=20260911-qa1';
+  s.async=false;
+  s.dataset.lelleeWave1Onboarding='1';
+  document.head.appendChild(s);
+})();
