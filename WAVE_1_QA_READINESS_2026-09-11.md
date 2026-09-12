@@ -12,9 +12,9 @@ Public release status: **NOT LIVE — all four remain `planned`**
 - Shared tools connected from the Program Pack: Document Vault, Calendar/Reminders, Resources, Trusted People, program-scoped Goals/Progress.
 - Shared-tool entry stores Wave 1 program context without changing the user’s primary program.
 - Cross-program sharing remains off by default.
-- Reusable program-specific onboarding runtime is now implemented for all four Wave 1 programs.
+- Reusable program-specific onboarding runtime is implemented for all four Wave 1 programs.
 - Onboarding answers save to the existing private `journey_account_intakes` table and do not enroll the user, change the primary program, or read private Journal content.
-- Latest onboarding/runtime loader deployed through `pwa-runtime.js`.
+- Latest onboarding/runtime loader is deployed through `pwa-runtime.js`.
 - Vercel status for the onboarding loader commit was confirmed successful.
 
 ## Backend readiness matrix
@@ -34,10 +34,10 @@ PASS at schema/runtime integration level:
 - `get_my_trusted_circle_summary` exists in active app database.
 - Program-specific `program_goals` and `program_progress_checkins` tables exist.
 - Wave 1 program IDs can scope goals/check-ins separately from Recovery.
-- Program modules are now populated for the approved Program Pack structure.
+- Program modules are populated for the approved Program Pack structure.
 - Four missing resource categories were added: Accessibility, Basic Needs, Personal Safety, Independent Living.
 - `journey_account_intakes` has user-scoped RLS and a unique `(user_id, topic_key)` key, supporting reusable private Program Pack setup.
-- Caregiving, Reentry, Housing Stability and Building Independence each now have their own internal setup questions and saved-answer flow.
+- Caregiving, Reentry, Housing Stability and Building Independence each have their own internal setup questions and saved-answer flow.
 
 ## Privacy / data-isolation verification
 
@@ -53,61 +53,66 @@ PASS at policy level:
 - Recipient-visible scopes currently restrict reads to `shared_tasks` and `shared_appointments`; unrelated journals/messages are not exposed by these policies.
 - Cross-program sharing remains off by default.
 
-Still pending:
-- authenticated browser end-to-end testing of every onboarding/shared-tool return path;
-- mobile/iPhone visual QA;
-- verified resource publication approval;
-- safety-route human/specialist review and publication;
-- final beta-user access rules and beta cohort test.
+## Consolidated approval checkpoint
+
+Owner approval received: **APPROVE ALL**.
+
+Approved:
+- 8 verified authoritative resource candidates for beta staging only;
+- 12 safety-route drafts as the working product copy for formal review.
+
+Conditions preserved:
+- resources remain unpublished;
+- safety routes remain draft/unpublished;
+- no public program status changes;
+- required specialist/accessibility/privacy review still applies.
+
+Durable approval record: `WAVE_1_RESOURCE_SAFETY_APPROVAL_2026-09-11.md`.
 
 ## Safety state
 
-All safety profiles remain draft. No safety route was published automatically.
+The four `program_safety_profiles_v2` records are now in **review** status. No safety route was published automatically.
 
 - Caregiving: heightened review.
 - Reentry: heightened review.
 - Housing Stability: heightened review.
 - Building Independence: standard review, with accessibility/privacy review required.
 
-Each program now has three draft routes covering its practical/elevated support needs plus an immediate-danger boundary. Draft status is intentional; public or external beta use remains blocked until required review is complete.
+Each program has three draft routes covering practical/elevated support needs plus an immediate-danger boundary. Public or external beta use remains blocked until required review is complete.
 
-A consolidated resource/safety review package is now stored in `WAVE_1_RESOURCE_SAFETY_REVIEW_2026-09-11.md` so these decisions can be reviewed in one batch rather than program by program.
-
-## Verified resource candidates — still unpublished
-
-These were verified from authoritative sources on 2026-09-11 and stored as drafts only:
+## Verified resource candidates — beta staging approved, still unpublished
 
 ### Caregiving
-- Eldercare Locator — https://eldercare.acl.gov/home
-- National Family Caregiver Support Program — https://acl.gov/programs/support-caregivers/national-family-caregiver-support-program
+- Eldercare Locator
+- National Family Caregiver Support Program
 
 ### Returning Home / Reentry
-- CareerOneStop — Find a Job After Incarceration — https://cloudfront.careeronestop.org/JusticeImpacted/Help/ReEntry/reentry-intro.aspx
-- USA.gov Benefit Finder — https://www.usa.gov/benefit-finder
+- CareerOneStop — Find a Job After Incarceration
+- USA.gov Benefit Finder
 
 ### Housing Stability
-- HUD Find Shelter — https://www.hud.gov/findshelter
-- HUD Housing Counseling — https://www.hud.gov/stat/sfh/housing-counseling
+- HUD Find Shelter
+- HUD Housing Counseling
 
 ### Building Independence
-- Disability Information and Access Locator (DIAL) — https://dial.acl.gov/home
-- USA.gov Benefit Finder — https://www.usa.gov/benefit-finder
+- Disability Information and Access Locator (DIAL)
+- USA.gov Benefit Finder
 
-No resource candidate was marked `published=true`; human approval remains a launch gate.
+All remain `published=false` until the applicable release gate is passed.
 
 ## Current QA disposition
 
 | Program | Runtime | Onboarding | Shared tools | Backend pack | Privacy/RLS | Safety | Resources | Browser E2E | Beta-ready |
 |---|---|---|---|---|---|---|---|---|---|
-| Caregiving | PASS | IMPLEMENTED | CONNECTED | PASS | PASS | REVIEW REQUIRED | DRAFTS READY | PENDING | NO |
-| Reentry | PASS | IMPLEMENTED | CONNECTED | PASS | PASS | REVIEW REQUIRED | DRAFTS READY | PENDING | NO |
-| Housing Stability | PASS | IMPLEMENTED | CONNECTED | PASS | PASS | REVIEW REQUIRED | DRAFTS READY | PENDING | NO |
-| Building Independence | PASS | IMPLEMENTED | CONNECTED | PASS | PASS | REVIEW REQUIRED | DRAFTS READY | PENDING | NO |
+| Caregiving | PASS | IMPLEMENTED | CONNECTED | PASS | PASS | FORMAL REVIEW | BETA STAGING APPROVED | PENDING | NO |
+| Reentry | PASS | IMPLEMENTED | CONNECTED | PASS | PASS | FORMAL REVIEW | BETA STAGING APPROVED | PENDING | NO |
+| Housing Stability | PASS | IMPLEMENTED | CONNECTED | PASS | PASS | FORMAL REVIEW | BETA STAGING APPROVED | PENDING | NO |
+| Building Independence | PASS | IMPLEMENTED | CONNECTED | PASS | PASS | ACCESSIBILITY/PRIVACY REVIEW | BETA STAGING APPROVED | PENDING | NO |
 
 ## Next execution block
 
-1. Obtain one consolidated product approval for the eight verified resource candidates and 12 draft safety-route working copies, while keeping resources unpublished and safety routes draft until beta/specialist gates are met.
-2. Run authenticated internal end-to-end navigation/data tests across setup, Today, shared tools and return paths.
+1. Run authenticated internal end-to-end navigation/data tests across setup, Today, shared tools and return paths.
+2. Complete required safety/accessibility/privacy review without publishing routes prematurely.
 3. Run mobile/iPhone visual QA.
 4. Define the final beta-user access rule and beta cohort.
 5. Move individual programs to beta only after their own gates pass.
