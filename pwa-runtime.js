@@ -43,7 +43,6 @@ q('#pwaInstallButton')?.addEventListener('click',async()=>{
 q('#pwaUpdateButton')?.addEventListener('click',()=>{
   if(!waitingWorker)return;
   waitingWorker.postMessage({type:'SKIP_WAITING'});
-  // Reload is explicit only: the person pressed Update App.
   setTimeout(()=>location.reload(),500);
 });
 
@@ -51,7 +50,6 @@ async function registerWorker(){
   updateClientStatus();
   if(!('serviceWorker'in navigator))return;
   try{
-    // Canonical worker. /sw.js remains only as a compatibility bridge for old installs.
     const reg=await navigator.serviceWorker.register('/service-worker.js',{scope:'/'});
     if(q('#pwaWorkerState'))q('#pwaWorkerState').textContent='Ready';
     if(reg.waiting){
@@ -69,8 +67,6 @@ async function registerWorker(){
         }
       });
     });
-    // Do not auto-reload on controllerchange. That old behavior could visibly
-    // restart the dashboard during normal startup/deployment.
     navigator.serviceWorker.addEventListener('controllerchange',()=>{
       if(q('#pwaUpdateState'))q('#pwaUpdateState').textContent='Updated';
       waitingWorker=null;
@@ -118,7 +114,7 @@ console.info('Lellee canonical PWA runtime 2026-09-03 loaded');
 (()=>{
   if(document.querySelector('script[data-lellee-wave1-runtime]'))return;
   const s=document.createElement('script');
-  s.src='/wave1-program-runtime.js?v=20260911-qa2';
+  s.src='/wave1-program-runtime.js?v=20260911-coaching3';
   s.async=false;
   s.dataset.lelleeWave1Runtime='1';
   document.head.appendChild(s);
@@ -127,7 +123,7 @@ console.info('Lellee canonical PWA runtime 2026-09-03 loaded');
 (()=>{
   if(document.querySelector('script[data-lellee-wave1-onboarding]'))return;
   const s=document.createElement('script');
-  s.src='/wave1-onboarding-runtime.js?v=20260911-qa1';
+  s.src='/wave1-onboarding-runtime.js?v=20260911-coaching2';
   s.async=false;
   s.dataset.lelleeWave1Onboarding='1';
   document.head.appendChild(s);
