@@ -118,7 +118,7 @@ console.info('Lellee canonical PWA runtime 2026-09-03 loaded');
 (()=>{
   if(document.querySelector('script[data-lellee-wave1-runtime]'))return;
   const s=document.createElement('script');
-  s.src='/wave1-program-runtime.js?v=20260911-qa1';
+  s.src='/wave1-program-runtime.js?v=20260911-qa2';
   s.async=false;
   s.dataset.lelleeWave1Runtime='1';
   document.head.appendChild(s);
