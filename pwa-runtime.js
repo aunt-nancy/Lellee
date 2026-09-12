@@ -128,3 +128,12 @@ console.info('Lellee canonical PWA runtime 2026-09-03 loaded');
   s.dataset.lelleeWave1Onboarding='1';
   document.head.appendChild(s);
 })();
+
+(()=>{
+  if(document.querySelector('script[data-lellee-recovery-journey-switcher]'))return;
+  const s=document.createElement('script');
+  s.src='/recovery-journey-switcher.js?v=20260912-1';
+  s.async=false;
+  s.dataset.lelleeRecoveryJourneySwitcher='1';
+  document.head.appendChild(s);
+})();
