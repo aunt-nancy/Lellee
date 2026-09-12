@@ -53,6 +53,18 @@ PASS at policy level:
 - Recipient-visible scopes currently restrict reads to `shared_tasks` and `shared_appointments`; unrelated journals/messages are not exposed by these policies.
 - Cross-program sharing remains off by default.
 
+## Authenticated browser E2E result
+
+Authenticated admin diagnostic completed with:
+- **53 passed**
+- **0 failed**
+- **4 manual gates**
+- **4 Wave 1 programs found**
+
+Automated browser/data QA is therefore **PASS** for all currently instrumented checks. The read-only harness verified program records, modules, privacy defaults, safety/resource staging, onboarding reads, program-scoped progress, shared-core RPCs, own-enrollment/state isolation, and deployed runtimes without changing user or release state.
+
+Durable result record: `WAVE_1_E2E_QA_RESULT_2026-09-11.md`.
+
 ## Consolidated approval checkpoint
 
 Owner approval received: **APPROVE ALL**.
@@ -71,7 +83,7 @@ Durable approval record: `WAVE_1_RESOURCE_SAFETY_APPROVAL_2026-09-11.md`.
 
 ## Safety state
 
-The four `program_safety_profiles_v2` records are now in **review** status. No safety route was published automatically.
+The four `program_safety_profiles_v2` records are in **review** status. No safety route was published automatically.
 
 - Caregiving: heightened review.
 - Reentry: heightened review.
@@ -102,19 +114,26 @@ All remain `published=false` until the applicable release gate is passed.
 
 ## Current QA disposition
 
-| Program | Runtime | Onboarding | Shared tools | Backend pack | Privacy/RLS | Safety | Resources | Browser E2E | Beta-ready |
+| Program | Runtime | Onboarding | Shared tools | Backend pack | Privacy/RLS | Automated E2E | Safety | Resources | Beta-ready |
 |---|---|---|---|---|---|---|---|---|---|
-| Caregiving | PASS | IMPLEMENTED | CONNECTED | PASS | PASS | FORMAL REVIEW | BETA STAGING APPROVED | PENDING | NO |
-| Reentry | PASS | IMPLEMENTED | CONNECTED | PASS | PASS | FORMAL REVIEW | BETA STAGING APPROVED | PENDING | NO |
-| Housing Stability | PASS | IMPLEMENTED | CONNECTED | PASS | PASS | FORMAL REVIEW | BETA STAGING APPROVED | PENDING | NO |
-| Building Independence | PASS | IMPLEMENTED | CONNECTED | PASS | PASS | ACCESSIBILITY/PRIVACY REVIEW | BETA STAGING APPROVED | PENDING | NO |
+| Caregiving | PASS | IMPLEMENTED | CONNECTED | PASS | PASS | PASS | FORMAL REVIEW | BETA STAGING APPROVED | NO |
+| Reentry | PASS | IMPLEMENTED | CONNECTED | PASS | PASS | PASS | FORMAL REVIEW | BETA STAGING APPROVED | NO |
+| Housing Stability | PASS | IMPLEMENTED | CONNECTED | PASS | PASS | PASS | FORMAL REVIEW | BETA STAGING APPROVED | NO |
+| Building Independence | PASS | IMPLEMENTED | CONNECTED | PASS | PASS | PASS | ACCESSIBILITY/PRIVACY REVIEW | BETA STAGING APPROVED | NO |
+
+## Remaining manual gates
+
+1. Interactive navigation click-through in the real authenticated app.
+2. Mobile/iPhone visual QA.
+3. Required safety/accessibility/privacy review.
+4. Controlled beta access/cohort test.
 
 ## Next execution block
 
-1. Run authenticated internal end-to-end navigation/data tests across setup, Today, shared tools and return paths.
-2. Complete required safety/accessibility/privacy review without publishing routes prematurely.
-3. Run mobile/iPhone visual QA.
-4. Define the final beta-user access rule and beta cohort.
+1. Complete interactive authenticated click-through for each Program Pack and return path.
+2. Run mobile/iPhone visual QA.
+3. Complete required safety/accessibility/privacy review without publishing routes prematurely.
+4. Define and test the controlled beta cohort.
 5. Move individual programs to beta only after their own gates pass.
 
 Printable blueprint remains deferred until the end of the full process, per approved instruction.
