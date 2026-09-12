@@ -65,6 +65,28 @@ Automated browser/data QA is therefore **PASS** for all currently instrumented c
 
 Durable result record: `WAVE_1_E2E_QA_RESULT_2026-09-11.md`.
 
+## iPhone / interactive QA result
+
+Owner-reported authenticated iPhone test: **PASS**.
+
+All four Program Packs were opened and reviewed through:
+- Setup
+- Today
+- Journey
+- Tools
+- I Need Help
+- Resources
+- Progress
+- return to the Program Pack
+
+No blocking mobile issue was reported: no page jumping, hanging, overlap, off-screen layout failure, or broken return path was reported.
+
+This closes two of the four manual gates:
+1. Interactive authenticated Program Pack click-through.
+2. Mobile/iPhone visual-navigation QA.
+
+Durable result record: `WAVE_1_IPHONE_QA_2026-09-11.md`.
+
 ## Consolidated approval checkpoint
 
 Owner approval received: **APPROVE ALL**.
@@ -114,26 +136,23 @@ All remain `published=false` until the applicable release gate is passed.
 
 ## Current QA disposition
 
-| Program | Runtime | Onboarding | Shared tools | Backend pack | Privacy/RLS | Automated E2E | Safety | Resources | Beta-ready |
-|---|---|---|---|---|---|---|---|---|---|
-| Caregiving | PASS | IMPLEMENTED | CONNECTED | PASS | PASS | PASS | FORMAL REVIEW | BETA STAGING APPROVED | NO |
-| Reentry | PASS | IMPLEMENTED | CONNECTED | PASS | PASS | PASS | FORMAL REVIEW | BETA STAGING APPROVED | NO |
-| Housing Stability | PASS | IMPLEMENTED | CONNECTED | PASS | PASS | PASS | FORMAL REVIEW | BETA STAGING APPROVED | NO |
-| Building Independence | PASS | IMPLEMENTED | CONNECTED | PASS | PASS | PASS | ACCESSIBILITY/PRIVACY REVIEW | BETA STAGING APPROVED | NO |
+| Program | Runtime | Onboarding | Shared tools | Backend pack | Privacy/RLS | Automated E2E | iPhone / interactive | Safety | Resources | Beta-ready |
+|---|---|---|---|---|---|---|---|---|---|---|
+| Caregiving | PASS | PASS | PASS | PASS | PASS | PASS | PASS | FORMAL REVIEW | BETA STAGING APPROVED | NO |
+| Reentry | PASS | PASS | PASS | PASS | PASS | PASS | PASS | FORMAL REVIEW | BETA STAGING APPROVED | NO |
+| Housing Stability | PASS | PASS | PASS | PASS | PASS | PASS | PASS | FORMAL REVIEW | BETA STAGING APPROVED | NO |
+| Building Independence | PASS | PASS | PASS | PASS | PASS | PASS | PASS | ACCESSIBILITY/PRIVACY REVIEW | BETA STAGING APPROVED | NO |
 
 ## Remaining manual gates
 
-1. Interactive navigation click-through in the real authenticated app.
-2. Mobile/iPhone visual QA.
-3. Required safety/accessibility/privacy review.
-4. Controlled beta access/cohort test.
+1. Required safety specialist / accessibility / privacy review.
+2. Controlled beta access/cohort test.
 
 ## Next execution block
 
-1. Complete interactive authenticated click-through for each Program Pack and return path.
-2. Run mobile/iPhone visual QA.
-3. Complete required safety/accessibility/privacy review without publishing routes prematurely.
-4. Define and test the controlled beta cohort.
-5. Move individual programs to beta only after their own gates pass.
+1. Complete required safety/accessibility/privacy review without publishing routes prematurely.
+2. Define and test the controlled beta cohort.
+3. Move individual programs to beta only after their own remaining gates pass.
+4. Keep resources unpublished until the applicable beta/release gate is reached.
 
 Printable blueprint remains deferred until the end of the full process, per approved instruction.
