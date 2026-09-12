@@ -1,175 +1,39 @@
 (function(){
-  'use strict';
-
-  const VERSION='2026-09-11-wave1-internal-qa1';
-  const PROGRAMS=Object.freeze({
-    caregiving:{
-      name:'Caregiving',
-      subtitle:'Reduce the mental load of caring for someone else while protecting your own capacity.',
-      stages:['Get Oriented','Get Organized','Build Support','Find a Rhythm','Adjust to Change','Sustain Yourself'],
-      today:['What matters most today?','One care task','One thing for you'],
-      tools:['Care Profiles','My Care Plan','Medication Organizer','Appointments','Prepare for Appointment','Care Calendar','Care Team','Share the Load','Document Vault','Resource Finder','Respite & Break Planner','Emergency Information','Care Transition','Caregiver Plan','Expense & Benefits Organizer','Care Binder'],
-      help:['I’m overwhelmed','I’m exhausted / need a break','I don’t have enough help','Someone who was helping is no longer available','I’m having trouble managing everything','The care situation suddenly changed','I’m worried about the person I’m caring for','I’m worried about myself','I need a service or resource','Something else'],
-      progress:['Care information is more organized','More help is available','Appointments are easier to manage','Regular breaks are becoming possible','Fewer tasks are unresolved'],
-      differentiator:'What matters now, what can wait, and what can someone else do?'
-    },
-    reentry:{
-      name:'Returning Home / Reentry',
-      subtitle:'Practical sequencing for returning home and rebuilding stability without surveillance or scoring.',
-      stages:['Coming Home','Get Stable','Rebuild Routine','Move Forward','Reconnect','Build the Next Chapter'],
-      today:['One essential task','One stability task','One forward-looking task'],
-      tools:['My Return Plan','Essential Documents','Requirements & Appointments','Housing','Benefits','Transportation','Employment & Education','Support Network','Next Steps'],
-      help:['I don’t have somewhere safe to stay','I need identification or documents','I don’t understand a requirement or deadline','I need transportation','I need work or income','I need benefits or basic needs','I need help figuring out what comes first','Something else'],
-      progress:['Essential documents are coming together','Housing options are clearer','Appointments and requirements are organized','Employment or training steps are moving','Support connections are growing'],
-      differentiator:'Stability and sequencing without a reentry score.'
-    },
-    'housing-stability':{
-      name:'Housing Stability',
-      subtitle:'Move from housing crisis or uncertainty toward stable housing with follow-through, not just listings.',
-      stages:['What’s Urgent?','Understand My Situation','Find Options','Get Ready','Get Stable','Stay Stable'],
-      today:['Urgent deadline','One housing action','One application or document step'],
-      tools:['Housing Situation','Deadline Tracker','Housing Search','Application Organizer','Document Vault','Benefits & Rent Assistance','Housing Counselor & Legal Resources','Move Plan','Stay Stable Plan'],
-      help:['I may lose my housing','I have nowhere to stay','I received a notice','I can’t pay rent or utilities','I need to find housing','I need help with an application','I think I’m experiencing housing discrimination','Something changed'],
-      progress:['Deadlines are identified','Documents are ready','Applications are moving','Resources are connected','Housing is becoming more stable'],
-      differentiator:'Housing search + documents + benefits + deadlines + follow-through.'
-    },
-    'independent-living':{
-      name:'Building Independence',
-      subtitle:'Build self-direction, access, and practical life systems while choosing the support that works for you.',
-      stages:['What I Want','Daily Life','Getting Around & Access','Money & Responsibilities','Work, School & Community','My Support, My Choice'],
-      today:['One personally chosen goal','One practical action','One upcoming responsibility'],
-      tools:['My Independence Goals','Daily-Life Systems','Transportation','Accessibility & Assistive Technology','Benefits','Money & Household Organization','Work & School','Self-Advocacy','Support Plan','Emergency Preparedness'],
-      help:['I need help doing something on my own','Transportation or access is stopping me','I need an accommodation','Paperwork or benefits are confusing','I need help speaking up for myself','I need more support','I want less help with something','I don’t know where to start'],
-      progress:['Daily systems are easier to use','Access barriers are clearer','Responsibilities are more organized','Self-advocacy is growing','Support better matches personal choice'],
-      differentiator:'Independence means self-direction, not doing everything without help.'
-    }
-  });
-
-  const $=s=>document.querySelector(s);
-  const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-  let allowed=false;
-  let activeSlug='caregiving';
-
-  function client(){ return window.LelleeAuthContext?.client||null; }
-  function user(){ return window.LelleeAuthContext?.getCurrentUser?.()||null; }
-  function navigate(page){
-    const fn=window.LelleeNavigatePage||window.showPage;
-    if(typeof fn==='function') fn(page);
-  }
-
-  function injectStyle(){
-    if($('#wave1ProgramRuntimeStyle'))return;
-    const s=document.createElement('style');
-    s.id='wave1ProgramRuntimeStyle';
-    s.textContent=`
-      #page-wave1-programs .approved-inner,#page-wave1-workspace .approved-inner{max-width:1120px;margin:0 auto}
-      .w1-status{display:inline-flex;align-items:center;gap:6px;border:1px solid #ded6e7;background:#f7f3fa;color:#684590;border-radius:999px;padding:6px 9px;font-size:.58rem;font-weight:850;letter-spacing:.04em}
-      .w1-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;margin-top:16px}
-      .w1-program-card{border:1px solid #e5e0e8;border-radius:12px;background:#fff;padding:17px;box-shadow:0 4px 14px rgba(31,25,44,.035)}
-      .w1-program-card h3{font-size:.9rem;margin:8px 0 6px}.w1-program-card p{font-size:.7rem;line-height:1.5;color:#6d6671;margin:0 0 12px}
-      .w1-program-card button,.w1-tab,.w1-help-choice{border:1px solid #ddd2e7;background:#fff;color:#5b2fa0;border-radius:8px;padding:8px 11px;font-size:.63rem;font-weight:800;cursor:pointer}
-      .w1-program-card button{background:#5b2fa0;color:#fff;border-color:#5b2fa0}
-      .w1-workspace-head{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;margin-bottom:14px}
-      .w1-workspace-head h2{font-size:1.25rem;margin:5px 0}.w1-workspace-head p{font-size:.72rem;line-height:1.5;color:#6d6671;max-width:760px;margin:0}
-      .w1-tabs{display:flex;gap:7px;flex-wrap:wrap;margin:14px 0}.w1-tab.active{background:#5b2fa0;color:#fff;border-color:#5b2fa0}
-      .w1-panel{border:1px solid #e6e1e9;border-radius:12px;background:#fff;padding:17px;min-height:190px}
-      .w1-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.w1-mini{border:1px solid #ece7ef;border-radius:10px;background:#fcfbfd;padding:13px}.w1-mini b{display:block;font-size:.72rem;margin-bottom:5px}.w1-mini p,.w1-mini small{font-size:.62rem;line-height:1.45;color:#706977}
-      .w1-stage-list,.w1-tool-list,.w1-progress-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.w1-list-item{border:1px solid #ece7ef;border-radius:9px;padding:11px 12px;background:#fcfbfd;font-size:.66rem;font-weight:750;color:#4b4450}
-      .w1-help-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.w1-help-choice{text-align:left;color:#4d3e59}
-      .w1-boundary{margin-top:14px;border:1px solid #e1d9e6;background:#faf7fc;border-radius:10px;padding:12px 13px;font-size:.61rem;line-height:1.5;color:#68606d}
-      .w1-internal-note{border-left:3px solid #7a57a6;background:#f6f1f9;padding:10px 12px;margin:12px 0;font-size:.61rem;line-height:1.5;color:#5f5664}
-      @media(max-width:760px){.w1-grid,.w1-cards,.w1-stage-list,.w1-tool-list,.w1-progress-list,.w1-help-grid{grid-template-columns:1fr}.w1-workspace-head{display:block}}
-    `;
-    document.head.appendChild(s);
-  }
-
-  function makePage(id){
-    let page=document.getElementById('page-'+id);
-    if(page)return page;
-    page=document.createElement('section');
-    page.className='page';
-    page.id='page-'+id;
-    document.querySelector('.content')?.appendChild(page);
-    return page;
-  }
-
-  function renderProgramsPage(){
-    const page=makePage('wave1-programs');
-    page.innerHTML=`<div class="approved-inner">
-      <div class="approved-inner-head"><div><span class="approved-kicker">WAVE 1 · INTERNAL PILOT</span><h2>My Programs — internal QA</h2><p>These Program Packs are implemented for controlled review only. They are not public launch status.</p></div><span class="w1-status">INTERNAL QA</span></div>
-      <div class="w1-internal-note"><b>Shared Lellee core:</b> Today framework, Journal, Calendar, reminders, Document Vault, Resources, Trusted People, Progress, account/session infrastructure. Each Program Pack supplies its own stages, priorities, tools, help routing, evidence rules, resources, safety and language.</div>
-      <div class="w1-grid">${Object.entries(PROGRAMS).map(([slug,p])=>`<article class="w1-program-card"><span class="w1-status">PILOT</span><h3>${esc(p.name)}</h3><p>${esc(p.subtitle)}</p><button type="button" data-w1-open="${esc(slug)}">Open internal workspace</button></article>`).join('')}</div>
-    </div>`;
-  }
-
-  function panelHtml(slug,tab){
-    const p=PROGRAMS[slug]; if(!p)return '';
-    if(tab==='today')return `<div class="w1-cards">${p.today.map((x,i)=>`<article class="w1-mini"><b>${i===0?'Most Important Today':i===1?'Next useful step':'Keep it manageable'}</b><p>${esc(x)}</p></article>`).join('')}</div><div class="w1-boundary">Today intentionally surfaces a small number of meaningful actions first. More items belong behind progressive disclosure rather than becoming a long checklist.</div>`;
-    if(tab==='journey')return `<div class="w1-stage-list">${p.stages.map((x,i)=>`<div class="w1-list-item">${i+1}. ${esc(x)}</div>`).join('')}</div><div class="w1-boundary">Stages guide emphasis; they are not grades or performance levels. History is preserved when circumstances change.</div>`;
-    if(tab==='tools')return `<div class="w1-tool-list">${p.tools.map(x=>`<div class="w1-list-item">${esc(x)}</div>`).join('')}</div>`;
-    if(tab==='help')return `<div class="w1-help-grid">${p.help.map(x=>`<button class="w1-help-choice" type="button" data-w1-help-choice>${esc(x)}</button>`).join('')}</div><div class="w1-boundary">“I Need Help” identifies the type of help first. Only genuine immediate-danger situations leave the ordinary workflow for the appropriate safety/emergency pathway.</div>`;
-    if(tab==='resources')return `<div class="w1-cards"><article class="w1-mini"><b>Resources Agent</b><p>Finds and verifies relevant services, then returns a small set of practical matches.</p></article><article class="w1-mini"><b>Housing Agent</b><p>Handles housing searches when housing is part of the need, using only authorized search context.</p></article><article class="w1-mini"><b>Reminder Agent</b><p>Turns chosen follow-up steps into user-approved reminders.</p></article></div><div class="w1-boundary">Resource results should connect to documents, follow-up, reminders and trusted helpers rather than ending as a directory of links.</div>`;
-    if(tab==='progress')return `<div class="w1-progress-list">${p.progress.map(x=>`<div class="w1-list-item">${esc(x)}</div>`).join('')}</div><div class="w1-boundary"><b>No score.</b> Progress is descriptive. Harder periods are treated as changed circumstances, not failure.</div>`;
-    return '';
-  }
-
-  function renderWorkspace(slug='caregiving',tab='today'){
-    if(!PROGRAMS[slug])slug='caregiving'; activeSlug=slug;
-    const p=PROGRAMS[slug];
-    const page=makePage('wave1-workspace');
-    page.innerHTML=`<div class="approved-inner">
-      <div class="w1-workspace-head"><div><span class="approved-kicker">INTERNAL PROGRAM PACK</span><h2>${esc(p.name)}</h2><p>${esc(p.subtitle)}</p></div><div><span class="w1-status">PILOT · NOT PUBLIC</span><button class="approved-link" type="button" data-page="wave1-programs">← All Wave 1 programs</button></div></div>
-      <div class="w1-internal-note"><b>Opportunity-gap focus:</b> ${esc(p.differentiator)}</div>
-      <div class="w1-tabs">${[['today','Today'],['journey','Journey'],['tools','Tools'],['help','I Need Help'],['resources','Resources'],['progress','Progress']].map(([k,l])=>`<button type="button" class="w1-tab ${k===tab?'active':''}" data-w1-tab="${k}">${l}</button>`).join('')}</div>
-      <div id="w1ProgramPanel" class="w1-panel">${panelHtml(slug,tab)}</div>
-    </div>`;
-  }
-
-  function ensureNavigation(){
-    const inner=document.querySelector('.nav-category[data-category="account"] .nav-category-items-inner');
-    if(!inner||inner.querySelector('[data-page="wave1-programs"]'))return;
-    const b=document.createElement('button');
-    b.type='button';b.className='nav-item';b.dataset.page='wave1-programs';b.id='wave1ProgramsNav';
-    b.innerHTML='<span class="nav-icon">◫</span><span>My Programs (Pilot)</span>';
-    inner.insertBefore(b,inner.firstChild);
-  }
-
-  async function checkAccess(){
-    const c=client(),u=user();
-    if(!c||!u)return false;
-    if(window.LelleeAdminContext?.isAdmin===true)return true;
-    try{
-      const {data,error}=await c.rpc('is_lellee_admin');
-      return !error&&data===true;
-    }catch(_){return false}
-  }
-
-  function wire(){
-    document.addEventListener('click',e=>{
-      const open=e.target.closest('[data-w1-open]');
-      if(open){renderWorkspace(open.dataset.w1Open,'today');navigate('wave1-workspace');return}
-      const tab=e.target.closest('[data-w1-tab]');
-      if(tab){renderWorkspace(activeSlug,tab.dataset.w1Tab);return}
-      const help=e.target.closest('[data-w1-help-choice]');
-      if(help){
-        const panel=$('#w1ProgramPanel');
-        if(panel)panel.insertAdjacentHTML('beforeend','<div class="w1-boundary"><b>QA placeholder:</b> The selected need will route to the appropriate Lellee tool, agent, trusted person, resource workflow, or safety pathway. No automatic diagnosis or emergency disposition.</div>');
-      }
-    },true);
-  }
-
-  async function start(){
-    if(window.LelleeWave1ProgramRuntime?.version===VERSION)return;
-    injectStyle();
-    renderProgramsPage();
-    renderWorkspace('caregiving','today');
-    allowed=await checkAccess();
-    if(allowed)ensureNavigation();
-    wire();
-    window.LelleeWave1ProgramRuntime=Object.freeze({version:VERSION,internalOnly:true,programs:Object.keys(PROGRAMS),open(slug){if(!allowed)return false;renderWorkspace(slug,'today');navigate('wave1-workspace');return true}});
-    console.info('Lellee Wave 1 Program Pack runtime ready:',VERSION,allowed?'admin access enabled':'hidden for non-admin');
-  }
-
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(start,900),{once:true});
-  else setTimeout(start,900);
+'use strict';
+const VERSION='2026-09-11-wave1-internal-qa2';
+const CTX='lellee:wave1:program-context';
+const P={
+ caregiving:{name:'Caregiving',subtitle:'Reduce the mental load of caring for someone else while protecting your own capacity.',stages:['Get Oriented','Get Organized','Build Support','Find a Rhythm','Adjust to Change','Sustain Yourself'],today:['What matters most today?','One care task','One thing for you'],tools:['Care Profiles','My Care Plan','Medication Organizer','Appointments','Prepare for Appointment','Care Calendar','Care Team','Share the Load','Document Vault','Resource Finder','Respite & Break Planner','Emergency Information','Care Transition','Caregiver Plan','Expense & Benefits Organizer','Care Binder'],help:['I’m overwhelmed','I’m exhausted / need a break','I don’t have enough help','Someone who was helping is no longer available','I’m having trouble managing everything','The care situation suddenly changed','I’m worried about the person I’m caring for','I’m worried about myself','I need a service or resource','Something else'],progress:['Care information is more organized','More help is available','Appointments are easier to manage','Regular breaks are becoming possible','Fewer tasks are unresolved'],diff:'What matters now, what can wait, and what can someone else do?'},
+ reentry:{name:'Returning Home / Reentry',subtitle:'Practical sequencing for returning home and rebuilding stability without surveillance or scoring.',stages:['Coming Home','Get Stable','Rebuild Routine','Move Forward','Reconnect','Build the Next Chapter'],today:['One essential task','One stability task','One forward-looking task'],tools:['My Return Plan','Essential Documents','Requirements & Appointments','Housing','Benefits','Transportation','Employment & Education','Support Network','Next Steps'],help:['I don’t have somewhere safe to stay','I need identification or documents','I don’t understand a requirement or deadline','I need transportation','I need work or income','I need benefits or basic needs','I need help figuring out what comes first','Something else'],progress:['Essential documents are coming together','Housing options are clearer','Appointments and requirements are organized','Employment or training steps are moving','Support connections are growing'],diff:'Stability and sequencing without a reentry score.'},
+ 'housing-stability':{name:'Housing Stability',subtitle:'Move from housing crisis or uncertainty toward stable housing with follow-through, not just listings.',stages:['What’s Urgent?','Understand My Situation','Find Options','Get Ready','Get Stable','Stay Stable'],today:['Urgent deadline','One housing action','One application or document step'],tools:['Housing Situation','Deadline Tracker','Housing Search','Application Organizer','Document Vault','Benefits & Rent Assistance','Housing Counselor & Legal Resources','Move Plan','Stay Stable Plan'],help:['I may lose my housing','I have nowhere to stay','I received a notice','I can’t pay rent or utilities','I need to find housing','I need help with an application','I think I’m experiencing housing discrimination','Something changed'],progress:['Deadlines are identified','Documents are ready','Applications are moving','Resources are connected','Housing is becoming more stable'],diff:'Housing search + documents + benefits + deadlines + follow-through.'},
+ 'independent-living':{name:'Building Independence',subtitle:'Build self-direction, access, and practical life systems while choosing the support that works for you.',stages:['What I Want','Daily Life','Getting Around & Access','Money & Responsibilities','Work, School & Community','My Support, My Choice'],today:['One personally chosen goal','One practical action','One upcoming responsibility'],tools:['My Independence Goals','Daily-Life Systems','Transportation','Accessibility & Assistive Technology','Benefits','Money & Household Organization','Work & School','Self-Advocacy','Support Plan','Emergency Preparedness'],help:['I need help doing something on my own','Transportation or access is stopping me','I need an accommodation','Paperwork or benefits are confusing','I need help speaking up for myself','I need more support','I want less help with something','I don’t know where to start'],progress:['Daily systems are easier to use','Access barriers are clearer','Responsibilities are more organized','Self-advocacy is growing','Support better matches personal choice'],diff:'Independence means self-direction, not doing everything without help.'}
+};
+const PAGE={vault:'document-vault',calendar:'calendar',resources:'resource-navigator',trusted:'trusted-circle',progress:'progress-hub'};
+const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+let allowed=false,slug='caregiving',tab='today',token=0;const ids=new Map();
+const db=()=>window.LelleeAuthContext?.client||null,me=()=>window.LelleeAuthContext?.getCurrentUser?.()||null;
+function nav(p){const f=window.LelleeNavigatePage||window.showPage;if(typeof f==='function')f(p)}
+function toast(m,b=false){const t=$('#globalToast');if(t){t.textContent=m;t.classList.remove('hidden');if(b)t.style.background='#7f2634';setTimeout(()=>{t.classList.add('hidden');t.style.background=''},2300)}else if(b)console.warn(m)}
+function context(){try{sessionStorage.setItem(CTX,JSON.stringify({slug,tab,name:P[slug].name,source:'wave1-pilot'}))}catch(_){}}
+function restore(){try{const x=JSON.parse(sessionStorage.getItem(CTX)||'null');if(P[x?.slug]){slug=x.slug;tab=x.tab||'today'}}catch(_){}}
+async function pid(s){if(ids.has(s))return ids.get(s);const c=db();if(!c)return null;const {data}=await c.from('programs').select('id').eq('slug',s).maybeSingle();if(data?.id)ids.set(s,data.id);return data?.id||null}
+function style(){if($('#wave1ProgramRuntimeStyle'))return;const s=document.createElement('style');s.id='wave1ProgramRuntimeStyle';s.textContent=`
+#page-wave1-programs .approved-inner,#page-wave1-workspace .approved-inner{max-width:1120px;margin:0 auto}.w1-status,.w1-live{display:inline-flex;border:1px solid #ded6e7;background:#f7f3fa;color:#684590;border-radius:999px;padding:6px 9px;font-size:.58rem;font-weight:850}.w1-live{background:#eef8f2;color:#2f6c4d;border-color:#d1ead9;padding:4px 7px}.w1-grid,.w1-cards,.w1-shared{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:14px}.w1-cards,.w1-shared{grid-template-columns:repeat(3,minmax(0,1fr))}.w1-program-card,.w1-mini,.w1-shared-card{border:1px solid #e5e0e8;border-radius:11px;background:#fff;padding:15px}.w1-program-card h3,.w1-mini b,.w1-shared-card b{font-size:.75rem;margin:7px 0}.w1-program-card p,.w1-mini p,.w1-shared-card small{font-size:.62rem;line-height:1.48;color:#706977}.w1-tabs{display:flex;gap:7px;flex-wrap:wrap;margin:14px 0}.w1-tab,.w1-action,.w1-help{border:1px solid #ddd2e7;background:#fff;color:#5b2fa0;border-radius:8px;padding:8px 11px;font-size:.63rem;font-weight:800;cursor:pointer}.w1-tab.active,.w1-action.primary,.w1-program-card button{background:#5b2fa0;color:#fff;border-color:#5b2fa0}.w1-panel{border:1px solid #e6e1e9;border-radius:12px;background:#fff;padding:17px;min-height:190px}.w1-list,.w1-help-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.w1-item{border:1px solid #ece7ef;border-radius:9px;padding:11px 12px;background:#fcfbfd;font-size:.66rem;font-weight:750;color:#4b4450}.w1-help{text-align:left;color:#4d3e59}.w1-note{margin-top:13px;border:1px solid #e1d9e6;background:#faf7fc;border-radius:10px;padding:11px 12px;font-size:.61rem;line-height:1.5;color:#68606d}.w1-kicker{font-size:.65rem;letter-spacing:.08em;text-transform:uppercase;color:#73518f;font-weight:900;margin:18px 0 8px}.w1-context{border:1px solid #d9cfe4;background:#f8f4fb;border-radius:10px;padding:10px 12px;margin-bottom:14px;display:flex;justify-content:space-between;gap:10px;font-size:.61rem;color:#5e5564}.w1-context button{border:1px solid #d7cae1;background:#fff;color:#5b2fa0;border-radius:7px;padding:7px 9px;font-size:.59rem;font-weight:850}.w1-resource{display:flex;justify-content:space-between;gap:10px;border:1px solid #ece7ef;border-radius:9px;padding:10px;margin:7px 0;background:#fcfbfd}.w1-resource b{font-size:.66rem}.w1-resource small{display:block;font-size:.57rem;color:#77707b;margin-top:3px}@media(max-width:760px){.w1-grid,.w1-cards,.w1-shared,.w1-list,.w1-help-grid{grid-template-columns:1fr}.w1-context{flex-direction:column}}
+`;document.head.appendChild(s)}
+function page(id){let e=$('#page-'+id);if(e)return e;e=document.createElement('section');e.className='page';e.id='page-'+id;$('.content')?.appendChild(e);return e}
+function programs(){const e=page('wave1-programs');e.innerHTML=`<div class="approved-inner"><div class="approved-inner-head"><div><span class="approved-kicker">WAVE 1 · INTERNAL PILOT</span><h2>My Programs — internal QA</h2><p>Controlled review only. These programs are not public yet.</p></div><span class="w1-status">INTERNAL QA</span></div><div class="w1-note"><b>Shared core is now connected:</b> Document Vault, Calendar/Reminders, Resources, Trusted People and program-specific Progress.</div><div class="w1-grid">${Object.entries(P).map(([k,p])=>`<article class="w1-program-card"><span class="w1-status">PILOT</span><h3>${esc(p.name)}</h3><p>${esc(p.subtitle)}</p><button class="w1-action primary" data-w1-open="${k}">Open internal workspace</button></article>`).join('')}</div></div>`}
+function shared(s={}){const v=s.vault||{},c=s.calendar||{},t=s.circle||{},p=s.progress||{};return `<div class="w1-kicker">Connected Lellee core</div><div class="w1-shared"><article class="w1-shared-card"><span class="w1-live">LIVE</span><b>Document Vault</b><small>Private documents stay in your shared Lellee vault.</small><p><b>${v.documents||0}</b> documents</p><button class="w1-action" data-w1-shared="vault">Open Vault</button></article><article class="w1-shared-card"><span class="w1-live">LIVE</span><b>Calendar & Reminders</b><small>Appointments and approved reminders stay together.</small><p><b>${c.upcoming||0}</b> upcoming · <b>${c.reminders||0}</b> reminders</p><button class="w1-action" data-w1-shared="calendar">Open Calendar</button></article><article class="w1-shared-card"><span class="w1-live">LIVE</span><b>Trusted People</b><small>Sharing stays explicit and revocable.</small><p><b>${t.members||0}</b> people · <b>${t.active_shares||0}</b> shares</p><button class="w1-action" data-w1-shared="trusted">Open Trusted People</button></article><article class="w1-shared-card"><span class="w1-live">LIVE</span><b>Program Progress</b><small>Goals/check-ins are scoped to this Program Pack.</small><p><b>${p.active||0}</b> active goals · <b>${p.checkins||0}</b> check-ins</p><button class="w1-action" data-w1-shared="progress">Open Progress</button></article></div>`}
+function html(k,x){const p=P[k];if(x==='today')return `<div class="w1-cards">${p.today.map((z,i)=>`<article class="w1-mini"><b>${i?'Next useful step':'Most Important Today'}</b><p>${esc(z)}</p></article>`).join('')}</div><div class="w1-note">Only a few meaningful actions appear first.</div><div id="w1Live">Connecting shared tools…</div>`;if(x==='journey')return `<div class="w1-list">${p.stages.map((z,i)=>`<div class="w1-item">${i+1}. ${esc(z)}</div>`).join('')}</div><div class="w1-note">Stages guide emphasis; they are not grades.</div>`;if(x==='tools')return `<div class="w1-list">${p.tools.map(z=>`<div class="w1-item">${esc(z)}</div>`).join('')}</div><div id="w1Live">Connecting shared tools…</div>`;if(x==='help')return `<div class="w1-help-grid">${p.help.map(z=>`<button class="w1-help" data-w1-help="${esc(z)}">${esc(z)}</button>`).join('')}</div><div class="w1-note">I Need Help identifies the kind of help first; it does not automatically label every need a crisis.</div><div id="w1Help"></div>`;if(x==='resources')return `<div id="w1Resources">Loading program resources…</div>`;if(x==='progress')return `<div class="w1-list">${p.progress.map(z=>`<div class="w1-item">${esc(z)}</div>`).join('')}</div><div class="w1-note"><b>No score.</b> Harder periods are treated as changed circumstances, not failure.</div><div id="w1Progress">Connecting program progress…</div>`;return''}
+function workspace(k=slug,x=tab){if(!P[k])k='caregiving';slug=k;tab=x;context();const p=P[k],e=page('wave1-workspace');e.innerHTML=`<div class="approved-inner"><div class="approved-inner-head"><div><span class="approved-kicker">INTERNAL PROGRAM PACK</span><h2>${esc(p.name)}</h2><p>${esc(p.subtitle)}</p></div><span class="w1-status">PILOT · NOT PUBLIC</span></div><div class="w1-note"><b>Opportunity-gap focus:</b> ${esc(p.diff)}</div><div class="w1-tabs">${[['today','Today'],['journey','Journey'],['tools','Tools'],['help','I Need Help'],['resources','Resources'],['progress','Progress']].map(([a,b])=>`<button class="w1-tab ${a===x?'active':''}" data-w1-tab="${a}">${b}</button>`).join('')}</div><div class="w1-panel">${html(k,x)}</div></div>`;live(k,x)}
+async function snapshot(k){const c=db(),u=me();if(!c||!u)return{};const id=await pid(k),d=a=>a.toISOString().slice(0,10),end=new Date(Date.now()+30*86400000),safe=async(q,f)=>{try{const r=await q;return r.error?f:(r.data??f)}catch(_){return f}};const [v,cal,ci,g,ch]=await Promise.all([safe(c.rpc('get_my_document_vault_summary'),{}),safe(c.rpc('get_my_calendar',{p_start_date:d(new Date()),p_end_date:d(end)}),{}),safe(c.rpc('get_my_trusted_circle_summary'),{}),id?safe(c.from('program_goals').select('id,status').eq('user_id',u.id).eq('program_id',id),[]):[],id?safe(c.from('program_progress_checkins').select('id').eq('user_id',u.id).eq('program_id',id).limit(12),[]):[]]);return{vault:v.summary||{},calendar:cal.summary||{},circle:ci.summary||{},progress:{active:g.filter(z=>z.status==='active').length,done:g.filter(z=>z.status==='completed').length,checkins:ch.length}}}
+async function resourceData(k){const c=db(),u=me();if(!c||!u)return{rows:[],saved:0};const id=await pid(k);try{const [{data:r},{data:s}]=await Promise.all([c.from('service_resources').select('id,name,city,state,program_id,verified_at').eq('published',true).order('sponsored',{ascending:false}).order('name').limit(80),c.from('user_saved_resources').select('resource_id').eq('user_id',u.id)]);return{rows:(r||[]).filter(z=>!z.program_id||(id&&z.program_id===id)).slice(0,6),saved:(s||[]).length}}catch(_){return{rows:[],saved:0}}}
+async function live(k,x){const n=++token;if(x==='today'||x==='tools'){const s=await snapshot(k);if(n!==token)return;const e=$('#w1Live');if(e)e.innerHTML=shared(s)}else if(x==='resources'){const r=await resourceData(k);if(n!==token)return;const e=$('#w1Resources');if(e)e.innerHTML=`<div class="w1-kicker">Live resource connection</div>${r.rows.length?r.rows.map(z=>`<div class="w1-resource"><div><b>${esc(z.name)}</b><small>${esc([z.city,z.state].filter(Boolean).join(', ')||'Service area varies')}${z.verified_at?' · verified':''}</small></div><button class="w1-action" data-w1-shared="resources">Open</button></div>`).join(''):'<div class="w1-note">No published resources are mapped to this Program Pack yet. Resource population/verification remains a beta gate.</div>'}<div class="w1-note"><b>${r.saved}</b> saved resources in your account.</div><button class="w1-action primary" data-w1-shared="resources">Open Resource Navigator</button> <button class="w1-action" data-w1-shared="calendar">Calendar & Reminders</button>`}else if(x==='progress'){const s=await snapshot(k);if(n!==token)return;const p=s.progress||{},e=$('#w1Progress');if(e)e.innerHTML=`<div class="w1-kicker">Live program progress connection</div><div class="w1-cards"><article class="w1-mini"><b>Active goals</b><p>${p.active||0}</p></article><article class="w1-mini"><b>Completed goals</b><p>${p.done||0}</p></article><article class="w1-mini"><b>Recent check-ins</b><p>${p.checkins||0}</p></article></div><div class="w1-note">These counts use this Program Pack’s program ID only. Recovery progress is not mixed into this view.</div><button class="w1-action primary" data-w1-shared="progress">Open Goals & Progress</button>`}}
+function help(choice){const q=String(choice||'').toLowerCase(),e=$('#w1Help');if(!e)return;let title='Start with one next step',copy='Lellee can help sort the need without turning it into a score or diagnosis.',a=[['resources','Find Resources'],['trusted','Trusted People']];if(/document|identification|application|paperwork/.test(q)){title='Get the paperwork organized';copy='Use Document Vault, then connect the deadline or follow-up to Calendar.';a=[['vault','Document Vault'],['calendar','Calendar & Reminders']]}else if(/housing|somewhere safe|rent|utilities|discrimination/.test(q)){title='Focus on housing stability first';copy='Open housing/resources and keep deadlines visible. Immediate danger belongs in the appropriate emergency/safety pathway.';a=[['resources','Housing & Resources'],['calendar','Deadlines & Reminders']]}else if(/transportation|benefits|service or resource|work or income/.test(q)){title='Find the right practical resource';copy='Open the shared resource workflow in this Program Pack context.';a=[['resources','Open Resources'],['calendar','Add Follow-up']]}else if(/overwhelmed|break|enough help|more support|speaking up|figuring out/.test(q)){title='Reduce what you are carrying';copy='Start with Trusted People or resources. Sharing remains explicit and revocable.';a=[['trusted','Trusted People'],['resources','Find Support']]}else if(/worried about myself|worried about the person/.test(q)){title='Safety comes before productivity';copy='If there is immediate danger or a medical emergency, contact emergency services or the appropriate professional now. Lellee does not diagnose or make emergency-disposition decisions.';a=[['trusted','Emergency / Trusted Contacts'],['resources','Support Resources']]};e.innerHTML=`<div class="w1-note"><b>${esc(title)}</b><br>${esc(copy)}</div>${a.map(([k,l])=>`<button class="w1-action ${k==='resources'?'primary':''}" data-w1-shared="${k}">${esc(l)}</button>`).join(' ')}`}
+function openShared(k){const p=PAGE[k];if(!p)return;context();if(!$('#page-'+p))return toast(`The ${k} page is not available in this build.`,true);nav(p);setTimeout(()=>banner(p),40)}
+function banner(p){if(!Object.values(PAGE).includes(p))return;const pg=$('#page-'+p);if(!pg)return;pg.querySelector('.w1-context')?.remove();const inner=pg.querySelector('.approved-inner')||pg.firstElementChild;if(!inner)return;const b=document.createElement('div');b.className='w1-context';b.innerHTML=`<div><b>${esc(P[slug].name)} pilot context</b><br>This shared tool was opened from the ${esc(P[slug].name)} Program Pack. It does not change your primary program or share information with another program.</div><button data-w1-return>Return to ${esc(P[slug].name)}</button>`;inner.insertBefore(b,inner.firstChild)}
+function menu(){const inner=document.querySelector('.nav-category[data-category="account"] .nav-category-items-inner');if(!inner||inner.querySelector('[data-page="wave1-programs"]'))return;const b=document.createElement('button');b.type='button';b.className='nav-item';b.dataset.page='wave1-programs';b.innerHTML='<span class="nav-icon">◫</span><span>My Programs (Pilot)</span>';inner.insertBefore(b,inner.firstChild)}
+async function access(){const c=db(),u=me();if(!c||!u)return false;if(window.LelleeAdminContext?.isAdmin===true)return true;try{const {data,error}=await c.rpc('is_lellee_admin');return !error&&data===true}catch(_){return false}}
+function wire(){document.addEventListener('click',e=>{const o=e.target.closest('[data-w1-open]');if(o){workspace(o.dataset.w1Open,'today');nav('wave1-workspace');return}const t=e.target.closest('[data-w1-tab]');if(t){workspace(slug,t.dataset.w1Tab);return}const h=e.target.closest('[data-w1-help]');if(h){help(h.dataset.w1Help);return}const s=e.target.closest('[data-w1-shared]');if(s){openShared(s.dataset.w1Shared);return}if(e.target.closest('[data-w1-return]')){workspace(slug,tab);nav('wave1-workspace')}},true);document.addEventListener('lellee:pagechange',e=>{if(Object.values(PAGE).includes(e.detail?.page))setTimeout(()=>banner(e.detail.page),0)})}
+async function start(){if(window.LelleeWave1ProgramRuntime?.version===VERSION)return;allowed=await access();if(!allowed){window.LelleeWave1ProgramRuntime=Object.freeze({version:VERSION,internalOnly:true,programs:[],open(){return false}});return}style();restore();programs();workspace(slug,tab);menu();wire();window.LelleeWave1ProgramRuntime=Object.freeze({version:VERSION,internalOnly:true,programs:Object.keys(P),open(k){workspace(k,'today');nav('wave1-workspace');return true},refresh(){live(slug,tab)}});console.info('Lellee Wave 1 Program Pack runtime ready:',VERSION)}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(start,900),{once:true});else setTimeout(start,900);
 })();
