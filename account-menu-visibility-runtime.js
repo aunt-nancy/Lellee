@@ -1,6 +1,6 @@
 (()=>{
 'use strict';
-const VERSION='2026-09-13-account-menu-v1';
+const VERSION='2026-09-13-account-menu-v2';
 const STYLE_ID='lelleeAccountMenuVisibilityStyle';
 const $=(s,r=document)=>r.querySelector(s);
 
@@ -63,16 +63,33 @@ function ensureEntries(){
   placeAfter(admin,help);
   return true;
 }
+async function resolveUser(client){
+  let user=null;
+  try{user=window.LelleeAuthContext?.getCurrentUser?.()||window.currentUser||null}catch(_){ }
+  if(user)return user;
+  try{
+    const result=await client?.auth?.getUser?.();
+    user=result?.data?.user||null;
+  }catch(_){ }
+  if(user)return user;
+  try{
+    const result=await client?.auth?.getSession?.();
+    user=result?.data?.session?.user||null;
+  }catch(_){ }
+  return user;
+}
 async function refreshAdmin(){
   if(!ensureEntries())return false;
   const admin=$('#adminNavItem')||$('.sidebar .nav-item[data-page="admin"]');
   if(!admin)return false;
   const client=window.LelleeAuthContext?.client||window.sb;
-  const user=window.LelleeAuthContext?.getCurrentUser?.()||window.currentUser||null;
-  if(!client||!user){admin.classList.add('hidden');return false}
+  if(!client){admin.classList.add('hidden');return false}
+  const user=await resolveUser(client);
+  if(!user){admin.classList.add('hidden');return false}
   try{
     const {data,error}=await client.rpc('is_lellee_admin');
     const allowed=!error&&data===true;
+    window.LelleeAdminContext={...(window.LelleeAdminContext||{}),isAdmin:allowed,userId:user.id,email:user.email||null};
     admin.classList.toggle('hidden',!allowed);
     if(allowed)admin.classList.remove('b2-nav-unused','b2-nav-duplicate');
     return allowed;
@@ -80,10 +97,14 @@ async function refreshAdmin(){
 }
 function refresh(){
   ensureEntries();
-  [0,250,700,1400,2400].forEach(ms=>setTimeout(()=>{ensureEntries();refreshAdmin()},ms));
+  [0,250,700,1400,2400,4000].forEach(ms=>setTimeout(()=>{ensureEntries();refreshAdmin()},ms));
 }
 document.addEventListener('lellee:pagechange',refresh);
 document.addEventListener('click',e=>{if(e.target.closest?.('.nav-category[data-category="account"] .nav-category-toggle'))setTimeout(refresh,30)},true);
+try{
+  const client=window.LelleeAuthContext?.client||window.sb;
+  client?.auth?.onAuthStateChange?.(()=>setTimeout(refresh,30));
+}catch(_){ }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',refresh,{once:true});else refresh();
 window.LelleeAccountMenu=Object.freeze({version:VERSION,refresh});
 })();
