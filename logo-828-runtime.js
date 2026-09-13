@@ -41,7 +41,7 @@ function apply(){
     tag.style.setProperty('position','absolute','important');
     tag.style.setProperty('left','4px','important');
     tag.style.setProperty('right','4px','important');
-    tag.style.setProperty('bottom','9px','important');
+    tag.style.setProperty('bottom','4px','important');
     tag.style.setProperty('z-index','4','important');
     tag.style.setProperty('margin','0','important');
     tag.style.setProperty('padding','0','important');
@@ -60,5 +60,5 @@ function apply(){
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',apply,{once:true});else apply();
 [100,300,700,1500,3000].forEach(ms=>setTimeout(apply,ms));
 document.addEventListener('lellee:pagechange',()=>setTimeout(apply,0));
-window.LelleeLogo828={apply,version:'2026-09-13-828-tagline-plus-2pt'};
+window.LelleeLogo828={apply,version:'2026-09-13-828-tagline-lowered'};
 })();
