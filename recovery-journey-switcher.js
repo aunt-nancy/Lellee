@@ -9,5 +9,5 @@ document.addEventListener('lellee:pagechange',event=>{if(event.detail?.page==='t
 if(!document.querySelector('script[data-lellee-my-journeys-runtime]')){const s=document.createElement('script');s.src='/my-journeys-runtime.js?v=20260912-1';s.async=false;s.dataset.lelleeMyJourneysRuntime='1';document.head.appendChild(s)}
 if(!document.querySelector('script[data-lellee-journey-plan-limits]')){const s=document.createElement('script');s.src='/journey-plan-limit-runtime.js?v=20260913-3';s.async=false;s.dataset.lelleeJourneyPlanLimits='1';document.head.appendChild(s)}
 if(!document.querySelector('script[data-lellee-menu-organization]')){const s=document.createElement('script');s.src='/menu-organization-runtime.js?v=20260913-1';s.async=false;s.dataset.lelleeMenuOrganization='1';document.head.appendChild(s)}
-if(!document.querySelector('script[data-lellee-account-menu]')){const s=document.createElement('script');s.src='/account-menu-visibility-runtime.js?v=20260913-5';s.async=false;s.dataset.lelleeAccountMenu='1';document.head.appendChild(s)}
+if(!document.querySelector('script[data-lellee-account-menu]')){const s=document.createElement('script');s.src='/account-menu-visibility-runtime.js?v=20260913-6';s.async=false;s.dataset.lelleeAccountMenu='1';document.head.appendChild(s)}
 })();
