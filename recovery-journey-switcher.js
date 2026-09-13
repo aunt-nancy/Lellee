@@ -20,10 +20,11 @@ function addStyle(){
   document.head.appendChild(style);
 }
 
-function navigateToPrograms(){
+function openMyJourneys(){
   const go=window.LelleeNavigatePage||window.showPage;
   if(typeof go==='function'){
     go('program-switcher');
+    setTimeout(()=>window.LelleeMyJourneys?.reload?.(),60);
     return;
   }
   const existing=document.querySelector('[data-page="program-switcher"]');
@@ -39,9 +40,9 @@ function ensureSwitcher(){
   const bar=document.createElement('div');
   bar.id=BAR_ID;
   bar.setAttribute('role','region');
-  bar.setAttribute('aria-label','Switch Lellee journey');
-  bar.innerHTML=`<div class="lellee-switch-copy"><span class="lellee-switch-kicker">RECOVERY TODAY</span><b>Want to work on a different journey?</b><small>Open My Programs to switch to another journey available on your account.</small></div><button type="button">Switch Journey</button>`;
-  bar.querySelector('button').addEventListener('click',navigateToPrograms);
+  bar.setAttribute('aria-label','Open My Journeys');
+  bar.innerHTML=`<div class="lellee-switch-copy"><span class="lellee-switch-kicker">RECOVERY TODAY</span><b>Working on more than one journey?</b><small>Open My Journeys to continue any journey on your account. Opening one does not pause the others.</small></div><button type="button">My Journeys</button>`;
+  bar.querySelector('button').addEventListener('click',openMyJourneys);
   host.insertBefore(bar,host.firstChild);
   return true;
 }
@@ -59,5 +60,5 @@ const timer=setInterval(()=>{
   if(ensureSwitcher()||tries>=30)clearInterval(timer);
 },200);
 
-window.LelleeRecoveryJourneySwitcher={ensure:ensureSwitcher,open:navigateToPrograms,version:'2026-09-12-v1'};
+window.LelleeRecoveryJourneySwitcher={ensure:ensureSwitcher,open:openMyJourneys,version:'2026-09-12-v2'};
 })();
