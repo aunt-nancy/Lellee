@@ -25,6 +25,7 @@ function openMyJourneys(){
   if(typeof go==='function'){
     go('program-switcher');
     setTimeout(()=>window.LelleeMyJourneys?.reload?.(),60);
+    setTimeout(()=>window.LelleeJourneyPlanLimits?.refresh?.(),180);
     return;
   }
   const existing=document.querySelector('[data-page="program-switcher"]');
@@ -60,13 +61,20 @@ const timer=setInterval(()=>{
   if(ensureSwitcher()||tries>=30)clearInterval(timer);
 },200);
 
-window.LelleeRecoveryJourneySwitcher={ensure:ensureSwitcher,open:openMyJourneys,version:'2026-09-12-v3'};
+window.LelleeRecoveryJourneySwitcher={ensure:ensureSwitcher,open:openMyJourneys,version:'2026-09-12-v4'};
 
 if(!document.querySelector('script[data-lellee-my-journeys-runtime]')){
   const s=document.createElement('script');
   s.src='/my-journeys-runtime.js?v=20260912-1';
   s.async=false;
   s.dataset.lelleeMyJourneysRuntime='1';
+  document.head.appendChild(s);
+}
+if(!document.querySelector('script[data-lellee-journey-plan-limits]')){
+  const s=document.createElement('script');
+  s.src='/journey-plan-limit-runtime.js?v=20260912-1';
+  s.async=false;
+  s.dataset.lelleeJourneyPlanLimits='1';
   document.head.appendChild(s);
 }
 })();
