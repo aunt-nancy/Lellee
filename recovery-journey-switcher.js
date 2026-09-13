@@ -61,7 +61,7 @@ const timer=setInterval(()=>{
   if(ensureSwitcher()||tries>=30)clearInterval(timer);
 },200);
 
-window.LelleeRecoveryJourneySwitcher={ensure:ensureSwitcher,open:openMyJourneys,version:'2026-09-13-v5'};
+window.LelleeRecoveryJourneySwitcher={ensure:ensureSwitcher,open:openMyJourneys,version:'2026-09-13-v6'};
 
 if(!document.querySelector('script[data-lellee-my-journeys-runtime]')){
   const s=document.createElement('script');
@@ -72,7 +72,7 @@ if(!document.querySelector('script[data-lellee-my-journeys-runtime]')){
 }
 if(!document.querySelector('script[data-lellee-journey-plan-limits]')){
   const s=document.createElement('script');
-  s.src='/journey-plan-limit-runtime.js?v=20260913-2';
+  s.src='/journey-plan-limit-runtime.js?v=20260913-3';
   s.async=false;
   s.dataset.lelleeJourneyPlanLimits='1';
   document.head.appendChild(s);
