@@ -60,5 +60,13 @@ const timer=setInterval(()=>{
   if(ensureSwitcher()||tries>=30)clearInterval(timer);
 },200);
 
-window.LelleeRecoveryJourneySwitcher={ensure:ensureSwitcher,open:openMyJourneys,version:'2026-09-12-v2'};
+window.LelleeRecoveryJourneySwitcher={ensure:ensureSwitcher,open:openMyJourneys,version:'2026-09-12-v3'};
+
+if(!document.querySelector('script[data-lellee-my-journeys-runtime]')){
+  const s=document.createElement('script');
+  s.src='/my-journeys-runtime.js?v=20260912-1';
+  s.async=false;
+  s.dataset.lelleeMyJourneysRuntime='1';
+  document.head.appendChild(s);
+}
 })();
