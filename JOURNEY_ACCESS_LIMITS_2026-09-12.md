@@ -1,6 +1,7 @@
 # Lellee Journey Access Limits
 
 Date: 2026-09-12  
+Updated: 2026-09-13  
 Status: APPROVED PRODUCT RULE
 
 ## Active journey limits
@@ -30,17 +31,38 @@ If an account reaches its plan limit, already-active journeys remain usable. A n
 
 If a user changes to a lower plan while they have more active journeys than the new limit, Lellee does **not** delete, erase, or reset any journey, coaching setup, goals, progress, or history. Existing work remains saved. The account must return to the allowed active-journey count before activating another journey.
 
-User-facing language should use **Inactive** rather than **Paused** for a journey the user has chosen not to keep in their current active set.
+User-facing language uses **Inactive** rather than **Paused** for a journey the user has chosen not to keep in their current active set. The legacy database may continue using `paused` internally for compatibility.
+
+## Controlled beta exemption
+
+Controlled-beta journey access is temporary testing access and does **not** consume a commercial active-journey slot. Beta membership is administered separately and cannot be turned off through the member's commercial plan-slot control.
+
+A journey that is both an eligible controlled-beta journey and an ordinary enrollment is counted only once and is treated as beta-exempt while the controlled beta remains active.
 
 ## Backend enforcement
 
-The active database includes:
+The production database already includes:
 
 - `lellee_journey_plan_limits` — central Free/Plus/Premium limit configuration.
-- `get_my_journey_access_summary()` — returns the signed-in user's effective level, active-journey allowance, distinct active journeys, remaining slots, and limit state.
-- `can_activate_my_journey(uuid)` — read-only server-side activation gate. Reopening an already-active journey is permitted; a new journey requires an available slot.
+- `get_my_journey_access_summary()` — signed-in plan allowance and active-journey summary.
+- `can_activate_my_journey(uuid)` — read-only server-side activation gate.
 
-The active-journey count is a distinct union of ordinary active program enrollments and eligible active controlled-beta cohort access, preventing duplicate counting of the same program.
+Source-controlled migration `20260913153000_journey_active_inactive_controls.sql` prepares the next database update. When applied, it will:
+
+- exclude eligible controlled-beta journeys from commercial slot usage;
+- return plan-slot usage, beta-exempt count, total active journeys, and saved inactive journeys separately;
+- expose `set_my_journey_active(uuid, boolean)` for an authenticated member to make an **existing commercial enrollment** Active or Inactive;
+- preserve setup, goals, progress, history, and other journey data when a journey becomes Inactive;
+- refuse to alter controlled-beta cohort membership through the member-facing toggle;
+- refuse reactivation when the member has reached the commercial plan limit.
+
+The browser runtime is fail-closed: Active / Inactive buttons appear only after the database summary explicitly reports `journey_activity_controls=true`. Deploying the front-end code before the migration therefore does not expose a broken or unsafe mutation control.
+
+## Member experience after the activity-control migration
+
+On **My Journeys**, active plan journeys will offer **Make Inactive**. The confirmation explains that setup, goals, progress, and history stay saved. Saved inactive journeys will appear in a separate **Inactive journeys** section with **Make Active** when a plan slot is available.
+
+Controlled-beta cards will instead show **Beta access · no plan slot** and will not display a member-controlled inactive toggle.
 
 ## Current controlled beta
 
