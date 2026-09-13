@@ -1,6 +1,6 @@
 (()=>{
 'use strict';
-const VERSION='2026-09-13-account-menu-v5';
+const VERSION='2026-09-13-account-menu-v6';
 const STYLE_ID='lelleeAccountMenuVisibilityStyle';
 const $=(s,r=document)=>r.querySelector(s);
 const $$=(s,r=document)=>[...r.querySelectorAll(s)];
@@ -14,21 +14,18 @@ function addStyle(){
 .sidebar .nav-category[data-category="account"] .nav-item{min-height:28px!important;padding-top:4px!important;padding-bottom:4px!important}
 .sidebar .nav-list{scrollbar-color:rgba(255,255,255,.38) transparent!important}
 .sidebar .nav-item[data-page="language-accessibility"]{display:none!important}
-/* Logo regression lock: paint the approved artwork on the wrapper so late img swaps cannot hide it. */
-body .sidebar .logo-wrap{
-  background-color:transparent!important;
-  background-image:url('/lellee-approved-logo-transparent-v2.svg?v=20260913-logo-v2')!important;
-  background-repeat:no-repeat!important;
-  background-position:center top!important;
-  background-size:contain!important;
-}
+/* Use the canonical transparent logo image set by build-2-shell.js. Do not repaint the wrapper. */
+body .sidebar .logo-wrap{background:transparent!important;background-image:none!important}
 body .sidebar .approved-logo{
-  opacity:0!important;
-  visibility:hidden!important;
-  background:none!important;
+  display:block!important;
+  opacity:1!important;
+  visibility:visible!important;
+  background:transparent!important;
+  background-image:none!important;
   border:0!important;
   box-shadow:none!important;
-  pointer-events:none!important;
+  pointer-events:auto!important;
+  object-fit:contain!important;
 }
 @media(max-height:850px) and (min-width:821px){
   .sidebar .help-card{padding:9px 10px!important;margin-top:5px!important}
