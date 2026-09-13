@@ -194,3 +194,55 @@ body .app-shell.sidebar-collapsed .app-plans-popover{
     max-height:70vh!important;
   }
 }
+
+/* =========================================================
+   2026-09-13 SIDEBAR VIEWPORT / SETTINGS VISIBILITY FIX
+   The menu may contain more destinations than fit vertically.
+   Keep the logo and help area stable while the navigation scrolls.
+   ========================================================= */
+body .sidebar{
+  height:100dvh!important;
+  max-height:100dvh!important;
+  overflow:hidden!important;
+  display:flex!important;
+  flex-direction:column!important;
+}
+body .sidebar .logo-wrap{
+  flex:0 0 auto!important;
+}
+body .sidebar .nav-list{
+  flex:1 1 auto!important;
+  min-height:0!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  overscroll-behavior:contain;
+  scrollbar-width:thin;
+  padding-bottom:10px!important;
+}
+body .sidebar .nav-list::-webkit-scrollbar{width:6px}
+body .sidebar .nav-list::-webkit-scrollbar-thumb{background:rgba(255,255,255,.24);border-radius:999px}
+body .sidebar .nav-list::-webkit-scrollbar-track{background:transparent}
+body .sidebar .side-spacer{display:none!important}
+body .sidebar .help-card{
+  flex:0 0 auto!important;
+  margin:8px 0 4px!important;
+}
+/* Account is the longest group; keep it readable without oversized gaps. */
+body .sidebar .nav-category[data-category="account"] .nav-category-items-inner{
+  padding-bottom:3px!important;
+}
+body .sidebar .nav-category[data-category="account"] .nav-item{
+  margin:0!important;
+}
+@media(max-height:760px) and (min-width:821px){
+  body .sidebar .logo-wrap{height:96px!important;min-height:96px!important;padding-bottom:6px!important}
+  body .sidebar .approved-logo{height:94px!important;min-height:94px!important}
+  body .sidebar .nav-category-toggle{min-height:32px!important}
+  body .sidebar .nav-category-items .nav-item{min-height:28px!important;padding-top:4px!important;padding-bottom:4px!important}
+  body .sidebar .help-card{padding:10px!important}
+  body .sidebar .help-card p{margin-bottom:8px!important}
+}
+@media(max-width:820px){
+  body .sidebar{height:100dvh!important;max-height:100dvh!important}
+  body .sidebar .nav-list{-webkit-overflow-scrolling:touch}
+}
