@@ -1,6 +1,6 @@
 (()=>{
 'use strict';
-const VERSION='2026-09-13-account-menu-v6';
+const VERSION='2026-09-13-account-menu-v7';
 const STYLE_ID='lelleeAccountMenuVisibilityStyle';
 const $=(s,r=document)=>r.querySelector(s);
 const $$=(s,r=document)=>[...r.querySelectorAll(s)];
@@ -14,8 +14,12 @@ function addStyle(){
 .sidebar .nav-category[data-category="account"] .nav-item{min-height:28px!important;padding-top:4px!important;padding-bottom:4px!important}
 .sidebar .nav-list{scrollbar-color:rgba(255,255,255,.38) transparent!important}
 .sidebar .nav-item[data-page="language-accessibility"]{display:none!important}
-/* Use the canonical transparent logo image set by build-2-shell.js. Do not repaint the wrapper. */
-body .sidebar .logo-wrap{background:transparent!important;background-image:none!important}
+/* Restore the approved 2026-08-28 logo treatment: Lellee artwork on a blue logo panel. */
+body .sidebar .logo-wrap{
+  background:#10245f!important;
+  background-image:none!important;
+  border-bottom:1px solid rgba(255,255,255,.08)!important;
+}
 body .sidebar .approved-logo{
   display:block!important;
   opacity:1!important;
