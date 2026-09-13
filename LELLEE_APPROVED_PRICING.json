@@ -2,22 +2,26 @@
   "version": "final-2026-08-16",
   "currency": "USD",
   "free": {
-    "monthly": 0
+    "monthly": 0,
+    "active_journey_limit": 1
   },
   "plus": {
     "monthly": 5.99,
-    "annual": 59.99
+    "annual": 59.99,
+    "active_journey_limit": 2
   },
   "premium": {
     "monthly": 14.99,
-    "annual": 149.0
+    "annual": 149.0,
+    "active_journey_limit": 4
   },
   "journal_companion": {
     "monthly": 4.99
   },
   "coach_add_on": {
     "monthly": 49.99,
-    "requires": "Lellee Premium"
+    "requires": "Lellee Premium",
+    "active_journey_limit_with_premium": 6
   },
   "additional_coaching": {
     "price": 19.99,
