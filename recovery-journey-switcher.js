@@ -26,6 +26,7 @@ function openMyJourneys(){
     go('program-switcher');
     setTimeout(()=>window.LelleeMyJourneys?.reload?.(),60);
     setTimeout(()=>window.LelleeJourneyPlanLimits?.refresh?.(),180);
+    setTimeout(()=>window.LelleeMenuOrganization?.refresh?.(),260);
     return;
   }
   const existing=document.querySelector('[data-page="program-switcher"]');
@@ -61,7 +62,7 @@ const timer=setInterval(()=>{
   if(ensureSwitcher()||tries>=30)clearInterval(timer);
 },200);
 
-window.LelleeRecoveryJourneySwitcher={ensure:ensureSwitcher,open:openMyJourneys,version:'2026-09-13-v6'};
+window.LelleeRecoveryJourneySwitcher={ensure:ensureSwitcher,open:openMyJourneys,version:'2026-09-13-v7'};
 
 if(!document.querySelector('script[data-lellee-my-journeys-runtime]')){
   const s=document.createElement('script');
@@ -75,6 +76,13 @@ if(!document.querySelector('script[data-lellee-journey-plan-limits]')){
   s.src='/journey-plan-limit-runtime.js?v=20260913-3';
   s.async=false;
   s.dataset.lelleeJourneyPlanLimits='1';
+  document.head.appendChild(s);
+}
+if(!document.querySelector('script[data-lellee-menu-organization]')){
+  const s=document.createElement('script');
+  s.src='/menu-organization-runtime.js?v=20260913-1';
+  s.async=false;
+  s.dataset.lelleeMenuOrganization='1';
   document.head.appendChild(s);
 }
 })();
