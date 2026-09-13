@@ -1,6 +1,6 @@
 (()=>{
 'use strict';
-const VERSION='2026-09-13-account-menu-v3';
+const VERSION='2026-09-13-account-menu-v4';
 const STYLE_ID='lelleeAccountMenuVisibilityStyle';
 const $=(s,r=document)=>r.querySelector(s);
 const $$=(s,r=document)=>[...r.querySelectorAll(s)];
@@ -14,6 +14,19 @@ function addStyle(){
 .sidebar .nav-category[data-category="account"] .nav-item{min-height:28px!important;padding-top:4px!important;padding-bottom:4px!important}
 .sidebar .nav-list{scrollbar-color:rgba(255,255,255,.38) transparent!important}
 .sidebar .nav-item[data-page="language-accessibility"]{display:none!important}
+/* Logo regression lock: transparent approved artwork must sit directly on the sidebar. */
+body .sidebar .logo-wrap{background:transparent!important}
+body .sidebar .approved-logo{
+  background-color:transparent!important;
+  background-image:url('/lellee-approved-logo-transparent.svg?v=20260913-logo-lock-1')!important;
+  background-repeat:no-repeat!important;
+  background-position:center!important;
+  background-size:contain!important;
+  border:0!important;
+  box-shadow:none!important;
+}
+body .sidebar .approved-logo>img,
+body .sidebar .approved-logo .sidebar-logo{visibility:hidden!important}
 @media(max-height:850px) and (min-width:821px){
   .sidebar .help-card{padding:9px 10px!important;margin-top:5px!important}
   .sidebar .help-card p{display:none!important}
@@ -107,7 +120,6 @@ async function serverAdminCheck(client,user){
     const {data,error}=await client.rpc('is_lellee_admin');
     if(!error)return data===true;
   }catch(_){ }
-  /* Safe compatibility fallback: RLS permits an authenticated user to read only their own role row. */
   try{
     const {data,error}=await client.from('admin_user_roles').select('role,active').eq('user_id',user.id).maybeSingle();
     return !error&&data?.active===true&&['admin','editor'].includes(data?.role);
