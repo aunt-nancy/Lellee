@@ -18,7 +18,7 @@ function addStaffReadabilityStyle(){
  #page-staff-operations .approved-resource-empty,
  #staffSopList .staff-row b,
  #staffSopList .staff-row small,
- #staffSopList .staff-row em{font-size:calc(1em + 2pt)!important;line-height:1.45!important}
+ #staffSopList .staff-row em{font-size:calc(1em - 2pt)!important;line-height:1.45!important}
  `;
  document.head.appendChild(style);
 }
