@@ -1,6 +1,6 @@
 (()=>{
 'use strict';
-const VERSION='2026-09-13-account-menu-v8';
+const VERSION='2026-09-13-account-menu-v9';
 const STYLE_ID='lelleeAccountMenuVisibilityStyle';
 const $=(s,r=document)=>r.querySelector(s);
 const $$=(s,r=document)=>[...r.querySelectorAll(s)];
@@ -103,11 +103,17 @@ function exitBrowseModeIfNeeded(user){
   return true;
 }
 function repairPrivateHeader(user){
-  if(!user||currentPage()!=='program-switcher')return;
+  if(!user)return;
+  const page=currentPage();
   const heading=$('.topbar .greeting h1')||$('.greeting h1');
   const sub=$('.topbar .greeting p')||$('.greeting p');
-  if(heading)heading.textContent='My Journeys';
-  if(sub)sub.textContent='Open any journey whenever you want. Working in one journey does not pause your other journeys.';
+  if(page==='program-switcher'){
+    if(heading)heading.textContent='My Journeys';
+    if(sub)sub.textContent='Open any journey whenever you want. Working in one journey does not pause your other journeys.';
+  }else if(page==='admin'){
+    if(heading)heading.textContent='Admin';
+    if(sub)sub.textContent='Manage Lellee operations, content, people, safety, data, and platform controls.';
+  }
   $$('.topbar .mini-stat,.topbar [class*="stat"]').forEach(node=>{
     const text=(node.textContent||'').toLowerCase();
     if(text.includes('program preview')||text.includes('no account required')||text.trim()==='explore')node.style.setProperty('display','none','important');
