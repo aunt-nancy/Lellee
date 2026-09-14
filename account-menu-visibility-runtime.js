@@ -1,6 +1,6 @@
 (()=>{
 'use strict';
-const VERSION='2026-09-13-account-menu-v11-coaching-boundary';
+const VERSION='2026-09-13-account-menu-v9';
 const STYLE_ID='lelleeAccountMenuVisibilityStyle';
 const $=(s,r=document)=>r.querySelector(s);
 const $$=(s,r=document)=>[...r.querySelectorAll(s)];
@@ -14,9 +14,6 @@ function addStyle(){
 .sidebar .nav-category[data-category="account"] .nav-item{min-height:28px!important;padding-top:4px!important;padding-bottom:4px!important}
 .sidebar .nav-list{scrollbar-color:rgba(255,255,255,.38) transparent!important}
 .sidebar .nav-item[data-page="language-accessibility"]{display:none!important}
-.sidebar .lellee-view-toggle{margin:6px 8px 2px!important;border:1px solid rgba(255,255,255,.32)!important;border-radius:999px!important;background:rgba(255,255,255,.10)!important;justify-content:center!important;font-weight:800!important;letter-spacing:.01em!important}
-.sidebar .lellee-view-toggle[data-mode="admin"]{background:rgba(255,255,255,.18)!important}
-.sidebar .lellee-coaching-purchase{margin-top:5px!important;border:1px solid rgba(255,255,255,.18)!important;background:rgba(91,47,160,.26)!important}
 @media(max-height:850px) and (min-width:821px){
   .sidebar .help-card{padding:9px 10px!important;margin-top:5px!important}
   .sidebar .help-card p{display:none!important}
@@ -30,9 +27,6 @@ function addStyle(){
 function categoryHost(key){return $(`.sidebar .nav-category[data-category="${key}"] .nav-category-items-inner`)}
 function accountHost(){return categoryHost('account')}
 function navigate(page){
-  if(page==='my-coaching'){
-    try{localStorage.setItem('lellee_active_workspace_v1','personal')}catch(_){ }
-  }
   const go=window.LelleeNavigatePage||window.showPage;
   if(typeof go==='function'){go(page);return}
   location.hash=page;
@@ -53,40 +47,6 @@ function placeAfter(node,anchor){
   if(!node||!anchor?.parentNode)return;
   anchor.parentNode.insertBefore(node,anchor.nextSibling);
 }
-function currentPage(){return (location.hash||'').replace(/^#/,'').split('?')[0]}
-function isAdminView(){return currentPage()==='admin'||document.body?.dataset?.lelleeViewMode==='admin'}
-function setViewMode(mode){
-  if(document.body)document.body.dataset.lelleeViewMode=mode;
-  try{sessionStorage.setItem('lelleeViewMode',mode)}catch(_){ }
-}
-function savedViewMode(){try{return sessionStorage.getItem('lelleeViewMode')||'user'}catch(_){return'user'}}
-function ensureViewToggle(allowed){
-  const host=accountHost();if(!host)return;
-  let b=$('#lelleeViewToggle');
-  if(!allowed){b?.remove();return}
-  if(!b){
-    b=document.createElement('button');
-    b.type='button';b.id='lelleeViewToggle';b.className='nav-item lellee-view-toggle';
-    b.innerHTML='<span class="nav-icon">⇄</span><span></span>';
-    b.addEventListener('click',e=>{
-      e.preventDefault();
-      const adminNow=isAdminView();
-      const next=adminNow?'user':'admin';
-      setViewMode(next);
-      navigate(next==='admin'?'admin':'program-switcher');
-      setTimeout(()=>updateViewToggle(true),40);
-    });
-  }
-  if(b.parentElement!==host)host.insertBefore(b,host.firstChild);
-  updateViewToggle(true);
-}
-function updateViewToggle(allowed){
-  const b=$('#lelleeViewToggle');if(!b||!allowed)return;
-  const adminNow=isAdminView();
-  b.dataset.mode=adminNow?'admin':'user';
-  normalizeLabel(b,adminNow?'Switch to User View':'Switch to Admin View');
-  b.setAttribute('aria-label',adminNow?'Switch to regular user view':'Switch to admin view');
-}
 function repairMyJourneysPlacement(){
   const daily=categoryHost('daily');
   if(!daily)return;
@@ -97,42 +57,6 @@ function repairMyJourneysPlacement(){
   normalizeLabel(primary,'My Journeys');
   if(primary.parentElement!==daily)daily.appendChild(primary);
   buttons.filter(b=>b!==primary).forEach(b=>b.classList.add('b2-nav-duplicate'));
-}
-function ensureCoachingEntries(){
-  const host=accountHost();if(!host)return;
-  let buy=$('#lelleeLiveCoachingOffer');
-  if(!buy){
-    buy=makeButton('plus','Live 1-on-1 Coaching','♡','lelleeLiveCoachingOffer');
-    buy.classList.add('lellee-coaching-purchase');
-  }
-  normalizeLabel(buy,'Live 1-on-1 Coaching');
-  if(buy.parentElement!==host)host.appendChild(buy);
-  const my=$('.sidebar .nav-item[data-page="my-coaching"]');
-  if(my){normalizeLabel(my,'My Coaching');my.classList.add('hidden');}
-  $$('.sidebar .nav-item[data-page="coach-dashboard"]').forEach(b=>normalizeLabel(b,'Coach Business Dashboard'));
-}
-async function refreshCoachingAccess(client,user){
-  ensureCoachingEntries();
-  if(!client||!user)return;
-  let active=false;
-  try{
-    const {data,error}=await client.from('coach_client_relationships').select('id,status').eq('client_user_id',user.id).eq('status','active').limit(1);
-    active=!error&&Array.isArray(data)&&data.length>0;
-  }catch(_){ }
-  let my=$('.sidebar .nav-item[data-page="my-coaching"]');
-  if(active){
-    const host=accountHost();
-    if(!my){my=makeButton('my-coaching','My Coaching','◎','myCoachingNavItem');if(host)host.appendChild(my)}
-    my.classList.remove('hidden','b2-nav-unused','b2-nav-duplicate');
-    normalizeLabel(my,'My Coaching');
-    const buy=$('#lelleeLiveCoachingOffer');if(buy)buy.classList.add('hidden');
-  }else{
-    if(my)my.classList.add('hidden');
-    $('#lelleeLiveCoachingOffer')?.classList.remove('hidden');
-  }
-  if(currentPage()==='my-coaching'){
-    try{localStorage.setItem('lellee_active_workspace_v1','personal')}catch(_){ }
-  }
 }
 function ensureEntries(){
   addStyle();
@@ -154,7 +78,6 @@ function ensureEntries(){
   normalizeLabel(admin,'Admin');
   if(admin.parentElement!==host)host.appendChild(admin);
   placeAfter(admin,help);
-  ensureCoachingEntries();
   return true;
 }
 async function resolveUser(client){
@@ -166,11 +89,12 @@ async function resolveUser(client){
   try{const r=await client?.auth?.getUser?.();user=r?.data?.user||null}catch(_){ }
   return user;
 }
+function currentPage(){return (location.hash||'').replace(/^#/,'').split('?')[0]}
 function privatePageRequested(){
-  return new Set(['settings','help-center','admin','workspace-home','global-search','plus','program-switcher','today','recovery','for-you','inbox','journal','progress','calendar','my-coaching']).has(currentPage());
+  return new Set(['settings','help-center','admin','workspace-home','global-search','plus','program-switcher','today','recovery','for-you','inbox','journal','progress','calendar']).has(currentPage());
 }
 function exitBrowseModeIfNeeded(user){
-  if(!user||!privatePageRequested())return false;
+  if(!user)return false;
   const url=new URL(location.href);
   if(url.searchParams.get('browse')!=='1')return false;
   url.searchParams.delete('browse');
@@ -189,15 +113,7 @@ function repairPrivateHeader(user){
   }else if(page==='admin'){
     if(heading)heading.textContent='Admin';
     if(sub)sub.textContent='Manage Lellee operations, content, people, safety, data, and platform controls.';
-  }else if(page==='my-coaching'){
-    if(heading)heading.textContent='My Coaching';
-    if(sub)sub.textContent='Your paid live coaching service is separate from your Lellee journeys.';
-    try{localStorage.setItem('lellee_active_workspace_v1','personal')}catch(_){ }
-  }else if(page==='coach-dashboard'){
-    if(heading)heading.textContent='Coach Business Dashboard';
-    if(sub)sub.textContent='Independent coaching business operations stay separate from consumer journeys and My Coaching.';
   }
-  $$('#page-coach-dashboard .approved-inner-head .approved-kicker').forEach(x=>x.textContent='COACH BUSINESS DASHBOARD');
   $$('.topbar .mini-stat,.topbar [class*="stat"]').forEach(node=>{
     const text=(node.textContent||'').toLowerCase();
     if(text.includes('program preview')||text.includes('no account required')||text.trim()==='explore')node.style.setProperty('display','none','important');
@@ -218,22 +134,15 @@ async function refreshAdmin(){
   const admin=$('#adminNavItem')||$('.sidebar .nav-item[data-page="admin"]');
   if(!admin)return false;
   const client=window.LelleeAuthContext?.client||window.sb;
-  if(!client){admin.classList.add('hidden');ensureViewToggle(false);return false}
+  if(!client){admin.classList.add('hidden');return false}
   const user=await resolveUser(client);
-  if(!user){admin.classList.add('hidden');ensureViewToggle(false);return false}
+  if(!user){admin.classList.add('hidden');return false}
   if(exitBrowseModeIfNeeded(user))return false;
   repairPrivateHeader(user);
-  await refreshCoachingAccess(client,user);
   const allowed=await serverAdminCheck(client,user);
   window.LelleeAdminContext={...(window.LelleeAdminContext||{}),isAdmin:allowed,userId:user.id,email:user.email||null};
   admin.classList.toggle('hidden',!allowed);
   if(allowed)admin.classList.remove('b2-nav-unused','b2-nav-duplicate');
-  ensureViewToggle(allowed);
-  if(allowed){
-    const mode=currentPage()==='admin'?'admin':(savedViewMode()==='admin'&&currentPage()==='admin'?'admin':'user');
-    setViewMode(mode);
-    updateViewToggle(true);
-  }
   return allowed;
 }
 function refresh(){
@@ -241,11 +150,7 @@ function refresh(){
   [0,200,500,900,1500,2400,4000].forEach(ms=>setTimeout(()=>{ensureEntries();refreshAdmin()},ms));
 }
 document.addEventListener('lellee:pagechange',refresh);
-document.addEventListener('click',e=>{
-  const coaching=e.target.closest?.('[data-page="my-coaching"]');
-  if(coaching){try{localStorage.setItem('lellee_active_workspace_v1','personal')}catch(_){ }}
-  if(e.target.closest?.('.nav-category-toggle,[data-page="settings"],[data-page="help-center"],[data-page="admin"],[data-page="program-switcher"],[data-page="my-coaching"],[data-page="coach-dashboard"],#lelleeViewToggle'))setTimeout(refresh,30)
-},true);
+document.addEventListener('click',e=>{if(e.target.closest?.('.nav-category-toggle,[data-page="settings"],[data-page="help-center"],[data-page="admin"],[data-page="program-switcher"]'))setTimeout(refresh,30)},true);
 try{
   const client=window.LelleeAuthContext?.client||window.sb;
   client?.auth?.onAuthStateChange?.(()=>setTimeout(refresh,30));
