@@ -3,6 +3,7 @@
 Status: CONSOLIDATED ARCHITECTURE APPROVED — IMPLEMENTATION / QA IN PROGRESS
 Started: 2026-09-07
 Consolidated approval locked: 2026-09-09
+Latest product-owner approval: 2026-09-13
 
 ## Programs
 
@@ -18,6 +19,8 @@ Research -> Opportunity Gap -> Blueprint -> Program Pack Build -> Safety/Privacy
 ## Shared launch rules
 
 - One shared Lellee engine with configurable Program Packs; do not create duplicated apps for each program.
+- Wave 1 is intended to go live in the main Lellee app in the same product model as Recovery once each program passes its individual launch gates.
+- Wave 1 programs should appear as full user journeys/programs, not remain permanently as admin-only previews.
 - Do not activate a program publicly until its individual launch gates pass.
 - A passing Wave 1 program may launch without waiting for another Wave 1 program that remains blocked.
 - Cross-program private sharing remains off by default.
@@ -73,7 +76,7 @@ Housing + documents + benefits + deadlines + resources + follow-through, rather 
 Self-direction and interdependence. Assistance can support independence; independence does not mean doing everything without help.
 
 ### 15. Beta
-Small controlled beta. Programs remain pilot/internal until their individual gates pass.
+Small controlled beta before public activation. Programs remain pilot/internal until their individual gates pass, then may graduate to full live status in the main Lellee app.
 
 ### 16. Launch gate
 Evidence, content, resources, privacy, safety, accessibility/mobile, data isolation, QA, and required human review must pass individually.
@@ -83,6 +86,26 @@ A passing program may launch without waiting for another Wave 1 program that rem
 
 ### 18. Continuous improvement
 Evidence, resource verification, and analytics continue after launch; substantive changes retain an audit history.
+
+### 19. Public launch destination — APPROVED 2026-09-13
+Wave 1 is not merely a prototype wave. The intended destination is public/live availability inside Lellee, using the same shared application model as Recovery. Each program must still complete its beta/correction/launch-gate sequence before public activation.
+
+## Coach readiness requirements — APPROVED 2026-09-13
+
+Before a coach can be marked Ready/Approved and made available to users:
+
+1. Complete required Lellee Core Coach Training.
+2. Complete the program-specific training for every journey they coach.
+3. Pass the required training modules and knowledge checks.
+4. Complete privacy, boundaries, safety/escalation, and crisis-referral training.
+5. Submit applicable credentials, education, training certificates, and/or lived-experience qualifications.
+6. Any credential displayed as Verified must receive human review first.
+7. Accept Lellee's Coach Code of Conduct and scope-of-practice boundaries.
+8. Complete identity/business review where required.
+9. Have no unresolved approval or safety blockers.
+10. Receive final human coach approval before becoming available to users.
+
+A professional license is not universally required. Lellee may recognize appropriate training, certifications, education, and lived experience while clearly distinguishing those qualifications from licensed clinical credentials. Coaching must remain within the approved non-clinical scope unless a separately qualified professional is operating within their lawful licensed scope.
 
 ## Caregiving template
 
@@ -185,8 +208,10 @@ Primary opportunity: self-direction, advocacy, accessibility, and chosen support
 
 - Map the approved shared Program Pack into the current Lellee Program Builder and runtime.
 - Implement/verify Wave 1 program-specific onboarding, Today, tools, I Need Help routing, evidence/source rules, resources, privacy, and safety configurations.
+- Implement the approved 10-point Coach Readiness Requirements in the coaching administration workflow.
 - Run internal QA for all four programs side-by-side.
-- Produce a readiness matrix showing Implemented / QA Passed / Correction Needed / Beta Ready / Blocked.
-- Keep all four non-public until individual launch gates pass.
+- Produce a readiness matrix showing Implemented / QA Passed / Correction Needed / Beta Ready / Blocked / Live Ready.
+- Run small controlled beta for each program as appropriate.
+- Graduate each passing Wave 1 program to live status in the main Lellee app, using the Recovery module as the live-product model.
 
 Printable blueprint: create only after the process is complete and approved.
