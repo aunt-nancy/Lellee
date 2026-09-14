@@ -1,6 +1,6 @@
 (()=>{
 'use strict';
-const VERSION='2026-09-13-account-menu-v7';
+const VERSION='2026-09-13-account-menu-v8';
 const STYLE_ID='lelleeAccountMenuVisibilityStyle';
 const $=(s,r=document)=>r.querySelector(s);
 const $$=(s,r=document)=>[...r.querySelectorAll(s)];
@@ -14,23 +14,6 @@ function addStyle(){
 .sidebar .nav-category[data-category="account"] .nav-item{min-height:28px!important;padding-top:4px!important;padding-bottom:4px!important}
 .sidebar .nav-list{scrollbar-color:rgba(255,255,255,.38) transparent!important}
 .sidebar .nav-item[data-page="language-accessibility"]{display:none!important}
-/* Restore the approved 2026-08-28 logo treatment: Lellee artwork on a blue logo panel. */
-body .sidebar .logo-wrap{
-  background:#10245f!important;
-  background-image:none!important;
-  border-bottom:1px solid rgba(255,255,255,.08)!important;
-}
-body .sidebar .approved-logo{
-  display:block!important;
-  opacity:1!important;
-  visibility:visible!important;
-  background:transparent!important;
-  background-image:none!important;
-  border:0!important;
-  box-shadow:none!important;
-  pointer-events:auto!important;
-  object-fit:contain!important;
-}
 @media(max-height:850px) and (min-width:821px){
   .sidebar .help-card{padding:9px 10px!important;margin-top:5px!important}
   .sidebar .help-card p{display:none!important}
@@ -106,9 +89,9 @@ async function resolveUser(client){
   try{const r=await client?.auth?.getUser?.();user=r?.data?.user||null}catch(_){ }
   return user;
 }
+function currentPage(){return (location.hash||'').replace(/^#/,'').split('?')[0]}
 function privatePageRequested(){
-  const hash=(location.hash||'').replace(/^#/,'').split('?')[0];
-  return new Set(['settings','help-center','admin','workspace-home','global-search','plus','program-switcher','today','recovery','for-you','inbox','journal','progress','calendar']).has(hash);
+  return new Set(['settings','help-center','admin','workspace-home','global-search','plus','program-switcher','today','recovery','for-you','inbox','journal','progress','calendar']).has(currentPage());
 }
 function exitBrowseModeIfNeeded(user){
   if(!user||!privatePageRequested())return false;
@@ -118,6 +101,17 @@ function exitBrowseModeIfNeeded(user){
   url.searchParams.delete('recommended');
   location.replace(url.pathname+(url.searchParams.toString()?`?${url.searchParams.toString()}`:'')+url.hash);
   return true;
+}
+function repairPrivateHeader(user){
+  if(!user||currentPage()!=='program-switcher')return;
+  const heading=$('.topbar .greeting h1')||$('.greeting h1');
+  const sub=$('.topbar .greeting p')||$('.greeting p');
+  if(heading)heading.textContent='My Journeys';
+  if(sub)sub.textContent='Open any journey whenever you want. Working in one journey does not pause your other journeys.';
+  $$('.topbar .mini-stat,.topbar [class*="stat"]').forEach(node=>{
+    const text=(node.textContent||'').toLowerCase();
+    if(text.includes('program preview')||text.includes('no account required')||text.trim()==='explore')node.style.setProperty('display','none','important');
+  });
 }
 async function serverAdminCheck(client,user){
   try{
@@ -138,6 +132,7 @@ async function refreshAdmin(){
   const user=await resolveUser(client);
   if(!user){admin.classList.add('hidden');return false}
   if(exitBrowseModeIfNeeded(user))return false;
+  repairPrivateHeader(user);
   const allowed=await serverAdminCheck(client,user);
   window.LelleeAdminContext={...(window.LelleeAdminContext||{}),isAdmin:allowed,userId:user.id,email:user.email||null};
   admin.classList.toggle('hidden',!allowed);
@@ -149,7 +144,7 @@ function refresh(){
   [0,200,500,900,1500,2400,4000].forEach(ms=>setTimeout(()=>{ensureEntries();refreshAdmin()},ms));
 }
 document.addEventListener('lellee:pagechange',refresh);
-document.addEventListener('click',e=>{if(e.target.closest?.('.nav-category-toggle,[data-page="settings"],[data-page="help-center"],[data-page="admin"]'))setTimeout(refresh,30)},true);
+document.addEventListener('click',e=>{if(e.target.closest?.('.nav-category-toggle,[data-page="settings"],[data-page="help-center"],[data-page="admin"],[data-page="program-switcher"]'))setTimeout(refresh,30)},true);
 try{
   const client=window.LelleeAuthContext?.client||window.sb;
   client?.auth?.onAuthStateChange?.(()=>setTimeout(refresh,30));
