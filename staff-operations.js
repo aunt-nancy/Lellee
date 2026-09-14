@@ -2,9 +2,26 @@
 (()=>{
 'use strict';
 const q=s=>document.querySelector(s),qa=s=>[...document.querySelectorAll(s)];
-const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot',"'":'&#39;'}[m]));
 const toast=(m,bad=false)=>{const t=q('#globalToast');if(t){t.textContent=m;t.classList.remove('hidden');if(bad)t.style.background='#7f2634';setTimeout(()=>{t.classList.add('hidden');t.style.background=''},2200)}};
 let isAdmin=false;
+
+function addStaffReadabilityStyle(){
+ if(document.getElementById('lelleeStaffReadability2pt'))return;
+ const style=document.createElement('style');
+ style.id='lelleeStaffReadability2pt';
+ style.textContent=`
+ #page-staff-operations .staff-row b,
+ #page-staff-operations .staff-row small,
+ #page-staff-operations .staff-row em,
+ #page-staff-operations [data-staff-tab],
+ #page-staff-operations .approved-resource-empty,
+ #staffSopList .staff-row b,
+ #staffSopList .staff-row small,
+ #staffSopList .staff-row em{font-size:calc(1em + 2pt)!important;line-height:1.45!important}
+ `;
+ document.head.appendChild(style);
+}
 
 async function rpc(name,args={}){
  const {data,error}=await sb.rpc(name,args);
@@ -24,6 +41,7 @@ async function checkAdmin(){
  return isAdmin;
 }
 async function loadStaffOps(){
+ addStaffReadabilityStyle();
  if(!await checkAdmin())return;
  const d=await rpc('get_staff_operations_summary');if(!d)return;
  const s=d.summary||{};
@@ -62,6 +80,7 @@ async function loadMyStaff(){
  q('#myStaffPermissionList').innerHTML=(d.permissions||[]).map(x=>`<article class="staff-permission"><b>${esc(x.label)}</b><small>${esc(x.description||'')}</small></article>`).join('')||'<div class="approved-resource-empty">No staff permission pack assigned.</div>';
 }
 
+addStaffReadabilityStyle();
 qa('[data-staff-tab]').forEach(b=>b.onclick=()=>setStaffTab(b.dataset.staffTab));
 q('#staffAddMember')?.addEventListener('click',addStaff);
 q('#staffAddHandoff')?.addEventListener('click',addHandoff);
