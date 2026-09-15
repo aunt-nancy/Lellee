@@ -94,7 +94,7 @@ function privatePageRequested(){
   return new Set(['settings','help-center','admin','workspace-home','global-search','plus','program-switcher','today','recovery','for-you','inbox','journal','progress','calendar']).has(currentPage());
 }
 function exitBrowseModeIfNeeded(user){
-  if(!user)return false;
+  if(!user||!privatePageRequested())return false;
   const url=new URL(location.href);
   if(url.searchParams.get('browse')!=='1')return false;
   url.searchParams.delete('browse');
