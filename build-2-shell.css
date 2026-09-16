@@ -273,6 +273,33 @@ body{font-size:16px!important}
 .content{max-width:1220px!important;padding-left:clamp(22px,3vw,38px)!important;padding-right:clamp(22px,3vw,38px)!important}
 .topbar{padding-left:clamp(22px,3vw,38px)!important;padding-right:clamp(22px,3vw,38px)!important}
 
+/* Non-Recovery journey previews share this shell. Keep their cards inside the
+   available column and prevent a later accordion rebuild from restoring
+   Recovery-only navigation such as "My Recovery". */
+body.program-preview-mode .main,
+body.program-preview-mode .content,
+body.program-preview-mode #page-program-preview{min-width:0!important;max-width:100%!important}
+body.program-preview-mode .program-preview-grid{
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  min-width:0!important;
+  max-width:100%!important;
+}
+body.program-preview-mode .program-preview-card{min-width:0!important;overflow-wrap:anywhere}
+body.program-preview-mode .sidebar .nav-item[data-page="recovery"],
+body.program-preview-mode .sidebar .nav-item[data-page="recovery-paths-v2"],
+body.program-preview-mode .sidebar .nav-item[data-page="meetings"],
+body.program-preview-mode .sidebar .nav-item[data-page="journal"],
+body.program-preview-mode .sidebar .nav-item[data-page="progress"],
+body.program-preview-mode .sidebar .nav-item[data-page="community"],
+body.program-preview-mode .sidebar .nav-item[data-page="milestones"],
+body.program-preview-mode .sidebar .nav-item[data-page="then-now"],
+body.program-preview-mode .sidebar .nav-item[data-page="story"],
+body.program-preview-mode .sidebar .nav-item[data-page="history"],
+body.program-preview-mode .sidebar .nav-item[data-page="longterm"]{display:none!important}
+@media(max-width:1050px) and (min-width:721px){
+  body.program-preview-mode .program-preview-grid{grid-template-columns:1fr!important}
+}
+
 /* Generic speech-to-text affordance for free-text fields. */
 .b2-voice-wrap{position:relative;display:block;width:100%;min-width:0}
 .b2-voice-wrap>input,.b2-voice-wrap>textarea{width:100%!important;padding-right:45px!important}
