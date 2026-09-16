@@ -1,4 +1,4 @@
-const LELLEE_SW_VERSION='lellee-journey-shell-refresh-2026-09-16-v1';
+const LELLEE_SW_VERSION='lellee-journey-nav-label-refresh-2026-09-16-v2';
 self.addEventListener('install',event=>self.skipWaiting());
 self.addEventListener('activate',event=>event.waitUntil((async()=>{
   // Consolidation rule: no historical shell/cache may survive a worker update.
