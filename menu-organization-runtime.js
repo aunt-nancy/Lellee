@@ -1,17 +1,8 @@
 (()=>{
 'use strict';
-const VERSION='2026-09-13-menu-organization-v1';
+const VERSION='2026-09-15-menu-organization-v2-single-nav-owner';
 const STYLE_ID='lelleeMenuOrganizationStyle';
 const WAVE=new Set(['caregiving','reentry','housing-stability','independent-living']);
-const CATEGORY_LABELS={daily:'Start Here',grow:'Learn & Tools',connect:'Connect',reflect:'Journal & Progress',support:'Support',account:'Account'};
-const CATEGORY_ORDER={
-  daily:['today','program-switcher','recovery','for-you'],
-  grow:['learn','tools','recovery-paths-v2','expert-guided-practices'],
-  connect:['meetings','community'],
-  reflect:['journal','progress','calendar'],
-  support:['resources','inbox'],
-  account:['workspace-home','global-search','plus','settings','help-center','admin']
-};
 const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
 const db=()=>window.LelleeAuthContext?.client||null;
 let admin=false,betaSlugs=new Set(),accessLoaded=false,accessLoading=false;
@@ -21,7 +12,7 @@ function addStyle(){
   const s=document.createElement('style');
   s.id=STYLE_ID;
   s.textContent=`
-/* Keep the approved flat shell; only organize the My Journeys workspace. */
+/* My Journeys content organization only. build-2-shell.js exclusively owns sidebar navigation. */
 #programSwitcherList{display:block!important;width:100%!important;max-width:none!important}
 #programSwitcherList>#journeyPlanLimitSummary,#programSwitcherList>.mj-summary{width:100%!important;max-width:none!important;margin:0 0 12px!important}
 #programSwitcherList .mj-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:14px!important;width:100%!important;margin:0!important}
@@ -42,70 +33,6 @@ function addStyle(){
   document.head.appendChild(s);
 }
 
-function navigate(page){
-  const go=window.LelleeNavigatePage||window.showPage;
-  if(typeof go==='function'){go(page);return true}
-  location.hash=page;return false;
-}
-
-function categoryInner(key){
-  return $(`.sidebar .nav-category[data-category="${key}"] .nav-category-items-inner`);
-}
-
-function setCategoryLabel(key,label){
-  const toggle=$(`.sidebar .nav-category[data-category="${key}"] .nav-category-toggle`);
-  if(!toggle)return;
-  const spans=$$('span',toggle);
-  const target=spans.length>=2?spans[1]:null;
-  if(target&&target.textContent.trim()!==label)target.textContent=label;
-}
-
-function setNavLabel(button,label){
-  if(!button)return;
-  const spans=$$('span',button);
-  if(spans.length>=2)spans[spans.length-1].textContent=label;
-  else {
-    const icon=button.querySelector('.nav-icon')?.outerHTML||'<span class="nav-icon">◎</span>';
-    button.innerHTML=`${icon}<span>${label}</span>`;
-  }
-}
-
-function makeMyJourneysButton(){
-  const b=document.createElement('button');
-  b.type='button';
-  b.className='nav-item';
-  b.dataset.page='program-switcher';
-  b.innerHTML='<span class="nav-icon">◎</span><span>My Journeys</span>';
-  b.addEventListener('click',event=>{
-    event.preventDefault();
-    navigate('program-switcher');
-    setTimeout(()=>window.LelleeMyJourneys?.reload?.(),70);
-    setTimeout(()=>window.LelleeJourneyPlanLimits?.refresh?.(),180);
-  });
-  return b;
-}
-
-function ensureMyJourneysNav(){
-  const host=categoryInner('daily');
-  if(!host)return null;
-  let buttons=$$('.sidebar .nav-item[data-page="program-switcher"]');
-  let primary=buttons.find(b=>b.closest('.nav-category')?.dataset.category==='daily')||buttons[0]||null;
-  if(!primary)primary=makeMyJourneysButton();
-  setNavLabel(primary,'My Journeys');
-  if(primary.parentElement!==host)host.appendChild(primary);
-  buttons=$$('.sidebar .nav-item[data-page="program-switcher"]');
-  buttons.filter(b=>b!==primary).forEach(b=>b.classList.add('b2-nav-duplicate'));
-  return primary;
-}
-
-function reorderCategory(key,pages){
-  const host=categoryInner(key);if(!host)return;
-  pages.forEach(page=>{
-    const b=$(`.sidebar .nav-item[data-page="${page}"]`);
-    if(b)host.appendChild(b);
-  });
-}
-
 function patchWorkspaceLabels(){
   $$('[data-quick-page="program-switcher"]').forEach(b=>{
     const title=$('b',b),help=$('small',b);
@@ -117,14 +44,6 @@ function patchWorkspaceLabels(){
     const title=row?.querySelector('b');
     if(title)title.textContent='My Journeys';
   });
-  $$('.sidebar .nav-item[data-page="program-switcher"]').forEach(b=>setNavLabel(b,'My Journeys'));
-}
-
-function organizeSidebar(){
-  Object.entries(CATEGORY_LABELS).forEach(([key,label])=>setCategoryLabel(key,label));
-  ensureMyJourneysNav();
-  Object.entries(CATEGORY_ORDER).forEach(([key,pages])=>reorderCategory(key,pages));
-  patchWorkspaceLabels();
 }
 
 async function loadAccess(){
@@ -187,6 +106,7 @@ function patchJourneySummary(){
 
 function organizeJourneys(){
   addStyle();
+  patchWorkspaceLabels();
   const wrap=$('#programSwitcherList');if(!wrap)return;
   $$('.mj-card',wrap).forEach(card=>{
     const slug=$('[data-mj-open]',card)?.dataset?.mjOpen;
@@ -196,14 +116,9 @@ function organizeJourneys(){
   patchJourneySummary();
 }
 
-function patchAll(){organizeSidebar();organizeJourneys()}
-function schedule(){[0,120,320,650,1050,1550,2200].forEach(ms=>setTimeout(async()=>{if(!accessLoaded)await loadAccess();patchAll()},ms))}
-
-document.addEventListener('lellee:pagechange',()=>schedule());
-document.addEventListener('click',event=>{
-  if(event.target.closest?.('.nav-category-toggle,[data-page="program-switcher"],[data-quick-page="program-switcher"]'))setTimeout(patchAll,80);
-},true);
+function schedule(){[0,120,320,650,1050,1550,2200].forEach(ms=>setTimeout(async()=>{if(!accessLoaded)await loadAccess();organizeJourneys()},ms))}
+document.addEventListener('lellee:pagechange',schedule);
+document.addEventListener('click',event=>{if(event.target.closest?.('[data-page="program-switcher"],[data-quick-page="program-switcher"]'))setTimeout(organizeJourneys,80)},true);
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',schedule,{once:true});else schedule();
-
 window.LelleeMenuOrganization=Object.freeze({version:VERSION,refresh:schedule});
 })();
