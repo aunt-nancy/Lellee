@@ -1,4 +1,4 @@
-const LELLEE_SW_VERSION='lellee-caregiving-context-help-2026-09-16-v5';
+const LELLEE_SW_VERSION='lellee-recovery-header-2026-09-17-v6';
 self.addEventListener('install',event=>self.skipWaiting());
 self.addEventListener('activate',event=>event.waitUntil((async()=>{
   // Consolidation rule: no historical shell/cache may survive a worker update.
