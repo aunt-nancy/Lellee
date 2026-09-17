@@ -1,4 +1,4 @@
-const LELLEE_SW_VERSION='lellee-recovery-header-2026-09-17-v6';
+const LELLEE_SW_VERSION='lellee-recovery-header-2026-09-17-v7';
 self.addEventListener('install',event=>self.skipWaiting());
 self.addEventListener('activate',event=>event.waitUntil((async()=>{
   // Consolidation rule: no historical shell/cache may survive a worker update.
