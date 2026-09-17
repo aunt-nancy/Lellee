@@ -132,7 +132,7 @@ console.info('Lellee canonical PWA runtime 2026-09-03 loaded');
 (()=>{
   if(document.querySelector('script[data-lellee-recovery-journey-switcher]'))return;
   const s=document.createElement('script');
-  s.src='/recovery-journey-switcher.js?v=20260917-14';
+  s.src='/recovery-journey-switcher.js?v=20260917-15';
   s.async=false;
   s.dataset.lelleeRecoveryJourneySwitcher='1';
   document.head.appendChild(s);
