@@ -32,7 +32,7 @@ h1{font-size:1.55rem;line-height:1.15;margin:3px 0 6px;letter-spacing:-.025em}.i
 .field{display:grid;gap:6px;margin:12px 0}.field label{font-size:.76rem;font-weight:800;color:#453858}.field input{width:100%;height:46px;border:1px solid var(--line);border-radius:11px;background:#fff;padding:0 12px;color:var(--ink);outline:none;box-shadow:0 1px 0 rgba(77,44,152,.02)}
 .field input:focus{border-color:#a58ac7;box-shadow:0 0 0 3px rgba(103,64,174,.12)}.password-wrap{position:relative}.password-wrap input{padding-right:70px}.show-password{position:absolute;right:8px;top:50%;transform:translateY(-50%);border:0;background:transparent;color:#6c5688;font-size:.7rem;font-weight:800;padding:7px;cursor:pointer}
 .utility-row{display:flex;justify-content:flex-end;min-height:26px;margin:-3px 1px 2px}.text-action{border:0;background:transparent;color:var(--purple-dark);font-size:.7rem;font-weight:800;padding:5px 0;cursor:pointer}.text-action:hover{text-decoration:underline}
-.legal{display:grid;gap:9px;margin:13px 0 4px;padding:13px;border:1px solid #e8dcec;border-radius:12px;background:linear-gradient(145deg,#fbf8fd,#fff8fb);font-size:.7rem;line-height:1.42;color:#61576a}.legal label{display:grid;grid-template-columns:18px 1fr;gap:8px;align-items:start}.legal input{width:16px;height:16px;margin:1px 0 0}.legal a{color:var(--purple-dark);font-weight:700}
+.legal{display:grid;gap:10px;margin:13px 0 4px;padding:13px;border:1px solid #e8dcec;border-radius:12px;background:linear-gradient(145deg,#fbf8fd,#fff8fb);font-size:.7rem;line-height:1.42;color:#61576a}.legal-scroll{height:220px;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:4px 10px 14px;border:1px solid #ded2e6;border-radius:10px;background:#fff;scrollbar-gutter:stable}.legal-document{padding:10px 0 16px;border-bottom:1px solid #eadfed}.legal-document:last-of-type{border-bottom:0}.legal-document-title{margin:0 0 8px;font-size:.84rem;line-height:1.3}.legal-document h2:not(.legal-document-title){margin:13px 0 5px;font-size:.75rem;line-height:1.35}.legal-document p{margin:5px 0}.legal-document .card{padding:8px;border:1px solid #e2d8e8;border-radius:8px;background:#faf7fc}.legal-document .badges{display:flex;flex-wrap:wrap;gap:4px;margin:7px 0}.legal-document .badge{padding:3px 6px;border:1px solid #ded2e6;border-radius:999px}.legal-document table{width:100%;border-collapse:collapse;font-size:.64rem}.legal-document th,.legal-document td{padding:5px;border:1px solid #e5dbea;text-align:left;vertical-align:top}.legal-end{text-align:center;font-weight:800;color:var(--purple-dark);margin:15px 0 2px}.legal-progress{margin:0;color:#75697e;font-weight:700}.legal-progress.complete{color:var(--success)}.legal label{display:grid;grid-template-columns:18px 1fr;gap:8px;align-items:start}.legal input{width:16px;height:16px;margin:1px 0 0}.legal input:disabled{opacity:.45}.legal a{color:var(--purple-dark);font-weight:700}
 .actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:14px}.primary,.secondary,.browse,.resend{min-height:43px;border-radius:10px;font-weight:820;cursor:pointer;transition:filter .15s ease,transform .15s ease}.primary{border:0;background:linear-gradient(135deg,var(--purple-dark),#8552cf);color:#fff;box-shadow:0 8px 18px rgba(92,49,158,.2)}.secondary{border:1px solid #d8cce4;background:#fff;color:#5b4672}.primary:hover,.secondary:hover,.browse:hover,.resend:hover{filter:brightness(.985)}.primary:active,.secondary:active,.browse:active,.resend:active{transform:translateY(1px)}.primary:disabled,.secondary:disabled,.resend:disabled{opacity:.62;cursor:wait}
 .status{min-height:42px;margin:10px 0 0;padding:0;font-size:.74rem;line-height:1.45;color:var(--muted);display:flex;align-items:center}.status.error,.status.success{padding:9px 11px;border-radius:10px;align-items:flex-start}.status.error{color:var(--error);background:#fff1f4;border:1px solid #efc8d1}.status.success{color:var(--success);background:#eef8f2;border:1px solid #cfe6d8}
 .resend{width:100%;margin-top:7px;border:1px solid #cfc0df;background:#f7f1fb;color:#563e71}.browse{width:100%;margin-top:7px;border:1px solid #d9d0e2;background:#faf8fc;color:#59466c}.browse-note{text-align:center;color:#81768a;font-size:.66rem;line-height:1.45;margin:8px 4px 0}.footer-links{display:flex;justify-content:center;flex-wrap:wrap;gap:12px;margin-top:13px;font-size:.62rem;color:#746a7e}.footer-links a{text-decoration:none}.footer-links a:hover{text-decoration:underline}.service-state{display:flex;align-items:center;justify-content:center;gap:6px;margin:8px 0 0;color:#83778e;font-size:.61rem;min-height:16px}.dot{width:7px;height:7px;border-radius:50%;background:#baadc6}.service-state.ready .dot{background:#48a16d}.service-state.error .dot{background:#c5566d}
@@ -52,9 +52,11 @@ h1{font-size:1.55rem;line-height:1.15;margin:3px 0 6px;letter-spacing:-.025em}.i
       <div class="field hidden" id="confirmField"><label for="confirmPassword">Confirm new password</label><div class="password-wrap"><input id="confirmPassword" type="password" minlength="8" autocomplete="new-password"><button class="show-password" data-password-target="confirmPassword" type="button" aria-pressed="false">Show</button></div></div>
       <div class="utility-row" id="signinUtilities"><button class="text-action" id="forgotButton" type="button">Forgot password?</button></div>
       <div class="legal hidden" id="legalNotice">
-        <label><input id="adult" type="checkbox" required><span>I confirm I am at least 18 years old.</span></label>
-        <label><input id="agreements" type="checkbox" required><span>I confirm I have read and agree to the <a href="/terms.html" target="_blank" rel="noopener">Terms of Use</a>, <a href="/privacy.html" target="_blank" rel="noopener">Privacy Policy</a>, <a href="/consumer-health-privacy.html" target="_blank" rel="noopener">Consumer Health Data Privacy Notice</a>, and <a href="/safety.html" target="_blank" rel="noopener">Safety Notice</a>.</span></label>
-        <label><input id="safety" type="checkbox" required><span>I understand Lellee is support, not emergency or professional medical treatment.</span></label>
+        <div class="legal-scroll" id="legalScroll" tabindex="0" aria-label="Terms of Use, Privacy Policy, Consumer Health Data Privacy Notice, and Safety Notice">
+          <p>Loading the approved legal notices…</p>
+        </div>
+        <p class="legal-progress" id="legalProgress" aria-live="polite">Scroll through all four notices to enable the acknowledgment.</p>
+        <label><input id="agreements" type="checkbox" required disabled><span>I confirm I am at least 18 years old and have read and agree to the Terms of Use, Privacy Policy, Consumer Health Data Privacy Notice, and Safety Notice.</span></label>
       </div>
       <div class="actions"><button class="primary" id="submitButton" type="submit">Sign in</button><button class="secondary" id="modeButton" type="button">Create account</button></div>
       <div class="status" id="status" role="status" aria-live="polite"></div>
@@ -79,8 +81,8 @@ h1{font-size:1.55rem;line-height:1.15;margin:3px 0 6px;letter-spacing:-.025em}.i
   const program=(params.get('program')||'').toLowerCase();
   const title=$('authTitle'),intro=$('authIntro'),form=$('authForm'),email=$('email'),password=$('password'),confirmPassword=$('confirmPassword');
   const emailField=$('emailField'),passwordField=$('passwordField'),confirmField=$('confirmField'),signinUtilities=$('signinUtilities');
-  const legal=$('legalNotice'),submit=$('submitButton'),modeButton=$('modeButton'),status=$('status'),service=$('serviceState'),resend=$('resendButton');
-  let client=null,loading=false,recoverySessionReady=false;
+  const legal=$('legalNotice'),legalScroll=$('legalScroll'),legalProgress=$('legalProgress'),agreements=$('agreements'),submit=$('submitButton'),modeButton=$('modeButton'),status=$('status'),service=$('serviceState'),resend=$('resendButton');
+  let client=null,loading=false,recoverySessionReady=false,legalNoticesLoaded=false,legalNoticesLoading=false,legalReviewComplete=false;
 
   function $(id){return document.getElementById(id)}
   function safeReturn(value){try{const u=new URL(value,location.origin);return u.origin===location.origin&&u.pathname.startsWith('/')?u.pathname+u.search+u.hash:'/app'}catch(_){return '/app'}}
@@ -93,6 +95,49 @@ h1{font-size:1.55rem;line-height:1.15;margin:3px 0 6px;letter-spacing:-.025em}.i
     if(next==='reset')return ['Choose a new password','Enter and confirm the new password you want to use for Lellee.','Save new password','Cancel'];
     return ['Sign in to Lellee','Sign in to save your progress, journal, preferences, and personal plan.','Sign in','Create account'];
   }
+  function updateLegalReview(){
+    if(!legalNoticesLoaded||legalReviewComplete)return;
+    const atEnd=Math.ceil(legalScroll.scrollTop+legalScroll.clientHeight)>=legalScroll.scrollHeight-4;
+    if(!atEnd)return;
+    legalReviewComplete=true;agreements.disabled=false;
+    legalProgress.textContent='All four notices reviewed. You may now check the acknowledgment.';
+    legalProgress.classList.add('complete');
+  }
+  async function loadLegalNotices(){
+    if(legalNoticesLoaded||legalNoticesLoading)return;
+    legalNoticesLoading=true;agreements.disabled=true;agreements.checked=false;
+    legalProgress.textContent='Loading the approved legal notices…';
+    const notices=[
+      {title:'Terms of Use',path:'/terms.html'},
+      {title:'Privacy Policy',path:'/privacy.html'},
+      {title:'Consumer Health Data Privacy Notice',path:'/consumer-health-privacy.html'},
+      {title:'Safety Notice',path:'/safety.html'}
+    ];
+    try{
+      const sections=[];
+      for(const notice of notices){
+        const response=await fetch(notice.path,{credentials:'same-origin',cache:'no-store'});
+        if(!response.ok)throw new Error('Notice failed to load');
+        const doc=new DOMParser().parseFromString(await response.text(),'text/html');
+        const source=doc.querySelector('main');
+        if(!source)throw new Error('Notice content is unavailable');
+        const section=document.createElement('section');section.className='legal-document';
+        const heading=document.createElement('h2');heading.className='legal-document-title';
+        const link=document.createElement('a');link.href=notice.path;link.target='_blank';link.rel='noopener';link.textContent=notice.title;
+        heading.appendChild(link);section.appendChild(heading);
+        Array.from(source.children).forEach(node=>section.appendChild(node.cloneNode(true)));
+        sections.push(section);
+      }
+      legalScroll.replaceChildren(...sections);
+      const end=document.createElement('p');end.className='legal-end';end.textContent='End of legal notices';legalScroll.appendChild(end);
+      legalNoticesLoaded=true;legalScroll.scrollTop=0;
+      legalProgress.textContent='Scroll through all four notices to enable the acknowledgment.';
+      requestAnimationFrame(updateLegalReview);
+    }catch(_){
+      legalScroll.innerHTML='<p>The notices could not load. Refresh this page and try again.</p><p><a href="/terms.html" target="_blank" rel="noopener">Terms of Use</a></p><p><a href="/privacy.html" target="_blank" rel="noopener">Privacy Policy</a></p><p><a href="/consumer-health-privacy.html" target="_blank" rel="noopener">Consumer Health Data Privacy Notice</a></p><p><a href="/safety.html" target="_blank" rel="noopener">Safety Notice</a></p>';
+      legalProgress.textContent='The acknowledgment will remain unavailable until the notices load.';
+    }finally{legalNoticesLoading=false}
+  }
   function setMode(nextMode,message='',keepResend=false){
     mode=['signup','forgot','reset'].includes(nextMode)?nextMode:'signin';
     const [heading,copy,submitText,alternateText]=modeCopy(mode);
@@ -102,6 +147,7 @@ h1{font-size:1.55rem;line-height:1.15;margin:3px 0 6px;letter-spacing:-.025em}.i
     confirmField.classList.toggle('hidden',mode!=='reset');
     signinUtilities.classList.toggle('hidden',mode!=='signin');
     legal.classList.toggle('hidden',mode!=='signup');
+    if(mode==='signup')loadLegalNotices();
     password.autocomplete=mode==='signin'?'current-password':'new-password';
     password.required=mode!=='forgot';confirmPassword.required=mode==='reset';
     if(!keepResend)setResend(false);setStatus(message);
@@ -112,7 +158,8 @@ h1{font-size:1.55rem;line-height:1.15;margin:3px 0 6px;letter-spacing:-.025em}.i
     if(mode!=='reset'&&!email.validity.valid){setStatus('Enter a valid email address.','error');email.focus();return false}
     if(mode!=='forgot'&&password.value.length<8){setStatus('Use a password with at least 8 characters.','error');password.focus();return false}
     if(mode==='reset'&&password.value!==confirmPassword.value){setStatus('The two new passwords do not match.','error');confirmPassword.focus();return false}
-    if(mode==='signup'&&['adult','agreements','safety'].some(id=>!$(id).checked)){setStatus('Please check all three account acknowledgments.','error');return false}
+    if(mode==='signup'&&agreements.disabled){setStatus('Scroll to the end of the grouped legal notices first.','error');legalScroll.focus();return false}
+    if(mode==='signup'&&!agreements.checked){setStatus('Check the legal acknowledgment before creating your account.','error');agreements.focus();return false}
     return true;
   }
   function confirmationUrl(){return 'https://lellee.com/auth.html'}
@@ -149,6 +196,7 @@ h1{font-size:1.55rem;line-height:1.15;margin:3px 0 6px;letter-spacing:-.025em}.i
   $('forgotButton').addEventListener('click',()=>{if(!loading)setMode('forgot')});
   $('browseButton').addEventListener('click',()=>location.assign(browseTarget()));
   document.querySelectorAll('.show-password').forEach(button=>button.addEventListener('click',event=>{const target=$(event.currentTarget.dataset.passwordTarget);const show=target.type==='password';target.type=show?'text':'password';event.currentTarget.textContent=show?'Hide':'Show';event.currentTarget.setAttribute('aria-pressed',String(show))}));
+  legalScroll.addEventListener('scroll',updateLegalReview,{passive:true});
   resend.addEventListener('click',async()=>{
     if(loading)return;if(!email.validity.valid){setStatus('Enter a valid email address first.','error');email.focus();return}if(!client){setStatus('Secure sign-in is still loading. Please wait a moment.','error');return}
     setBusy(true);try{const {error}=await client.auth.resend({type:'signup',email:email.value.trim(),options:{emailRedirectTo:confirmationUrl()}});if(error)throw error;setStatus('Confirmation email requested. Check Inbox and Spam.','success')}catch(error){setStatus(friendlyError(error,'resend'),'error')}finally{setBusy(false);setResend(true)}
