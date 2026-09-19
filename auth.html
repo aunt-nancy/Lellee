@@ -52,9 +52,9 @@ h1{font-size:1.55rem;line-height:1.15;margin:3px 0 6px;letter-spacing:-.025em}.i
       <div class="field hidden" id="confirmField"><label for="confirmPassword">Confirm new password</label><div class="password-wrap"><input id="confirmPassword" type="password" minlength="8" autocomplete="new-password"><button class="show-password" data-password-target="confirmPassword" type="button" aria-pressed="false">Show</button></div></div>
       <div class="utility-row" id="signinUtilities"><button class="text-action" id="forgotButton" type="button">Forgot password?</button></div>
       <div class="legal hidden" id="legalNotice">
-        <label><input id="adult" type="checkbox"><span>I confirm I am at least 18 years old.</span></label>
-        <label><input id="agreements" type="checkbox"><span>I reviewed the <a href="/terms.html" target="_blank" rel="noopener">Terms</a>, <a href="/privacy.html" target="_blank" rel="noopener">Privacy Policy</a>, and <a href="/consumer-health-privacy.html" target="_blank" rel="noopener">Consumer Health Data Notice</a>.</span></label>
-        <label><input id="safety" type="checkbox"><span>I understand Lellee is support, not emergency or professional medical treatment.</span></label>
+        <label><input id="adult" type="checkbox" required><span>I confirm I am at least 18 years old.</span></label>
+        <label><input id="agreements" type="checkbox" required><span>I confirm I have read and agree to the <a href="/terms.html" target="_blank" rel="noopener">Terms of Use</a>, <a href="/privacy.html" target="_blank" rel="noopener">Privacy Policy</a>, <a href="/consumer-health-privacy.html" target="_blank" rel="noopener">Consumer Health Data Privacy Notice</a>, and <a href="/safety.html" target="_blank" rel="noopener">Safety Notice</a>.</span></label>
+        <label><input id="safety" type="checkbox" required><span>I understand Lellee is support, not emergency or professional medical treatment.</span></label>
       </div>
       <div class="actions"><button class="primary" id="submitButton" type="submit">Sign in</button><button class="secondary" id="modeButton" type="button">Create account</button></div>
       <div class="status" id="status" role="status" aria-live="polite"></div>
@@ -168,7 +168,7 @@ h1{font-size:1.55rem;line-height:1.15;margin:3px 0 6px;letter-spacing:-.025em}.i
       }else if(mode==='signin'){
         const result=await client.auth.signInWithPassword({email:e,password:p});if(result.error)throw result.error;location.replace(returnTarget);
       }else{
-        const result=await client.auth.signUp({email:e,password:p,options:{emailRedirectTo:confirmationUrl(),data:{lellee_adult_confirmed:true,lellee_terms_privacy_reviewed:true,lellee_safety_acknowledged:true,lellee_account_acknowledged_at:new Date().toISOString()}}});
+        const result=await client.auth.signUp({email:e,password:p,options:{emailRedirectTo:confirmationUrl(),data:{lellee_adult_confirmed:true,lellee_terms_privacy_reviewed:true,lellee_legal_notices_reviewed:true,lellee_legal_notices_version:'2026-09-18',lellee_safety_acknowledged:true,lellee_account_acknowledged_at:new Date().toISOString()}}});
         if(result.error)throw result.error;
         const identities=result.data?.user?.identities;
         if(Array.isArray(identities)&&identities.length===0){
