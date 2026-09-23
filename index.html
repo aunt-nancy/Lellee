@@ -8139,15 +8139,17 @@ Includes:
 </div>
 <div aria-labelledby="onboardingTitle" aria-modal="true" class="final-onboarding hidden" id="finalOnboardingOverlay" role="dialog">
 <div class="final-onboarding-card">
-<div class="final-onboarding-brand"><img alt="Lellee" src="/logo.png"/><span id="onboardingStepLabel">STEP 1 OF 5</span></div>
+<div class="final-onboarding-brand"><img alt="Lellee" src="/logo.png"/><span id="onboardingStepLabel">STARTING POINT</span></div>
 <div class="final-onboarding-progress"><i id="onboardingProgressBar"></i></div>
 <section class="onboarding-step active" data-onboarding-step="1">
-<span class="approved-kicker">WELCOME TO LELLEE</span><h2 id="onboardingTitle">What would you like support with?</h2>
-<p>Choose the journey that fits what you need now. You can add or change journeys later.</p>
+<span class="approved-kicker">WELCOME TO LELLEE</span><h2 id="onboardingTitle">Find My Starting Point</h2>
+<p>Choose any statements that feel close to what you need now. Lellee will suggest a primary journey and optional additional journeys, and you decide whether to use them.</p>
 <label class="onboarding-field">What should Lellee call you?<input id="onboardingName" maxlength="60" placeholder="First name or preferred name"/></label>
-<div class="onboarding-choice-row">
-<button data-onboarding-journey="recovery" type="button">Recovery</button><button data-onboarding-journey="caregiving" type="button">Caregiving</button><button data-onboarding-journey="reentry" type="button">Returning Home</button><button data-onboarding-journey="housing-stability" type="button">Housing Stability</button><button data-onboarding-journey="independent-living" type="button">Building Independence</button><button data-onboarding-journey="not-sure" type="button">I’m not sure yet</button>
+<h3 class="onboarding-start-question">What would you like help with first?</h3>
+<div class="onboarding-choice-row onboarding-starting-points">
+<button data-onboarding-journey="recovery" type="button">Recovery or substance-use support</button><button data-onboarding-journey="caregiving" type="button">Caring for someone else</button><button data-onboarding-journey="reentry" type="button">Returning home and rebuilding</button><button data-onboarding-journey="housing-stability" type="button">Finding or keeping stable housing</button><button data-onboarding-journey="independent-living" type="button">Building daily-living and independence skills</button><button data-onboarding-journey="not-sure" type="button">I’m not sure yet</button>
 </div>
+<div class="onboarding-recommendation hidden" id="onboardingRecommendation" aria-live="polite"><span>SUGGESTED STARTING POINT</span><h3 id="onboardingRecommendationTitle"></h3><p id="onboardingRecommendationText"></p><p class="onboarding-secondary-routes hidden" id="onboardingSecondaryRoutes"></p><small>You can accept these suggestions, change your choices, or change journeys later.</small></div>
 </section>
 <section class="onboarding-step" data-onboarding-step="2">
 <span class="approved-kicker">RECOVERY DATE</span><h2>Where should your Lellee Journey begin?</h2>
