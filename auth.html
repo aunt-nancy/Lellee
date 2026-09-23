@@ -167,7 +167,7 @@ h1{font-size:1.55rem;line-height:1.15;margin:3px 0 6px;letter-spacing:-.025em}.i
   function friendlyError(error,context=''){
     const raw=(error?.message||'').trim(),msg=raw.toLowerCase();
     if(msg.includes('invalid login credentials'))return 'This email may already have a Lellee account, but that password does not match. Use “Forgot password?” below the password field.';
-    if(msg.includes('email not confirmed'))return 'This account still needs email confirmation. Use “Resend confirmation email.”';
+    if(msg.includes('email not confirmed'))return 'Your Lellee account still needs email confirmation. Use “Resend confirmation email.”';
     if(msg.includes('rate limit'))return 'Email sending is temporarily limited. Wait a few minutes, then try again.';
     if(msg.includes('user already registered'))return 'This email already has a Lellee account. Sign in or use “Forgot password?”';
     return raw||'The account request did not complete. Please try again.';
@@ -199,7 +199,7 @@ h1{font-size:1.55rem;line-height:1.15;margin:3px 0 6px;letter-spacing:-.025em}.i
   legalScroll.addEventListener('scroll',updateLegalReview,{passive:true});
   resend.addEventListener('click',async()=>{
     if(loading)return;if(!email.validity.valid){setStatus('Enter a valid email address first.','error');email.focus();return}if(!client){setStatus('Secure sign-in is still loading. Please wait a moment.','error');return}
-    setBusy(true);try{const {error}=await client.auth.resend({type:'signup',email:email.value.trim(),options:{emailRedirectTo:confirmationUrl()}});if(error)throw error;setStatus('Confirmation email requested. Check Inbox and Spam.','success')}catch(error){setStatus(friendlyError(error,'resend'),'error')}finally{setBusy(false);setResend(true)}
+    setBusy(true);try{const {error}=await client.auth.resend({type:'signup',email:email.value.trim(),options:{emailRedirectTo:confirmationUrl()}});if(error)throw error;setStatus('Lellee confirmation email requested. Check Inbox and Spam. The sender may temporarily show Supabase, Lellee’s secure sign-in provider.','success')}catch(error){setStatus(friendlyError(error,'resend'),'error')}finally{setBusy(false);setResend(true)}
   });
   form.addEventListener('submit',async event=>{
     event.preventDefault();if(loading||!validate())return;if(!client){setStatus('Secure sign-in is still loading. Please wait a moment.','error');return}
@@ -227,7 +227,7 @@ h1{font-size:1.55rem;line-height:1.15;margin:3px 0 6px;letter-spacing:-.025em}.i
           return;
         }
         if(result.data?.session){location.replace(returnTarget);return}
-        password.value='';setMode('signin','Account created. Check your email to confirm it, then sign in.',true);setStatus('Account created. Check Inbox and Spam for the confirmation email.','success');setResend(true);
+        password.value='';setMode('signin','Your Lellee account was created. Check your email to confirm it, then sign in.',true);setStatus('Check Inbox and Spam for your Lellee confirmation email. The sender may temporarily show Supabase, Lellee’s secure sign-in provider.','success');setResend(true);
       }
     }catch(error){const message=friendlyError(error,mode);setStatus(message,'error');if(message.toLowerCase().includes('confirmation'))setResend(true)}
     finally{setBusy(false)}
