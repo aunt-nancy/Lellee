@@ -22,6 +22,16 @@
     if(!c?.auth) return null;
     try{ const {data}=await c.auth.getUser(); return data?.user || null; }catch(_){ return null; }
   }
+  function personalizedStripeUrl(raw,current){
+    const url=new URL(String(raw||''));
+    if(url.hostname!=='buy.stripe.com'&&url.hostname!=='billing.stripe.com') throw new Error('Payment URL is not trusted.');
+    if(current?.id) url.searchParams.set('client_reference_id',current.id);
+    if(current?.email){
+      if(url.hostname==='buy.stripe.com') url.searchParams.set('locked_prefilled_email',current.email);
+      else url.searchParams.set('prefilled_email',current.email);
+    }
+    return url.toString();
+  }
   function esc(v){
     return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
   }
@@ -111,13 +121,14 @@
     const c=client(), u=await user();
     if(c&&u){
       try{
-        const {data,error}=await c.from('user_memberships')
-          .select('tier,status,provider_subscription_id,provider_customer_id')
-          .eq('user_id',u.id).maybeSingle();
+        const {data,error}=await c.from('user_entitlements')
+          .select('entitlement_key,status,stripe_subscription_id,stripe_customer_id,current_period_end')
+          .eq('user_id',u.id).in('entitlement_key',['plus','premium'])
+          .in('status',['active','trialing']).limit(1).maybeSingle();
         if(!error && data){
           status=data.status||'free';
-          active=data.tier==='plus' && ['active','trialing'].includes(status);
-          paid=active && Boolean(data.provider_subscription_id);
+          active=['plus','premium'].includes(data.entitlement_key) && ['active','trialing'].includes(status);
+          paid=active && Boolean(data.stripe_subscription_id||data.stripe_customer_id);
         }
       }catch(_){ }
     }
@@ -172,6 +183,12 @@
   async function openPlusBillingPortal(){
     const c=client(), u=await user();
     if(!c||!u) throw new Error('Please sign in before opening billing.');
+    const {data:links}=await c.from('app_public_settings').select('key,value').eq('key','billing_portal_link');
+    const portal=links?.[0]?.value;
+    if(/^https:\/\/billing\.stripe\.com\//i.test(String(portal||''))){
+      window.location.assign(personalizedStripeUrl(portal,u));
+      return true;
+    }
     const {data,error}=await c.functions.invoke('create-billing-portal',{body:{return_page:'plus'}});
     if(error) throw error;
     if(data?.url){ window.location.assign(data.url); return true; }
@@ -201,7 +218,7 @@
         const {data}=await c.from('app_public_settings').select('key,value').in('key',keys);
         const byKey=new Map((data||[]).map(x=>[x.key,x.value]));
         const url=keys.map(k=>byKey.get(k)).find(v=>/^https:\/\//i.test(String(v||'')));
-        if(url){ window.location.assign(url); return; }
+        if(url){ window.location.assign(personalizedStripeUrl(url,u)); return; }
       }catch(_){ }
 
       // Preferred path: authenticated Edge Function creates the Stripe-hosted Checkout Session.
@@ -583,7 +600,7 @@
       try{
         const {data}=await c.from('app_public_settings').select('key,value').in('key',['journal_companion_payment_link','journal_companion_checkout_url']);
         const url=(data||[]).map(x=>x.value).find(v=>/^https:\/\//i.test(String(v||'')));
-        if(url){ window.location.assign(url); return; }
+        if(url){ window.location.assign(personalizedStripeUrl(url,u)); return; }
       }catch(_){ }
 
       // Preferred path: authenticated Supabase Edge Function creates a Stripe-hosted checkout session.

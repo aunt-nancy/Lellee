@@ -5,20 +5,23 @@ const q=s=>document.querySelector(s),qa=s=>[...document.querySelectorAll(s)];
 const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 const set=(id,v)=>{const e=q('#'+id);if(e)e.textContent=v??''};
 const toast=(m,err=false)=>{const t=q('#globalToast');if(t){t.textContent=m;t.classList.remove('hidden');if(err)t.style.background='#7f2634';setTimeout(()=>{t.classList.add('hidden');t.style.background=''},2300)}else if(window.showSync)showSync(m)};
-let membership={tier:'free',status:'free'},priceMonthly=3.99,currentReview=null;
-const isPlus=()=>membership.tier==='plus'&&['active','trialing'].includes(membership.status);
+let membership={tier:'free',status:'free'},priceMonthly=5.99,currentReview=null;
+const isPlus=()=>['plus','premium'].includes(membership.tier)&&['active','trialing'].includes(membership.status);
 
 async function loadPlusSettings(){
  try{
   const {data:r}=await sb.from('app_public_settings').select('key,value').in('key',['plus_monthly_price','plus_annual_price']);
   const m=Object.fromEntries((r||[]).map(x=>[x.key,x.value]));
-  priceMonthly=Number(m.plus_monthly_price||3.99);
+  priceMonthly=Number(m.plus_monthly_price||5.99);
  }catch(e){}
  set('plusPriceMonthly',`$${priceMonthly.toFixed(2)}`);set('plusComparePrice',`$${priceMonthly.toFixed(2)}`);
 }
 async function loadMembership(){
  if(!currentUser)return;
- try{const {data:r}=await sb.from('user_memberships').select('*').eq('user_id',currentUser.id).maybeSingle();membership=r||{tier:'free',status:'free'}}catch(e){membership={tier:'free',status:'free'}}
+ try{
+  const {data:r}=await sb.from('user_entitlements').select('*').eq('user_id',currentUser.id).in('entitlement_key',['plus','premium']).in('status',['active','trialing']).limit(1).maybeSingle();
+  membership=r?{...r,tier:r.entitlement_key}:{tier:'free',status:'free'};
+ }catch(e){membership={tier:'free',status:'free'}}
  const plus=isPlus();q('#plusStatusBand')?.classList.toggle('active',plus);set('plusStatusTitle',plus?'Lellee Plus active':'Free account');set('plusStatusBadge',plus?'PLUS':'FREE');
  set('plusStatusText',plus?'Your Plus features are active.':'You have the full core recovery experience. Plus features are optional.');
 }

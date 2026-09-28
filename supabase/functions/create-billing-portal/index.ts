@@ -18,15 +18,17 @@ Deno.serve(async (req) => {
   if (error || !user) return Response.json({ error:'unauthorized' }, { status:401 })
 
   const admin = createClient(SUPABASE_URL, SERVICE_KEY)
-  const { data:membership } = await admin.from('user_memberships')
-    .select('provider_customer_id').eq('user_id',user.id).maybeSingle()
+  const { data:membership } = await admin.from('user_entitlements')
+    .select('stripe_customer_id').eq('user_id',user.id)
+    .in('entitlement_key',['plus','premium','journal_companion','coach'])
+    .not('stripe_customer_id','is',null).limit(1).maybeSingle()
 
-  if (!membership?.provider_customer_id) {
+  if (!membership?.stripe_customer_id) {
     return Response.json({ error:'no_billing_customer' }, { status:404 })
   }
 
   const session = await stripe.billingPortal.sessions.create({
-    customer:membership.provider_customer_id,
+    customer:membership.stripe_customer_id,
     return_url:`${SITE_URL}/app?page=plus`
   })
 

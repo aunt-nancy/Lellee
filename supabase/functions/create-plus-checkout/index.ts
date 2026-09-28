@@ -28,27 +28,27 @@ Deno.serve(async (req) => {
   if (!priceId) return Response.json({ error:'stripe_price_not_configured' }, { status:500 })
 
   const admin = createClient(SUPABASE_URL, SERVICE_KEY)
-  const { data:membership } = await admin.from('user_memberships')
-    .select('*').eq('user_id',user.id).maybeSingle()
+  const { data:membership } = await admin.from('user_entitlements')
+    .select('*').eq('user_id',user.id).in('entitlement_key',['plus','premium'])
+    .in('status',['active','trialing']).limit(1).maybeSingle()
 
-  if (membership?.tier === 'plus' && ['active','trialing'].includes(membership.status)) {
+  if (membership && ['active','trialing'].includes(membership.status)) {
     return Response.json({ error:'already_subscribed', manage_billing:true }, { status:409 })
   }
 
-  let customerId = membership?.provider_customer_id || null
+  let customerId = membership?.stripe_customer_id || null
+  if (!customerId) {
+    const { data:customerEntitlement } = await admin.from('user_entitlements')
+      .select('stripe_customer_id').eq('user_id',user.id)
+      .not('stripe_customer_id','is',null).limit(1).maybeSingle()
+    customerId = customerEntitlement?.stripe_customer_id || null
+  }
   if (!customerId) {
     const customer = await stripe.customers.create({
       email: user.email || undefined,
       metadata: { lellee_user_id:user.id }
     })
     customerId = customer.id
-    await admin.from('user_memberships').upsert({
-      user_id:user.id,
-      tier:'free',
-      status:'free',
-      provider:'stripe',
-      provider_customer_id:customerId
-    }, { onConflict:'user_id' })
   }
 
   const session = await stripe.checkout.sessions.create({
@@ -59,8 +59,8 @@ Deno.serve(async (req) => {
     client_reference_id:user.id,
     success_url:`${SITE_URL}/app?page=plus&checkout=success&session_id={CHECKOUT_SESSION_ID}`,
     cancel_url:`${SITE_URL}/app?page=plus&checkout=cancelled`,
-    metadata:{ user_id:user.id, plan },
-    subscription_data:{ metadata:{ user_id:user.id, plan } }
+    metadata:{ user_id:user.id, plan, lellee_offer_key:`plus_${plan}`, lellee_entitlement:'plus' },
+    subscription_data:{ metadata:{ user_id:user.id, plan, lellee_offer_key:`plus_${plan}`, lellee_entitlement:'plus' } }
   })
 
   await admin.from('plus_checkout_requests').insert({

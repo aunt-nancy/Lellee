@@ -8,8 +8,8 @@ let plusActive=false, journalEntries=[],collections=[],favoritesOnly=false,selec
 
 async function membershipCheck(){
  if(!currentUser){plusActive=false;return false}
- const {data:r}=await sb.from('user_memberships').select('tier,status').eq('user_id',currentUser.id).maybeSingle();
- plusActive=r?.tier==='plus'&&['active','trialing'].includes(r?.status);
+ const {data:r}=await sb.from('user_entitlements').select('entitlement_key,status').eq('user_id',currentUser.id).in('entitlement_key',['plus','premium']).in('status',['active','trialing']).limit(1).maybeSingle();
+ plusActive=['plus','premium'].includes(r?.entitlement_key)&&['active','trialing'].includes(r?.status);
  ['journal','reminder','story'].forEach(k=>{
    q(`#${k}PlusLock`)?.classList.toggle('hidden',plusActive);
    q(`#${k}PlusContent`)?.classList.toggle('hidden',!plusActive);

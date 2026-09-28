@@ -1,155 +1,185 @@
-import Stripe from 'npm:stripe@^22'
-import { createClient } from 'npm:@supabase/supabase-js@2'
+import "jsr:@supabase/functions-js/edge-runtime.d.ts";
+import { createClient } from "npm:@supabase/supabase-js@2";
 
-const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY')!)
-const cryptoProvider = Stripe.createSubtleCryptoProvider()
-const webhookSecret = Deno.env.get('STRIPE_WEBHOOK_SECRET')!
 const admin = createClient(
-  Deno.env.get('SUPABASE_URL')!,
-  Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
-)
-const monthlyPrice = Deno.env.get('STRIPE_PRICE_PLUS_MONTHLY')
-const annualPrice = Deno.env.get('STRIPE_PRICE_PLUS_ANNUAL')
+  Deno.env.get("SUPABASE_URL")!,
+  Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+  { auth: { persistSession: false, autoRefreshToken: false } },
+);
 
-function membershipStatus(status:string) {
-  switch(status) {
-    case 'trialing': return 'trialing'
-    case 'active': return 'active'
-    case 'past_due': return 'past_due'
-    case 'canceled': return 'cancelled'
-    case 'unpaid': return 'unpaid'
-    case 'incomplete': return 'incomplete'
-    case 'incomplete_expired': return 'expired'
-    case 'paused': return 'paused'
-    default: return 'free'
+type Offer = { entitlement: string; interval: "monthly" | "annual" | "one_time"; price: string };
+
+const OFFERS: Record<string, Offer> = {
+  plus_monthly: { entitlement: "plus", interval: "monthly", price: "price_1UKkL6DpLc9a3tUuZyLbJOEH" },
+  plus_annual: { entitlement: "plus", interval: "annual", price: "price_1UKkL5DpLc9a3tUu4cM6QJTy" },
+  premium_monthly: { entitlement: "premium", interval: "monthly", price: "price_1UKkL7DpLc9a3tUuMg0wvgXy" },
+  premium_annual: { entitlement: "premium", interval: "annual", price: "price_1UKkOQDpLc9a3tUu4oO2bU0y" },
+  journal_companion_monthly: { entitlement: "journal_companion", interval: "monthly", price: "price_1UKkOPDpLc9a3tUutSwZPky7" },
+  coach_addon_monthly: { entitlement: "coach", interval: "monthly", price: "price_1UKkL9DpLc9a3tUuoo3NE0HO" },
+  coach_checkin: { entitlement: "coach_checkin", interval: "one_time", price: "price_1UKkL8DpLc9a3tUuVkHtcSRq" },
+  coaching_foundations: { entitlement: "coaching_foundations", interval: "one_time", price: "price_1UKkaxDpLc9a3tUuT6Gsqfz7" },
+  specialty_recovery: { entitlement: "specialty_recovery", interval: "one_time", price: "price_1UKkaxDpLc9a3tUuXJOj4OsM" },
+  specialty_reentry: { entitlement: "specialty_reentry", interval: "one_time", price: "price_1UKkayDpLc9a3tUuHgN88yMz" },
+  specialty_housing_stability: { entitlement: "specialty_housing_stability", interval: "one_time", price: "price_1UKkazDpLc9a3tUuzl2jCKGU" },
+  specialty_caregiving: { entitlement: "specialty_caregiving", interval: "one_time", price: "price_1UKkb0DpLc9a3tUu7SEYfTi4" },
+  specialty_grief_life_after_loss: { entitlement: "specialty_grief_life_after_loss", interval: "one_time", price: "price_1UKkb0DpLc9a3tUuyY6kOiyu" },
+  specialty_workforce_new_beginnings: { entitlement: "specialty_workforce_new_beginnings", interval: "one_time", price: "price_1UKkb2DpLc9a3tUu5SmrBofJ" },
+};
+
+const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+function hex(bytes: ArrayBuffer) {
+  return Array.from(new Uint8Array(bytes)).map((byte) => byte.toString(16).padStart(2, "0")).join("");
+}
+
+function constantTimeEqual(left: string, right: string) {
+  if (left.length !== right.length) return false;
+  let difference = 0;
+  for (let index = 0; index < left.length; index += 1) difference |= left.charCodeAt(index) ^ right.charCodeAt(index);
+  return difference === 0;
+}
+
+async function verifySignature(payload: string, header: string, secret: string) {
+  const values = header.split(",").map((part) => part.trim());
+  const timestamp = values.find((part) => part.startsWith("t="))?.slice(2);
+  const signatures = values.filter((part) => part.startsWith("v1=")).map((part) => part.slice(3));
+  if (!timestamp || !signatures.length || !/^\d+$/.test(timestamp)) return false;
+  if (Math.abs(Math.floor(Date.now() / 1000) - Number(timestamp)) > 300) return false;
+  const key = await crypto.subtle.importKey(
+    "raw",
+    new TextEncoder().encode(secret),
+    { name: "HMAC", hash: "SHA-256" },
+    false,
+    ["sign"],
+  );
+  const digest = hex(await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(`${timestamp}.${payload}`)));
+  return signatures.some((candidate) => constantTimeEqual(digest, candidate));
+}
+
+function stripeId(value: unknown) {
+  if (typeof value === "string") return value;
+  if (value && typeof value === "object" && "id" in value && typeof value.id === "string") return value.id;
+  return null;
+}
+
+function subscriptionStatus(status: string) {
+  if (["active", "trialing", "past_due", "paused"].includes(status)) return status;
+  if (status === "canceled") return "cancelled";
+  return "expired";
+}
+
+async function upsertCheckoutEntitlement(session: Record<string, any>) {
+  const userId = session.client_reference_id;
+  const offerKey = session.metadata?.lellee_offer_key;
+  const offer = OFFERS[offerKey];
+  if (!uuidPattern.test(String(userId || "")) || !offer) throw new Error("missing_checkout_identity");
+  if (!["paid", "no_payment_required"].includes(String(session.payment_status || ""))) return;
+
+  const { error } = await admin.from("user_entitlements").upsert({
+    user_id: userId,
+    entitlement_key: offer.entitlement,
+    status: "active",
+    source: "stripe",
+    billing_interval: offer.interval,
+    stripe_customer_id: stripeId(session.customer),
+    stripe_subscription_id: stripeId(session.subscription),
+    stripe_price_id: offer.price,
+    current_period_end: null,
+    updated_at: new Date().toISOString(),
+  }, { onConflict: "user_id,entitlement_key" });
+  if (error) throw error;
+}
+
+async function syncSubscription(subscription: Record<string, any>) {
+  const subscriptionId = stripeId(subscription.id);
+  if (!subscriptionId) return;
+  const item = subscription.items?.data?.[0];
+  const periodEnd = subscription.current_period_end ?? item?.current_period_end;
+  const { error } = await admin.from("user_entitlements").update({
+    status: subscriptionStatus(String(subscription.status || "")),
+    stripe_customer_id: stripeId(subscription.customer),
+    stripe_price_id: stripeId(item?.price),
+    current_period_end: periodEnd ? new Date(Number(periodEnd) * 1000).toISOString() : null,
+    updated_at: new Date().toISOString(),
+  }).eq("stripe_subscription_id", subscriptionId);
+  if (error) throw error;
+}
+
+function invoiceSubscriptionId(invoice: Record<string, any>) {
+  return stripeId(invoice.subscription) || stripeId(invoice.parent?.subscription_details?.subscription);
+}
+
+Deno.serve(async (request: Request) => {
+  if (request.method !== "POST") return new Response("method_not_allowed", { status: 405 });
+
+  const payload = await request.text();
+  const signature = request.headers.get("stripe-signature") || "";
+  const { data: secret, error: secretError } = await admin.rpc("get_stripe_webhook_signing_secret");
+  if (secretError || !secret) return new Response("webhook_secret_unavailable", { status: 503 });
+  if (!await verifySignature(payload, signature, String(secret))) return new Response("bad_signature", { status: 400 });
+
+  let event: Record<string, any>;
+  try { event = JSON.parse(payload); } catch { return new Response("bad_payload", { status: 400 }); }
+  if (!event.livemode) return new Response("live_events_only", { status: 400 });
+
+  const object = event.data?.object || {};
+  const { data: existing } = await admin.from("stripe_webhook_events")
+    .select("processing_status").eq("stripe_event_id", event.id).maybeSingle();
+  if (existing?.processing_status === "processed" || existing?.processing_status === "ignored") {
+    return Response.json({ received: true, duplicate: true });
   }
-}
-async function findUserId(customerId:string, metadataUserId?:string|null) {
-  if (metadataUserId) return metadataUserId
-  const { data:r } = await admin.from('user_memberships')
-    .select('user_id').eq('provider_customer_id',customerId).maybeSingle()
-  return r?.user_id || null
-}
-async function syncSubscription(sub:any) {
-  const customerId = typeof sub.customer === 'string' ? sub.customer : sub.customer?.id
-  if (!customerId) return
-  const userId = await findUserId(customerId, sub.metadata?.user_id)
-  if (!userId) return
 
-  const priceId = sub.items?.data?.[0]?.price?.id || null
-  const billingPeriod = priceId === annualPrice ? 'annual'
-    : priceId === monthlyPrice ? 'monthly' : null
-  const status = membershipStatus(sub.status)
-  const hasAccess = ['active','trialing'].includes(status)
-
-  await admin.from('user_memberships').upsert({
-    user_id:userId,
-    tier:hasAccess ? 'plus' : 'free',
-    status,
-    billing_period:billingPeriod,
-    provider:'stripe',
-    provider_customer_id:customerId,
-    provider_subscription_id:sub.id,
-    current_period_start:sub.current_period_start ? new Date(sub.current_period_start*1000).toISOString() : null,
-    current_period_end:sub.current_period_end ? new Date(sub.current_period_end*1000).toISOString() : null,
-    cancel_at_period_end:!!sub.cancel_at_period_end
-  }, { onConflict:'user_id' })
-}
-
-Deno.serve(async (req) => {
-  if (req.method !== 'POST') return new Response('method_not_allowed',{status:405})
-
-  const signature = req.headers.get('stripe-signature') || ''
-  const body = await req.text()
-  let event:Stripe.Event
+  await admin.from("stripe_webhook_events").upsert({
+    stripe_event_id: event.id,
+    event_type: event.type,
+    livemode: true,
+    object_id: typeof object.id === "string" ? object.id : null,
+    processing_status: "processing",
+    received_at: new Date().toISOString(),
+    last_error: null,
+  }, { onConflict: "stripe_event_id" });
 
   try {
-    event = await stripe.webhooks.constructEventAsync(
-      body, signature, webhookSecret, undefined, cryptoProvider
-    )
-  } catch {
-    return new Response('bad_signature',{status:400})
-  }
-
-  const { data:seen } = await admin.from('stripe_webhook_events')
-    .select('event_id,processing_status').eq('event_id',event.id).maybeSingle()
-  if (seen?.processing_status === 'processed') {
-    return Response.json({ received:true, duplicate:true })
-  }
-
-  await admin.from('stripe_webhook_events').upsert({
-    event_id:event.id,
-    event_type:event.type,
-    livemode:event.livemode,
-    processing_status:'received'
-  }, { onConflict:'event_id' })
-
-  try {
-    switch(event.type) {
-      case 'checkout.session.completed': {
-        const session:any = event.data.object
-        const userId = session.client_reference_id || session.metadata?.user_id
-        if (userId && session.customer) {
-          await admin.from('user_memberships').upsert({
-            user_id:userId,
-            provider:'stripe',
-            provider_customer_id:typeof session.customer === 'string' ? session.customer : session.customer.id
-          }, { onConflict:'user_id' })
-          await admin.from('plus_checkout_requests').update({
-            status:'completed',
-            completed_at:new Date().toISOString()
-          }).eq('provider_checkout_id',session.id)
+    switch (event.type) {
+      case "checkout.session.completed":
+      case "checkout.session.async_payment_succeeded":
+        await upsertCheckoutEntitlement(object);
+        break;
+      case "customer.subscription.created":
+      case "customer.subscription.updated":
+      case "customer.subscription.deleted":
+        await syncSubscription(object);
+        break;
+      case "invoice.paid":
+      case "invoice.payment_failed": {
+        const subscriptionId = invoiceSubscriptionId(object);
+        if (subscriptionId) {
+          const status = event.type === "invoice.paid" ? "active" : "past_due";
+          const { error } = await admin.from("user_entitlements")
+            .update({ status, updated_at: new Date().toISOString() })
+            .eq("stripe_subscription_id", subscriptionId);
+          if (error) throw error;
         }
-        if (session.subscription) {
-          const sub = await stripe.subscriptions.retrieve(
-            typeof session.subscription === 'string'
-              ? session.subscription : session.subscription.id
-          )
-          await syncSubscription(sub)
-        }
-        break
+        break;
       }
-
-      case 'customer.subscription.created':
-      case 'customer.subscription.updated':
-      case 'customer.subscription.deleted':
-        await syncSubscription(event.data.object as any)
-        break
-
-      case 'invoice.payment_failed': {
-        const invoice:any = event.data.object
-        const customerId = typeof invoice.customer === 'string' ? invoice.customer : invoice.customer?.id
-        if (customerId) {
-          const userId = await findUserId(customerId)
-          if (userId) {
-            await admin.from('user_memberships').update({
-              tier:'free', status:'past_due'
-            }).eq('user_id',userId)
-          }
-        }
-        break
-      }
-
+      case "checkout.session.async_payment_failed":
+        break;
       default:
-        await admin.from('stripe_webhook_events').update({
-          processing_status:'ignored',
-          processed_at:new Date().toISOString()
-        }).eq('event_id',event.id)
-        return Response.json({ received:true, ignored:true })
+        await admin.from("stripe_webhook_events").update({
+          processing_status: "ignored", processed_at: new Date().toISOString(),
+        }).eq("stripe_event_id", event.id);
+        return Response.json({ received: true, ignored: true });
     }
 
-    await admin.from('stripe_webhook_events').update({
-      processing_status:'processed',
-      processed_at:new Date().toISOString()
-    }).eq('event_id',event.id)
-
-    return Response.json({ received:true })
-  } catch (e) {
-    await admin.from('stripe_webhook_events').update({
-      processing_status:'failed',
-      error_message:e instanceof Error ? e.message : String(e),
-      processed_at:new Date().toISOString()
-    }).eq('event_id',event.id)
-    return Response.json({ error:'processing_failed' }, { status:500 })
+    await admin.from("stripe_webhook_events").update({
+      processing_status: "processed", processed_at: new Date().toISOString(), last_error: null,
+    }).eq("stripe_event_id", event.id);
+    return Response.json({ received: true });
+  } catch (error) {
+    const message = error instanceof Error ? error.message.slice(0, 500) : "processing_failed";
+    await admin.from("stripe_webhook_events").update({
+      processing_status: "failed", processed_at: new Date().toISOString(), last_error: message,
+    }).eq("stripe_event_id", event.id);
+    return new Response("processing_failed", { status: 500 });
   }
-})
+});

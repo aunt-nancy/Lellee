@@ -63,9 +63,14 @@ async function loadGateSetting(){
 
 async function gateExistingUser(){
  if(!gateEnabled||typeof currentUser==='undefined'||!currentUser)return;
- const {data:a}=await sb.from('legal_acceptances').select('id').eq('user_id',currentUser.id)
+ let {data:a}=await sb.from('legal_acceptances').select('id').eq('user_id',currentUser.id)
  .eq('terms_version',versions.terms).eq('privacy_version',versions.privacy)
  .eq('consumer_health_version',versions.consumer).eq('safety_version',versions.safety).maybeSingle();
+ const metadata=currentUser.user_metadata||{};
+ if(!a&&metadata.lellee_legal_notices_reviewed===true&&metadata.lellee_legal_notices_version==='2026-09-18'){
+  const {data:record}=await sb.from('legal_acceptances').insert({user_id:currentUser.id,terms_version:versions.terms,privacy_version:versions.privacy,consumer_health_version:versions.consumer,safety_version:versions.safety,adult_confirmed:metadata.lellee_adult_confirmed===true,user_agent:navigator.userAgent}).select('id').single();
+  a=record||null;
+ }
  q('#legalAcceptanceOverlay')?.classList.toggle('hidden',!!a);if(!a)loadNoticeGroup('gate');
 }
 

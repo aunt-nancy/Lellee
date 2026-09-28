@@ -26,9 +26,12 @@ async function startCheckout(){
   const btn=q('#startPlusMembership');
   if(btn){btn.disabled=true;btn.textContent='Opening secure checkout…'}
   try{
-    const data=await invoke('create-plus-checkout',{plan});
-    if(!data?.url)throw new Error('Checkout URL was not returned.');
-    location.assign(data.url);
+    const keys=plan==='annual'?['plus_payment_link_annual']:['plus_payment_link_monthly'];
+    const {data:links}=await sb.from('app_public_settings').select('value').in('key',keys);
+    const raw=links?.[0]?.value;
+    if(!/^https:\/\/buy\.stripe\.com\//i.test(String(raw||'')))throw new Error('Checkout URL was not returned.');
+    const url=new URL(raw);url.searchParams.set('client_reference_id',currentUser.id);if(currentUser.email)url.searchParams.set('locked_prefilled_email',currentUser.email);
+    location.assign(url.toString());
   }catch(e){
     toast(e?.message||'Could not open checkout.',true);
     if(btn){btn.disabled=false;btn.textContent='Start Lellee Plus'}
@@ -39,8 +42,15 @@ async function manageBilling(){
   const btn=q('#managePlusBilling');
   if(btn){btn.disabled=true;btn.textContent='Opening billing…'}
   try{
+    const {data:setting}=await sb.from('app_public_settings').select('value').eq('key','billing_portal_link').maybeSingle();
+    if(/^https:\/\/billing\.stripe\.com\//i.test(String(setting?.value||''))){
+      const url=new URL(setting.value);
+      if(currentUser.email)url.searchParams.set('prefilled_email',currentUser.email);
+      location.assign(url.toString());
+      return;
+    }
     const data=await invoke('create-billing-portal',{});
-    if(!data?.url)throw new Error('Billing portal URL was not returned.');
+    if(!data?.url)throw new Error('Billing portal is not configured yet.');
     location.assign(data.url);
   }catch(e){
     toast(e?.message||'Could not open billing management.',true);
@@ -50,9 +60,9 @@ async function manageBilling(){
 async function refreshMembershipUI(){
   if(!currentUser)return;
   try{
-    const {data:r}=await sb.from('user_memberships').select('*').eq('user_id',currentUser.id).maybeSingle();
-    const active=r?.tier==='plus'&&['active','trialing'].includes(r?.status);
-    q('#managePlusBilling')?.classList.toggle('hidden',!r?.provider_customer_id);
+    const {data:r}=await sb.from('user_entitlements').select('*').eq('user_id',currentUser.id).in('entitlement_key',['plus','premium']).in('status',['active','trialing']).limit(1).maybeSingle();
+    const active=['plus','premium'].includes(r?.entitlement_key)&&['active','trialing'].includes(r?.status);
+    q('#managePlusBilling')?.classList.toggle('hidden',!r?.stripe_customer_id);
     const start=q('#startPlusMembership');
     if(start){
       start.classList.toggle('hidden',active);
@@ -79,8 +89,8 @@ function checkoutReturn(){
     let tries=0;
     const timer=setInterval(async()=>{
       tries++;await refreshMembershipUI();
-      const {data:r}=await sb.from('user_memberships').select('tier,status').eq('user_id',currentUser.id).maybeSingle();
-      if(r?.tier==='plus'&&['active','trialing'].includes(r.status)){
+      const {data:r}=await sb.from('user_entitlements').select('entitlement_key,status').eq('user_id',currentUser.id).in('entitlement_key',['plus','premium']).in('status',['active','trialing']).limit(1).maybeSingle();
+      if(['plus','premium'].includes(r?.entitlement_key)&&['active','trialing'].includes(r.status)){
         clearInterval(timer);box.textContent='Lellee Plus is active ✓';
       }else if(tries>=10)clearInterval(timer);
     },1500);

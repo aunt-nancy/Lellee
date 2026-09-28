@@ -593,20 +593,23 @@ const q=s=>document.querySelector(s),qa=s=>[...document.querySelectorAll(s)];
 const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 const set=(id,v)=>{const e=q('#'+id);if(e)e.textContent=v??''};
 const toast=(m,err=false)=>{const t=q('#globalToast');if(t){t.textContent=m;t.classList.remove('hidden');if(err)t.style.background='#7f2634';setTimeout(()=>{t.classList.add('hidden');t.style.background=''},2300)}else if(window.showSync)showSync(m)};
-let membership={tier:'free',status:'free'},priceMonthly=3.99,currentReview=null;
-const isPlus=()=>membership.tier==='plus'&&['active','trialing'].includes(membership.status);
+let membership={tier:'free',status:'free'},priceMonthly=5.99,currentReview=null;
+const isPlus=()=>['plus','premium'].includes(membership.tier)&&['active','trialing'].includes(membership.status);
 
 async function loadPlusSettings(){
  try{
   const {data:r}=await sb.from('app_public_settings').select('key,value').in('key',['plus_monthly_price','plus_annual_price']);
   const m=Object.fromEntries((r||[]).map(x=>[x.key,x.value]));
-  priceMonthly=Number(m.plus_monthly_price||3.99);
+  priceMonthly=Number(m.plus_monthly_price||5.99);
  }catch(e){}
  set('plusPriceMonthly',`$${priceMonthly.toFixed(2)}`);set('plusComparePrice',`$${priceMonthly.toFixed(2)}`);
 }
 async function loadMembership(){
  if(!currentUser)return;
- try{const {data:r}=await sb.from('user_memberships').select('*').eq('user_id',currentUser.id).maybeSingle();membership=r||{tier:'free',status:'free'}}catch(e){membership={tier:'free',status:'free'}}
+ try{
+  const {data:r}=await sb.from('user_entitlements').select('*').eq('user_id',currentUser.id).in('entitlement_key',['plus','premium']).in('status',['active','trialing']).limit(1).maybeSingle();
+  membership=r?{...r,tier:r.entitlement_key}:{tier:'free',status:'free'};
+ }catch(e){membership={tier:'free',status:'free'}}
  const plus=isPlus();q('#plusStatusBand')?.classList.toggle('active',plus);set('plusStatusTitle',plus?'Lellee Plus active':'Free account');set('plusStatusBadge',plus?'PLUS':'FREE');
  set('plusStatusText',plus?'Your Plus features are active.':'You have the full core recovery experience. Plus features are optional.');
 }
@@ -749,9 +752,9 @@ async function manageBilling(){
 async function refreshMembershipUI(){
   if(!currentUser)return;
   try{
-    const {data:r}=await sb.from('user_memberships').select('*').eq('user_id',currentUser.id).maybeSingle();
-    const active=r?.tier==='plus'&&['active','trialing'].includes(r?.status);
-    q('#managePlusBilling')?.classList.toggle('hidden',!r?.provider_customer_id);
+    const {data:r}=await sb.from('user_entitlements').select('*').eq('user_id',currentUser.id).in('entitlement_key',['plus','premium']).in('status',['active','trialing']).limit(1).maybeSingle();
+    const active=['plus','premium'].includes(r?.entitlement_key)&&['active','trialing'].includes(r?.status);
+    q('#managePlusBilling')?.classList.toggle('hidden',!r?.stripe_customer_id);
     const start=q('#startPlusMembership');
     if(start){
       start.classList.toggle('hidden',active);
@@ -778,8 +781,8 @@ function checkoutReturn(){
     let tries=0;
     const timer=setInterval(async()=>{
       tries++;await refreshMembershipUI();
-      const {data:r}=await sb.from('user_memberships').select('tier,status').eq('user_id',currentUser.id).maybeSingle();
-      if(r?.tier==='plus'&&['active','trialing'].includes(r.status)){
+      const {data:r}=await sb.from('user_entitlements').select('entitlement_key,status').eq('user_id',currentUser.id).in('entitlement_key',['plus','premium']).in('status',['active','trialing']).limit(1).maybeSingle();
+      if(['plus','premium'].includes(r?.entitlement_key)&&['active','trialing'].includes(r.status)){
         clearInterval(timer);box.textContent='Lellee Plus is active ✓';
       }else if(tries>=10)clearInterval(timer);
     },1500);
@@ -812,8 +815,8 @@ let plusActive=false, journalEntries=[],collections=[],favoritesOnly=false,selec
 
 async function membershipCheck(){
  if(!currentUser){plusActive=false;return false}
- const {data:r}=await sb.from('user_memberships').select('tier,status').eq('user_id',currentUser.id).maybeSingle();
- plusActive=r?.tier==='plus'&&['active','trialing'].includes(r?.status);
+ const {data:r}=await sb.from('user_entitlements').select('entitlement_key,status').eq('user_id',currentUser.id).in('entitlement_key',['plus','premium']).in('status',['active','trialing']).limit(1).maybeSingle();
+ plusActive=['plus','premium'].includes(r?.entitlement_key)&&['active','trialing'].includes(r?.status);
  ['journal','reminder','story'].forEach(k=>{
    q(`#${k}PlusLock`)?.classList.toggle('hidden',plusActive);
    q(`#${k}PlusContent`)?.classList.toggle('hidden',!plusActive);
@@ -965,7 +968,7 @@ async function loadAdmin(){
     sb.from('local_resources').select('*').order('name'),
     sb.from('recovery_news').select('*').order('published_at',{ascending:false}),
     sb.from('sponsor_accounts').select('*').order('created_at',{ascending:false}),
-    sb.from('user_memberships').select('user_id').eq('tier','plus').in('status',['active','trialing'])
+    sb.from('user_entitlements').select('user_id').in('entitlement_key',['plus','premium']).in('status',['active','trialing'])
   ]);
   resources=r.data||[];news=n.data||[];sponsors=s.data||[];
   setText('adminResourceCount',resources.filter(x=>x.published).length);
@@ -1108,7 +1111,7 @@ async function polishAccess(){
  if(!currentUser)return;
  let billing=false,plus=false;
  try{const {data:r}=await sb.from('app_public_settings').select('value').eq('key','billing_enabled').maybeSingle();billing=r?.value==='true'}catch(e){}
- try{const {data:m}=await sb.from('user_memberships').select('tier,status').eq('user_id',currentUser.id).maybeSingle();plus=m?.tier==='plus'&&['active','trialing'].includes(m?.status)}catch(e){}
+ try{const {data:m}=await sb.from('user_entitlements').select('entitlement_key,status').eq('user_id',currentUser.id).in('entitlement_key',['plus','premium']).in('status',['active','trialing']).limit(1).maybeSingle();plus=['plus','premium'].includes(m?.entitlement_key)&&['active','trialing'].includes(m?.status)}catch(e){}
  const plusPages=new Set(['journal-plus','reminders-plus','story-editions','recovery-review']);
  qa('[data-page]').forEach(el=>{if(!plusPages.has(el.dataset.page)||plus||el.querySelector('.final-plus-badge'))return;const b=document.createElement('span');b.className='final-plus-badge';b.textContent='PLUS';el.appendChild(b)});
  if(!billing){const old=q('#startPlusMembership');if(old){const fresh=old.cloneNode(true);old.replaceWith(fresh);fresh.textContent='Plus billing coming at launch';fresh.classList.add('final-billing-disabled');fresh.addEventListener('click',()=>toast('Lellee Plus is built. Secure Stripe checkout will be connected during final launch setup.'))}}

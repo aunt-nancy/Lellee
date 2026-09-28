@@ -29,7 +29,7 @@ async function loadAdmin(){
     sb.from('local_resources').select('*').order('name'),
     sb.from('recovery_news').select('*').order('published_at',{ascending:false}),
     sb.from('sponsor_accounts').select('*').order('created_at',{ascending:false}),
-    sb.from('user_memberships').select('user_id').eq('tier','plus').in('status',['active','trialing'])
+    sb.from('user_entitlements').select('user_id').in('entitlement_key',['plus','premium']).in('status',['active','trialing'])
   ]);
   resources=r.data||[];news=n.data||[];sponsors=s.data||[];
   setText('adminResourceCount',resources.filter(x=>x.published).length);
