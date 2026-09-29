@@ -359,7 +359,13 @@
     if(note)note.insertAdjacentElement('beforebegin',panel);else host.appendChild(panel);
 
     $('#startPremiumMembership')?.addEventListener('click',()=>startPremiumCheckout().catch(err=>{toast(err?.message||'Could not open Premium checkout.','error');refreshWave1UpgradePanel()}));
-    $('#startJournalCompanionMembership')?.addEventListener('click',()=>openJournalCheckout());
+    $('#startJournalCompanionMembership')?.addEventListener('click',async()=>{
+      try{
+        const state=await loadWave1UpgradeState();
+        if(state.entitlements.has('journal_companion')) await openPlusBillingPortal();
+        else openJournalCheckout();
+      }catch(err){toast(err?.message||'Could not open Journal Companion billing.','error')}
+    });
     $('#startCoachAddonMembership')?.addEventListener('click',()=>startCoachAddonCheckout().catch(err=>{toast(err?.message||'Could not open Coach checkout.','error');refreshWave1UpgradePanel()}));
     $('#buyCoachCheckin')?.addEventListener('click',()=>startCoachCheckinCheckout().catch(err=>{toast(err?.message||'Could not open check-in checkout.','error');refreshWave1UpgradePanel()}));
     return panel;
@@ -380,7 +386,7 @@
     if(journal){
       journal.disabled=false;
       journal.textContent=has('journal_companion')?'Manage Journal Companion':'Add Journal Companion';
-      if(has('journal_companion')) journal.onclick=()=>openPlusBillingPortal().catch(err=>toast(err?.message||'Could not open billing.','error'));
+      journal.onclick=null;
     }
     if($('#journalUpgradeStatus')) $('#journalUpgradeStatus').textContent=has('journal_companion')?'Journal Companion is active.':'';
 
