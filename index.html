@@ -1103,8 +1103,8 @@ Includes the approved Lellee consumer experience from early recovery through lif
 </style>
 
 <link rel="stylesheet" href="/agent-command-center.css?v=20260827-1">
-<link rel="stylesheet" href="/coach-dashboard-live.css?v=20260827-1">
-<link rel="stylesheet" href="/coach-operations-completion.css?v=20260827-1">
+<link rel="stylesheet" href="/coach-dashboard-live.css?v=20260929-1">
+<link rel="stylesheet" href="/coach-operations-completion.css?v=20260929-1">
 <link rel="stylesheet" href="/organization-dashboard-live.css?v=20260827-1">
 <link rel="stylesheet" href="/organization-operations-completion.css?v=20260827-1">
 <link rel="stylesheet" href="/unified-workspace-switcher.css?v=20260827-1">
@@ -4085,18 +4085,21 @@ html,body,.app,.content,.page{overflow-anchor:none!important}
 <article><b id="credentialPending">0</b><small>Pending verification</small></article>
 <article><b id="credentialVerified">0</b><small>Verified</small></article>
 <article><b id="credentialExpiring">0</b><small>Expiring soon</small></article>
+<article><b id="credentialCertificates">0</b><small>Active certificates</small></article>
 </div>
 <div class="commerce-tabs">
 <button class="active" data-credential-tab="claims">Claims</button>
 <button data-credential-tab="types">Credential Types</button>
 <button data-credential-tab="training">Training</button>
+<button data-credential-tab="certificates">Certificates</button>
 <button data-credential-tab="requirements">Requirements</button>
 </div>
 <div id="credentialPanelClaims"><div class="forms-list" id="credentialClaimList"></div></div>
 <div class="hidden" id="credentialPanelTypes"><div class="forms-list" id="credentialTypeList"></div></div>
 <div class="hidden" id="credentialPanelTraining"><div class="forms-list" id="credentialTrainingList"></div></div>
+<div class="hidden" id="credentialPanelCertificates"><div class="forms-list" id="credentialCertificateList"></div></div>
 <div class="hidden" id="credentialPanelRequirements"><div class="forms-list" id="credentialRequirementList"></div></div>
-<div class="forms-note"><b>Verification is a status, not an assumption.</b><p>Credentials remain self-reported until explicitly reviewed and marked verified. Automated credential verification and automatic public display remain off.</p></div>
+<div class="forms-note"><b>Verification is a status, not an assumption.</b><p>Credentials remain self-reported until explicitly reviewed and marked verified. Certificates document reviewed completion and never represent professional licensure or clinical authority.</p></div>
 </div>
 </section>
 <section class="page" id="page-forms-studio">
@@ -5134,6 +5137,10 @@ html,body,.app,.content,.page{overflow-anchor:none!important}
 <article><b id="coachMetricCapacity">0</b><small>Open group seats</small></article>
 <article><b id="coachMetricMessages">0</b><small>Unread messages</small></article>
 </div>
+<section class="coach-readiness-card" id="coachReadinessCard" aria-labelledby="coachReadinessTitle">
+<div class="coach-panel-head"><div><span class="approved-kicker">COACH READINESS</span><h3 id="coachReadinessTitle">Business and certification status</h3></div><button class="approved-small-action" data-page="coach-credentials">Open Certifications</button></div>
+<div class="coach-readiness-grid" id="coachReadinessGrid"><span>Loading readiness…</span></div>
+</section>
 <div class="coach-tabs">
 <button class="active" data-coach-tab="clients">Clients</button>
 <button data-coach-tab="groups">Groups</button>
@@ -6499,11 +6506,13 @@ html,body,.app,.content,.page{overflow-anchor:none!important}
 <article><b id="coachCredCount">0</b><small>Credentials</small></article>
 <article><b id="coachCredVerified">0</b><small>Verified</small></article>
 <article><b id="coachCredTraining">0</b><small>Training records</small></article>
+<article><b id="coachCredCertificates">0</b><small>Certificates</small></article>
 <article><b id="coachCredForms">0</b><small>Intake forms</small></article>
 </div>
 <div class="commerce-tabs">
 <button class="active" data-coach-cred-tab="credentials">Credentials</button>
 <button data-coach-cred-tab="training">Training</button>
+<button data-coach-cred-tab="certifications">Certificates</button>
 <button data-coach-cred-tab="intake">Client Intake</button>
 </div>
 <div id="coachCredPanelCredentials">
@@ -6511,10 +6520,14 @@ html,body,.app,.content,.page{overflow-anchor:none!important}
 <div class="forms-list" id="coachCredentialList"></div>
 </div>
 <div class="hidden" id="coachCredPanelTraining"><div class="forms-list" id="coachTrainingList"></div></div>
+<div class="hidden" id="coachCredPanelCertifications">
+<div class="commerce-panel-head"><div><span class="approved-kicker">LELLEE CERTIFICATES</span><h3>Reviewed completion certificates</h3></div></div>
+<div class="forms-list" id="coachCertificateList"></div>
+</div>
 <div class="hidden" id="coachCredPanelIntake"><div class="forms-list" id="coachIntakeFormList"></div></div>
 <div class="forms-note">
 <b>Credential status must be explicit.</b>
-<p>Self-entered credentials are not treated as verified. Public credential display stays off until a verification workflow approves the claim.</p>
+<p>Self-entered credentials are not treated as verified. Lellee certificates document reviewed completion only; they are not professional licenses or clinical credentials.</p>
 </div>
 </div>
 </section>
@@ -8593,8 +8606,8 @@ Transportation"></textarea></label>
 
 <script src="/journey-nav-label-hotfix.js?v=20260916-1"></script>\n<script src="/agent-command-center.js?v=20260827-1"></script>
 <script src="/coach-entry-router.js?v=20260827-1"></script>
-<script src="/coach-dashboard-live.js?v=20260827-1"></script>
-<script src="/coach-operations-completion.js?v=20260827-1"></script>
+<script src="/coach-dashboard-live.js?v=20260929-1"></script>
+<script src="/coach-operations-completion.js?v=20260929-1"></script>
 <script src="/organization-entry-router.js?v=20260827-1"></script>
 <script src="/organization-dashboard-live.js?v=20260827-1"></script>
 <script src="/organization-operations-completion.js?v=20260827-1"></script>

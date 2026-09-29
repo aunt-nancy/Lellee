@@ -11,6 +11,7 @@
 
   let state = {
     context:null,
+    certification:null,
     user:null,
     business:null,
     loading:false
@@ -54,9 +55,14 @@
     if(!c || !u) return null;
     state.loading=true;
     try{
-      const {data,error}=await c.client.rpc('get_my_coach_dashboard_context');
-      if(error) throw error;
-      state.context=data || {};
+      const [dashboardResult, certificationResult]=await Promise.all([
+        c.client.rpc('get_my_coach_dashboard_context'),
+        c.client.rpc('get_my_coach_certification_context')
+      ]);
+      if(dashboardResult.error) throw dashboardResult.error;
+      if(certificationResult.error) throw certificationResult.error;
+      state.context=dashboardResult.data || {};
+      state.certification=certificationResult.data || {};
       state.user=u;
       state.business=state.context.business || null;
       return state.context;
@@ -191,6 +197,7 @@
       $('#coachMetricGroups').textContent=ctx.metrics?.groups ?? 0;
       $('#coachMetricCapacity').textContent=ctx.metrics?.open_seats ?? 0;
       $('#coachMetricMessages').textContent=ctx.metrics?.unread_messages ?? 0;
+      renderReadiness();
 
       renderClients();
       renderGroups();
@@ -214,6 +221,20 @@
       const host=$('#coachClientList');
       if(host) host.innerHTML=`<div class="coach-live-error">${esc(err.message||err)}</div>`;
     }
+  }
+
+  function renderReadiness(){
+    const host=$('#coachReadinessGrid'); if(!host) return;
+    const readiness=state.certification?.readiness || {};
+    const items=[
+      ['Business approved',readiness.business_approved],
+      ['Credential submitted',readiness.credential_submitted],
+      ['Training recorded',readiness.training_recorded],
+      ['Certificate issued',readiness.certificate_issued]
+    ];
+    host.innerHTML=items.map(([label,complete])=>`
+      <span class="coach-readiness-step ${complete?'complete':''}"><b>${complete?'✓':'○'}</b>${esc(label)}</span>
+    `).join('');
   }
 
   function renderClients(){

@@ -44,7 +44,7 @@ async function addVaultDocument(){
  if(error)return toast(error.message,true);loadVault();
 }
 
-function setCoachCredTab(tab){qa('[data-coach-cred-tab]').forEach(b=>b.classList.toggle('active',b.dataset.coachCredTab===tab));['credentials','training','intake'].forEach(x=>q('#coachCredPanel'+x[0].toUpperCase()+x.slice(1))?.classList.toggle('hidden',x!==tab))}
+function setCoachCredTab(tab){qa('[data-coach-cred-tab]').forEach(b=>b.classList.toggle('active',b.dataset.coachCredTab===tab));['credentials','training','certifications','intake'].forEach(x=>q('#coachCredPanel'+x[0].toUpperCase()+x.slice(1))?.classList.toggle('hidden',x!==tab))}
 async function loadCoachCredentials(){
  const {data:b}=await sb.from('coach_businesses').select('id,business_name,public_name').eq('owner_user_id',currentUser.id).maybeSingle();coachBusiness=b||null;if(!b)return;
  q('#coachCredentialName').textContent=b.public_name||b.business_name;
@@ -95,7 +95,7 @@ async function addForm(){
  if(error)return toast(error.message,true);loadFormsStudio();
 }
 
-function setCredentialTab(tab){qa('[data-credential-tab]').forEach(b=>b.classList.toggle('active',b.dataset.credentialTab===tab));['claims','types','training','requirements'].forEach(x=>q('#credentialPanel'+x[0].toUpperCase()+x.slice(1))?.classList.toggle('hidden',x!==tab))}
+function setCredentialTab(tab){qa('[data-credential-tab]').forEach(b=>b.classList.toggle('active',b.dataset.credentialTab===tab));['claims','types','training','certificates','requirements'].forEach(x=>q('#credentialPanel'+x[0].toUpperCase()+x.slice(1))?.classList.toggle('hidden',x!==tab))}
 
 function ensureCoachTrainingAdminUi(){
  const page=q('#page-credentialing-center');
@@ -143,15 +143,35 @@ async function loadCoachTrainingAdmin(){
 
 async function loadCredentialing(){
  if(!await checkAdmin())return;
- ensureCoachTrainingAdminUi();
- const d=await rpc('get_credentialing_center_summary');if(!d)return;
+ const d=await rpc('get_admin_coach_certification_context');if(!d)return;
  const s=d.summary||{};
  q('#credentialClaims').textContent=s.claims||0;q('#credentialPending').textContent=s.pending||0;q('#credentialVerified').textContent=s.verified||0;q('#credentialExpiring').textContent=s.expiring||0;
- q('#credentialClaimList').innerHTML=(d.claims||[]).map(x=>row('C',x.label,`${x.credential_type} · ${x.owner_label}`,x.verification_status,x.verification_status==='verified'?'ok':'attention')).join('')||'<div class="approved-resource-empty">No credential claims.</div>';
+ q('#credentialCertificates').textContent=s.certificates||0;
+ q('#credentialClaimList').innerHTML=(d.claims||[]).map(x=>`<article class="forms-admin-review ${x.verification_status==='verified'?'ok':'attention'}"><div>${row('C',x.label,`${x.credential_type} · ${x.owner_label}${x.issuer?' · '+x.issuer:''}`,x.verification_status,x.verification_status==='verified'?'ok':'attention')}</div><div class="forms-admin-actions">${x.verification_status!=='verified'?`<button data-admin-credential-review="${x.id}" data-review-status="verified">Verify</button><button data-admin-credential-review="${x.id}" data-review-status="unable_to_verify">Unable to verify</button>`:x.certificate_id?`<span>Certificate ${esc(x.certificate_number)}</span>`:`<button data-admin-issue-claim-certificate="${x.id}">Issue Lellee certificate</button>`}</div></article>`).join('')||'<div class="approved-resource-empty">No credential claims.</div>';
  q('#credentialTypeList').innerHTML=(d.types||[]).map(x=>row('T',x.label,x.description,x.status)).join('');
- q('#credentialTrainingList').innerHTML=(d.training||[]).map(x=>row('L',x.title,`${x.delivery_type} · ${x.status}`,x.required_hours?x.required_hours+' hrs':'')).join('');
- q('#credentialRequirementList').innerHTML=(d.requirements||[]).map(x=>row('R',x.label,`${x.applies_to} · ${x.status}`,x.required?'required':'optional')).join('');
- await loadCoachTrainingAdmin();
+ q('#credentialTrainingList').innerHTML=(d.training||[]).map(x=>`<article class="forms-admin-review ${x.verified?'ok':''}"><div>${row('L',x.title,`${x.owner_label} · ${x.status}${x.hours?' · '+x.hours+' hrs':''}`,x.verified?'verified':'unverified',x.verified?'ok':'attention')}</div><div class="forms-admin-actions">${!x.verified&&x.status==='completed'?`<button data-admin-verify-training="${x.id}">Verify completion</button>`:x.verified&&!x.certificate_id?`<button data-admin-issue-training-certificate="${x.id}">Issue Lellee certificate</button>`:x.certificate_id?`<span>Certificate ${esc(x.certificate_number)}</span>`:''}</div></article>`).join('')||'<div class="approved-resource-empty">No training records.</div>';
+ q('#credentialCertificateList').innerHTML=(d.certificates||[]).map(x=>`<article class="forms-admin-review ${x.status==='active'?'ok':'attention'}">${row('✓',x.title,`${x.owner_label} · ${x.certificate_number} · issued ${new Date(x.issued_on).toLocaleDateString()}`,x.status,x.status==='active'?'ok':'attention')}<div class="forms-admin-actions">${x.status==='active'?`<button data-admin-revoke-certificate="${x.id}">Revoke</button>`:''}</div></article>`).join('')||'<div class="approved-resource-empty">No certificates issued.</div>';
+ q('#credentialRequirementList').innerHTML='<article class="forms-guardrail"><b>✓ Business review</b><small>The coaching business must be approved before public operation.</small></article><article class="forms-guardrail"><b>✓ Human verification</b><small>Professional claims stay self-reported until reviewed by a Lellee administrator.</small></article><article class="forms-guardrail"><b>✓ Certificate scope</b><small>Lellee certificates record reviewed completion only and never represent a professional license or clinical credential.</small></article>';
+}
+
+async function reviewCredential(id,status){
+ const note=prompt(status==='verified'?'Optional verification note:':'Why could this claim not be verified?','')||null;
+ const {error}=await sb.rpc('admin_review_coach_credential',{p_claim_id:id,p_status:status,p_note:note});
+ if(error)return toast(error.message,true);toast(status==='verified'?'Credential verified.':'Credential updated.');loadCredentialing();
+}
+async function verifyTraining(id){
+ const {error}=await sb.rpc('admin_review_training_record',{p_training_record_id:id,p_verified:true});
+ if(error)return toast(error.message,true);toast('Training completion verified.');loadCredentialing();
+}
+async function issueCertificate(source,id){
+ const args={p_credential_claim_id:source==='claim'?id:null,p_training_record_id:source==='training'?id:null,p_title:null,p_expires_on:null,p_note:null};
+ const {error}=await sb.rpc('admin_issue_coach_certificate',args);
+ if(error)return toast(error.message,true);toast('Lellee certificate issued.');loadCredentialing();
+}
+async function revokeCertificate(id){
+ const note=prompt('Reason for revocation:','')||null;if(!note)return;
+ const {error}=await sb.rpc('admin_revoke_coach_certificate',{p_certificate_id:id,p_note:note});
+ if(error)return toast(error.message,true);toast('Certificate revoked.');loadCredentialing();
 }
 
 function relabelAdminCoachTraining(){
@@ -160,6 +180,16 @@ function relabelAdminCoachTraining(){
 
 document.addEventListener('click',e=>{
  if(e.target.closest('[data-admin-home-group="people-partners"]'))setTimeout(relabelAdminCoachTraining,0);
+ const credentialAction=e.target.closest('[data-admin-credential-review]');
+ if(credentialAction){e.preventDefault();reviewCredential(credentialAction.dataset.adminCredentialReview,credentialAction.dataset.reviewStatus)}
+ const trainingAction=e.target.closest('[data-admin-verify-training]');
+ if(trainingAction){e.preventDefault();verifyTraining(trainingAction.dataset.adminVerifyTraining)}
+ const claimCertificate=e.target.closest('[data-admin-issue-claim-certificate]');
+ if(claimCertificate){e.preventDefault();issueCertificate('claim',claimCertificate.dataset.adminIssueClaimCertificate)}
+ const trainingCertificate=e.target.closest('[data-admin-issue-training-certificate]');
+ if(trainingCertificate){e.preventDefault();issueCertificate('training',trainingCertificate.dataset.adminIssueTrainingCertificate)}
+ const revokeAction=e.target.closest('[data-admin-revoke-certificate]');
+ if(revokeAction){e.preventDefault();revokeCertificate(revokeAction.dataset.adminRevokeCertificate)}
 },true);
 
 qa('[data-my-forms-tab]').forEach(b=>b.onclick=()=>setMyFormsTab(b.dataset.myFormsTab));

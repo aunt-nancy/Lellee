@@ -9,7 +9,7 @@
   const date=v=>v?new Date(v).toLocaleDateString():'—';
   const title=v=>String(v||'').replaceAll('_',' ').replace(/\b\w/g,c=>c.toUpperCase());
 
-  let state={ctx:null,base:null,user:null,loading:false};
+  let state={ctx:null,base:null,cert:null,user:null,loading:false};
 
   function bridge(){return window.LelleeAuthContext?.client?window.LelleeAuthContext:null}
   function sb(){return bridge()?.client}
@@ -42,14 +42,17 @@
     const c=bridge(),u=user(); if(!c||!u) return null;
     state.loading=true;
     try{
-      const [ops,base]=await Promise.all([
+      const [ops,base,cert]=await Promise.all([
         c.client.rpc('get_my_coach_operations_context'),
-        c.client.rpc('get_my_coach_dashboard_context')
+        c.client.rpc('get_my_coach_dashboard_context'),
+        c.client.rpc('get_my_coach_certification_context')
       ]);
       if(ops.error) throw ops.error;
       if(base.error) throw base.error;
+      if(cert.error) throw cert.error;
       state.ctx=ops.data||{};
       state.base=base.data||{};
+      state.cert=cert.data||{};
       state.user=u;
       return state.ctx;
     }finally{state.loading=false}
@@ -180,21 +183,29 @@
 
   function renderCredentials(tab='credentials'){
     ensureCredentialButtons();
-    const c=state.ctx?.credentials||{},s=c.summary||{};
+    const c=state.ctx?.credentials||{},cert=state.cert||{},s=cert.summary||c.summary||{};
     setText('coachCredentialName',state.ctx.business_name||'My Coaching Business');
     setText('coachCredCount',s.credentials||0);
     setText('coachCredVerified',s.verified||0);
     setText('coachCredTraining',s.training||0);
-    setText('coachCredForms',s.intake_forms||0);
+    setText('coachCredCertificates',s.certificates||0);
+    setText('coachCredForms',c.summary?.intake_forms||0);
     const cl=$('#coachCredentialList');
-    if(cl) cl.innerHTML=(c.credentials||[]).length?(c.credentials||[]).map(x=>`
+    if(cl) cl.innerHTML=(cert.credentials||c.credentials||[]).length?(cert.credentials||c.credentials||[]).map(x=>`
       <article class="coach-ops-item"><div class="coach-ops-row"><div><b>${esc(x.label)}</b><small>${esc(title(x.credential_type))}${x.issuer?' · '+esc(x.issuer):''}</small></div><span class="coach-ops-pill">${esc(title(x.verification_status))}</span></div>
-      ${x.expires_on?`<small>Expires ${esc(date(x.expires_on))}</small>`:''}</article>`).join(''):
+      ${x.expires_on?`<small>Expires ${esc(date(x.expires_on))}</small>`:''}
+      ${['self_reported','unable_to_verify'].includes(x.verification_status)?`<div class="coach-ops-actions"><button class="primary" data-request-credential-review="${x.id}">Request human review</button></div>`:''}
+      ${x.verification_status==='pending'?'<div class="coach-ops-review-note">Human review requested. Public display remains off while review is pending.</div>':''}</article>`).join(''):
       '<div class="coach-ops-empty">No credential claims yet. Self-entered claims remain unverified until human review.</div>';
     const tl=$('#coachTrainingList');
-    if(tl) tl.innerHTML=(c.training||[]).length?(c.training||[]).map(x=>`
+    if(tl) tl.innerHTML=(cert.training||c.training||[]).length?(cert.training||c.training||[]).map(x=>`
       <article class="coach-ops-item"><div class="coach-ops-row"><div><b>${esc(x.title)}</b><small>${x.hours!=null?esc(x.hours)+' hours':''}${x.completed_at?' · completed '+esc(date(x.completed_at)):''}</small></div><span class="coach-ops-pill">${x.verified?'VERIFIED':esc(title(x.status))}</span></div></article>`).join(''):
       '<div class="coach-ops-empty">No training records yet.</div>';
+    const certificates=$('#coachCertificateList');
+    if(certificates) certificates.innerHTML=(cert.certificates||[]).length?(cert.certificates||[]).map(x=>`
+      <article class="coach-ops-item coach-certificate-item"><div class="coach-ops-row"><div><span class="approved-kicker">${esc(x.certificate_number)}</span><b>${esc(x.title)}</b><small>Issued by ${esc(x.issuer)} on ${esc(date(x.issued_on))}${x.expires_on?' · expires '+esc(date(x.expires_on)):''}</small></div><span class="coach-ops-pill">${esc(title(x.status))}</span></div>
+      <div class="coach-ops-certificate-scope">${esc(x.scope_note)}</div></article>`).join(''):
+      '<div class="coach-ops-empty">No Lellee certificates have been issued yet. Verified credentials or completed, verified training can be reviewed by an administrator for certificate issuance.</div>';
     const il=$('#coachIntakeFormList');
     if(il) il.innerHTML=(c.intake_forms||[]).length?(c.intake_forms||[]).map(x=>`
       <article class="coach-ops-item"><div class="coach-ops-row"><div><b>${esc(x.title)}</b><small>${esc(x.description||'')} · ${x.assignment_count||0} assignments</small></div><span class="coach-ops-pill">${esc(title(x.status))}</span></div>
@@ -205,8 +216,8 @@
 
   function showCredTab(tab){
     document.querySelectorAll('[data-coach-cred-tab]').forEach(b=>b.classList.toggle('active',b.dataset.coachCredTab===tab));
-    ['credentials','training','intake'].forEach(k=>{
-      const id='coachCredPanel'+(k==='credentials'?'Credentials':k==='training'?'Training':'Intake');
+    ['credentials','training','certifications','intake'].forEach(k=>{
+      const id='coachCredPanel'+(k==='credentials'?'Credentials':k==='training'?'Training':k==='certifications'?'Certifications':'Intake');
       $('#'+id)?.classList.toggle('hidden',k!==tab);
     });
   }
@@ -366,6 +377,13 @@
     closeDialog();await loadPage('coach-credentials');
   }
 
+  async function requestCredentialReview(id){
+    const {error}=await sb().rpc('request_coach_credential_review',{p_claim_id:id});
+    if(error)throw error;
+    await loadPage('coach-credentials');
+    showCredTab('credentials');
+  }
+
   function openTraining(){
     openDialog('Add Training Record','Track completed or in-progress training. Human verification is separate.',`
       <form id="coachOpsTrainingForm"><div class="coach-ops-form">
@@ -434,6 +452,9 @@
     if(e.target.closest('#coachAddCredential')){e.preventDefault();e.stopImmediatePropagation();openCredential()}
     if(e.target.closest('#coachAddTraining')){e.preventDefault();e.stopImmediatePropagation();openTraining()}
     if(e.target.closest('#coachAddIntakeForm')){e.preventDefault();e.stopImmediatePropagation();openIntake()}
+
+    const review=e.target.closest('[data-request-credential-review]');
+    if(review){e.preventDefault();e.stopImmediatePropagation();requestCredentialReview(review.dataset.requestCredentialReview).catch(err=>alert(err.message||String(err)))}
 
     const comp=e.target.closest('[data-complete-followup]');
     if(comp){e.preventDefault();completeFollowup(comp.dataset.completeFollowup).catch(err=>alert(err.message||String(err)))}
