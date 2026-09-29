@@ -140,7 +140,7 @@
       if(heading)heading.textContent='Human coaching from approved Lellee Coaches.';
       if(intro)intro.textContent='The consumer Lellee Coach add-on connects eligible Premium members with trained Lellee Coaches serving under approved W-2 or 1099 arrangements. Independent professionals who are not engaged by Lellee remain a separate business category.';
       const panel=coaches.querySelector('#b5ConsumerCoachPanel p');
-      if(panel)panel.textContent='Lellee Coaches are trained and supervised by Lellee and may serve under approved W-2 or 1099 arrangements. The add-on is $49.99/month in addition to Lellee Premium at $14.99/month. Additional 15-minute sessions are $19.99. Billing remains off until the launch gate is approved.';
+      if(panel)panel.textContent='Lellee Coaches are trained and supervised by Lellee and may serve under approved W-2 or 1099 arrangements. The add-on is $49.99/month in addition to Lellee Premium at $14.99/month. Additional 15-minute sessions are $19.99. Checkout is available through Lellee's approved billing flow.';
     }
   }
 
