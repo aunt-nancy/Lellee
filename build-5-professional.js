@@ -324,7 +324,7 @@
   }
 
   function buildMissingCard() {
-    return `<div class="b5-empty"><b>Build 5 database setup is not available yet.</b><br>Run <code>BUILD_5_COACH_BUSINESS_TRAINING.sql</code> in Supabase, then refresh. ${state.lastError ? `<br><small>${escapeHtml(state.lastError)}</small>` : ''}</div>`;
+    return `<div class="b5-empty"><b>Professional Training Center is not active in the current production backend.</b><br>The older Build 5 training database has been superseded and paid specialty checkout is not offered from this page. Current coaching credentials and training records are managed through Credentials &amp; Intake. ${state.lastError ? `<br><small>Technical detail: ${escapeHtml(state.lastError)}</small>` : ''}</div>`;
   }
 
   function renderProfessionalHub() {
