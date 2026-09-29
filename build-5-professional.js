@@ -224,7 +224,7 @@
         const panel = document.createElement('div');
         panel.id = 'b5ConsumerCoachPanel';
         panel.className = 'b5-consumer-coach-panel';
-        panel.innerHTML = '<span class="b5-kicker">LELLEE COACH ADD-ON</span><h3>Accountability and structured human support</h3><p>Lellee Coaches are trained and supervised by Lellee and may serve under approved W-2 or 1099 arrangements. The add-on is $49.99/month in addition to Lellee Premium at $14.99/month. Additional 15-minute sessions are $19.99. Checkout is available through Lellee's approved billing flow.</p><div class="b5-actions"><button class="b5-primary" data-page="plus">View Membership</button><button class="b5-secondary" data-b5-page="professional-hub">Professional information</button></div>';
+        panel.innerHTML = '<span class="b5-kicker">LELLEE COACH ADD-ON</span><h3>Accountability and structured human support</h3><p>Lellee Coaches are trained and supervised by Lellee and may serve under approved W-2 or 1099 arrangements. The add-on is $49.99/month in addition to Lellee Premium at $14.99/month. Additional 15-minute sessions are $19.99. Checkout is available through the approved Lellee billing flow.</p><div class="b5-actions"><button class="b5-primary" data-page="plus">View Membership</button><button class="b5-secondary" data-b5-page="professional-hub">Professional information</button></div>';
         $('.approved-inner', coachesPage)?.appendChild(panel);
       }
     }
