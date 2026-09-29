@@ -48,12 +48,12 @@ function setCoachCredTab(tab){qa('[data-coach-cred-tab]').forEach(b=>b.classList
 async function loadCoachCredentials(){
  const {data:b}=await sb.from('coach_businesses').select('id,business_name,public_name').eq('owner_user_id',currentUser.id).maybeSingle();coachBusiness=b||null;if(!b)return;
  q('#coachCredentialName').textContent=b.public_name||b.business_name;
- const d=await rpc('get_coach_credential_summary',{p_business_id:b.id});if(!d)return;
+ const d=await rpc('get_my_coach_certification_context');if(!d)return;
  const s=d.summary||{};
- q('#coachCredCount').textContent=s.credentials||0;q('#coachCredVerified').textContent=s.verified||0;q('#coachCredTraining').textContent=s.training||0;q('#coachCredForms').textContent=s.intake_forms||0;
+ q('#coachCredCount').textContent=s.credentials||0;q('#coachCredVerified').textContent=s.verified||0;q('#coachCredTraining').textContent=s.training||0;q('#coachCredCertificates').textContent=s.certificates||0;
  q('#coachCredentialList').innerHTML=(d.credentials||[]).map(x=>row('C',x.label,`${x.credential_type} · ${x.issuer||'issuer not listed'}`,x.verification_status,x.verification_status==='verified'?'ok':x.verification_status==='expired'?'attention':'' )).join('')||'<div class="approved-resource-empty">No credentials entered.</div>';
  q('#coachTrainingList').innerHTML=(d.training||[]).map(x=>row('T',x.title,`${x.status}${x.completed_at?' · '+new Date(x.completed_at).toLocaleDateString():''}`,x.hours?x.hours+' hrs':'')).join('')||'<div class="approved-resource-empty">No training records.</div>';
- q('#coachIntakeFormList').innerHTML=(d.intake_forms||[]).map(x=>row('▤',x.title,`${x.status} · ${x.assignment_count} assignments`,x.form_type)).join('')||'<div class="approved-resource-empty">No client-intake forms configured.</div>';
+ q('#coachCertificateList').innerHTML=(d.certificates||[]).map(x=>row('✓',x.title,`${x.certificate_number} · issued ${new Date(x.issued_on).toLocaleDateString()}`,x.status,x.status==='active'?'ok':'attention')).join('')||'<div class="approved-resource-empty">No Lellee certificates issued.</div>';
 }
 async function addCoachCredential(){
  if(!coachBusiness)return;
@@ -196,7 +196,7 @@ qa('[data-my-forms-tab]').forEach(b=>b.onclick=()=>setMyFormsTab(b.dataset.myFor
 qa('[data-coach-cred-tab]').forEach(b=>b.onclick=()=>setCoachCredTab(b.dataset.coachCredTab));
 qa('[data-org-forms-tab]').forEach(b=>b.onclick=()=>setOrgFormsTab(b.dataset.orgFormsTab));
 qa('[data-forms-studio-tab]').forEach(b=>b.onclick=()=>setFormsStudioTab(b.dataset.formsStudioTab));
-qa('[data-credential-tab]').forEach(b=>b.onclick=()=>{setCredentialTab(b.dataset.credentialTab);if(b.dataset.credentialTab==='training')loadCoachTrainingAdmin()});
+qa('[data-credential-tab]').forEach(b=>b.onclick=()=>setCredentialTab(b.dataset.credentialTab));
 q('#vaultAddDocument')?.addEventListener('click',addVaultDocument);
 q('#coachAddCredential')?.addEventListener('click',addCoachCredential);
 q('#formsStudioAddForm')?.addEventListener('click',addForm);
