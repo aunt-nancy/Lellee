@@ -46,6 +46,7 @@ async function addVaultDocument(){
 
 function setCoachCredTab(tab){qa('[data-coach-cred-tab]').forEach(b=>b.classList.toggle('active',b.dataset.coachCredTab===tab));['credentials','training','certifications','intake'].forEach(x=>q('#coachCredPanel'+x[0].toUpperCase()+x.slice(1))?.classList.toggle('hidden',x!==tab))}
 async function loadCoachCredentials(){
+ if(typeof currentUser==='undefined'||!currentUser)return;
  const {data:b}=await sb.from('coach_businesses').select('id,business_name,public_name').eq('owner_user_id',currentUser.id).maybeSingle();coachBusiness=b||null;if(!b)return;
  q('#coachCredentialName').textContent=b.public_name||b.business_name;
  const d=await rpc('get_my_coach_certification_context');if(!d)return;
