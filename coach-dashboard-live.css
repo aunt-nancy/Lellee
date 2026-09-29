@@ -35,10 +35,11 @@
 }
 .coach-live-dialog{
   border:0;border-radius:20px;padding:0;width:min(720px,calc(100% - 28px));
+  max-height:calc(100dvh - 28px);overflow:hidden;
   box-shadow:0 30px 90px rgba(28,19,39,.30)
 }
 .coach-live-dialog::backdrop{background:rgba(25,18,34,.58)}
-.coach-live-dialog-inner{padding:22px}
+.coach-live-dialog-inner{padding:22px;max-height:calc(100dvh - 28px);overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
 .coach-live-dialog-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:14px}
 .coach-live-dialog-head h3{margin:3px 0 4px}
 .coach-live-dialog-head p{margin:0;color:#716a78;font-size:calc(.72rem + 2px)}
