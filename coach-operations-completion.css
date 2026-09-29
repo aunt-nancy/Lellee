@@ -23,10 +23,11 @@
 }
 .coach-ops-dialog{
   border:0;border-radius:20px;padding:0;width:min(730px,calc(100% - 28px));
+  max-height:calc(100dvh - 28px);overflow:hidden;
   box-shadow:0 30px 90px rgba(30,20,42,.3)
 }
 .coach-ops-dialog::backdrop{background:rgba(25,18,35,.58)}
-.coach-ops-dialog-inner{padding:22px}
+.coach-ops-dialog-inner{padding:22px;max-height:calc(100dvh - 28px);overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
 .coach-ops-dialog-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:14px}
 .coach-ops-dialog-head h3{margin:3px 0 4px}
 .coach-ops-dialog-head p{margin:0;color:#716979;font-size:calc(.72rem + 2px)}
