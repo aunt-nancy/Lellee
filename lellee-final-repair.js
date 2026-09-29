@@ -253,6 +253,148 @@
     else startPlusCheckout();
   }
 
+
+  /* ---------------------------------------------------------
+     Wave 1 consumer upgrades.
+     Uses live server-managed Payment Links and the same signed-in
+     client_reference_id pattern as Lellee Plus.
+     --------------------------------------------------------- */
+  let wave1UpgradeState={entitlements:new Map()};
+
+  async function loadWave1UpgradeState(){
+    const c=client(),u=await user();
+    const map=new Map();
+    if(c&&u){
+      try{
+        const {data,error}=await c.from('user_entitlements')
+          .select('entitlement_key,status,stripe_customer_id,stripe_subscription_id,current_period_end')
+          .eq('user_id',u.id)
+          .in('status',['active','trialing']);
+        if(!error)(data||[]).forEach(row=>map.set(row.entitlement_key,row));
+      }catch(_){}
+    }
+    wave1UpgradeState={entitlements:map};
+    return wave1UpgradeState;
+  }
+
+  async function openWave1PaymentLink(settingKey){
+    const c=client(),u=await user();
+    if(!c||!u) throw new Error('Please sign in before starting payment.');
+    const {data,error}=await c.from('app_public_settings').select('value').eq('key',settingKey).maybeSingle();
+    if(error) throw error;
+    if(!/^https:\/\/buy\.stripe\.com\//i.test(String(data?.value||''))) throw new Error('Secure checkout is not configured yet.');
+    window.location.assign(personalizedStripeUrl(data.value,u));
+  }
+
+  async function startPremiumCheckout(){
+    const state=await loadWave1UpgradeState();
+    if(state.entitlements.has('premium')||state.entitlements.has('plus')){
+      await openPlusBillingPortal();
+      return;
+    }
+    const plan=$('#premiumPlanChoice')?.value==='annual'?'annual':'monthly';
+    await openWave1PaymentLink(plan==='annual'?'premium_payment_link_annual':'premium_payment_link_monthly');
+  }
+
+  async function startCoachAddonCheckout(){
+    const state=await loadWave1UpgradeState();
+    if(state.entitlements.has('coach')){
+      await openPlusBillingPortal();
+      return;
+    }
+    if(!state.entitlements.has('premium')){
+      throw new Error('Lellee Premium is required before adding Lellee Coach.');
+    }
+    await openWave1PaymentLink('coach_addon_payment_link');
+  }
+
+  async function startCoachCheckinCheckout(){
+    const state=await loadWave1UpgradeState();
+    if(!state.entitlements.has('coach')){
+      throw new Error('An active Lellee Coach add-on is required for an additional check-in.');
+    }
+    await openWave1PaymentLink('coach_checkin_payment_link');
+  }
+
+  function ensureWave1UpgradePanel(){
+    const host=$('#page-plus .approved-inner');
+    if(!host)return null;
+    let panel=$('#lelleeWave1UpgradePanel');
+    if(panel)return panel;
+    panel=document.createElement('section');
+    panel.id='lelleeWave1UpgradePanel';
+    panel.className='wave1-upgrade-panel';
+    panel.innerHTML=`
+      <div class="wave1-upgrade-head">
+        <div><span class="approved-kicker">MORE LELLEE OPTIONS</span><h3>Choose only the support you want</h3><p>Core recovery and safety stay free. These are optional paid upgrades.</p></div>
+      </div>
+      <div class="wave1-upgrade-grid">
+        <article class="wave1-upgrade-card" data-wave1-product="premium">
+          <small>LELLEE PREMIUM</small><h3>Advanced personalized support</h3>
+          <p>Everything in Plus, with deeper personalized guidance, planning and advanced practices.</p>
+          <label>Billing
+            <select id="premiumPlanChoice">
+              <option value="monthly">Monthly — $14.99/month</option>
+              <option value="annual">Annual — $149/year</option>
+            </select>
+          </label>
+          <button class="approved-small-action" id="startPremiumMembership" type="button">Start Premium</button>
+          <span class="approved-setting-note" id="premiumUpgradeStatus"></span>
+        </article>
+        <article class="wave1-upgrade-card" data-wave1-product="journal">
+          <small>JOURNAL COMPANION</small><h3>$4.99/month</h3>
+          <p>Advanced collections, physical-journal pairing, volume review and long-term organization.</p>
+          <button class="approved-small-action" id="startJournalCompanionMembership" type="button">Add Journal Companion</button>
+          <span class="approved-setting-note" id="journalUpgradeStatus"></span>
+        </article>
+        <article class="wave1-upgrade-card" data-wave1-product="coach">
+          <small>LELLEE COACH ADD-ON</small><h3>$49.99/month + Premium</h3>
+          <p>Human coaching, messaging, goals, accountability, progress review and milestone support.</p>
+          <button class="approved-small-action" id="startCoachAddonMembership" type="button">Add Lellee Coach</button>
+          <button class="approved-link" id="buyCoachCheckin" type="button">Additional 15-minute check-in — $19.99</button>
+          <span class="approved-setting-note" id="coachUpgradeStatus"></span>
+        </article>
+      </div>`;
+    const note=$('#lelleeCanonicalPricingNote');
+    if(note)note.insertAdjacentElement('beforebegin',panel);else host.appendChild(panel);
+
+    $('#startPremiumMembership')?.addEventListener('click',()=>startPremiumCheckout().catch(err=>{toast(err?.message||'Could not open Premium checkout.','error');refreshWave1UpgradePanel()}));
+    $('#startJournalCompanionMembership')?.addEventListener('click',()=>openJournalCheckout());
+    $('#startCoachAddonMembership')?.addEventListener('click',()=>startCoachAddonCheckout().catch(err=>{toast(err?.message||'Could not open Coach checkout.','error');refreshWave1UpgradePanel()}));
+    $('#buyCoachCheckin')?.addEventListener('click',()=>startCoachCheckinCheckout().catch(err=>{toast(err?.message||'Could not open check-in checkout.','error');refreshWave1UpgradePanel()}));
+    return panel;
+  }
+
+  async function refreshWave1UpgradePanel(){
+    const panel=ensureWave1UpgradePanel();if(!panel)return;
+    const state=await loadWave1UpgradeState();
+    const has=key=>state.entitlements.has(key);
+    const premium=$('#startPremiumMembership'),journal=$('#startJournalCompanionMembership'),coach=$('#startCoachAddonMembership'),checkin=$('#buyCoachCheckin');
+
+    if(premium){
+      premium.disabled=false;
+      premium.textContent=has('premium')?'Manage Premium':has('plus')?'Upgrade in Billing Portal':'Start Premium';
+    }
+    if($('#premiumUpgradeStatus')) $('#premiumUpgradeStatus').textContent=has('premium')?'Premium is active.':has('plus')?'Plus is active. Use billing management to change subscription level.':'';
+
+    if(journal){
+      journal.disabled=false;
+      journal.textContent=has('journal_companion')?'Manage Journal Companion':'Add Journal Companion';
+      if(has('journal_companion')) journal.onclick=()=>openPlusBillingPortal().catch(err=>toast(err?.message||'Could not open billing.','error'));
+    }
+    if($('#journalUpgradeStatus')) $('#journalUpgradeStatus').textContent=has('journal_companion')?'Journal Companion is active.':'';
+
+    if(coach){
+      coach.disabled=!has('premium')&&!has('coach');
+      coach.textContent=has('coach')?'Manage Lellee Coach':has('premium')?'Add Lellee Coach':'Premium required';
+    }
+    if(checkin){
+      checkin.disabled=!has('coach');
+      checkin.setAttribute('aria-disabled',String(!has('coach')));
+    }
+    if($('#coachUpgradeStatus')) $('#coachUpgradeStatus').textContent=has('coach')?'Lellee Coach is active. Additional check-ins are available.':has('premium')?'Premium is active. You can add Lellee Coach.':'Lellee Premium is required for the Coach add-on.';
+  }
+
   function wireRecoveryReviewCard(){
     const card=$('.plus-review-preview');
     if(!card) return;
@@ -635,7 +777,14 @@
       .final-checkout-note{border:1px solid #e7e2e8;background:#fff;border-radius:9px;padding:14px 16px}.final-checkout-note b{font-size:.75rem}.final-checkout-note p{font-size:.65rem;color:#777;line-height:1.5;margin:5px 0 0}
       .final-checkout-actions{display:flex;justify-content:flex-end;gap:14px;align-items:center;margin:14px 0}
       .final-support-row{cursor:default!important}
-      @media(max-width:700px){.final-checkout-card{display:block}.final-checkout-price{text-align:left;margin-top:14px}.final-story-actions{justify-content:flex-start;margin-top:10px}}
+      .wave1-upgrade-panel{margin:18px 0;border:1px solid #e4dce9;border-radius:14px;background:#fcfafd;padding:18px}
+      .wave1-upgrade-head h3{margin:4px 0 5px;font-size:1rem}.wave1-upgrade-head p{margin:0 0 14px;color:#706a73;font-size:.72rem}
+      .wave1-upgrade-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+      .wave1-upgrade-card{border:1px solid #e7e1e9;background:#fff;border-radius:11px;padding:15px;display:flex;flex-direction:column;gap:8px;min-width:0}
+      .wave1-upgrade-card>small{font-size:.58rem;font-weight:850;color:#65409a;letter-spacing:.04em}.wave1-upgrade-card h3{font-size:.9rem;margin:0}.wave1-upgrade-card p{font-size:.68rem;line-height:1.5;color:#706a73;margin:0 0 3px}
+      .wave1-upgrade-card label{display:grid;gap:4px;font-size:.63rem;font-weight:750}.wave1-upgrade-card select{width:100%;padding:8px;border:1px solid #ddd6e1;border-radius:8px;background:#fff}
+      .wave1-upgrade-card button{margin-top:auto}.wave1-upgrade-card button+button{margin-top:2px}
+      @media(max-width:700px){.final-checkout-card{display:block}.final-checkout-price{text-align:left;margin-top:14px}.final-story-actions{justify-content:flex-start;margin-top:10px}.wave1-upgrade-grid{grid-template-columns:1fr}.wave1-upgrade-card{padding:14px}}
     `;
     document.head.appendChild(s);
   }
@@ -663,6 +812,8 @@
     injectStyles();
     ensureStoryPreviewPage();
     ensureJournalCheckoutPage();
+    ensureWave1UpgradePanel();
+    refreshWave1UpgradePanel();
     wireRecoveryReviewCard();
     repairJournalReviewButton();
     refreshRecoveryDay();
@@ -699,7 +850,7 @@
         const name=pageButton.dataset.page;
         setTimeout(()=>{
           applySavedLocale(); refreshRecoveryDay();
-          if(name==='plus') refreshPlusStatus();
+          if(name==='plus'){ refreshPlusStatus(); refreshWave1UpgradePanel(); }
           if(name==='support-network') loadSupportPeople();
         },220);
       }
@@ -716,12 +867,12 @@
       applyLocale(lang,{syncBuild6:false});
     });
 
-    window.addEventListener('pageshow',()=>{setTimeout(()=>{applySavedLocale();refreshRecoveryDay();refreshPlusStatus()},100)});
+    window.addEventListener('pageshow',()=>{setTimeout(()=>{applySavedLocale();refreshRecoveryDay();refreshPlusStatus();refreshWave1UpgradePanel()},100)});
     document.addEventListener('visibilitychange',()=>{if(!document.hidden){applySavedLocale();refreshRecoveryDay()}});
 
     // Auth can complete after this file loads. Retry a few times without observers.
     [250,900,1800].forEach(ms=>setTimeout(()=>{
-      loadLocaleFromServer(); wireRecoveryReviewCard(); refreshPlusStatus(); refreshRecoveryDay();
+      loadLocaleFromServer(); wireRecoveryReviewCard(); refreshPlusStatus(); refreshWave1UpgradePanel(); refreshRecoveryDay();
     },ms));
   }
 
