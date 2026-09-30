@@ -3,7 +3,7 @@
 'use strict';
 
 var VERSION='2026-09-29-professional-review-center-v1';
-var state={courses:[],selectedCourse:null,selectedReview:null,loaded:false,busy:false};
+var state={courses:[],reviewers:[],selectedCourse:null,selectedReview:null,loaded:false,busy:false};
 var client=(typeof sb!=='undefined'&&sb)?sb:(window.LelleeAuthContext&&window.LelleeAuthContext.client?window.LelleeAuthContext.client:null);
 
 function q(sel,root){return (root||document).querySelector(sel)}
@@ -85,7 +85,7 @@ function ensureUi(){
   wrap.innerHTML=
    '<div class="ptr-head"><div><span class="approved-kicker">COURSE REVIEW & RELEASE</span><h3>Professional training human review center</h3><p>Record qualified human signoffs for sources, curriculum, assessments, scope/safety and capstones. Course publishing and checkout remain hard-blocked until all release requirements pass.</p></div><button class="approved-small-action" id="ptrRefresh" type="button">Refresh</button></div>'+
    '<div id="ptrMetrics"></div>'+
-   '<div class="ptr-audit-note"><b>Audit rule:</b> Reviewer name, qualification, domain, decision and attestation are retained as review evidence. Scope reviews with two required domains must be completed by different reviewers.</div>'+
+   '<div class="ptr-audit-note"><b>Audit rule:</b> Reviewer qualifications are verified manually in-house before a signoff can count. Scope reviews with two required domains must be completed by different verified reviewers.</div>'+ '<div id="ptrReviewerRegistry"></div>'+
    '<div id="ptrCourseList"></div>';
   panel.insertBefore(wrap,panel.firstChild);
   var oldList=q('#credentialTrainingList');
@@ -102,11 +102,8 @@ function ensureUi(){
   dialog.innerHTML=
    '<div class="ptr-dialog-inner"><span class="approved-kicker">HUMAN REVIEW SIGNOFF</span><h3 id="ptrDialogTitle">Record review</h3><p id="ptrRequirement"></p>'+
    '<div class="ptr-form">'+
-   '<label>Reviewer domain<select id="ptrDomain"></select></label>'+
-   '<label>Reviewer name<input id="ptrName" autocomplete="name"></label>'+
-   '<label class="wide">Qualification / credential<textarea id="ptrQualification" placeholder="State license/bar status, subject-matter role, instructional-design qualification, or other relevant credential."></textarea></label>'+
-   '<label>Organization (optional)<input id="ptrOrganization"></label>'+
-   '<label>Evidence / credential reference (optional)<input id="ptrEvidence" placeholder="License/bar reference, profile URL, CV location, etc."></label>'+
+   '<label class="wide">Verified in-house reviewer<select id="ptrReviewer"></select></label>'+
+   '<div class="wide ptr-audit-note" id="ptrReviewerDetail"></div>'+
    '<label class="wide">Review notes<textarea id="ptrNotes" placeholder="Material reviewed, corrections requested, limitations and basis for signoff."></textarea></label>'+
    '<label class="wide ptr-attest"><input id="ptrAttest" type="checkbox"><span>I attest that the named reviewer has the stated qualifications, reviewed this domain, and this record accurately reflects the reviewer decision.</span></label>'+
    '</div><div class="ptr-actions"><button class="approved-link" id="ptrCancel" type="button">Cancel</button><button class="approved-link" id="ptrRevisions" type="button">Revisions Required</button><button class="approved-small-action" id="ptrApprove" type="button">Record Approval</button></div></div>';
@@ -120,6 +117,7 @@ function ensureUi(){
 }
 function render(data){
  state.courses=data.courses||[];
+ state.reviewers=data.reviewers||[];
  var s=data.summary||{};
  q('#ptrMetrics').innerHTML=
   '<div class="ptr-metrics">'+
@@ -129,6 +127,18 @@ function render(data){
   '<article><b>'+esc(s.enrollments||0)+'</b><small>enrollments</small></article>'+
   '<article><b>'+esc(s.published||0)+'</b><small>published</small></article>'+
   '<article><b>'+esc(s.checkout_enabled||0)+'</b><small>checkout enabled</small></article>'+
+  '</div>';
+ var verifiedReviewers=state.reviewers.filter(function(r){return r.verification_status==='verified_in_house'&&r.active});
+ var pendingReviewers=state.reviewers.filter(function(r){return r.verification_status==='pending'&&r.active});
+ q('#ptrReviewerRegistry').innerHTML=
+  '<div class="ptr-course"><div class="ptr-head"><div><span class="approved-kicker">IN-HOUSE REVIEWER REGISTRY</span><h3>Manual reviewer verification</h3><p>Register reviewers, verify qualifications in-house, then use only verified reviewers for course signoff.</p></div><button class="approved-small-action" id="ptrAddReviewer" type="button">+ Add Reviewer</button></div>'+
+  '<div class="ptr-audit-note"><b>'+esc(verifiedReviewers.length)+'</b> verified in-house · <b>'+esc(pendingReviewers.length)+'</b> pending verification</div>'+
+  (state.reviewers.length?state.reviewers.map(function(r){
+    var actions=r.verification_status==='pending'&&r.active
+      ? '<button type="button" data-ptr-verify-reviewer="'+esc(r.id)+'">Verify In-House</button> <button type="button" data-ptr-reject-reviewer="'+esc(r.id)+'">Reject</button>'
+      : '';
+    return '<div class="ptr-signoff"><b>'+esc(r.full_name)+'</b> · '+esc(r.verification_status)+'<br>'+esc(r.qualification)+'<br><small>'+esc((r.reviewer_domains||[]).join(', '))+(r.organization?' · '+esc(r.organization):'')+'</small><br>'+actions+'</div>';
+   }).join(''):'<div class="approved-resource-empty">No reviewers registered yet.</div>')+
   '</div>';
  q('#ptrCourseList').innerHTML=state.courses.map(function(course){
   var reviews=(course.reviews||[]).map(function(review){
@@ -175,39 +185,36 @@ function openReview(courseKey,reviewType){
  state.selectedReview=reviewType;
  q('#ptrDialogTitle').textContent=course.title+' · '+label(reviewType);
  q('#ptrRequirement').textContent=(review.instructions||'')+' Required domain(s): '+(review.required_domains||[]).join(', ')+'.'+(review.distinct_reviewers_required?' This review requires different reviewers for the required domains.':'');
- q('#ptrDomain').innerHTML=(review.required_domains||[]).map(function(domain){return '<option value="'+esc(domain)+'">'+esc(domain)+'</option>'}).join('');
- q('#ptrName').value='';
- q('#ptrQualification').value='';
- q('#ptrOrganization').value='';
- q('#ptrEvidence').value='';
+ var eligible=state.reviewers.filter(function(r){
+  return r.verification_status==='verified_in_house'&&r.active&&(r.reviewer_domains||[]).some(function(d){return (review.required_domains||[]).indexOf(d)>=0});
+ });
+ if(!eligible.length){toast('No verified in-house reviewer is registered for this review domain.',true);return}
+ q('#ptrReviewer').innerHTML=eligible.map(function(r){return '<option value="'+esc(r.id)+'">'+esc(r.full_name)+' · '+esc((r.reviewer_domains||[]).join(', '))+'</option>'}).join('');
+ q('#ptrReviewerDetail').textContent=eligible[0].qualification+(eligible[0].organization?' · '+eligible[0].organization:'');
+ q('#ptrReviewer').onchange=function(){
+  var selected=eligible.find(function(r){return r.id===q('#ptrReviewer').value});
+  q('#ptrReviewerDetail').textContent=selected?selected.qualification+(selected.organization?' · '+selected.organization:''):'';
+ };
  q('#ptrNotes').value='';
  q('#ptrAttest').checked=false;
  q('#ptrDialog').showModal();
 }
 async function save(decision){
  if(!state.selectedCourse||!state.selectedReview)return;
- var name=q('#ptrName').value.trim();
- var qualification=q('#ptrQualification').value.trim();
- var domain=q('#ptrDomain').value;
- var organization=q('#ptrOrganization').value.trim()||null;
- var evidence=q('#ptrEvidence').value.trim()||null;
+ var reviewerId=q('#ptrReviewer').value;
  var notes=q('#ptrNotes').value.trim()||null;
  var attest=!!q('#ptrAttest').checked;
- if(!name||!qualification||!domain){toast('Reviewer name, qualification and domain are required.',true);return}
+ if(!reviewerId){toast('Select a verified in-house reviewer.',true);return}
  if(!attest){toast('Reviewer attestation is required.',true);return}
  var approve=q('#ptrApprove'),revise=q('#ptrRevisions');
  if(approve)approve.disabled=true;if(revise)revise.disabled=true;
  try{
-  var out=await rpc('admin_record_professional_review_signoff',{
+  var out=await rpc('admin_record_verified_professional_review_signoff',{
    p_course_key:state.selectedCourse,
    p_review_type:state.selectedReview,
-   p_reviewer_name:name,
-   p_reviewer_qualification:qualification,
-   p_reviewer_domain:domain,
+   p_reviewer_id:reviewerId,
    p_decision:decision,
    p_notes:notes,
-   p_reviewer_organization:organization,
-   p_reviewer_evidence_ref:evidence,
    p_attestation:true
   });
   if(out.error){toast(out.error.message||'Review could not be saved.',true);return}
@@ -216,11 +223,39 @@ async function save(decision){
   await load();
  }finally{if(approve)approve.disabled=false;if(revise)revise.disabled=false}
 }
+async function addReviewer(){
+ var name=prompt('Reviewer full name:');if(!name)return;
+ var qualification=prompt('Reviewer qualification / credential:');if(!qualification)return;
+ var domains=prompt('Reviewer domain(s), comma-separated (example: coaching_sme, instructional_design):');if(!domains)return;
+ var organization=prompt('Organization (optional):','')||null;
+ var evidence=prompt('Internal verification reference or evidence note (optional):','')||null;
+ var list=domains.split(',').map(function(x){return x.trim()}).filter(Boolean);
+ var out=await rpc('admin_register_professional_reviewer',{
+  p_full_name:name,p_qualification:qualification,p_reviewer_domains:list,
+  p_organization:organization,p_evidence_ref:evidence
+ });
+ if(out.error)return toast(out.error.message||'Reviewer could not be registered.',true);
+ toast('Reviewer registered. Verify in-house before using for signoff.');
+ await load();
+}
+async function verifyReviewer(id,verified){
+ var note=prompt(verified?'In-house verification notes:':'Reason reviewer was rejected:','')||null;
+ var out=await rpc('admin_verify_professional_reviewer',{p_reviewer_id:id,p_verified:verified,p_notes:note});
+ if(out.error)return toast(out.error.message||'Reviewer verification could not be saved.',true);
+ toast(verified?'Reviewer verified in-house.':'Reviewer rejected.');
+ await load();
+}
 function activate(){
  if(!ensureUi())return;
  load();
 }
 document.addEventListener('click',function(event){
+ var add=event.target.closest('#ptrAddReviewer');
+ if(add){event.preventDefault();addReviewer();return}
+ var verify=event.target.closest('[data-ptr-verify-reviewer]');
+ if(verify){event.preventDefault();verifyReviewer(verify.dataset.ptrVerifyReviewer,true);return}
+ var reject=event.target.closest('[data-ptr-reject-reviewer]');
+ if(reject){event.preventDefault();verifyReviewer(reject.dataset.ptrRejectReviewer,false);return}
  var button=event.target.closest('[data-ptr-course]');
  if(button){event.preventDefault();openReview(button.dataset.ptrCourse,button.dataset.ptrReview);return}
  var tab=event.target.closest('[data-credential-tab="training"]');
