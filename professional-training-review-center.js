@@ -3,7 +3,7 @@
 'use strict';
 
 var VERSION='2026-09-29-professional-review-center-v1';
-var state={courses:[],reviewers:[],selectedCourse:null,selectedReview:null,loaded:false,busy:false};
+var state={courses:[],reviewers:[],controls:{},selectedCourse:null,selectedReview:null,loaded:false,busy:false};
 var client=(typeof sb!=='undefined'&&sb)?sb:(window.LelleeAuthContext&&window.LelleeAuthContext.client?window.LelleeAuthContext.client:null);
 
 function q(sel,root){return (root||document).querySelector(sel)}
@@ -118,6 +118,7 @@ function ensureUi(){
 function render(data){
  state.courses=data.courses||[];
  state.reviewers=data.reviewers||[];
+ state.controls=data.controls||{};
  var s=data.summary||{};
  q('#ptrMetrics').innerHTML=
   '<div class="ptr-metrics">'+
@@ -130,13 +131,31 @@ function render(data){
   '</div>';
  var verifiedReviewers=state.reviewers.filter(function(r){return r.verification_status==='verified_in_house'&&r.active});
  var pendingReviewers=state.reviewers.filter(function(r){return r.verification_status==='pending'&&r.active});
+ var controlHtml='';
+ if(state.controls.is_key_administrator){
+  var overrideOn=!!state.controls.dual_review_override_enabled;
+  var linkedId=state.controls.key_admin_reviewer_id||null;
+  controlHtml='<div class="ptr-audit-note"><b>Temporary key-administrator dual review:</b> '+(overrideOn?'ON':'OFF')+
+   (overrideOn&&state.controls.dual_review_override_reason?'<br>Reason: '+esc(state.controls.dual_review_override_reason):'')+
+   '<br><button type="button" class="approved-small-action" id="ptrToggleDualReview">'+(overrideOn?'Turn Override OFF':'Turn Override ON')+'</button>'+
+   (!linkedId?'<br><small>Before enabling, link one Verified In-House reviewer record to the key administrator.</small>':'')+
+   '</div>';
+ }
  q('#ptrReviewerRegistry').innerHTML=
   '<div class="ptr-course"><div class="ptr-head"><div><span class="approved-kicker">IN-HOUSE REVIEWER REGISTRY</span><h3>Manual reviewer verification</h3><p>Register reviewers, verify qualifications in-house, then use only verified reviewers for course signoff.</p></div><button class="approved-small-action" id="ptrAddReviewer" type="button">+ Add Reviewer</button></div>'+
+  controlHtml+
   '<div class="ptr-audit-note"><b>'+esc(verifiedReviewers.length)+'</b> verified in-house · <b>'+esc(pendingReviewers.length)+'</b> pending verification</div>'+
   (state.reviewers.length?state.reviewers.map(function(r){
     var actions=r.verification_status==='pending'&&r.active
       ? '<button type="button" data-ptr-verify-reviewer="'+esc(r.id)+'">Verify In-House</button> <button type="button" data-ptr-reject-reviewer="'+esc(r.id)+'">Reject</button>'
       : '';
+    if(state.controls.is_key_administrator&&r.verification_status==='verified_in_house'&&r.active){
+      if(r.linked_to_current_key_admin){
+        actions+=(actions?' ':'')+'<span><b>Key Admin Reviewer</b></span>';
+      }else if(!state.controls.key_admin_reviewer_id){
+        actions+=(actions?' ':'')+'<button type="button" data-ptr-link-key-admin="'+esc(r.id)+'">Link as Key Admin Reviewer</button>';
+      }
+    }
     return '<div class="ptr-signoff"><b>'+esc(r.full_name)+'</b> · '+esc(r.verification_status)+'<br>'+esc(r.qualification)+'<br><small>'+esc((r.reviewer_domains||[]).join(', '))+(r.organization?' · '+esc(r.organization):'')+'</small><br>'+actions+'</div>';
    }).join(''):'<div class="approved-resource-empty">No reviewers registered yet.</div>')+
   '</div>';
@@ -241,6 +260,25 @@ async function save(decision){
   await load();
  }finally{if(approve)approve.disabled=false;if(revise)revise.disabled=false}
 }
+async function linkKeyAdminReviewer(id){
+ var out=await rpc('admin_link_reviewer_to_current_key_admin',{p_reviewer_id:id});
+ if(out.error)return toast(out.error.message||'Reviewer could not be linked to the key administrator.',true);
+ toast('Reviewer linked to the key administrator.');
+ await load();
+}
+async function toggleDualReviewOverride(){
+ if(!state.controls.is_key_administrator)return toast('Key administrator access required.',true);
+ var enabling=!state.controls.dual_review_override_enabled;
+ var reason=null;
+ if(enabling){
+  reason=prompt('Reason for temporarily allowing the key administrator to fill both reviewer roles:','Temporary staffing coverage while reviewer staffing is being expanded.');
+  if(!reason)return;
+ }
+ var out=await rpc('admin_set_key_admin_dual_review_override',{p_enabled:enabling,p_reason:reason});
+ if(out.error)return toast(out.error.message||'Dual-review override could not be changed.',true);
+ toast(enabling?'Temporary dual-review override enabled.':'Temporary dual-review override disabled.');
+ await load();
+}
 async function assignReviewSlot(id){
  var assignment=null;
  state.courses.some(function(course){
@@ -299,6 +337,10 @@ function activate(){
  load();
 }
 document.addEventListener('click',function(event){
+ var toggle=event.target.closest('#ptrToggleDualReview');
+ if(toggle){event.preventDefault();toggleDualReviewOverride();return}
+ var linkAdmin=event.target.closest('[data-ptr-link-key-admin]');
+ if(linkAdmin){event.preventDefault();linkKeyAdminReviewer(linkAdmin.dataset.ptrLinkKeyAdmin);return}
  var assign=event.target.closest('[data-ptr-assign-slot]');
  if(assign){event.preventDefault();assignReviewSlot(assign.dataset.ptrAssignSlot);return}
  var startSlot=event.target.closest('[data-ptr-start-slot]');
