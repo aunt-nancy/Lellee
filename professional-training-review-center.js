@@ -66,7 +66,7 @@ function ensureStyles(){
  '.ptr-metrics{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;margin:0 0 12px}.ptr-metrics article{border:1px solid #e6e0e9;background:#fff;border-radius:9px;padding:10px}.ptr-metrics b{display:block;font-size:1rem;color:#65409a}.ptr-metrics small{font-size:.55rem;color:#777}'+
  '.ptr-course{border:1px solid #e4dce9;border-radius:13px;background:#fff;padding:14px;margin:10px 0}.ptr-course-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.ptr-course-head h4{margin:3px 0;font-size:.82rem}.ptr-course-head p{margin:0;color:#746d78;font-size:.61rem;line-height:1.45}.ptr-price{text-align:right;white-space:nowrap}.ptr-price b{display:block;color:#65409a;font-size:.88rem}.ptr-price small{font-size:.54rem;color:#777}'+
  '.ptr-domains{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px;margin-top:10px}.ptr-domain{border:1px solid #e8e3e9;border-radius:10px;padding:9px;background:#fbfafc;min-width:0}.ptr-domain.approved{border-color:#cfe4d5;background:#f7fcf8}.ptr-domain.revisions_required{border-color:#efd1d5;background:#fff8f9}.ptr-domain>b{display:block;font-size:.6rem}.ptr-domain>small{display:block;font-size:.52rem;line-height:1.42;color:#777;margin:3px 0}.ptr-domain button{border:1px solid #d8cfe0;background:#fff;border-radius:7px;padding:6px 8px;font-size:.53rem;font-weight:760;color:#65409a;cursor:pointer}'+
- '.ptr-signoff{border-top:1px solid #eee8f0;margin-top:5px;padding-top:5px;font-size:.49rem;color:#68616b;line-height:1.35}.ptr-blockers{margin-top:9px;border-top:1px solid #eee8f0;padding-top:8px;font-size:.54rem;color:#7c5660}.ptr-blockers.ok{color:#3b7853}.ptr-audit-note{border:1px solid #e6e0e9;background:#faf8fc;border-radius:10px;padding:10px 12px;font-size:.56rem;line-height:1.5;color:#6d6570;margin:8px 0 12px}'+
+ '.ptr-signoff{border-top:1px solid #eee8f0;margin-top:5px;padding-top:5px;font-size:.49rem;color:#68616b;line-height:1.35}.ptr-assignments{margin-top:10px;border-top:1px solid #eee8f0;padding-top:9px}.ptr-assignment{display:flex;justify-content:space-between;gap:10px;align-items:center;border:1px solid #eee8f0;border-radius:8px;padding:7px 9px;margin:5px 0;font-size:.53rem}.ptr-assignment b{font-size:.56rem}.ptr-assignment small{display:block;color:#777;margin-top:2px}.ptr-assignment-actions{display:flex;gap:5px;flex-wrap:wrap}.ptr-assignment button{border:1px solid #d8cfe0;background:#fff;border-radius:7px;padding:5px 7px;font-size:.51rem;font-weight:750;color:#65409a;cursor:pointer}.ptr-blockers{margin-top:9px;border-top:1px solid #eee8f0;padding-top:8px;font-size:.54rem;color:#7c5660}.ptr-blockers.ok{color:#3b7853}.ptr-audit-note{border:1px solid #e6e0e9;background:#faf8fc;border-radius:10px;padding:10px 12px;font-size:.56rem;line-height:1.5;color:#6d6570;margin:8px 0 12px}'+
  '.ptr-dialog{border:0;border-radius:16px;padding:0;width:min(620px,calc(100% - 24px));max-height:calc(100dvh - 28px);overflow:hidden;box-shadow:0 30px 90px rgba(28,19,39,.3)}.ptr-dialog::backdrop{background:rgba(26,19,34,.58)}.ptr-dialog-inner{padding:20px;max-height:calc(100dvh - 28px);overflow-y:auto}.ptr-dialog h3{margin:4px 0 5px;font-size:1rem}.ptr-dialog p{font-size:.62rem;color:#706a73;line-height:1.5}'+
  '.ptr-form{display:grid;grid-template-columns:1fr 1fr;gap:9px}.ptr-form label{display:grid;gap:4px;font-size:.57rem;font-weight:750;color:#625966}.ptr-form .wide{grid-column:1/-1}.ptr-form input,.ptr-form select,.ptr-form textarea{width:100%;box-sizing:border-box;border:1px solid #ddd5e1;border-radius:8px;padding:8px;background:#fff;font:inherit;font-size:.63rem}.ptr-form textarea{min-height:74px;resize:vertical}.ptr-attest{display:flex!important;grid-template-columns:none!important;flex-direction:row;gap:8px!important;align-items:flex-start;font-weight:650!important}.ptr-attest input{width:auto;margin-top:2px}.ptr-actions{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap;margin-top:12px}'+
  '@media(max-width:760px){.ptr-metrics{grid-template-columns:1fr 1fr}.ptr-domains{grid-template-columns:1fr}.ptr-form{grid-template-columns:1fr}.ptr-form .wide{grid-column:auto}.ptr-course-head,.ptr-head{display:block}.ptr-price{text-align:left;margin-top:6px}}';
@@ -158,11 +158,25 @@ function render(data){
     '<button type="button" data-ptr-course="'+esc(course.course_key)+'" data-ptr-review="'+esc(review.review_type)+'">Record review</button>'+
     '</article>';
   }).join('');
+  var assignmentHtml=(course.assignments||[]).map(function(a){
+   var stateText=a.status==='unassigned'?'Unassigned':a.status==='assigned'?'Assigned':a.status==='in_review'?'In review':a.status==='completed'?'Completed':a.status;
+   var reviewer=a.reviewer_name||'No reviewer';
+   var due=a.due_date?' · due '+a.due_date:'';
+   var actions='';
+   if(a.status==='unassigned'||a.status==='completed'){
+    actions='<button type="button" data-ptr-assign-slot="'+esc(a.id)+'">'+(a.status==='completed'?'Reassign':'Assign')+'</button>';
+   }else if(a.status==='assigned'){
+    actions='<button type="button" data-ptr-start-slot="'+esc(a.id)+'">Start Review</button><button type="button" data-ptr-assign-slot="'+esc(a.id)+'">Reassign</button>';
+   }else if(a.status==='in_review'){
+    actions='<button type="button" data-ptr-assign-slot="'+esc(a.id)+'">Reassign</button>';
+   }
+   return '<div class="ptr-assignment"><div><b>'+esc(label(a.review_type))+' · '+esc(a.reviewer_domain)+'</b><small>'+esc(stateText)+' · '+esc(reviewer)+due+'</small></div><div class="ptr-assignment-actions">'+actions+'</div></div>';
+  }).join('');
   var issues=course.issues||[];
   var blockers=issues.length?
    '<div class="ptr-blockers"><b>Release blockers:</b> '+issues.map(issueLabel).map(esc).join(' · ')+'</div>':
    '<div class="ptr-blockers ok"><b>All review gates are complete.</b> Publishing and checkout remain separate controlled actions.</div>';
-  return '<article class="ptr-course"><div class="ptr-course-head"><div><span class="approved-kicker">'+esc(course.category==='foundation'?'FOUNDATION':'SPECIALTY')+'</span><h4>'+esc(course.title)+'</h4><p>'+esc(course.estimated_hours)+' hrs · '+esc(course.modules)+' modules · '+esc(course.assessments)+' questions · '+esc(course.scenarios)+' scenarios · '+esc(course.status)+'</p></div><div class="ptr-price"><b>'+esc(money(course.price_cents))+'</b><small>'+(course.checkout_enabled?'checkout enabled':'checkout off')+'</small></div></div><div class="ptr-domains">'+reviews+'</div>'+blockers+'</article>';
+  return '<article class="ptr-course"><div class="ptr-course-head"><div><span class="approved-kicker">'+esc(course.category==='foundation'?'FOUNDATION':'SPECIALTY')+'</span><h4>'+esc(course.title)+'</h4><p>'+esc(course.estimated_hours)+' hrs · '+esc(course.modules)+' modules · '+esc(course.assessments)+' questions · '+esc(course.scenarios)+' scenarios · '+esc(course.status)+'</p></div><div class="ptr-price"><b>'+esc(money(course.price_cents))+'</b><small>'+(course.checkout_enabled?'checkout enabled':'checkout off')+'</small></div></div><div class="ptr-assignments"><b>Reviewer assignment queue</b>'+assignmentHtml+'</div><div class="ptr-domains">'+reviews+'</div>'+blockers+'</article>';
  }).join('')||'<div class="approved-resource-empty">No professional courses found.</div>';
 }
 async function load(){
@@ -185,10 +199,14 @@ function openReview(courseKey,reviewType){
  state.selectedReview=reviewType;
  q('#ptrDialogTitle').textContent=course.title+' · '+label(reviewType);
  q('#ptrRequirement').textContent=(review.instructions||'')+' Required domain(s): '+(review.required_domains||[]).join(', ')+'.'+(review.distinct_reviewers_required?' This review requires different reviewers for the required domains.':'');
- var eligible=state.reviewers.filter(function(r){
-  return r.verification_status==='verified_in_house'&&r.active&&(r.reviewer_domains||[]).some(function(d){return (review.required_domains||[]).indexOf(d)>=0});
+ var activeAssignments=(course.assignments||[]).filter(function(a){
+  return a.review_type===reviewType&&a.reviewer_id&&(a.status==='assigned'||a.status==='in_review');
  });
- if(!eligible.length){toast('No verified in-house reviewer is registered for this review domain.',true);return}
+ var assignedIds=activeAssignments.map(function(a){return a.reviewer_id});
+ var eligible=state.reviewers.filter(function(r){
+  return r.verification_status==='verified_in_house'&&r.active&&assignedIds.indexOf(r.id)>=0;
+ });
+ if(!eligible.length){toast('Assign a Verified In-House reviewer to this exact review slot before recording a decision.',true);return}
  q('#ptrReviewer').innerHTML=eligible.map(function(r){return '<option value="'+esc(r.id)+'">'+esc(r.full_name)+' · '+esc((r.reviewer_domains||[]).join(', '))+'</option>'}).join('');
  q('#ptrReviewerDetail').textContent=eligible[0].qualification+(eligible[0].organization?' · '+eligible[0].organization:'');
  q('#ptrReviewer').onchange=function(){
@@ -223,6 +241,37 @@ async function save(decision){
   await load();
  }finally{if(approve)approve.disabled=false;if(revise)revise.disabled=false}
 }
+async function assignReviewSlot(id){
+ var assignment=null;
+ state.courses.some(function(course){
+  assignment=(course.assignments||[]).find(function(a){return a.id===id})||null;
+  return !!assignment;
+ });
+ if(!assignment)return toast('Review assignment could not be found.',true);
+ var eligible=state.reviewers.filter(function(r){
+  return r.verification_status==='verified_in_house'&&r.active&&(r.reviewer_domains||[]).indexOf(assignment.reviewer_domain)>=0;
+ });
+ if(!eligible.length)return toast('No Verified In-House reviewer is available for '+assignment.reviewer_domain+'.',true);
+ var options=eligible.map(function(r,i){return (i+1)+'. '+r.full_name+' — '+r.qualification}).join('\n');
+ var choice=prompt('Select reviewer for '+assignment.reviewer_domain+':\n'+options,'1');
+ if(!choice)return;
+ var idx=parseInt(choice,10)-1;
+ if(!Number.isInteger(idx)||idx<0||idx>=eligible.length)return toast('Enter the reviewer number shown in the list.',true);
+ var due=prompt('Due date YYYY-MM-DD (optional):','')||null;
+ var notes=prompt('Assignment notes (optional):','')||null;
+ var out=await rpc('admin_assign_professional_reviewer',{
+  p_assignment_id:id,p_reviewer_id:eligible[idx].id,p_due_date:due,p_notes:notes
+ });
+ if(out.error)return toast(out.error.message||'Reviewer could not be assigned.',true);
+ toast('Reviewer assigned to '+assignment.reviewer_domain+'.');
+ await load();
+}
+async function startReviewSlot(id){
+ var out=await rpc('admin_start_professional_review_assignment',{p_assignment_id:id});
+ if(out.error)return toast(out.error.message||'Review could not be started.',true);
+ toast('Review marked In Review.');
+ await load();
+}
 async function addReviewer(){
  var name=prompt('Reviewer full name:');if(!name)return;
  var qualification=prompt('Reviewer qualification / credential:');if(!qualification)return;
@@ -250,6 +299,10 @@ function activate(){
  load();
 }
 document.addEventListener('click',function(event){
+ var assign=event.target.closest('[data-ptr-assign-slot]');
+ if(assign){event.preventDefault();assignReviewSlot(assign.dataset.ptrAssignSlot);return}
+ var startSlot=event.target.closest('[data-ptr-start-slot]');
+ if(startSlot){event.preventDefault();startReviewSlot(startSlot.dataset.ptrStartSlot);return}
  var add=event.target.closest('#ptrAddReviewer');
  if(add){event.preventDefault();addReviewer();return}
  var verify=event.target.closest('[data-ptr-verify-reviewer]');
