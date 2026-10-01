@@ -2,8 +2,8 @@
 (function(){
 'use strict';
 
-var VERSION='2026-10-01-professional-review-center-v4';
-var state={courses:[],reviewers:[],controls:{},release:{courses:[],is_key_administrator:false},evidence:{courses:[]},selectedCourse:null,selectedReview:null,selectedAssignment:null,selectedReviewerVerification:null,loaded:false,busy:false};
+var VERSION='2026-10-01-professional-review-center-v5';
+var state={courses:[],reviewers:[],controls:{},release:{courses:[],is_key_administrator:false},evidence:{courses:[]},workload:{summary:{},reviewers:[],domains:[],is_key_administrator:false},selectedCourse:null,selectedReview:null,selectedAssignment:null,selectedReviewerVerification:null,selectedCapacityReviewer:null,loaded:false,busy:false};
 var client=(typeof sb!=='undefined'&&sb)?sb:(window.LelleeAuthContext&&window.LelleeAuthContext.client?window.LelleeAuthContext.client:null);
 
 function q(sel,root){return (root||document).querySelector(sel)}
@@ -69,7 +69,7 @@ function ensureStyles(){
  '.ptr-domains{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px;margin-top:10px}.ptr-domain{border:1px solid #e8e3e9;border-radius:10px;padding:9px;background:#fbfafc;min-width:0}.ptr-domain.approved{border-color:#cfe4d5;background:#f7fcf8}.ptr-domain.revisions_required{border-color:#efd1d5;background:#fff8f9}.ptr-domain>b{display:block;font-size:.6rem}.ptr-domain>small{display:block;font-size:.52rem;line-height:1.42;color:#777;margin:3px 0}.ptr-domain button{border:1px solid #d8cfe0;background:#fff;border-radius:7px;padding:6px 8px;font-size:.53rem;font-weight:760;color:#65409a;cursor:pointer}'+
  '.ptr-signoff{border-top:1px solid #eee8f0;margin-top:5px;padding-top:5px;font-size:.49rem;color:#68616b;line-height:1.35}.ptr-assignments{margin-top:10px;border-top:1px solid #eee8f0;padding-top:9px}.ptr-assignment{display:flex;justify-content:space-between;gap:10px;align-items:center;border:1px solid #eee8f0;border-radius:8px;padding:7px 9px;margin:5px 0;font-size:.53rem}.ptr-assignment b{font-size:.56rem}.ptr-assignment small{display:block;color:#777;margin-top:2px}.ptr-assignment-actions{display:flex;gap:5px;flex-wrap:wrap}.ptr-assignment button{border:1px solid #d8cfe0;background:#fff;border-radius:7px;padding:5px 7px;font-size:.51rem;font-weight:750;color:#65409a;cursor:pointer}.ptr-blockers{margin-top:9px;border-top:1px solid #eee8f0;padding-top:8px;font-size:.54rem;color:#7c5660}.ptr-blockers.ok{color:#3b7853}.ptr-audit-note{border:1px solid #e6e0e9;background:#faf8fc;border-radius:10px;padding:10px 12px;font-size:.56rem;line-height:1.5;color:#6d6570;margin:8px 0 12px}'+
  '.ptr-dialog{border:0;border-radius:16px;padding:0;width:min(620px,calc(100% - 24px));max-height:calc(100dvh - 28px);overflow:hidden;box-shadow:0 30px 90px rgba(28,19,39,.3)}.ptr-dialog::backdrop{background:rgba(26,19,34,.58)}.ptr-dialog-inner{padding:20px;max-height:calc(100dvh - 28px);overflow-y:auto}.ptr-dialog h3{margin:4px 0 5px;font-size:1rem}.ptr-dialog p{font-size:.62rem;color:#706a73;line-height:1.5}'+
- '.ptr-evidence{margin-top:10px;border-top:1px solid #eee8f0;padding-top:9px}.ptr-evidence-row{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;border:1px solid #e6e0e9;border-radius:9px;padding:8px 9px;margin:6px 0;background:#faf9fb}.ptr-evidence-row b{display:block;font-size:.57rem}.ptr-evidence-row small{display:block;font-size:.51rem;color:#777;margin-top:2px}.ptr-evidence-row button{border:1px solid #d8cfe0;background:#fff;border-radius:7px;padding:5px 7px;font-size:.51rem;font-weight:750;color:#65409a;cursor:pointer}.ptr-evidence-content{white-space:pre-wrap;overflow-wrap:anywhere;border:1px solid #e6e0e9;border-radius:9px;background:#fbfafc;padding:12px;font:500 .62rem/1.55 ui-monospace,SFMono-Regular,Consolas,monospace;color:#433b47}.ptr-source{border:1px solid #e6e0e9;border-radius:9px;padding:9px;margin:6px 0;font-size:.56rem;line-height:1.45}.ptr-source a{color:#65409a;font-weight:760}.ptr-assessment-review{border-top:1px solid #eee8f0;padding-top:9px;margin-top:9px;font-size:.57rem;line-height:1.45}.ptr-assessment-review ol{padding-left:20px}.ptr-assessment-review .correct{font-weight:800;color:#356244}.ptr-evidence-meta{display:flex;gap:6px;flex-wrap:wrap;margin:7px 0}.ptr-evidence-meta span{border-radius:999px;background:#f2eef6;padding:4px 7px;font-size:.5rem;color:#625966;font-weight:750}'+
+ '.ptr-evidence{margin-top:10px;border-top:1px solid #eee8f0;padding-top:9px}.ptr-evidence-row{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;border:1px solid #e6e0e9;border-radius:9px;padding:8px 9px;margin:6px 0;background:#faf9fb}.ptr-evidence-row b{display:block;font-size:.57rem}.ptr-evidence-row small{display:block;font-size:.51rem;color:#777;margin-top:2px}.ptr-evidence-row button{border:1px solid #d8cfe0;background:#fff;border-radius:7px;padding:5px 7px;font-size:.51rem;font-weight:750;color:#65409a;cursor:pointer}.ptr-evidence-content{white-space:pre-wrap;overflow-wrap:anywhere;border:1px solid #e6e0e9;border-radius:9px;background:#fbfafc;padding:12px;font:500 .62rem/1.55 ui-monospace,SFMono-Regular,Consolas,monospace;color:#433b47}.ptr-source{border:1px solid #e6e0e9;border-radius:9px;padding:9px;margin:6px 0;font-size:.56rem;line-height:1.45}.ptr-source a{color:#65409a;font-weight:760}.ptr-assessment-review{border-top:1px solid #eee8f0;padding-top:9px;margin-top:9px;font-size:.57rem;line-height:1.45}.ptr-assessment-review ol{padding-left:20px}.ptr-assessment-review .correct{font-weight:800;color:#356244}.ptr-evidence-meta{display:flex;gap:6px;flex-wrap:wrap;margin:7px 0}.ptr-evidence-meta span{border-radius:999px;background:#f2eef6;padding:4px 7px;font-size:.5rem;color:#625966;font-weight:750}'+ '.ptr-workload{border:1px solid #e4dce9;border-radius:13px;background:#fff;padding:14px;margin:10px 0}.ptr-workload-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin:9px 0 12px}.ptr-workload-grid article{border:1px solid #e8e2eb;border-radius:9px;padding:9px;background:#faf9fb}.ptr-workload-grid b{display:block;font-size:.86rem;color:#65409a}.ptr-workload-grid small{font-size:.51rem;color:#777}.ptr-domain-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.ptr-domain-coverage{border:1px solid #e8e2eb;border-radius:9px;padding:8px 9px;font-size:.53rem;line-height:1.4}.ptr-domain-coverage.gap{border-color:#efd1d5;background:#fff8f9}.ptr-domain-coverage.single{border-color:#eadcbf;background:#fffdf7}.ptr-domain-coverage b{display:block;font-size:.56rem}.ptr-workload-reviewer{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;border-top:1px solid #eee8f0;padding:8px 0;font-size:.53rem}.ptr-workload-reviewer small{display:block;color:#777;margin-top:2px}.ptr-workload-reviewer button{border:1px solid #d8cfe0;background:#fff;border-radius:7px;padding:5px 7px;font-size:.51rem;font-weight:750;color:#65409a;cursor:pointer}'+
  '.ptr-form{display:grid;grid-template-columns:1fr 1fr;gap:9px}.ptr-form label{display:grid;gap:4px;font-size:.57rem;font-weight:750;color:#625966}.ptr-form .wide{grid-column:1/-1}.ptr-form input,.ptr-form select,.ptr-form textarea{width:100%;box-sizing:border-box;border:1px solid #ddd5e1;border-radius:8px;padding:8px;background:#fff;font:inherit;font-size:.63rem}.ptr-form textarea{min-height:74px;resize:vertical}.ptr-attest{display:flex!important;grid-template-columns:none!important;flex-direction:row;gap:8px!important;align-items:flex-start;font-weight:650!important}.ptr-attest input{width:auto;margin-top:2px}.ptr-actions{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap;margin-top:12px}'+
  '@media(max-width:760px){.ptr-metrics{grid-template-columns:1fr 1fr}.ptr-domains{grid-template-columns:1fr}.ptr-form{grid-template-columns:1fr}.ptr-form .wide{grid-column:auto}.ptr-course-head,.ptr-head{display:block}.ptr-price{text-align:left;margin-top:6px}}';
  document.head.appendChild(style);
@@ -87,6 +87,7 @@ function ensureUi(){
   wrap.innerHTML=
    '<div class="ptr-head"><div><span class="approved-kicker">COURSE REVIEW & RELEASE</span><h3>Professional training human review center</h3><p>Record qualified human signoffs for sources, curriculum, assessments, scope/safety and capstones. Course publishing and checkout remain hard-blocked until all release requirements pass.</p></div><button class="approved-small-action" id="ptrRefresh" type="button">Refresh</button></div>'+
    '<div id="ptrMetrics"></div>'+
+   '<div id="ptrWorkload"></div>'+
    '<div class="ptr-audit-note"><b>Audit rule:</b> Reviewer qualifications are verified manually in-house before a signoff can count. Scope reviews with two required domains must be completed by different verified reviewers.</div>'+ '<div id="ptrReviewerRegistry"></div>'+
    '<div id="ptrCourseList"></div>';
   panel.insertBefore(wrap,panel.firstChild);
@@ -174,6 +175,20 @@ function ensureUi(){
   q('#ptrVerificationCancel').addEventListener('click',function(){verificationDialog.close()});
   q('#ptrVerificationReject').addEventListener('click',function(){saveReviewerVerification(false)});
   q('#ptrVerificationApprove').addEventListener('click',function(){saveReviewerVerification(true)});
+
+  var capacityDialog=document.createElement('dialog');
+  capacityDialog.id='ptrCapacityDialog';
+  capacityDialog.className='ptr-dialog';
+  capacityDialog.innerHTML=
+   '<div class="ptr-dialog-inner"><span class="approved-kicker">REVIEWER CAPACITY</span><h3 id="ptrCapacityTitle">Set reviewer capacity</h3><p>Capacity is an operational limit, not a credential. Leave maximum assignments blank if no numerical cap has been set.</p>'+
+   '<div class="ptr-form">'+
+   '<label>Availability<select id="ptrCapacityStatus"><option value="available">Available</option><option value="limited">Limited</option><option value="unavailable">Unavailable</option></select></label>'+
+   '<label>Maximum active assignments<input id="ptrCapacityMax" type="number" min="1" max="100" step="1" placeholder="No set limit"></label>'+
+   '<label class="wide">Capacity notes<textarea id="ptrCapacityNotes" placeholder="Optional staffing or scheduling note."></textarea></label>'+
+   '</div><div class="ptr-actions"><button class="approved-link" id="ptrCapacityCancel" type="button">Cancel</button><button class="approved-small-action" id="ptrCapacitySave" type="button">Save Capacity</button></div></div>';
+  document.body.appendChild(capacityDialog);
+  q('#ptrCapacityCancel').addEventListener('click',function(){capacityDialog.close()});
+  q('#ptrCapacitySave').addEventListener('click',saveReviewerCapacity);
  }
  return true;
 }
@@ -183,6 +198,7 @@ function render(data){
  state.controls=data.controls||{};
  state.release=data.release||state.release||{courses:[],is_key_administrator:false};
  state.evidence=data.evidence||state.evidence||{courses:[]};
+ state.workload=data.workload||state.workload||{summary:{},reviewers:[],domains:[],is_key_administrator:false};
  var s=data.summary||{};
  q('#ptrMetrics').innerHTML=
   '<div class="ptr-metrics">'+
@@ -193,6 +209,35 @@ function render(data){
   '<article><b>'+esc(s.published||0)+'</b><small>published</small></article>'+
   '<article><b>'+esc(s.checkout_enabled||0)+'</b><small>checkout enabled</small></article>'+
   '</div>';
+
+ var ws=state.workload.summary||{};
+ var domainRows=(state.workload.domains||[]).map(function(d){
+  var available=Number(d.available_verified_reviewers||0);
+  var cls=available===0?'gap':available===1?'single':'';
+  var coverage=available===0?'No available verified reviewer':available===1?'Single-reviewer dependency':available+' available verified reviewers';
+  return '<div class="ptr-domain-coverage '+cls+'"><b>'+esc(d.reviewer_domain)+'</b><span>'+esc(coverage)+'</span><br><small>'+esc(d.unassigned_slots||0)+' unassigned · '+esc(d.active_slots||0)+' active · '+esc(d.total_slots||0)+' total slots</small></div>';
+ }).join('');
+ var reviewerLoadRows=(state.workload.reviewers||[]).map(function(w){
+  var capacity=w.max_active_assignments==null?'No set cap':esc(w.active_assignments||0)+' / '+esc(w.max_active_assignments);
+  var availability=String(w.availability_status||'available').replace(/_/g,' ');
+  var action=state.workload.is_key_administrator?'<button type="button" data-ptr-capacity="'+esc(w.id)+'">Set Capacity</button>':'';
+  return '<div class="ptr-workload-reviewer"><div><b>'+esc(w.full_name)+'</b> · '+esc(availability)+'<small>'+esc((w.reviewer_domains||[]).join(', '))+' · Active: '+esc(w.active_assignments||0)+' · Capacity: '+capacity+' · Overdue: '+esc(w.overdue_assignments||0)+' · Due next 7 days: '+esc(w.due_next_7_days||0)+'</small></div>'+action+'</div>';
+ }).join('');
+ q('#ptrWorkload').innerHTML=
+  '<section class="ptr-workload"><div class="ptr-head"><div><span class="approved-kicker">REVIEWER WORKLOAD & STAFFING</span><h3>Coverage, active load and staffing gaps</h3><p>No default reviewer maximum is assumed. Key Admin may set a reviewer-specific capacity or mark a reviewer unavailable.</p></div></div>'+
+  '<div class="ptr-workload-grid">'+
+   '<article><b>'+esc(ws.verified_reviewers||0)+'</b><small>verified reviewers</small></article>'+
+   '<article><b>'+esc(ws.active_assignments||0)+'</b><small>active assignments</small></article>'+
+   '<article><b>'+esc(ws.unassigned_slots||0)+'</b><small>unassigned slots</small></article>'+
+   '<article><b>'+esc(ws.overdue_assignments||0)+'</b><small>overdue</small></article>'+
+   '<article><b>'+esc(ws.domains_without_available_reviewer||0)+'</b><small>domains with no available reviewer</small></article>'+
+  '</div>'+
+  '<div class="ptr-audit-note"><b>Domain coverage</b><br>Zero available reviewers is a staffing gap. One available reviewer is shown as a single-reviewer dependency; no additional staffing threshold is assumed.</div>'+
+  '<div class="ptr-domain-grid">'+domainRows+'</div>'+
+  '<div style="margin-top:12px"><b>Reviewer load</b>'+(
+    reviewerLoadRows||'<div class="approved-resource-empty">No reviewer records yet. Register and verify in-house reviewers to populate workload data.</div>'
+  )+'</div></section>';
+
  var verifiedReviewers=state.reviewers.filter(function(r){return r.verification_status==='verified_in_house'&&r.active});
  var pendingReviewers=state.reviewers.filter(function(r){return r.verification_status==='pending'&&r.active});
  var controlHtml='';
@@ -213,7 +258,11 @@ function render(data){
     var actions=r.verification_status==='pending'&&r.active
       ? '<button type="button" data-ptr-verify-reviewer="'+esc(r.id)+'">Verify In-House</button> <button type="button" data-ptr-reject-reviewer="'+esc(r.id)+'">Reject</button>'
       : '';
+    var workloadReviewer=(state.workload.reviewers||[]).find(function(w){return w.id===r.id})||null;
     if(state.controls.is_key_administrator&&r.verification_status==='verified_in_house'&&r.active){
+      if(workloadReviewer){
+        actions+=(actions?' ':'')+'<button type="button" data-ptr-capacity="'+esc(r.id)+'">Capacity</button>';
+      }
       if(r.linked_to_current_key_admin){
         actions+=(actions?' ':'')+'<span><b>Key Admin Reviewer</b></span>';
       }else if(!state.controls.key_admin_reviewer_id){
@@ -300,15 +349,18 @@ async function load(){
   var results=await Promise.all([
    rpc('get_admin_professional_training_review_center'),
    rpc('get_admin_professional_release_controls'),
-   rpc('get_admin_professional_training_evidence_center')
+   rpc('get_admin_professional_training_evidence_center'),
+   rpc('get_admin_professional_reviewer_workload')
   ]);
-  var out=results[0],releaseOut=results[1],evidenceOut=results[2];
+  var out=results[0],releaseOut=results[1],evidenceOut=results[2],workloadOut=results[3];
   if(out.error){console.warn('Professional review center',out.error);q('#ptrCourseList').innerHTML='<div class="approved-resource-empty">Professional review data could not be loaded.</div>';return}
   if(releaseOut.error){console.warn('Professional release controls',releaseOut.error)}
   if(evidenceOut.error){console.warn('Professional evidence center',evidenceOut.error)}
+  if(workloadOut.error){console.warn('Professional reviewer workload',workloadOut.error)}
   var data=out.data||{};
   data.release=releaseOut.error?{courses:[],is_key_administrator:false}:(releaseOut.data||{});
   data.evidence=evidenceOut.error?{courses:[]}:(evidenceOut.data||{courses:[]});
+  data.workload=workloadOut.error?{summary:{},reviewers:[],domains:[],is_key_administrator:false}:(workloadOut.data||{});
   state.loaded=true;
   render(data);
  }finally{state.busy=false}
@@ -444,7 +496,9 @@ function assignReviewSlot(id){
  });
  if(!assignment)return toast('Review assignment could not be found.',true);
  var eligible=state.reviewers.filter(function(r){
-  return r.verification_status==='verified_in_house'&&r.active&&(r.reviewer_domains||[]).indexOf(assignment.reviewer_domain)>=0;
+  var w=(state.workload.reviewers||[]).find(function(x){return x.id===r.id})||null;
+  var workloadOkay=!w||((w.availability_status||'available')!=='unavailable'&&!w.at_capacity);
+  return r.verification_status==='verified_in_house'&&r.active&&workloadOkay&&(r.reviewer_domains||[]).indexOf(assignment.reviewer_domain)>=0;
  });
  if(!eligible.length)return toast('No Verified In-House reviewer is available for '+assignment.reviewer_domain+'.',true);
  state.selectedAssignment=assignment;
@@ -530,6 +584,40 @@ async function saveReviewerForm(){
   await load();
  }finally{if(save)save.disabled=false}
 }
+function openReviewerCapacity(id){
+ if(!state.workload.is_key_administrator)return toast('Key administrator access required to change reviewer capacity.',true);
+ var w=(state.workload.reviewers||[]).find(function(x){return x.id===id});
+ if(!w)return toast('Reviewer workload record could not be found.',true);
+ state.selectedCapacityReviewer=w;
+ q('#ptrCapacityTitle').textContent='Capacity · '+w.full_name;
+ q('#ptrCapacityStatus').value=w.availability_status||'available';
+ q('#ptrCapacityMax').value=w.max_active_assignments==null?'':w.max_active_assignments;
+ q('#ptrCapacityNotes').value=w.capacity_notes||'';
+ q('#ptrCapacityDialog').showModal();
+}
+async function saveReviewerCapacity(){
+ var w=state.selectedCapacityReviewer;
+ if(!w)return toast('Reviewer workload record could not be found.',true);
+ var status=q('#ptrCapacityStatus').value;
+ var raw=q('#ptrCapacityMax').value.trim();
+ var max=raw?parseInt(raw,10):null;
+ var notes=q('#ptrCapacityNotes').value.trim()||null;
+ if(max!==null&&(!Number.isInteger(max)||max<1||max>100))return toast('Maximum active assignments must be between 1 and 100, or left blank.',true);
+ var save=q('#ptrCapacitySave');if(save)save.disabled=true;
+ try{
+  var out=await rpc('admin_set_professional_reviewer_capacity',{
+   p_reviewer_id:w.id,
+   p_availability_status:status,
+   p_max_active_assignments:max,
+   p_notes:notes
+  });
+  if(out.error)return toast(out.error.message||'Reviewer capacity could not be saved.',true);
+  q('#ptrCapacityDialog').close();
+  state.selectedCapacityReviewer=null;
+  toast('Reviewer capacity updated.');
+  await load();
+ }finally{if(save)save.disabled=false}
+}
 function verifyReviewer(id,verified){
  var reviewer=state.reviewers.find(function(r){return r.id===id});
  if(!reviewer)return toast('Reviewer could not be found.',true);
@@ -595,6 +683,8 @@ function activate(){
  load();
 }
 document.addEventListener('click',function(event){
+ var capacity=event.target.closest('[data-ptr-capacity]');
+ if(capacity){event.preventDefault();openReviewerCapacity(capacity.dataset.ptrCapacity);return}
  var evidenceModule=event.target.closest('[data-ptr-evidence-module]');
  if(evidenceModule){event.preventDefault();openEvidenceModule(evidenceModule.dataset.ptrEvidenceModule);return}
  var publish=event.target.closest('[data-ptr-publish]');
