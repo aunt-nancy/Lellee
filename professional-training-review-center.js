@@ -3,7 +3,7 @@
 'use strict';
 
 var VERSION='2026-09-29-professional-review-center-v1';
-var state={courses:[],reviewers:[],controls:{},selectedCourse:null,selectedReview:null,loaded:false,busy:false};
+var state={courses:[],reviewers:[],controls:{},release:{courses:[],is_key_administrator:false},selectedCourse:null,selectedReview:null,loaded:false,busy:false};
 var client=(typeof sb!=='undefined'&&sb)?sb:(window.LelleeAuthContext&&window.LelleeAuthContext.client?window.LelleeAuthContext.client:null);
 
 function q(sel,root){return (root||document).querySelector(sel)}
@@ -39,6 +39,7 @@ function issueLabel(key){
   approved_question_bank_below_minimum:'Approved question bank below minimum',
   approved_scenario_count_below_minimum:'Approved scenario count below minimum',
   approved_human_capstone_rubric_missing:'Approved human capstone/rubric missing',
+  evidence_requirements_not_approved:'Evidence requirements not approved',
   instructional_content_or_sources_incomplete:'Instructional content or sources incomplete',
   insufficient_required_modules:'Required module count incomplete'
  };
@@ -119,6 +120,7 @@ function render(data){
  state.courses=data.courses||[];
  state.reviewers=data.reviewers||[];
  state.controls=data.controls||{};
+ state.release=data.release||state.release||{courses:[],is_key_administrator:false};
  var s=data.summary||{};
  q('#ptrMetrics').innerHTML=
   '<div class="ptr-metrics">'+
@@ -191,11 +193,30 @@ function render(data){
    }
    return '<div class="ptr-assignment"><div><b>'+esc(label(a.review_type))+' · '+esc(a.reviewer_domain)+'</b><small>'+esc(stateText)+' · '+esc(reviewer)+due+'</small></div><div class="ptr-assignment-actions">'+actions+'</div></div>';
   }).join('');
-  var issues=course.issues||[];
+  var release=(state.release.courses||[]).find(function(x){return x.course_key===course.course_key})||{};
+  var issues=release.issues||course.issues||[];
   var blockers=issues.length?
    '<div class="ptr-blockers"><b>Release blockers:</b> '+issues.map(issueLabel).map(esc).join(' · ')+'</div>':
    '<div class="ptr-blockers ok"><b>All review gates are complete.</b> Publishing and checkout remain separate controlled actions.</div>';
-  return '<article class="ptr-course"><div class="ptr-course-head"><div><span class="approved-kicker">'+esc(course.category==='foundation'?'FOUNDATION':'SPECIALTY')+'</span><h4>'+esc(course.title)+'</h4><p>'+esc(course.estimated_hours)+' hrs · '+esc(course.modules)+' modules · '+esc(course.assessments)+' questions · '+esc(course.scenarios)+' scenarios · '+esc(course.status)+'</p></div><div class="ptr-price"><b>'+esc(money(course.price_cents))+'</b><small>'+(course.checkout_enabled?'checkout enabled':'checkout off')+'</small></div></div><div class="ptr-assignments"><b>Reviewer assignment queue</b>'+assignmentHtml+'</div><div class="ptr-domains">'+reviews+'</div>'+blockers+'</article>';
+  var releaseActions='';
+  if(state.release.is_key_administrator){
+    if(course.status!=='published'){
+      releaseActions='<button type="button" class="approved-small-action" data-ptr-publish="'+esc(course.course_key)+'" '+(release.publish_ready?'':'disabled')+'>Publish Course</button>';
+    }else if(!course.checkout_enabled){
+      releaseActions='<button type="button" class="approved-small-action" data-ptr-enable-checkout="'+esc(course.course_key)+'" '+(release.checkout_ready?'':'disabled')+'>Enable Checkout</button>';
+    }else{
+      releaseActions='<button type="button" class="approved-link" data-ptr-disable-checkout="'+esc(course.course_key)+'">Disable Checkout</button>';
+    }
+  }else{
+    releaseActions='<small>Key administrator required for release actions.</small>';
+  }
+  var evidenceNote=Number(release.evidence_total||0)>0
+    ? '<small>Evidence: '+esc(release.evidence_approved||0)+'/'+esc(release.evidence_total)+' approved</small>'
+    : '';
+  var paymentNote=course.status==='published'||!issues.length
+    ? '<small>Payment link: '+(release.payment_link_configured?'configured':'not configured')+'</small>'
+    : '';
+  return '<article class="ptr-course"><div class="ptr-course-head"><div><span class="approved-kicker">'+esc(course.category==='foundation'?'FOUNDATION':'SPECIALTY')+'</span><h4>'+esc(course.title)+'</h4><p>'+esc(course.estimated_hours)+' hrs · '+esc(course.modules)+' modules · '+esc(course.assessments)+' questions · '+esc(course.scenarios)+' scenarios · '+esc(course.status)+'</p></div><div class="ptr-price"><b>'+esc(money(course.price_cents))+'</b><small>'+(course.checkout_enabled?'checkout enabled':'checkout off')+'</small><br>'+evidenceNote+'<br>'+paymentNote+'<div class="ptr-actions">'+releaseActions+'</div></div></div><div class="ptr-assignments"><b>Reviewer assignment queue</b>'+assignmentHtml+'</div><div class="ptr-domains">'+reviews+'</div>'+blockers+'</article>';
  }).join('')||'<div class="approved-resource-empty">No professional courses found.</div>';
 }
 async function load(){
@@ -204,10 +225,17 @@ async function load(){
  state.busy=true;
  try{
   if(!await isAdmin()){q('#ptrCourseList').innerHTML='<div class="approved-resource-empty">Administrator access required.</div>';return}
-  var out=await rpc('get_admin_professional_training_review_center');
+  var results=await Promise.all([
+   rpc('get_admin_professional_training_review_center'),
+   rpc('get_admin_professional_release_controls')
+  ]);
+  var out=results[0],releaseOut=results[1];
   if(out.error){console.warn('Professional review center',out.error);q('#ptrCourseList').innerHTML='<div class="approved-resource-empty">Professional review data could not be loaded.</div>';return}
+  if(releaseOut.error){console.warn('Professional release controls',releaseOut.error)}
+  var data=out.data||{};
+  data.release=releaseOut.error?{courses:[],is_key_administrator:false}:(releaseOut.data||{});
   state.loaded=true;
-  render(out.data||{});
+  render(data);
  }finally{state.busy=false}
 }
 function openReview(courseKey,reviewType){
@@ -259,6 +287,26 @@ async function save(decision){
   toast(label(state.selectedReview)+' review recorded: '+statusLabel(out.data&&out.data.review_status?out.data.review_status:decision)+'.');
   await load();
  }finally{if(approve)approve.disabled=false;if(revise)revise.disabled=false}
+}
+async function publishProfessionalCourse(courseKey){
+ var expected='PUBLISH '+courseKey;
+ var confirmation=prompt('Publishing makes this course visible to learners. Checkout will remain OFF.\n\nType exactly:\n'+expected,'');
+ if(confirmation!==expected)return confirmation==null?null:toast('Confirmation did not match. Course was not published.',true);
+ var out=await rpc('admin_publish_professional_course_v2',{p_course_key:courseKey,p_confirmation:confirmation});
+ if(out.error)return toast(out.error.message||'Course could not be published.',true);
+ toast('Course published. Checkout remains OFF.');
+ await load();
+}
+async function setProfessionalCourseCheckout(courseKey,enabled){
+ var expected=(enabled?'ENABLE CHECKOUT ':'DISABLE CHECKOUT ')+courseKey;
+ var confirmation=prompt((enabled?'This will make paid enrollment available for the published course.':'This will immediately stop new paid enrollments for this course.')+'\n\nType exactly:\n'+expected,'');
+ if(confirmation!==expected)return confirmation==null?null:toast('Confirmation did not match. Checkout was not changed.',true);
+ var out=await rpc('admin_set_professional_course_checkout_v2',{
+  p_course_key:courseKey,p_enabled:enabled,p_confirmation:confirmation
+ });
+ if(out.error)return toast(out.error.message||'Checkout could not be changed.',true);
+ toast(enabled?'Checkout enabled.':'Checkout disabled.');
+ await load();
 }
 async function linkKeyAdminReviewer(id){
  var out=await rpc('admin_link_reviewer_to_current_key_admin',{p_reviewer_id:id});
@@ -337,6 +385,12 @@ function activate(){
  load();
 }
 document.addEventListener('click',function(event){
+ var publish=event.target.closest('[data-ptr-publish]');
+ if(publish){event.preventDefault();publishProfessionalCourse(publish.dataset.ptrPublish);return}
+ var enableCheckout=event.target.closest('[data-ptr-enable-checkout]');
+ if(enableCheckout){event.preventDefault();setProfessionalCourseCheckout(enableCheckout.dataset.ptrEnableCheckout,true);return}
+ var disableCheckout=event.target.closest('[data-ptr-disable-checkout]');
+ if(disableCheckout){event.preventDefault();setProfessionalCourseCheckout(disableCheckout.dataset.ptrDisableCheckout,false);return}
  var toggle=event.target.closest('#ptrToggleDualReview');
  if(toggle){event.preventDefault();toggleDualReviewOverride();return}
  var linkAdmin=event.target.closest('[data-ptr-link-key-admin]');
