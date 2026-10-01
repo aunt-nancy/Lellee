@@ -2,8 +2,8 @@
 (function(){
 'use strict';
 
-var VERSION='2026-09-29-professional-review-center-v1';
-var state={courses:[],reviewers:[],controls:{},release:{courses:[],is_key_administrator:false},selectedCourse:null,selectedReview:null,loaded:false,busy:false};
+var VERSION='2026-09-30-professional-review-center-v2';
+var state={courses:[],reviewers:[],controls:{},release:{courses:[],is_key_administrator:false},evidence:{courses:[]},selectedCourse:null,selectedReview:null,loaded:false,busy:false};
 var client=(typeof sb!=='undefined'&&sb)?sb:(window.LelleeAuthContext&&window.LelleeAuthContext.client?window.LelleeAuthContext.client:null);
 
 function q(sel,root){return (root||document).querySelector(sel)}
@@ -69,6 +69,7 @@ function ensureStyles(){
  '.ptr-domains{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px;margin-top:10px}.ptr-domain{border:1px solid #e8e3e9;border-radius:10px;padding:9px;background:#fbfafc;min-width:0}.ptr-domain.approved{border-color:#cfe4d5;background:#f7fcf8}.ptr-domain.revisions_required{border-color:#efd1d5;background:#fff8f9}.ptr-domain>b{display:block;font-size:.6rem}.ptr-domain>small{display:block;font-size:.52rem;line-height:1.42;color:#777;margin:3px 0}.ptr-domain button{border:1px solid #d8cfe0;background:#fff;border-radius:7px;padding:6px 8px;font-size:.53rem;font-weight:760;color:#65409a;cursor:pointer}'+
  '.ptr-signoff{border-top:1px solid #eee8f0;margin-top:5px;padding-top:5px;font-size:.49rem;color:#68616b;line-height:1.35}.ptr-assignments{margin-top:10px;border-top:1px solid #eee8f0;padding-top:9px}.ptr-assignment{display:flex;justify-content:space-between;gap:10px;align-items:center;border:1px solid #eee8f0;border-radius:8px;padding:7px 9px;margin:5px 0;font-size:.53rem}.ptr-assignment b{font-size:.56rem}.ptr-assignment small{display:block;color:#777;margin-top:2px}.ptr-assignment-actions{display:flex;gap:5px;flex-wrap:wrap}.ptr-assignment button{border:1px solid #d8cfe0;background:#fff;border-radius:7px;padding:5px 7px;font-size:.51rem;font-weight:750;color:#65409a;cursor:pointer}.ptr-blockers{margin-top:9px;border-top:1px solid #eee8f0;padding-top:8px;font-size:.54rem;color:#7c5660}.ptr-blockers.ok{color:#3b7853}.ptr-audit-note{border:1px solid #e6e0e9;background:#faf8fc;border-radius:10px;padding:10px 12px;font-size:.56rem;line-height:1.5;color:#6d6570;margin:8px 0 12px}'+
  '.ptr-dialog{border:0;border-radius:16px;padding:0;width:min(620px,calc(100% - 24px));max-height:calc(100dvh - 28px);overflow:hidden;box-shadow:0 30px 90px rgba(28,19,39,.3)}.ptr-dialog::backdrop{background:rgba(26,19,34,.58)}.ptr-dialog-inner{padding:20px;max-height:calc(100dvh - 28px);overflow-y:auto}.ptr-dialog h3{margin:4px 0 5px;font-size:1rem}.ptr-dialog p{font-size:.62rem;color:#706a73;line-height:1.5}'+
+ '.ptr-evidence{margin-top:10px;border-top:1px solid #eee8f0;padding-top:9px}.ptr-evidence-row{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;border:1px solid #e6e0e9;border-radius:9px;padding:8px 9px;margin:6px 0;background:#faf9fb}.ptr-evidence-row b{display:block;font-size:.57rem}.ptr-evidence-row small{display:block;font-size:.51rem;color:#777;margin-top:2px}.ptr-evidence-row button{border:1px solid #d8cfe0;background:#fff;border-radius:7px;padding:5px 7px;font-size:.51rem;font-weight:750;color:#65409a;cursor:pointer}.ptr-evidence-content{white-space:pre-wrap;overflow-wrap:anywhere;border:1px solid #e6e0e9;border-radius:9px;background:#fbfafc;padding:12px;font:500 .62rem/1.55 ui-monospace,SFMono-Regular,Consolas,monospace;color:#433b47}.ptr-source{border:1px solid #e6e0e9;border-radius:9px;padding:9px;margin:6px 0;font-size:.56rem;line-height:1.45}.ptr-source a{color:#65409a;font-weight:760}.ptr-assessment-review{border-top:1px solid #eee8f0;padding-top:9px;margin-top:9px;font-size:.57rem;line-height:1.45}.ptr-assessment-review ol{padding-left:20px}.ptr-assessment-review .correct{font-weight:800;color:#356244}.ptr-evidence-meta{display:flex;gap:6px;flex-wrap:wrap;margin:7px 0}.ptr-evidence-meta span{border-radius:999px;background:#f2eef6;padding:4px 7px;font-size:.5rem;color:#625966;font-weight:750}'+
  '.ptr-form{display:grid;grid-template-columns:1fr 1fr;gap:9px}.ptr-form label{display:grid;gap:4px;font-size:.57rem;font-weight:750;color:#625966}.ptr-form .wide{grid-column:1/-1}.ptr-form input,.ptr-form select,.ptr-form textarea{width:100%;box-sizing:border-box;border:1px solid #ddd5e1;border-radius:8px;padding:8px;background:#fff;font:inherit;font-size:.63rem}.ptr-form textarea{min-height:74px;resize:vertical}.ptr-attest{display:flex!important;grid-template-columns:none!important;flex-direction:row;gap:8px!important;align-items:flex-start;font-weight:650!important}.ptr-attest input{width:auto;margin-top:2px}.ptr-actions{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap;margin-top:12px}'+
  '@media(max-width:760px){.ptr-metrics{grid-template-columns:1fr 1fr}.ptr-domains{grid-template-columns:1fr}.ptr-form{grid-template-columns:1fr}.ptr-form .wide{grid-column:auto}.ptr-course-head,.ptr-head{display:block}.ptr-price{text-align:left;margin-top:6px}}';
  document.head.appendChild(style);
@@ -113,6 +114,15 @@ function ensureUi(){
   q('#ptrCancel').addEventListener('click',function(){dialog.close()});
   q('#ptrApprove').addEventListener('click',function(){save('approved')});
   q('#ptrRevisions').addEventListener('click',function(){save('revisions_required')});
+
+  var evidenceDialog=document.createElement('dialog');
+  evidenceDialog.id='ptrEvidenceDialog';
+  evidenceDialog.className='ptr-dialog';
+  evidenceDialog.style.width='min(900px,calc(100% - 24px))';
+  evidenceDialog.innerHTML=
+   '<div class="ptr-dialog-inner"><span class="approved-kicker">EVIDENCE PACKET · ADMIN ONLY</span><h3 id="ptrEvidenceTitle">Evidence review</h3><div id="ptrEvidenceBody"></div><div class="ptr-actions"><button class="approved-small-action" id="ptrEvidenceClose" type="button">Close</button></div></div>';
+  document.body.appendChild(evidenceDialog);
+  q('#ptrEvidenceClose').addEventListener('click',function(){evidenceDialog.close()});
  }
  return true;
 }
@@ -121,6 +131,7 @@ function render(data){
  state.reviewers=data.reviewers||[];
  state.controls=data.controls||{};
  state.release=data.release||state.release||{courses:[],is_key_administrator:false};
+ state.evidence=data.evidence||state.evidence||{courses:[]};
  var s=data.summary||{};
  q('#ptrMetrics').innerHTML=
   '<div class="ptr-metrics">'+
@@ -193,6 +204,16 @@ function render(data){
    }
    return '<div class="ptr-assignment"><div><b>'+esc(label(a.review_type))+' · '+esc(a.reviewer_domain)+'</b><small>'+esc(stateText)+' · '+esc(reviewer)+due+'</small></div><div class="ptr-assignment-actions">'+actions+'</div></div>';
   }).join('');
+  var evidenceCourse=(state.evidence.courses||[]).find(function(x){return x.course_key===course.course_key})||null;
+  var evidenceHtml='';
+  if(evidenceCourse&&(evidenceCourse.modules||[]).length){
+    evidenceHtml='<div class="ptr-evidence"><b>Evidence-informed module drafts</b><small>'+esc(evidenceCourse.evidence_approved||0)+'/'+esc(evidenceCourse.evidence_total||0)+' evidence records approved · '+esc(evidenceCourse.evidence_internal_review||0)+' in internal review</small>'+
+      (evidenceCourse.modules||[]).map(function(em){
+        var counts=esc(em.source_count||0)+' sources · '+esc(em.assessment_items||0)+' assessments · '+esc(em.scenario_items||0)+' scenarios · '+esc(em.content_characters||0)+' lesson characters';
+        return '<div class="ptr-evidence-row"><div><b>'+esc(em.sequence)+'. '+esc(em.title)+'</b><small>'+esc(String(em.evidence_status||'').replace(/_/g,' '))+' · '+counts+'</small></div><button type="button" data-ptr-evidence-module="'+esc(em.module_id)+'">Open Evidence Packet</button></div>';
+      }).join('')+
+      '<div class="ptr-audit-note"><b>Approval rule:</b> Opening this packet does not approve anything. Use the assigned Source/Curriculum/Assessment review cards above to record verified human decisions.</div></div>';
+  }
   var release=(state.release.courses||[]).find(function(x){return x.course_key===course.course_key})||{};
   var issues=release.issues||course.issues||[];
   var blockers=issues.length?
@@ -216,7 +237,7 @@ function render(data){
   var stripeStatus=release.stripe_setup_status||'not tracked';
   var paymentNote='<small>Stripe setup: '+esc(String(stripeStatus).replace(/_/g,' '))+
     ' · Payment link: '+(release.payment_link_configured?'configured':'not configured')+'</small>';
-  return '<article class="ptr-course"><div class="ptr-course-head"><div><span class="approved-kicker">'+esc(course.category==='foundation'?'FOUNDATION':'SPECIALTY')+'</span><h4>'+esc(course.title)+'</h4><p>'+esc(course.estimated_hours)+' hrs · '+esc(course.modules)+' modules · '+esc(course.assessments)+' questions · '+esc(course.scenarios)+' scenarios · '+esc(course.status)+'</p></div><div class="ptr-price"><b>'+esc(money(course.price_cents))+'</b><small>'+(course.checkout_enabled?'checkout enabled':'checkout off')+'</small><br>'+evidenceNote+'<br>'+paymentNote+'<div class="ptr-actions">'+releaseActions+'</div></div></div><div class="ptr-assignments"><b>Reviewer assignment queue</b>'+assignmentHtml+'</div><div class="ptr-domains">'+reviews+'</div>'+blockers+'</article>';
+  return '<article class="ptr-course"><div class="ptr-course-head"><div><span class="approved-kicker">'+esc(course.category==='foundation'?'FOUNDATION':'SPECIALTY')+'</span><h4>'+esc(course.title)+'</h4><p>'+esc(course.estimated_hours)+' hrs · '+esc(course.modules)+' modules · '+esc(course.assessments)+' questions · '+esc(course.scenarios)+' scenarios · '+esc(course.status)+'</p></div><div class="ptr-price"><b>'+esc(money(course.price_cents))+'</b><small>'+(course.checkout_enabled?'checkout enabled':'checkout off')+'</small><br>'+evidenceNote+'<br>'+paymentNote+'<div class="ptr-actions">'+releaseActions+'</div></div></div>'+evidenceHtml+'<div class="ptr-assignments"><b>Reviewer assignment queue</b>'+assignmentHtml+'</div><div class="ptr-domains">'+reviews+'</div>'+blockers+'</article>';
  }).join('')||'<div class="approved-resource-empty">No professional courses found.</div>';
 }
 async function load(){
@@ -227,13 +248,16 @@ async function load(){
   if(!await isAdmin()){q('#ptrCourseList').innerHTML='<div class="approved-resource-empty">Administrator access required.</div>';return}
   var results=await Promise.all([
    rpc('get_admin_professional_training_review_center'),
-   rpc('get_admin_professional_release_controls')
+   rpc('get_admin_professional_release_controls'),
+   rpc('get_admin_professional_training_evidence_center')
   ]);
-  var out=results[0],releaseOut=results[1];
+  var out=results[0],releaseOut=results[1],evidenceOut=results[2];
   if(out.error){console.warn('Professional review center',out.error);q('#ptrCourseList').innerHTML='<div class="approved-resource-empty">Professional review data could not be loaded.</div>';return}
   if(releaseOut.error){console.warn('Professional release controls',releaseOut.error)}
+  if(evidenceOut.error){console.warn('Professional evidence center',evidenceOut.error)}
   var data=out.data||{};
   data.release=releaseOut.error?{courses:[],is_key_administrator:false}:(releaseOut.data||{});
+  data.evidence=evidenceOut.error?{courses:[]}:(evidenceOut.data||{courses:[]});
   state.loaded=true;
   render(data);
  }finally{state.busy=false}
@@ -287,6 +311,39 @@ async function save(decision){
   toast(label(state.selectedReview)+' review recorded: '+statusLabel(out.data&&out.data.review_status?out.data.review_status:decision)+'.');
   await load();
  }finally{if(approve)approve.disabled=false;if(revise)revise.disabled=false}
+}
+async function openEvidenceModule(moduleId){
+ var dialog=q('#ptrEvidenceDialog'),body=q('#ptrEvidenceBody'),title=q('#ptrEvidenceTitle');
+ if(!dialog||!body||!title)return;
+ title.textContent='Loading evidence packet…';
+ body.innerHTML='<div class="ptr-audit-note">Loading module evidence, lesson and assessment bank…</div>';
+ dialog.showModal();
+ var out=await rpc('get_admin_professional_training_evidence_module',{p_module_id:moduleId});
+ if(out.error){title.textContent='Evidence packet unavailable';body.innerHTML='<div class="ptr-audit-note">'+esc(out.error.message||'Evidence packet could not be loaded.')+'</div>';return}
+ var data=out.data||{},m=data.module||{},e=data.evidence||{},items=data.assessment_items||[];
+ title.textContent=(m.sequence?m.sequence+'. ':'')+(m.title||'Evidence review');
+ var sources=(m.source_refs||[]).map(function(s){
+  var url=String(s.url||'');
+  var link=/^https:\/\//i.test(url)?'<a href="'+esc(url)+'" target="_blank" rel="noopener noreferrer">'+esc(s.title||url)+'</a>':esc(s.title||url);
+  return '<div class="ptr-source">'+link+'<br><small>'+esc(s.source_type||'source')+' · '+esc(s.published_or_reviewed_year||'')+(s.current_or_recent?' · current/recent':'')+'</small><br>'+esc(s.claim_supported||'')+'</div>';
+ }).join('');
+ var objectives=(m.learning_objectives||[]).map(function(x){return '<li>'+esc(x)+'</li>'}).join('');
+ var practice=(m.practice_requirements||[]).map(function(x){return '<li>'+esc(x)+'</li>'}).join('');
+ var assessments=items.map(function(a){
+  var choices=(a.choices||[]).map(function(choice,i){return '<li class="'+(i===a.correct_answer_index?'correct':'')+'">'+esc(choice)+(i===a.correct_answer_index?' ✓':'')+'</li>'}).join('');
+  return '<div class="ptr-assessment-review"><b>'+esc(a.item_order)+'. '+esc(a.prompt)+'</b><ol>'+choices+'</ol><small><b>Rationale:</b> '+esc(a.rationale||'')+'<br><b>Source note:</b> '+esc(a.source_note||'')+'</small></div>';
+ }).join('');
+ body.innerHTML=
+  '<div class="ptr-evidence-meta"><span>Module: '+esc(m.review_status||'')+'</span><span>Evidence: '+esc(e.status||'')+'</span><span>'+esc((m.source_refs||[]).length)+' sources</span><span>'+esc(items.length)+' assessment items</span></div>'+
+  '<div class="ptr-audit-note"><b>Mixed/negative evidence:</b><br>'+esc(e.mixed_evidence_note||'Not recorded')+'</div>'+
+  '<div class="ptr-audit-note"><b>Claim-strength limit:</b><br>'+esc(e.claim_strength_note||'Not recorded')+'</div>'+
+  (e.reviewer_note?'<div class="ptr-audit-note"><b>Build note:</b><br>'+esc(e.reviewer_note)+'</div>':'')+
+  '<h4>Learning objectives</h4><ul>'+objectives+'</ul>'+
+  '<h4>Practice requirements</h4><ul>'+practice+'</ul>'+
+  '<h4>Evidence sources</h4>'+sources+
+  '<h4>Lesson draft</h4><div class="ptr-evidence-content">'+esc(m.content_md||'')+'</div>'+
+  '<h4>Assessment bank · answer key visible to Admin</h4>'+assessments+
+  '<div class="ptr-audit-note"><b>Human review required:</b> This packet is evidence for the assigned reviewers. It does not approve the course or replace the separate Source, Curriculum and Assessment signoffs.</div>';
 }
 async function publishProfessionalCourse(courseKey){
  var expected='PUBLISH '+courseKey;
@@ -385,6 +442,8 @@ function activate(){
  load();
 }
 document.addEventListener('click',function(event){
+ var evidenceModule=event.target.closest('[data-ptr-evidence-module]');
+ if(evidenceModule){event.preventDefault();openEvidenceModule(evidenceModule.dataset.ptrEvidenceModule);return}
  var publish=event.target.closest('[data-ptr-publish]');
  if(publish){event.preventDefault();publishProfessionalCourse(publish.dataset.ptrPublish);return}
  var enableCheckout=event.target.closest('[data-ptr-enable-checkout]');
