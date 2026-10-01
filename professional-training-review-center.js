@@ -2,8 +2,8 @@
 (function(){
 'use strict';
 
-var VERSION='2026-09-30-professional-review-center-v2';
-var state={courses:[],reviewers:[],controls:{},release:{courses:[],is_key_administrator:false},evidence:{courses:[]},selectedCourse:null,selectedReview:null,loaded:false,busy:false};
+var VERSION='2026-10-01-professional-review-center-v3';
+var state={courses:[],reviewers:[],controls:{},release:{courses:[],is_key_administrator:false},evidence:{courses:[]},selectedCourse:null,selectedReview:null,selectedAssignment:null,loaded:false,busy:false};
 var client=(typeof sb!=='undefined'&&sb)?sb:(window.LelleeAuthContext&&window.LelleeAuthContext.client?window.LelleeAuthContext.client:null);
 
 function q(sel,root){return (root||document).querySelector(sel)}
@@ -123,6 +123,38 @@ function ensureUi(){
    '<div class="ptr-dialog-inner"><span class="approved-kicker">EVIDENCE PACKET · ADMIN ONLY</span><h3 id="ptrEvidenceTitle">Evidence review</h3><div id="ptrEvidenceBody"></div><div class="ptr-actions"><button class="approved-small-action" id="ptrEvidenceClose" type="button">Close</button></div></div>';
   document.body.appendChild(evidenceDialog);
   q('#ptrEvidenceClose').addEventListener('click',function(){evidenceDialog.close()});
+
+  var reviewerDialog=document.createElement('dialog');
+  reviewerDialog.id='ptrReviewerDialog';
+  reviewerDialog.className='ptr-dialog';
+  reviewerDialog.innerHTML=
+   '<div class="ptr-dialog-inner"><span class="approved-kicker">IN-HOUSE REVIEWER</span><h3>Register reviewer</h3><p>Enter the reviewer exactly as the in-house verification record should appear. Registration alone does not authorize signoff; the reviewer must still be marked Verified In-House.</p>'+
+   '<div class="ptr-form">'+
+   '<label class="wide">Full name<input id="ptrReviewerName" type="text" autocomplete="name" placeholder="Reviewer full name"></label>'+
+   '<label class="wide">Qualification / credential<textarea id="ptrReviewerQualification" placeholder="Degree, credential, licensure, professional experience, or other qualification relevant to the assigned review domain."></textarea></label>'+
+   '<label class="wide">Reviewer domain(s)<textarea id="ptrReviewerDomains" placeholder="Comma-separated, for example: independent_living_sme, instructional_design"></textarea></label>'+
+   '<div class="wide ptr-audit-note" id="ptrReviewerDomainHelp"></div>'+
+   '<label>Organization<input id="ptrReviewerOrganization" type="text" placeholder="Optional"></label>'+
+   '<label>Evidence / internal reference<input id="ptrReviewerEvidence" type="text" placeholder="Optional verification reference"></label>'+
+   '</div><div class="ptr-actions"><button class="approved-link" id="ptrReviewerCancel" type="button">Cancel</button><button class="approved-small-action" id="ptrReviewerSave" type="button">Register Reviewer</button></div></div>';
+  document.body.appendChild(reviewerDialog);
+  q('#ptrReviewerCancel').addEventListener('click',function(){reviewerDialog.close()});
+  q('#ptrReviewerSave').addEventListener('click',saveReviewerForm);
+
+  var assignmentDialog=document.createElement('dialog');
+  assignmentDialog.id='ptrAssignmentDialog';
+  assignmentDialog.className='ptr-dialog';
+  assignmentDialog.innerHTML=
+   '<div class="ptr-dialog-inner"><span class="approved-kicker">REVIEW ASSIGNMENT</span><h3 id="ptrAssignmentTitle">Assign reviewer</h3><p id="ptrAssignmentRequirement"></p>'+
+   '<div class="ptr-form">'+
+   '<label class="wide">Verified In-House reviewer<select id="ptrAssignmentReviewer"></select></label>'+
+   '<div class="wide ptr-audit-note" id="ptrAssignmentReviewerDetail"></div>'+
+   '<label>Due date<input id="ptrAssignmentDue" type="date"></label>'+
+   '<label class="wide">Assignment notes<textarea id="ptrAssignmentNotes" placeholder="What should the reviewer focus on? Optional."></textarea></label>'+
+   '</div><div class="ptr-actions"><button class="approved-link" id="ptrAssignmentCancel" type="button">Cancel</button><button class="approved-small-action" id="ptrAssignmentSave" type="button">Save Assignment</button></div></div>';
+  document.body.appendChild(assignmentDialog);
+  q('#ptrAssignmentCancel').addEventListener('click',function(){assignmentDialog.close()});
+  q('#ptrAssignmentSave').addEventListener('click',saveAssignmentForm);
  }
  return true;
 }
@@ -384,30 +416,55 @@ async function toggleDualReviewOverride(){
  toast(enabling?'Temporary dual-review override enabled.':'Temporary dual-review override disabled.');
  await load();
 }
-async function assignReviewSlot(id){
- var assignment=null;
+function assignReviewSlot(id){
+ var assignment=null,courseFound=null;
  state.courses.some(function(course){
-  assignment=(course.assignments||[]).find(function(a){return a.id===id})||null;
-  return !!assignment;
+  var found=(course.assignments||[]).find(function(a){return a.id===id})||null;
+  if(found){assignment=found;courseFound=course;return true}
+  return false;
  });
  if(!assignment)return toast('Review assignment could not be found.',true);
  var eligible=state.reviewers.filter(function(r){
   return r.verification_status==='verified_in_house'&&r.active&&(r.reviewer_domains||[]).indexOf(assignment.reviewer_domain)>=0;
  });
  if(!eligible.length)return toast('No Verified In-House reviewer is available for '+assignment.reviewer_domain+'.',true);
- var options=eligible.map(function(r,i){return (i+1)+'. '+r.full_name+' — '+r.qualification}).join('\n');
- var choice=prompt('Select reviewer for '+assignment.reviewer_domain+':\n'+options,'1');
- if(!choice)return;
- var idx=parseInt(choice,10)-1;
- if(!Number.isInteger(idx)||idx<0||idx>=eligible.length)return toast('Enter the reviewer number shown in the list.',true);
- var due=prompt('Due date YYYY-MM-DD (optional):','')||null;
- var notes=prompt('Assignment notes (optional):','')||null;
- var out=await rpc('admin_assign_professional_reviewer',{
-  p_assignment_id:id,p_reviewer_id:eligible[idx].id,p_due_date:due,p_notes:notes
- });
- if(out.error)return toast(out.error.message||'Reviewer could not be assigned.',true);
- toast('Reviewer assigned to '+assignment.reviewer_domain+'.');
- await load();
+ state.selectedAssignment=assignment;
+ var dialog=q('#ptrAssignmentDialog');
+ q('#ptrAssignmentTitle').textContent=(assignment.status==='unassigned'?'Assign':'Reassign')+' · '+label(assignment.review_type);
+ q('#ptrAssignmentRequirement').textContent=(courseFound?courseFound.title+' · ':'')+'Required reviewer domain: '+assignment.reviewer_domain+'. Only active reviewers verified in-house for this exact domain are listed.';
+ q('#ptrAssignmentReviewer').innerHTML=eligible.map(function(r){
+  return '<option value="'+esc(r.id)+'" '+(r.id===assignment.reviewer_id?'selected':'')+'>'+esc(r.full_name)+' · '+esc(r.qualification)+'</option>';
+ }).join('');
+ q('#ptrAssignmentDue').value=assignment.due_date||'';
+ q('#ptrAssignmentNotes').value=assignment.assignment_notes||'';
+ function showDetail(){
+  var selected=eligible.find(function(r){return r.id===q('#ptrAssignmentReviewer').value});
+  q('#ptrAssignmentReviewerDetail').textContent=selected
+    ? selected.full_name+' · '+selected.qualification+(selected.organization?' · '+selected.organization:'')+' · '+(selected.reviewer_domains||[]).join(', ')
+    : '';
+ }
+ q('#ptrAssignmentReviewer').onchange=showDetail;
+ showDetail();
+ dialog.showModal();
+}
+async function saveAssignmentForm(){
+ var assignment=state.selectedAssignment;
+ if(!assignment)return toast('Review assignment could not be found.',true);
+ var reviewerId=q('#ptrAssignmentReviewer').value;
+ var due=q('#ptrAssignmentDue').value||null;
+ var notes=q('#ptrAssignmentNotes').value.trim()||null;
+ if(!reviewerId)return toast('Select a Verified In-House reviewer.',true);
+ var save=q('#ptrAssignmentSave');if(save)save.disabled=true;
+ try{
+  var out=await rpc('admin_assign_professional_reviewer',{
+   p_assignment_id:assignment.id,p_reviewer_id:reviewerId,p_due_date:due,p_notes:notes
+  });
+  if(out.error)return toast(out.error.message||'Reviewer could not be assigned.',true);
+  q('#ptrAssignmentDialog').close();
+  state.selectedAssignment=null;
+  toast('Reviewer assigned to '+assignment.reviewer_domain+'.');
+  await load();
+ }finally{if(save)save.disabled=false}
 }
 async function startReviewSlot(id){
  var out=await rpc('admin_start_professional_review_assignment',{p_assignment_id:id});
@@ -415,20 +472,44 @@ async function startReviewSlot(id){
  toast('Review marked In Review.');
  await load();
 }
-async function addReviewer(){
- var name=prompt('Reviewer full name:');if(!name)return;
- var qualification=prompt('Reviewer qualification / credential:');if(!qualification)return;
- var domains=prompt('Reviewer domain(s), comma-separated (example: coaching_sme, instructional_design):');if(!domains)return;
- var organization=prompt('Organization (optional):','')||null;
- var evidence=prompt('Internal verification reference or evidence note (optional):','')||null;
- var list=domains.split(',').map(function(x){return x.trim()}).filter(Boolean);
- var out=await rpc('admin_register_professional_reviewer',{
-  p_full_name:name,p_qualification:qualification,p_reviewer_domains:list,
-  p_organization:organization,p_evidence_ref:evidence
+function addReviewer(){
+ var dialog=q('#ptrReviewerDialog');if(!dialog)return;
+ q('#ptrReviewerName').value='';
+ q('#ptrReviewerQualification').value='';
+ q('#ptrReviewerDomains').value='';
+ q('#ptrReviewerOrganization').value='';
+ q('#ptrReviewerEvidence').value='';
+ var domains=[];
+ state.courses.forEach(function(course){
+  (course.assignments||[]).forEach(function(a){
+   if(domains.indexOf(a.reviewer_domain)<0)domains.push(a.reviewer_domain);
+  });
  });
- if(out.error)return toast(out.error.message||'Reviewer could not be registered.',true);
- toast('Reviewer registered. Verify in-house before using for signoff.');
- await load();
+ domains.sort();
+ q('#ptrReviewerDomainHelp').innerHTML='<b>Current reviewer domains:</b><br>'+domains.map(esc).join(' · ');
+ dialog.showModal();
+ q('#ptrReviewerName').focus();
+}
+async function saveReviewerForm(){
+ var name=q('#ptrReviewerName').value.trim();
+ var qualification=q('#ptrReviewerQualification').value.trim();
+ var domains=q('#ptrReviewerDomains').value.split(',').map(function(x){return x.trim()}).filter(Boolean);
+ var organization=q('#ptrReviewerOrganization').value.trim()||null;
+ var evidence=q('#ptrReviewerEvidence').value.trim()||null;
+ if(!name)return toast('Reviewer full name is required.',true);
+ if(qualification.length<10)return toast('Enter a meaningful reviewer qualification or credential.',true);
+ if(!domains.length)return toast('Enter at least one reviewer domain.',true);
+ var save=q('#ptrReviewerSave');if(save)save.disabled=true;
+ try{
+  var out=await rpc('admin_register_professional_reviewer',{
+   p_full_name:name,p_qualification:qualification,p_reviewer_domains:domains,
+   p_organization:organization,p_evidence_ref:evidence
+  });
+  if(out.error)return toast(out.error.message||'Reviewer could not be registered.',true);
+  q('#ptrReviewerDialog').close();
+  toast('Reviewer registered. Verify in-house before using for signoff.');
+  await load();
+ }finally{if(save)save.disabled=false}
 }
 async function verifyReviewer(id,verified){
  var note=prompt(verified?'In-house verification notes:':'Reason reviewer was rejected:','')||null;
