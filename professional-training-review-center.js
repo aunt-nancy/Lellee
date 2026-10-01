@@ -2,8 +2,8 @@
 (function(){
 'use strict';
 
-var VERSION='2026-10-01-professional-review-center-v3';
-var state={courses:[],reviewers:[],controls:{},release:{courses:[],is_key_administrator:false},evidence:{courses:[]},selectedCourse:null,selectedReview:null,selectedAssignment:null,loaded:false,busy:false};
+var VERSION='2026-10-01-professional-review-center-v4';
+var state={courses:[],reviewers:[],controls:{},release:{courses:[],is_key_administrator:false},evidence:{courses:[]},selectedCourse:null,selectedReview:null,selectedAssignment:null,selectedReviewerVerification:null,loaded:false,busy:false};
 var client=(typeof sb!=='undefined'&&sb)?sb:(window.LelleeAuthContext&&window.LelleeAuthContext.client?window.LelleeAuthContext.client:null);
 
 function q(sel,root){return (root||document).querySelector(sel)}
@@ -155,6 +155,25 @@ function ensureUi(){
   document.body.appendChild(assignmentDialog);
   q('#ptrAssignmentCancel').addEventListener('click',function(){assignmentDialog.close()});
   q('#ptrAssignmentSave').addEventListener('click',saveAssignmentForm);
+
+  var verificationDialog=document.createElement('dialog');
+  verificationDialog.id='ptrVerificationDialog';
+  verificationDialog.className='ptr-dialog';
+  verificationDialog.innerHTML=
+   '<div class="ptr-dialog-inner"><span class="approved-kicker">IN-HOUSE VERIFICATION</span><h3 id="ptrVerificationTitle">Verify reviewer</h3><p id="ptrVerificationIntro"></p>'+
+   '<div class="ptr-audit-note" id="ptrVerificationReviewerDetail"></div>'+
+   '<div class="ptr-form">'+
+   '<label class="wide ptr-attest"><input id="ptrVerifyIdentity" type="checkbox"><span>Identity was checked against the in-house information available for this reviewer.</span></label>'+
+   '<label class="wide ptr-attest"><input id="ptrVerifyQualification" type="checkbox"><span>Qualification/experience was reviewed and is relevant to the proposed reviewer role.</span></label>'+
+   '<label class="wide ptr-attest"><input id="ptrVerifyEvidence" type="checkbox"><span>Supporting evidence or internal verification information was reviewed.</span></label>'+
+   '<label class="wide ptr-attest"><input id="ptrVerifyConflict" type="checkbox"><span>Conflict/independence concerns were considered for reviewer use.</span></label>'+
+   '<div class="wide ptr-audit-note"><b>Reviewer domains verified</b><div id="ptrVerificationDomains" style="margin-top:6px"></div></div>'+
+   '<label class="wide">Verification / rejection notes<textarea id="ptrVerificationNotes" placeholder="Record what was checked, limitations, relevant experience, and the basis for the decision."></textarea></label>'+
+   '</div><div class="ptr-actions"><button class="approved-link" id="ptrVerificationCancel" type="button">Cancel</button><button class="approved-link" id="ptrVerificationReject" type="button">Reject Reviewer</button><button class="approved-small-action" id="ptrVerificationApprove" type="button">Verify In-House</button></div></div>';
+  document.body.appendChild(verificationDialog);
+  q('#ptrVerificationCancel').addEventListener('click',function(){verificationDialog.close()});
+  q('#ptrVerificationReject').addEventListener('click',function(){saveReviewerVerification(false)});
+  q('#ptrVerificationApprove').addEventListener('click',function(){saveReviewerVerification(true)});
  }
  return true;
 }
@@ -511,12 +530,65 @@ async function saveReviewerForm(){
   await load();
  }finally{if(save)save.disabled=false}
 }
-async function verifyReviewer(id,verified){
- var note=prompt(verified?'In-house verification notes:':'Reason reviewer was rejected:','')||null;
- var out=await rpc('admin_verify_professional_reviewer',{p_reviewer_id:id,p_verified:verified,p_notes:note});
- if(out.error)return toast(out.error.message||'Reviewer verification could not be saved.',true);
- toast(verified?'Reviewer verified in-house.':'Reviewer rejected.');
- await load();
+function verifyReviewer(id,verified){
+ var reviewer=state.reviewers.find(function(r){return r.id===id});
+ if(!reviewer)return toast('Reviewer could not be found.',true);
+ state.selectedReviewerVerification=reviewer;
+ var dialog=q('#ptrVerificationDialog');
+ q('#ptrVerificationTitle').textContent=verified?'Verify In-House Reviewer':'Review / Reject Reviewer';
+ q('#ptrVerificationIntro').textContent=verified
+  ? 'Complete every verification item and confirm each declared reviewer domain before this reviewer can sign off on professional training.'
+  : 'You may record a rejection without completing every checklist item, but a clear rejection reason is required.';
+ q('#ptrVerificationReviewerDetail').innerHTML=
+  '<b>'+esc(reviewer.full_name)+'</b><br>'+
+  esc(reviewer.qualification||'')+
+  (reviewer.organization?'<br>'+esc(reviewer.organization):'')+
+  (reviewer.evidence_ref?'<br><small>Evidence/reference: '+esc(reviewer.evidence_ref)+'</small>':'');
+ ['#ptrVerifyIdentity','#ptrVerifyQualification','#ptrVerifyEvidence','#ptrVerifyConflict'].forEach(function(sel){q(sel).checked=false});
+ q('#ptrVerificationNotes').value='';
+ q('#ptrVerificationDomains').innerHTML=(reviewer.reviewer_domains||[]).map(function(domain){
+  return '<label class="ptr-attest" style="margin:5px 0"><input type="checkbox" data-ptr-verify-domain="'+esc(domain)+'"><span>'+esc(domain)+'</span></label>';
+ }).join('')||'<small>No reviewer domains are currently declared.</small>';
+ q('#ptrVerificationApprove').hidden=!verified;
+ q('#ptrVerificationReject').hidden=false;
+ dialog.showModal();
+}
+async function saveReviewerVerification(verified){
+ var reviewer=state.selectedReviewerVerification;
+ if(!reviewer)return toast('Reviewer could not be found.',true);
+ var notes=q('#ptrVerificationNotes').value.trim();
+ var domains=qa('[data-ptr-verify-domain]',q('#ptrVerificationDialog')).filter(function(x){return x.checked}).map(function(x){return x.dataset.ptrVerifyDomain});
+ var checklist={
+  identity_checked:!!q('#ptrVerifyIdentity').checked,
+  qualification_checked:!!q('#ptrVerifyQualification').checked,
+  evidence_reviewed:!!q('#ptrVerifyEvidence').checked,
+  conflict_independence_checked:!!q('#ptrVerifyConflict').checked,
+  checked_domains:domains
+ };
+ if(verified){
+  if(!checklist.identity_checked||!checklist.qualification_checked||!checklist.evidence_reviewed||!checklist.conflict_independence_checked)
+   return toast('Complete every in-house verification checklist item before approval.',true);
+  if(domains.length!==(reviewer.reviewer_domains||[]).length)
+   return toast('Verify every declared reviewer domain before approval.',true);
+ }
+ if(notes.length<10)return toast(verified?'Enter verification notes of at least 10 characters.':'Enter a rejection reason of at least 10 characters.',true);
+ var approve=q('#ptrVerificationApprove'),reject=q('#ptrVerificationReject');
+ if(approve)approve.disabled=true;if(reject)reject.disabled=true;
+ try{
+  var out=await rpc('admin_verify_professional_reviewer_v2',{
+   p_reviewer_id:reviewer.id,
+   p_verified:verified,
+   p_checklist:checklist,
+   p_notes:notes
+  });
+  if(out.error)return toast(out.error.message||'Reviewer verification could not be saved.',true);
+  q('#ptrVerificationDialog').close();
+  state.selectedReviewerVerification=null;
+  toast(verified?'Reviewer verified in-house.':'Reviewer rejected.');
+  await load();
+ }finally{
+  if(approve)approve.disabled=false;if(reject)reject.disabled=false;
+ }
 }
 function activate(){
  if(!ensureUi())return;
