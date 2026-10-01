@@ -213,9 +213,9 @@ function render(data){
   var evidenceNote=Number(release.evidence_total||0)>0
     ? '<small>Evidence: '+esc(release.evidence_approved||0)+'/'+esc(release.evidence_total)+' approved</small>'
     : '';
-  var paymentNote=course.status==='published'||!issues.length
-    ? '<small>Payment link: '+(release.payment_link_configured?'configured':'not configured')+'</small>'
-    : '';
+  var stripeStatus=release.stripe_setup_status||'not tracked';
+  var paymentNote='<small>Stripe setup: '+esc(String(stripeStatus).replace(/_/g,' '))+
+    ' · Payment link: '+(release.payment_link_configured?'configured':'not configured')+'</small>';
   return '<article class="ptr-course"><div class="ptr-course-head"><div><span class="approved-kicker">'+esc(course.category==='foundation'?'FOUNDATION':'SPECIALTY')+'</span><h4>'+esc(course.title)+'</h4><p>'+esc(course.estimated_hours)+' hrs · '+esc(course.modules)+' modules · '+esc(course.assessments)+' questions · '+esc(course.scenarios)+' scenarios · '+esc(course.status)+'</p></div><div class="ptr-price"><b>'+esc(money(course.price_cents))+'</b><small>'+(course.checkout_enabled?'checkout enabled':'checkout off')+'</small><br>'+evidenceNote+'<br>'+paymentNote+'<div class="ptr-actions">'+releaseActions+'</div></div></div><div class="ptr-assignments"><b>Reviewer assignment queue</b>'+assignmentHtml+'</div><div class="ptr-domains">'+reviews+'</div>'+blockers+'</article>';
  }).join('')||'<div class="approved-resource-empty">No professional courses found.</div>';
 }
