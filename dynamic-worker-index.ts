@@ -257,7 +257,7 @@ Deno.serve(async (req) => {
     return json({
       ok: Boolean(SUPABASE_URL && SERVICE_ROLE_KEY && WORKER_SECRET),
       worker: "dynamic-worker",
-      version: "1.1",
+      version: "1.2",
       model: MODEL,
       has_supabase_url: Boolean(SUPABASE_URL),
       has_service_role_key: Boolean(SERVICE_ROLE_KEY),
@@ -306,8 +306,23 @@ Deno.serve(async (req) => {
   if (!tasks?.length) return json({ ok: true, processed: 0, message: "No queued tasks." });
 
   const results: any[] = [];
+  let externalCreditBlocked = false;
 
   for (const task of tasks) {
+    if (externalCreditBlocked) {
+      await sb.from("agent_tasks").update({
+        status: "blocked",
+        updated_at: new Date().toISOString(),
+      }).eq("id", task.task_id);
+      results.push({
+        task_id: task.task_id,
+        title: task.title,
+        status: "blocked",
+        error: "external_api_credits_required",
+      });
+      continue;
+    }
+
     let runId: string | null = null;
     try {
       const useWebSearch =
@@ -388,23 +403,28 @@ Deno.serve(async (req) => {
         }).eq("id", runId);
       }
 
+      const creditBlocked = /no credits remaining|insufficient[_ ]quota|billing/i.test(message);
+      const terminalStatus = creditBlocked ? "blocked" : "failed";
+
       await sb.from("agent_tasks").update({
-        status: "failed",
+        status: terminalStatus,
         updated_at: new Date().toISOString(),
       }).eq("id", task.task_id);
 
       await sb.from("agent_audit_log").insert({
-        event_type: "worker_failed_task",
+        event_type: creditBlocked ? "worker_blocked_external_credits" : "worker_failed_task",
         agent_id: task.agent_id,
         task_id: task.task_id,
         safe_metadata: { error: message.slice(0, 500) },
       });
 
+      if (creditBlocked) externalCreditBlocked = true;
+
       results.push({
         task_id: task.task_id,
         title: task.title,
-        status: "failed",
-        error: message,
+        status: terminalStatus,
+        error: creditBlocked ? "external_api_credits_required" : message,
       });
     }
   }
