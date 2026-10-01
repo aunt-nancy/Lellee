@@ -2,8 +2,8 @@
 (function(){
 'use strict';
 
-var VERSION='2026-10-01-professional-review-center-v5';
-var state={courses:[],reviewers:[],controls:{},release:{courses:[],is_key_administrator:false},evidence:{courses:[]},workload:{summary:{},reviewers:[],domains:[],is_key_administrator:false},selectedCourse:null,selectedReview:null,selectedAssignment:null,selectedReviewerVerification:null,selectedCapacityReviewer:null,loaded:false,busy:false};
+var VERSION='2026-10-01-professional-review-center-v6';
+var state={courses:[],reviewers:[],controls:{},release:{courses:[],is_key_administrator:false},evidence:{courses:[]},workload:{summary:{},reviewers:[],domains:[],is_key_administrator:false},deadlines:{summary:{},settings:{},alerts:[],is_key_administrator:false},selectedCourse:null,selectedReview:null,selectedAssignment:null,selectedReviewerVerification:null,selectedCapacityReviewer:null,loaded:false,busy:false};
 var client=(typeof sb!=='undefined'&&sb)?sb:(window.LelleeAuthContext&&window.LelleeAuthContext.client?window.LelleeAuthContext.client:null);
 
 function q(sel,root){return (root||document).querySelector(sel)}
@@ -69,7 +69,7 @@ function ensureStyles(){
  '.ptr-domains{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px;margin-top:10px}.ptr-domain{border:1px solid #e8e3e9;border-radius:10px;padding:9px;background:#fbfafc;min-width:0}.ptr-domain.approved{border-color:#cfe4d5;background:#f7fcf8}.ptr-domain.revisions_required{border-color:#efd1d5;background:#fff8f9}.ptr-domain>b{display:block;font-size:.6rem}.ptr-domain>small{display:block;font-size:.52rem;line-height:1.42;color:#777;margin:3px 0}.ptr-domain button{border:1px solid #d8cfe0;background:#fff;border-radius:7px;padding:6px 8px;font-size:.53rem;font-weight:760;color:#65409a;cursor:pointer}'+
  '.ptr-signoff{border-top:1px solid #eee8f0;margin-top:5px;padding-top:5px;font-size:.49rem;color:#68616b;line-height:1.35}.ptr-assignments{margin-top:10px;border-top:1px solid #eee8f0;padding-top:9px}.ptr-assignment{display:flex;justify-content:space-between;gap:10px;align-items:center;border:1px solid #eee8f0;border-radius:8px;padding:7px 9px;margin:5px 0;font-size:.53rem}.ptr-assignment b{font-size:.56rem}.ptr-assignment small{display:block;color:#777;margin-top:2px}.ptr-assignment-actions{display:flex;gap:5px;flex-wrap:wrap}.ptr-assignment button{border:1px solid #d8cfe0;background:#fff;border-radius:7px;padding:5px 7px;font-size:.51rem;font-weight:750;color:#65409a;cursor:pointer}.ptr-blockers{margin-top:9px;border-top:1px solid #eee8f0;padding-top:8px;font-size:.54rem;color:#7c5660}.ptr-blockers.ok{color:#3b7853}.ptr-audit-note{border:1px solid #e6e0e9;background:#faf8fc;border-radius:10px;padding:10px 12px;font-size:.56rem;line-height:1.5;color:#6d6570;margin:8px 0 12px}'+
  '.ptr-dialog{border:0;border-radius:16px;padding:0;width:min(620px,calc(100% - 24px));max-height:calc(100dvh - 28px);overflow:hidden;box-shadow:0 30px 90px rgba(28,19,39,.3)}.ptr-dialog::backdrop{background:rgba(26,19,34,.58)}.ptr-dialog-inner{padding:20px;max-height:calc(100dvh - 28px);overflow-y:auto}.ptr-dialog h3{margin:4px 0 5px;font-size:1rem}.ptr-dialog p{font-size:.62rem;color:#706a73;line-height:1.5}'+
- '.ptr-evidence{margin-top:10px;border-top:1px solid #eee8f0;padding-top:9px}.ptr-evidence-row{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;border:1px solid #e6e0e9;border-radius:9px;padding:8px 9px;margin:6px 0;background:#faf9fb}.ptr-evidence-row b{display:block;font-size:.57rem}.ptr-evidence-row small{display:block;font-size:.51rem;color:#777;margin-top:2px}.ptr-evidence-row button{border:1px solid #d8cfe0;background:#fff;border-radius:7px;padding:5px 7px;font-size:.51rem;font-weight:750;color:#65409a;cursor:pointer}.ptr-evidence-content{white-space:pre-wrap;overflow-wrap:anywhere;border:1px solid #e6e0e9;border-radius:9px;background:#fbfafc;padding:12px;font:500 .62rem/1.55 ui-monospace,SFMono-Regular,Consolas,monospace;color:#433b47}.ptr-source{border:1px solid #e6e0e9;border-radius:9px;padding:9px;margin:6px 0;font-size:.56rem;line-height:1.45}.ptr-source a{color:#65409a;font-weight:760}.ptr-assessment-review{border-top:1px solid #eee8f0;padding-top:9px;margin-top:9px;font-size:.57rem;line-height:1.45}.ptr-assessment-review ol{padding-left:20px}.ptr-assessment-review .correct{font-weight:800;color:#356244}.ptr-evidence-meta{display:flex;gap:6px;flex-wrap:wrap;margin:7px 0}.ptr-evidence-meta span{border-radius:999px;background:#f2eef6;padding:4px 7px;font-size:.5rem;color:#625966;font-weight:750}'+ '.ptr-workload{border:1px solid #e4dce9;border-radius:13px;background:#fff;padding:14px;margin:10px 0}.ptr-workload-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin:9px 0 12px}.ptr-workload-grid article{border:1px solid #e8e2eb;border-radius:9px;padding:9px;background:#faf9fb}.ptr-workload-grid b{display:block;font-size:.86rem;color:#65409a}.ptr-workload-grid small{font-size:.51rem;color:#777}.ptr-domain-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.ptr-domain-coverage{border:1px solid #e8e2eb;border-radius:9px;padding:8px 9px;font-size:.53rem;line-height:1.4}.ptr-domain-coverage.gap{border-color:#efd1d5;background:#fff8f9}.ptr-domain-coverage.single{border-color:#eadcbf;background:#fffdf7}.ptr-domain-coverage b{display:block;font-size:.56rem}.ptr-workload-reviewer{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;border-top:1px solid #eee8f0;padding:8px 0;font-size:.53rem}.ptr-workload-reviewer small{display:block;color:#777;margin-top:2px}.ptr-workload-reviewer button{border:1px solid #d8cfe0;background:#fff;border-radius:7px;padding:5px 7px;font-size:.51rem;font-weight:750;color:#65409a;cursor:pointer}'+
+ '.ptr-evidence{margin-top:10px;border-top:1px solid #eee8f0;padding-top:9px}.ptr-evidence-row{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;border:1px solid #e6e0e9;border-radius:9px;padding:8px 9px;margin:6px 0;background:#faf9fb}.ptr-evidence-row b{display:block;font-size:.57rem}.ptr-evidence-row small{display:block;font-size:.51rem;color:#777;margin-top:2px}.ptr-evidence-row button{border:1px solid #d8cfe0;background:#fff;border-radius:7px;padding:5px 7px;font-size:.51rem;font-weight:750;color:#65409a;cursor:pointer}.ptr-evidence-content{white-space:pre-wrap;overflow-wrap:anywhere;border:1px solid #e6e0e9;border-radius:9px;background:#fbfafc;padding:12px;font:500 .62rem/1.55 ui-monospace,SFMono-Regular,Consolas,monospace;color:#433b47}.ptr-source{border:1px solid #e6e0e9;border-radius:9px;padding:9px;margin:6px 0;font-size:.56rem;line-height:1.45}.ptr-source a{color:#65409a;font-weight:760}.ptr-assessment-review{border-top:1px solid #eee8f0;padding-top:9px;margin-top:9px;font-size:.57rem;line-height:1.45}.ptr-assessment-review ol{padding-left:20px}.ptr-assessment-review .correct{font-weight:800;color:#356244}.ptr-evidence-meta{display:flex;gap:6px;flex-wrap:wrap;margin:7px 0}.ptr-evidence-meta span{border-radius:999px;background:#f2eef6;padding:4px 7px;font-size:.5rem;color:#625966;font-weight:750}'+ '.ptr-workload{border:1px solid #e4dce9;border-radius:13px;background:#fff;padding:14px;margin:10px 0}.ptr-workload-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin:9px 0 12px}.ptr-workload-grid article{border:1px solid #e8e2eb;border-radius:9px;padding:9px;background:#faf9fb}.ptr-workload-grid b{display:block;font-size:.86rem;color:#65409a}.ptr-workload-grid small{font-size:.51rem;color:#777}.ptr-domain-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.ptr-domain-coverage{border:1px solid #e8e2eb;border-radius:9px;padding:8px 9px;font-size:.53rem;line-height:1.4}.ptr-domain-coverage.gap{border-color:#efd1d5;background:#fff8f9}.ptr-domain-coverage.single{border-color:#eadcbf;background:#fffdf7}.ptr-domain-coverage b{display:block;font-size:.56rem}.ptr-workload-reviewer{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;border-top:1px solid #eee8f0;padding:8px 0;font-size:.53rem}.ptr-workload-reviewer small{display:block;color:#777;margin-top:2px}.ptr-workload-reviewer button{border:1px solid #d8cfe0;background:#fff;border-radius:7px;padding:5px 7px;font-size:.51rem;font-weight:750;color:#65409a;cursor:pointer}'+ '.ptr-deadlines{border:1px solid #e4dce9;border-radius:13px;background:#fff;padding:14px;margin:10px 0}.ptr-deadline-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin:9px 0 12px}.ptr-deadline-grid article{border:1px solid #e8e2eb;border-radius:9px;padding:9px;background:#faf9fb}.ptr-deadline-grid b{display:block;font-size:.86rem;color:#65409a}.ptr-deadline-grid small{font-size:.51rem;color:#777}.ptr-alert{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;border:1px solid #e6e0e9;border-radius:9px;padding:9px 10px;margin:6px 0;font-size:.54rem;background:#faf9fb}.ptr-alert.overdue{border-color:#e7bdc5;background:#fff7f8}.ptr-alert.stalled{border-color:#ead6ad;background:#fffdf6}.ptr-alert.due_soon{border-color:#d8cee4;background:#faf8fc}.ptr-alert.acknowledged{opacity:.68}.ptr-alert b{display:block;font-size:.57rem}.ptr-alert small{display:block;color:#777;margin-top:2px}.ptr-alert-actions{display:flex;gap:5px;flex-wrap:wrap}.ptr-alert button{border:1px solid #d8cfe0;background:#fff;border-radius:7px;padding:5px 7px;font-size:.51rem;font-weight:750;color:#65409a;cursor:pointer}'+
  '.ptr-form{display:grid;grid-template-columns:1fr 1fr;gap:9px}.ptr-form label{display:grid;gap:4px;font-size:.57rem;font-weight:750;color:#625966}.ptr-form .wide{grid-column:1/-1}.ptr-form input,.ptr-form select,.ptr-form textarea{width:100%;box-sizing:border-box;border:1px solid #ddd5e1;border-radius:8px;padding:8px;background:#fff;font:inherit;font-size:.63rem}.ptr-form textarea{min-height:74px;resize:vertical}.ptr-attest{display:flex!important;grid-template-columns:none!important;flex-direction:row;gap:8px!important;align-items:flex-start;font-weight:650!important}.ptr-attest input{width:auto;margin-top:2px}.ptr-actions{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap;margin-top:12px}'+
  '@media(max-width:760px){.ptr-metrics{grid-template-columns:1fr 1fr}.ptr-domains{grid-template-columns:1fr}.ptr-form{grid-template-columns:1fr}.ptr-form .wide{grid-column:auto}.ptr-course-head,.ptr-head{display:block}.ptr-price{text-align:left;margin-top:6px}}';
  document.head.appendChild(style);
@@ -87,6 +87,7 @@ function ensureUi(){
   wrap.innerHTML=
    '<div class="ptr-head"><div><span class="approved-kicker">COURSE REVIEW & RELEASE</span><h3>Professional training human review center</h3><p>Record qualified human signoffs for sources, curriculum, assessments, scope/safety and capstones. Course publishing and checkout remain hard-blocked until all release requirements pass.</p></div><button class="approved-small-action" id="ptrRefresh" type="button">Refresh</button></div>'+
    '<div id="ptrMetrics"></div>'+
+   '<div id="ptrDeadlines"></div>'+
    '<div id="ptrWorkload"></div>'+
    '<div class="ptr-audit-note"><b>Audit rule:</b> Reviewer qualifications are verified manually in-house before a signoff can count. Scope reviews with two required domains must be completed by different verified reviewers.</div>'+ '<div id="ptrReviewerRegistry"></div>'+
    '<div id="ptrCourseList"></div>';
@@ -189,6 +190,20 @@ function ensureUi(){
   document.body.appendChild(capacityDialog);
   q('#ptrCapacityCancel').addEventListener('click',function(){capacityDialog.close()});
   q('#ptrCapacitySave').addEventListener('click',saveReviewerCapacity);
+
+  var reminderSettingsDialog=document.createElement('dialog');
+  reminderSettingsDialog.id='ptrReminderSettingsDialog';
+  reminderSettingsDialog.className='ptr-dialog';
+  reminderSettingsDialog.innerHTML=
+   '<div class="ptr-dialog-inner"><span class="approved-kicker">REVIEW DEADLINE SETTINGS</span><h3>Deadline & reminder thresholds</h3><p>These settings control internal Professional Training alerts only. They do not send email, SMS, or push notifications.</p>'+
+   '<div class="ptr-form">'+
+   '<label class="wide ptr-attest"><input id="ptrReminderEnabled" type="checkbox"><span>Enable internal review deadline alerts</span></label>'+
+   '<label>Due-soon window (days)<input id="ptrDueSoonDays" type="number" min="1" max="30" step="1"></label>'+
+   '<label>Stalled-review threshold (days)<input id="ptrStalledDays" type="number" min="1" max="60" step="1"></label>'+
+   '</div><div class="ptr-actions"><button class="approved-link" id="ptrReminderSettingsCancel" type="button">Cancel</button><button class="approved-small-action" id="ptrReminderSettingsSave" type="button">Save Settings</button></div></div>';
+  document.body.appendChild(reminderSettingsDialog);
+  q('#ptrReminderSettingsCancel').addEventListener('click',function(){reminderSettingsDialog.close()});
+  q('#ptrReminderSettingsSave').addEventListener('click',saveReminderSettings);
  }
  return true;
 }
@@ -199,6 +214,7 @@ function render(data){
  state.release=data.release||state.release||{courses:[],is_key_administrator:false};
  state.evidence=data.evidence||state.evidence||{courses:[]};
  state.workload=data.workload||state.workload||{summary:{},reviewers:[],domains:[],is_key_administrator:false};
+ state.deadlines=data.deadlines||state.deadlines||{summary:{},settings:{},alerts:[],is_key_administrator:false};
  var s=data.summary||{};
  q('#ptrMetrics').innerHTML=
   '<div class="ptr-metrics">'+
@@ -209,6 +225,39 @@ function render(data){
   '<article><b>'+esc(s.published||0)+'</b><small>published</small></article>'+
   '<article><b>'+esc(s.checkout_enabled||0)+'</b><small>checkout enabled</small></article>'+
   '</div>';
+
+ var ds=state.deadlines.summary||{};
+ var dcfg=state.deadlines.settings||{};
+ var alerts=(state.deadlines.alerts||[]).map(function(a){
+  var statusText=String(a.status||'').replace(/_/g,' ');
+  var typeText=String(a.reminder_type||'').replace(/_/g,' ');
+  var due=a.due_date?' · due '+esc(a.due_date):'';
+  var timing='';
+  if(a.reminder_type==='overdue'&&a.days_until_due!=null)timing=' · '+esc(Math.abs(a.days_until_due))+' day(s) overdue';
+  else if(a.reminder_type==='due_soon'&&a.days_until_due!=null)timing=' · '+esc(a.days_until_due)+' day(s) remaining';
+  var actions=a.status==='open'
+    ? '<button type="button" data-ptr-reminder-action="acknowledge" data-ptr-reminder-id="'+esc(a.id)+'">Acknowledge</button>'
+    : a.status==='acknowledged'
+      ? '<button type="button" data-ptr-reminder-action="reopen" data-ptr-reminder-id="'+esc(a.id)+'">Reopen</button>'
+      : '';
+  return '<div class="ptr-alert '+esc(a.reminder_type)+' '+esc(a.status)+'"><div><b>'+esc(typeText)+' · '+esc(a.course_title||'Course')+' · '+esc(label(a.review_type))+'</b><span>'+esc(a.reviewer_domain||'')+' · '+esc(a.reviewer_name||'No reviewer')+due+timing+'</span><small>Status: '+esc(statusText)+'</small></div><div class="ptr-alert-actions">'+actions+'</div></div>';
+ }).join('');
+ var settingsButton=state.deadlines.is_key_administrator
+  ? '<button type="button" class="approved-small-action" id="ptrReminderSettings">Settings</button>'
+  : '';
+ q('#ptrDeadlines').innerHTML=
+  '<section class="ptr-deadlines"><div class="ptr-head"><div><span class="approved-kicker">REVIEW DEADLINES & ALERTS</span><h3>Due soon, overdue and stalled reviews</h3><p>Internal alerts refresh hourly. Current thresholds: due soon within '+esc(dcfg.due_soon_days||7)+' days · stalled after '+esc(dcfg.stalled_days||7)+' days.</p></div>'+settingsButton+'</div>'+
+  '<div class="ptr-deadline-grid">'+
+   '<article><b>'+esc(ds.open_alerts||0)+'</b><small>open alerts</small></article>'+
+   '<article><b>'+esc(ds.due_soon||0)+'</b><small>due soon</small></article>'+
+   '<article><b>'+esc(ds.overdue||0)+'</b><small>overdue</small></article>'+
+   '<article><b>'+esc(ds.stalled||0)+'</b><small>stalled</small></article>'+
+   '<article><b>'+esc(ds.assignments_without_due_date||0)+'</b><small>active without due date</small></article>'+
+  '</div>'+
+  (alerts||'<div class="approved-resource-empty">No active review deadline alerts.</div>')+
+  '<div class="ptr-audit-note"><b>Delivery rule:</b> These are Professional Training internal alerts only. They do not use Lellee push/email/SMS delivery unless a separate notification channel is approved later.</div></section>';
+ var tab=q('[data-credential-tab="training"]');
+ if(tab)tab.textContent='Professional Training'+(Number(ds.open_alerts||0)>0?' ('+Number(ds.open_alerts||0)+')':'');
 
  var ws=state.workload.summary||{};
  var domainRows=(state.workload.domains||[]).map(function(d){
@@ -350,17 +399,20 @@ async function load(){
    rpc('get_admin_professional_training_review_center'),
    rpc('get_admin_professional_release_controls'),
    rpc('get_admin_professional_training_evidence_center'),
-   rpc('get_admin_professional_reviewer_workload')
+   rpc('get_admin_professional_reviewer_workload'),
+   rpc('get_admin_professional_review_deadline_center')
   ]);
-  var out=results[0],releaseOut=results[1],evidenceOut=results[2],workloadOut=results[3];
+  var out=results[0],releaseOut=results[1],evidenceOut=results[2],workloadOut=results[3],deadlineOut=results[4];
   if(out.error){console.warn('Professional review center',out.error);q('#ptrCourseList').innerHTML='<div class="approved-resource-empty">Professional review data could not be loaded.</div>';return}
   if(releaseOut.error){console.warn('Professional release controls',releaseOut.error)}
   if(evidenceOut.error){console.warn('Professional evidence center',evidenceOut.error)}
   if(workloadOut.error){console.warn('Professional reviewer workload',workloadOut.error)}
+  if(deadlineOut.error){console.warn('Professional review deadlines',deadlineOut.error)}
   var data=out.data||{};
   data.release=releaseOut.error?{courses:[],is_key_administrator:false}:(releaseOut.data||{});
   data.evidence=evidenceOut.error?{courses:[]}:(evidenceOut.data||{courses:[]});
   data.workload=workloadOut.error?{summary:{},reviewers:[],domains:[],is_key_administrator:false}:(workloadOut.data||{});
+  data.deadlines=deadlineOut.error?{summary:{},settings:{},alerts:[],is_key_administrator:false}:(deadlineOut.data||{});
   state.loaded=true;
   render(data);
  }finally{state.busy=false}
@@ -584,6 +636,39 @@ async function saveReviewerForm(){
   await load();
  }finally{if(save)save.disabled=false}
 }
+function openReminderSettings(){
+ if(!state.deadlines.is_key_administrator)return toast('Key administrator access required.',true);
+ var cfg=state.deadlines.settings||{};
+ q('#ptrReminderEnabled').checked=cfg.reminders_enabled!==false;
+ q('#ptrDueSoonDays').value=cfg.due_soon_days||7;
+ q('#ptrStalledDays').value=cfg.stalled_days||7;
+ q('#ptrReminderSettingsDialog').showModal();
+}
+async function saveReminderSettings(){
+ var enabled=!!q('#ptrReminderEnabled').checked;
+ var dueSoon=parseInt(q('#ptrDueSoonDays').value,10);
+ var stalled=parseInt(q('#ptrStalledDays').value,10);
+ if(!Number.isInteger(dueSoon)||dueSoon<1||dueSoon>30)return toast('Due-soon days must be between 1 and 30.',true);
+ if(!Number.isInteger(stalled)||stalled<1||stalled>60)return toast('Stalled-review days must be between 1 and 60.',true);
+ var save=q('#ptrReminderSettingsSave');if(save)save.disabled=true;
+ try{
+  var out=await rpc('admin_set_professional_review_reminder_settings',{
+   p_enabled:enabled,p_due_soon_days:dueSoon,p_stalled_days:stalled
+  });
+  if(out.error)return toast(out.error.message||'Reminder settings could not be saved.',true);
+  q('#ptrReminderSettingsDialog').close();
+  toast('Review reminder settings updated.');
+  await load();
+ }finally{if(save)save.disabled=false}
+}
+async function updateReviewReminder(id,action){
+ var out=await rpc('admin_update_professional_review_reminder',{
+  p_reminder_id:id,p_action:action,p_snooze_days:null
+ });
+ if(out.error)return toast(out.error.message||'Reminder could not be updated.',true);
+ toast(action==='acknowledge'?'Review alert acknowledged.':'Review alert reopened.');
+ await load();
+}
 function openReviewerCapacity(id){
  if(!state.workload.is_key_administrator)return toast('Key administrator access required to change reviewer capacity.',true);
  var w=(state.workload.reviewers||[]).find(function(x){return x.id===id});
@@ -683,6 +768,10 @@ function activate(){
  load();
 }
 document.addEventListener('click',function(event){
+ var reminderSettings=event.target.closest('#ptrReminderSettings');
+ if(reminderSettings){event.preventDefault();openReminderSettings();return}
+ var reminderAction=event.target.closest('[data-ptr-reminder-action]');
+ if(reminderAction){event.preventDefault();updateReviewReminder(reminderAction.dataset.ptrReminderId,reminderAction.dataset.ptrReminderAction);return}
  var capacity=event.target.closest('[data-ptr-capacity]');
  if(capacity){event.preventDefault();openReviewerCapacity(capacity.dataset.ptrCapacity);return}
  var evidenceModule=event.target.closest('[data-ptr-evidence-module]');
