@@ -115,21 +115,101 @@ RULES FOR THIS RUN:
 - Keep uncertainties explicit.
 - If web research is available, use public sources only and cite sources.
 - Return practical, organized output that a Lellee human reviewer can use.
+${task.agent_key === "professional-training-evidence-builder" ? `
+PROFESSIONAL TRAINING EVIDENCE BUILD:
+- Use live web research and real verifiable sources.
+- Prefer systematic reviews, current government guidance, professional standards, and peer-reviewed research.
+- Include at least 3 unique sources and at least 2 authoritative/systematic sources.
+- Include at least one current/recent source for changing topics; justified older foundational evidence may supplement it.
+- Preserve important mixed, null, negative, or uncertain findings; do not cherry-pick.
+- Match claim strength to evidence and never call the Lellee curriculum itself evidence-based unless separately validated.
+- Draft at least 1,800 characters of substantive instructional content.
+- Provide at least 3 learning objectives and 2 practice requirements.
+- Provide exactly 8 assessment items, each with 4 answer choices; at least 3 items must be scenarios.
+- Keep diagnosis, treatment, medication decisions, individualized legal advice, emergency services, and other regulated practice outside ordinary coaching/education scope.
+- The response must conform exactly to the required structured-output schema.
+` : ""}
 `.trim();
+};
+
+const professionalTrainingSchema = {
+  type: "object",
+  additionalProperties: false,
+  properties: {
+    content_md: { type: "string" },
+    learning_objectives: { type: "array", items: { type: "string" } },
+    practice_requirements: { type: "array", items: { type: "string" } },
+    source_refs: {
+      type: "array",
+      items: {
+        type: "object",
+        additionalProperties: false,
+        properties: {
+          title: { type: "string" },
+          url: { type: "string" },
+          source_type: {
+            type: "string",
+            enum: ["systematic_review","government_guidance","professional_standard","peer_reviewed_research"]
+          },
+          published_or_reviewed_year: { type: "integer" },
+          current_or_recent: { type: "boolean" },
+          claim_supported: { type: "string" }
+        },
+        required: ["title","url","source_type","published_or_reviewed_year","current_or_recent","claim_supported"]
+      }
+    },
+    mixed_evidence_note: { type: "string" },
+    claim_strength_note: { type: "string" },
+    assessment_items: {
+      type: "array",
+      items: {
+        type: "object",
+        additionalProperties: false,
+        properties: {
+          item_type: { type: "string", enum: ["multiple_choice","scenario"] },
+          prompt: { type: "string" },
+          choices: { type: "array", items: { type: "string" } },
+          correct_index: { type: "integer" },
+          rationale: { type: "string" },
+          source_note: { type: "string" }
+        },
+        required: ["item_type","prompt","choices","correct_index","rationale","source_note"]
+      }
+    }
+  },
+  required: [
+    "content_md","learning_objectives","practice_requirements","source_refs",
+    "mixed_evidence_note","claim_strength_note","assessment_items"
+  ]
 };
 
 const callOpenAI = async (task: any, useWebSearch: boolean) => {
   const prompt = await safePrompt(task);
 
+  const evidenceBuild = task.agent_key === "professional-training-evidence-builder";
   const body: any = {
     model: MODEL,
-    reasoning: { effort: "low" },
-    max_output_tokens: 2600,
+    reasoning: { effort: evidenceBuild ? "medium" : "low" },
+    max_output_tokens: evidenceBuild ? 8000 : 6000,
     input: prompt,
   };
 
   if (useWebSearch) {
-    body.tools = [{ type: "web_search", search_context_size: "low" }];
+    body.tools = [{
+      type: "web_search",
+      search_context_size: evidenceBuild ? "medium" : "low"
+    }];
+  }
+
+  if (evidenceBuild) {
+    body.text = {
+      format: {
+        type: "json_schema",
+        name: "professional_training_module",
+        strict: true,
+        schema: professionalTrainingSchema,
+      },
+    };
   }
 
   const response = await fetch("https://api.openai.com/v1/responses", {
@@ -177,7 +257,7 @@ Deno.serve(async (req) => {
     return json({
       ok: Boolean(SUPABASE_URL && SERVICE_ROLE_KEY && WORKER_SECRET),
       worker: "dynamic-worker",
-      version: "1.0",
+      version: "1.1",
       model: MODEL,
       has_supabase_url: Boolean(SUPABASE_URL),
       has_service_role_key: Boolean(SERVICE_ROLE_KEY),
@@ -232,7 +312,10 @@ Deno.serve(async (req) => {
     try {
       const useWebSearch =
         researchEnabled &&
-        ["provider_research", "prospect_research", "trend_intelligence", "resource_freshness"].includes(task.agent_type);
+        (
+          ["provider_research", "prospect_research"].includes(task.agent_type) ||
+          task.agent_key === "professional-training-evidence-builder"
+        );
 
       const { data: run, error: runError } = await sb
         .from("agent_runs")
