@@ -24,6 +24,7 @@ const OFFERS: Record<string, Offer> = {
   specialty_caregiving: { entitlement: "specialty_caregiving", interval: "one_time", price: "price_1UKkb0DpLc9a3tUu7SEYfTi4" },
   specialty_grief_life_after_loss: { entitlement: "specialty_grief_life_after_loss", interval: "one_time", price: "price_1UKkb0DpLc9a3tUuyY6kOiyu" },
   specialty_workforce_new_beginnings: { entitlement: "specialty_workforce_new_beginnings", interval: "one_time", price: "price_1UKkb2DpLc9a3tUu5SmrBofJ" },
+  specialty_independent_living: { entitlement: "specialty_independent_living", interval: "one_time", price: "price_1ULZoqDpLc9a3tUuEvaJkW7T" },
 };
 
 const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
