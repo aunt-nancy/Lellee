@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0d3b39">
+<title>Lellee Coach Business — Log In</title>
+<meta name="description" content="Secure login for independent coaches using the Lellee Coach Business workspace.">
+<link rel="stylesheet" href="/coach-auth.css?v=20261002-1">
+</head>
+<body data-coach-auth="login">
+<main class="coach-auth-shell">
+  <section class="coach-auth-brand" aria-label="Lellee Coach Business">
+    <a class="coach-wordmark" href="/coach.html"><img src="/lellee-approved-logo-final.jpg" alt="Lellee"><span>COACH BUSINESS</span></a>
+    <div class="coach-auth-copy">
+      <span class="eyebrow">INDEPENDENT COACH BUSINESS</span>
+      <h2>Run your coaching practice from one professional workspace.</h2>
+      <p>Manage clients, groups, services, scheduling, assignments, conversations, credentials, follow-up and business operations without mixing the professional front door into the consumer support experience.</p>
+      <div class="coach-auth-points"><span>Client & group management</span><span>Scheduling & CRM</span><span>Assignments & conversations</span><span>Business analytics</span></div>
+    </div>
+    <div class="coach-auth-foot">Powered by Lellee · Private by default · Client-controlled sharing</div>
+  </section>
+  <section class="coach-auth-panel">
+    <div class="coach-auth-card">
+      <span class="coach-auth-kicker">COACH BUSINESS</span>
+      <h1 id="authTitle">Coach Business Log In</h1>
+      <p class="coach-auth-intro" id="authIntro">Sign in to manage your independent coaching business, clients, groups, scheduling and operations.</p>
+      <form id="authForm" novalidate>
+        <div class="field" id="emailField"><label for="email">Email</label><input id="email" type="email" autocomplete="email" inputmode="email" required></div>
+        <div class="field" id="passwordField"><label for="password">Password</label><div class="password-wrap"><input id="password" type="password" minlength="8" autocomplete="current-password" required><button class="show-password" type="button" data-password-target="password">Show</button></div></div>
+        <div class="field hidden" id="confirmField"><label for="confirmPassword">Confirm new password</label><div class="password-wrap"><input id="confirmPassword" type="password" minlength="8" autocomplete="new-password"><button class="show-password" type="button" data-password-target="confirmPassword">Show</button></div></div>
+        <div class="utility"><button class="link-button" id="forgotButton" type="button">Forgot password?</button><button class="link-button hidden" id="backToLogin" type="button">Back to login</button></div>
+        <button class="primary" id="submitButton" type="submit">Log in to Coach Business</button>
+        <div class="status" id="status" role="status" aria-live="polite"></div>
+      </form>
+      <p class="existing-note"><b>Already use Lellee Support?</b> Use the same email and password here. Your personal support workspace and Coach Business role stay separate.</p>
+      <p class="switch-note">New to Coach Business? <a href="/coach-signup.html">Create a Coach Business account</a></p>
+      <div class="service-state" id="serviceState"><span class="dot"></span><span>Preparing secure sign-in…</span></div>
+      <nav class="coach-auth-links"><a href="/coach.html">Coach Business home</a><a href="/privacy.html">Privacy</a><a href="/terms.html">Terms</a><a href="/safety.html">Safety</a></nav>
+    </div>
+  </section>
+</main>
+<script src="/coach-auth.js?v=20261002-1"></script>
+</body>
+</html>
