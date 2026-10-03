@@ -34,7 +34,9 @@ function passwordToggle(button){
 }
 function configureLoginMode(next){
   mode=next;
-  const emailField=$('emailField'),passField=$('passwordField'),confirmField=$('confirmField'),submit=$('submitButton'),title=$('authTitle'),intro=$('authIntro');
+  const emailField=$('emailField'),passField=$('passwordField'),confirmField=$('confirmField'),submit=$('submitButton'),title=$('authTitle'),intro=$('authIntro'),forgot=$('forgotButton'),back=$('backToLogin');
+  if(forgot)forgot.classList.toggle('hidden',next!=='signin');
+  if(back)back.classList.toggle('hidden',next==='signin');
   if(next==='forgot'){
     title.textContent='Reset your Coach Business password';
     intro.textContent='Enter the email connected to your Lellee account and we will send a secure reset link.';
