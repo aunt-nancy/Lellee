@@ -124,18 +124,21 @@
 
     const sched=$('#coachScheduleList');
     if(sched) sched.innerHTML=(r.schedule||[]).length?(r.schedule||[]).map(x=>`
-      <article class="coach-ops-item"><div class="coach-ops-row"><div><b>${esc(x.title)}</b><small>${esc(dt(x.scheduled_start))} · ${x.duration_minutes} min · ${esc(title(x.session_scope))}</small></div><span class="coach-ops-pill">${esc(title(x.status))}</span></div>${x.meeting_location?`<small>${esc(x.meeting_location)}</small>`:''}</article>`).join(''):
+      <article class="coach-ops-item"><div class="coach-ops-row"><div><b>${esc(x.title)}</b><small>${esc(dt(x.scheduled_start))} · ${x.duration_minutes} min · ${esc(title(x.session_scope))}</small></div><span class="coach-ops-pill">${esc(title(x.status))}</span></div>${x.meeting_location?`<small>${esc(x.meeting_location)}</small>`:''}
+      <div class="coach-ops-actions"><button class="primary" data-open-coach-schedule="${x.id}">Open</button></div></article>`).join(''):
       '<div class="coach-ops-empty">No scheduled sessions yet.</div>';
 
     const av=$('#coachAvailabilityList');
     const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
     if(av) av.innerHTML=(r.availability||[]).length?(r.availability||[]).map(x=>`
-      <article class="coach-ops-item"><div class="coach-ops-row"><div><b>${days[x.day_of_week]||'Day'}</b><small>${esc(x.start_time)} – ${esc(x.end_time)} · ${esc(x.timezone)}</small></div><span class="coach-ops-pill">${x.active?'ACTIVE':'OFF'}</span></div></article>`).join(''):
+      <article class="coach-ops-item"><div class="coach-ops-row"><div><b>${days[x.day_of_week]||'Day'}</b><small>${esc(x.start_time)} – ${esc(x.end_time)} · ${esc(x.timezone)}</small></div><span class="coach-ops-pill">${x.active?'ACTIVE':'OFF'}</span></div>
+      <div class="coach-ops-actions"><button class="primary" data-open-coach-availability="${x.id}">Edit</button></div></article>`).join(''):
       '<div class="coach-ops-empty">No availability rules yet.</div>';
 
     const co=$('#coachConsultationList');
     if(co) co.innerHTML=(r.consultations||[]).length?(r.consultations||[]).map(x=>`
-      <article class="coach-ops-item"><div class="coach-ops-row"><div><b>${esc(x.client_label)}</b><small>${esc(x.note||'No note')} · ${esc(date(x.created_at))}</small></div><span class="coach-ops-pill">${esc(title(x.status))}</span></div></article>`).join(''):
+      <article class="coach-ops-item"><div class="coach-ops-row"><div><b>${esc(x.client_label)}</b><small>${esc(x.note||'No note')} · ${esc(date(x.created_at))}</small></div><span class="coach-ops-pill">${esc(title(x.status))}</span></div>
+      <div class="coach-ops-actions"><button class="primary" data-open-coach-consultation="${x.id}">Manage</button></div></article>`).join(''):
       '<div class="coach-ops-empty">No open consultation requests.</div>';
 
     const fo=$('#coachFollowupList');
