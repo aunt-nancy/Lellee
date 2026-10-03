@@ -308,6 +308,15 @@
     await openWave1PaymentLink('coach_addon_payment_link');
   }
 
+  async function startIndividualizedLiveCoachingCheckout(){
+    const state=await loadWave1UpgradeState();
+    if(state.entitlements.has('live_coaching_425')){
+      await openPlusBillingPortal();
+      return;
+    }
+    await openWave1PaymentLink('individualized_live_coaching_payment_link');
+  }
+
   async function startCoachCheckinCheckout(){
     const state=await loadWave1UpgradeState();
     if(!state.entitlements.has('coach')){
@@ -348,11 +357,17 @@
           <span class="approved-setting-note" id="journalUpgradeStatus"></span>
         </article>
         <article class="wave1-upgrade-card" data-wave1-product="coach">
-          <small>LELLEE COACH ADD-ON</small><h3>$49.99/month + Premium</h3>
-          <p>Human coaching, messaging, goals, accountability, progress review and milestone support.</p>
-          <button class="approved-small-action" id="startCoachAddonMembership" type="button">Add Lellee Coach</button>
+          <small>LIGHT COACH SUPPORT</small><h3>$49.99/month + Premium</h3>
+          <p>Recurring lighter-touch human coaching support with messaging, goals, accountability and scheduled check-ins.</p>
+          <button class="approved-small-action" id="startCoachAddonMembership" type="button">Add Coach Support</button>
           <button class="approved-link" id="buyCoachCheckin" type="button">Additional 15-minute check-in — $19.99</button>
           <span class="approved-setting-note" id="coachUpgradeStatus"></span>
+        </article>
+        <article class="wave1-upgrade-card" data-wave1-product="live-coaching">
+          <small>INDIVIDUALIZED LIVE COACHING</small><h3>$425/month</h3>
+          <p>Higher-touch individualized live coaching for users who want an ongoing one-to-one coaching relationship. Lellee Plus is included while this plan is active.</p>
+          <button class="approved-small-action" id="startIndividualizedLiveCoaching" type="button">Start Live Coaching</button>
+          <span class="approved-setting-note" id="individualizedLiveCoachingStatus"></span>
         </article>
       </div>`;
     const note=$('#lelleeCanonicalPricingNote');
@@ -366,8 +381,9 @@
         else openJournalCheckout();
       }catch(err){toast(err?.message||'Could not open Journal Companion billing.','error')}
     });
-    $('#startCoachAddonMembership')?.addEventListener('click',()=>startCoachAddonCheckout().catch(err=>{toast(err?.message||'Could not open Coach checkout.','error');refreshWave1UpgradePanel()}));
+    $('#startCoachAddonMembership')?.addEventListener('click',()=>startCoachAddonCheckout().catch(err=>{toast(err?.message||'Could not open Coach Support checkout.','error');refreshWave1UpgradePanel()}));
     $('#buyCoachCheckin')?.addEventListener('click',()=>startCoachCheckinCheckout().catch(err=>{toast(err?.message||'Could not open check-in checkout.','error');refreshWave1UpgradePanel()}));
+    $('#startIndividualizedLiveCoaching')?.addEventListener('click',()=>startIndividualizedLiveCoachingCheckout().catch(err=>{toast(err?.message||'Could not open Individualized Live Coaching checkout.','error');refreshWave1UpgradePanel()}));
     return panel;
   }
 
@@ -375,7 +391,7 @@
     const panel=ensureWave1UpgradePanel();if(!panel)return;
     const state=await loadWave1UpgradeState();
     const has=key=>state.entitlements.has(key);
-    const premium=$('#startPremiumMembership'),journal=$('#startJournalCompanionMembership'),coach=$('#startCoachAddonMembership'),checkin=$('#buyCoachCheckin');
+    const premium=$('#startPremiumMembership'),journal=$('#startJournalCompanionMembership'),coach=$('#startCoachAddonMembership'),checkin=$('#buyCoachCheckin'),liveCoach=$('#startIndividualizedLiveCoaching');
 
     if(premium){
       premium.disabled=false;
@@ -398,7 +414,17 @@
       checkin.disabled=!has('coach');
       checkin.setAttribute('aria-disabled',String(!has('coach')));
     }
-    if($('#coachUpgradeStatus')) $('#coachUpgradeStatus').textContent=has('coach')?'Lellee Coach is active. Additional check-ins are available.':has('premium')?'Premium is active. You can add Lellee Coach.':'Lellee Premium is required for the Coach add-on.';
+    if($('#coachUpgradeStatus')) $('#coachUpgradeStatus').textContent=has('coach')?'Light Coach Support is active. Additional 15-minute check-ins are available.':has('premium')?'Premium is active. You can add Light Coach Support.':'Lellee Premium is required for the $49.99 Coach Support add-on.';
+
+    if(liveCoach){
+      liveCoach.disabled=false;
+      liveCoach.textContent=has('live_coaching_425')?'Manage Live Coaching':'Start Live Coaching';
+    }
+    if($('#individualizedLiveCoachingStatus')){
+      $('#individualizedLiveCoachingStatus').textContent=has('live_coaching_425')
+        ? 'Individualized Live Coaching is active. Lellee Plus access is included.'
+        : 'Lellee Plus is included while this plan is active.';
+    }
   }
 
   function wireRecoveryReviewCard(){
