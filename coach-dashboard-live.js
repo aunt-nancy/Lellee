@@ -18,6 +18,8 @@
     clientWorkspace:null,
     selectedGroup:null,
     groupWorkspace:null,
+    selectedService:null,
+    selectedLead:null,
     loading:false
   };
 
@@ -288,6 +290,7 @@
           <span class="coach-live-pill">${esc(money(s.price_amount))}</span>
           <span class="coach-live-pill">${esc(statusLabel(s.billing_model))}</span>
         </div>
+        <div class="coach-live-actions"><button class="primary" data-coach-open-service="${s.id}">Open Service</button></div>
       </article>`).join('') :
       `<div class="coach-live-empty">No services yet. Define a 1-to-1, group, hybrid, package, or free coaching offer.</div>`;
   }
@@ -344,7 +347,9 @@
           <div><b>${esc(l.name||l.email||'Lead')}</b><small>${esc([l.email,l.phone,l.source].filter(Boolean).join(' · '))}</small></div>
           <span class="coach-live-pill">${esc(statusLabel(l.status))}</span>
         </div>
+        <div class="coach-live-meta">${l.interested_service_id?`<span class="coach-live-pill">${esc(((state.context?.services||[]).find(s=>s.id===l.interested_service_id)||{}).name||'Service')}</span>`:''}</div>
         ${l.notes?`<small style="margin-top:7px">${esc(l.notes)}</small>`:''}
+        <div class="coach-live-actions"><button class="primary" data-coach-open-lead="${l.id}">Open Lead</button></div>
       </article>`).join('') :
       `<div class="coach-live-empty">No leads yet.</div>`;
   }
@@ -504,6 +509,176 @@
     const {error}=await sb().from('coach_leads').insert(row);
     if(error) throw error;
     closeDialog(); await loadDashboard();
+  }
+
+
+  function serviceForId(id){
+    return (state.context?.services||[]).find(x=>x.id===id)||null;
+  }
+
+  function leadForId(id){
+    return (state.context?.leads||[]).find(x=>x.id===id)||null;
+  }
+
+  function leadServiceOptions(selected=''){
+    return '<option value="">No interested service</option>'+(state.context?.services||[]).map(s=>
+      '<option value="'+esc(s.id)+'" '+(s.id===selected?'selected':'')+'>'+esc(s.name)+(s.active?'':' · inactive')+'</option>'
+    ).join('');
+  }
+
+  function openServiceManagement(serviceId){
+    const service=serviceForId(serviceId);
+    if(!service) return alert('Coaching service could not be found.');
+    state.selectedService=service;
+    dialog('Manage Service',service.program_name||'Program',
+      '<form id="coachServiceManagementForm"><div class="coach-live-form">'+
+        '<label class="wide">Service name<input id="coachManageServiceName" value="'+esc(service.name)+'" required></label>'+
+        '<label>Program<input value="'+esc(service.program_name||'Program')+'" disabled></label>'+
+        '<label>Service type<select id="coachManageServiceType">'+
+          ['one_to_one','group','hybrid'].map(x=>'<option value="'+x+'" '+(service.service_type===x?'selected':'')+'>'+esc(typeLabel(x))+'</option>').join('')+
+        '</select></label>'+
+        '<label>Billing model<select id="coachManageServiceBilling">'+
+          ['monthly','per_session','package','free'].map(x=>'<option value="'+x+'" '+(service.billing_model===x?'selected':'')+'>'+esc(statusLabel(x))+'</option>').join('')+
+        '</select></label>'+
+        '<label>Price<input id="coachManageServicePrice" type="number" min="0" step="0.01" value="'+esc(service.price_amount==null?'':service.price_amount)+'"></label>'+
+        '<label>Sessions included<input id="coachManageServiceSessions" type="number" min="0" value="'+esc(service.sessions_included==null?'':service.sessions_included)+'"></label>'+
+        '<label>Group capacity<input id="coachManageServiceCapacity" type="number" min="2" max="50" value="'+esc(service.group_capacity==null?'':service.group_capacity)+'"></label>'+
+        '<label>Individual touchpoints<input id="coachManageServiceTouchpoints" type="number" min="0" value="'+esc(service.individual_touchpoints==null?'':service.individual_touchpoints)+'"></label>'+
+        '<label class="wide">Description<textarea id="coachManageServiceDescription">'+esc(service.description||'')+'</textarea></label>'+
+        '<label class="wide coach-service-active"><input id="coachManageServiceActive" type="checkbox" '+(service.active?'checked':'')+'><span>Service is active and available for new client/group setup</span></label>'+
+      '</div><div class="coach-live-review-note"><b>Existing clients:</b> Deactivating a service stops it from being selected for new setups. It does not erase existing client or group records.</div>'+
+      '<div class="coach-live-footer"><button type="button" data-coach-live-close>Cancel</button><button class="primary" type="submit">Save Service</button></div></form>');
+  }
+
+  async function saveServiceManagement(){
+    const s=state.selectedService;
+    if(!s) throw new Error('Service is unavailable.');
+    const billing=$('#coachManageServiceBilling')?.value||s.billing_model;
+    const payload={
+      p_service_id:s.id,
+      p_name:$('#coachManageServiceName')?.value.trim(),
+      p_description:$('#coachManageServiceDescription')?.value.trim()||null,
+      p_service_type:$('#coachManageServiceType')?.value||s.service_type,
+      p_billing_model:billing,
+      p_price_amount:billing==='free'?0:($('#coachManageServicePrice')?.value===''?null:Number($('#coachManageServicePrice')?.value)),
+      p_sessions_included:$('#coachManageServiceSessions')?.value===''?null:Number($('#coachManageServiceSessions')?.value),
+      p_group_capacity:$('#coachManageServiceCapacity')?.value===''?null:Number($('#coachManageServiceCapacity')?.value),
+      p_individual_touchpoints:$('#coachManageServiceTouchpoints')?.value===''?null:Number($('#coachManageServiceTouchpoints')?.value),
+      p_active:!!$('#coachManageServiceActive')?.checked
+    };
+    const {error}=await sb().rpc('update_my_coach_service',payload);
+    if(error) throw error;
+    closeDialog();
+    state.context=null;
+    await loadDashboard();
+  }
+
+  function openLeadManagement(leadId){
+    const lead=leadForId(leadId);
+    if(!lead) return alert('Lead could not be found.');
+    state.selectedLead=lead;
+    const canInvite=!!lead.email && state.business?.status==='approved' && lead.status!=='converted' && lead.status!=='closed';
+    dialog('Manage Lead','Business prospect/contact record. Keep private support and recovery information out of lead notes.',
+      '<form id="coachLeadManagementForm"><div class="coach-live-form">'+
+        '<label>Name<input id="coachManageLeadName" value="'+esc(lead.name||'')+'"></label>'+
+        '<label>Email<input id="coachManageLeadEmail" type="email" value="'+esc(lead.email||'')+'"></label>'+
+        '<label>Phone<input id="coachManageLeadPhone" value="'+esc(lead.phone||'')+'"></label>'+
+        '<label>Source<input id="coachManageLeadSource" value="'+esc(lead.source||'')+'"></label>'+
+        '<label>Interested service<select id="coachManageLeadService">'+leadServiceOptions(lead.interested_service_id||'')+'</select></label>'+
+        '<label>Status<select id="coachManageLeadStatus">'+
+          ['new','contacted','consultation','invited','converted','closed'].map(x=>'<option value="'+x+'" '+(lead.status===x?'selected':'')+'>'+esc(statusLabel(x))+(x==='converted'?' · accepted client only':'')+'</option>').join('')+
+        '</select></label>'+
+        '<label class="wide">Notes<textarea id="coachManageLeadNotes" placeholder="Business/contact notes only">'+esc(lead.notes||'')+'</textarea></label>'+
+      '</div><div class="coach-live-review-note"><b>Client conversion:</b> “Converted” is allowed only after the person accepts a coaching invitation. Creating an invitation does not create a client relationship.</div>'+
+      '<div class="coach-client-actions">'+
+        (canInvite?'<button type="button" data-lead-invite="'+esc(lead.id)+'">Invite as Client</button>':'')+
+        '<button type="button" data-lead-followup="'+esc(lead.id)+'">Add Follow-Up</button>'+
+      '</div>'+
+      '<div class="coach-live-footer"><button type="button" data-coach-live-close>Cancel</button><button class="primary" type="submit">Save Lead</button></div></form>');
+  }
+
+  async function saveLeadManagement(){
+    const l=state.selectedLead;
+    if(!l) throw new Error('Lead is unavailable.');
+    const payload={
+      p_lead_id:l.id,
+      p_name:$('#coachManageLeadName')?.value.trim()||null,
+      p_email:$('#coachManageLeadEmail')?.value.trim()||null,
+      p_phone:$('#coachManageLeadPhone')?.value.trim()||null,
+      p_source:$('#coachManageLeadSource')?.value.trim()||null,
+      p_interested_service_id:$('#coachManageLeadService')?.value||null,
+      p_status:$('#coachManageLeadStatus')?.value||l.status,
+      p_notes:$('#coachManageLeadNotes')?.value.trim()||null
+    };
+    const {error}=await sb().rpc('update_my_coach_lead',payload);
+    if(error) throw error;
+    closeDialog();
+    state.context=null;
+    await loadDashboard();
+  }
+
+  async function inviteLeadAsClient(leadId){
+    const lead=leadForId(leadId);
+    if(!lead?.email) throw new Error('Lead email is required before creating a client invitation.');
+    if(state.business?.status!=='approved') throw new Error('Human approval is required before inviting clients.');
+    const service=(state.context?.services||[]).find(s=>s.id===lead.interested_service_id)||null;
+    const programId=service?.program_id||state.business.primary_program_id;
+    const {data,error}=await sb().rpc('create_coach_invite',{
+      p_business_id:state.business.id,
+      p_program_id:programId,
+      p_email:lead.email
+    });
+    if(error) throw error;
+
+    const update=await sb().rpc('update_my_coach_lead',{
+      p_lead_id:lead.id,p_name:lead.name||null,p_email:lead.email,p_phone:lead.phone||null,
+      p_source:lead.source||null,p_interested_service_id:lead.interested_service_id||null,
+      p_status:'invited',p_notes:lead.notes||null
+    });
+    if(update.error) throw update.error;
+
+    const link=location.origin+'/app?coach_invite='+encodeURIComponent(data);
+    const inner=$('#coachLiveDialogInner');
+    inner.innerHTML=
+      '<div class="coach-live-dialog-head"><div><span class="approved-kicker">CLIENT INVITATION</span><h3>Invitation ready for '+esc(lead.name||lead.email)+'</h3><p>The person must sign in with '+esc(lead.email)+' and accept before a coaching relationship exists.</p></div><button class="coach-live-close" data-coach-live-close>×</button></div>'+
+      '<div class="coach-invite-link" id="coachInviteLink">'+esc(link)+'</div>'+
+      '<div class="coach-live-footer"><button type="button" id="copyCoachInvite">Copy link</button><button class="primary" type="button" data-coach-live-close>Done</button></div>';
+    state.context=null;
+  }
+
+  function openLeadFollowup(leadId){
+    const lead=leadForId(leadId);
+    if(!lead) return;
+    state.selectedLead=lead;
+    dialog('Lead Follow-Up',lead.name||lead.email||'Lead',
+      '<form id="coachLeadFollowupForm"><div class="coach-live-form">'+
+        '<label class="wide">Follow-up title<input id="coachLeadFollowupTitle" required></label>'+
+        '<label class="wide">Due date/time<input id="coachLeadFollowupDue" type="datetime-local"></label>'+
+        '<label class="wide">Note<textarea id="coachLeadFollowupNote" placeholder="Business/contact follow-up note."></textarea></label>'+
+      '</div><div class="coach-live-footer"><button type="button" data-coach-open-lead="'+esc(lead.id)+'">Back</button><button class="primary" type="submit">Add Follow-Up</button></div></form>');
+  }
+
+  async function createLeadFollowup(){
+    const lead=state.selectedLead;
+    if(!lead) throw new Error('Lead is unavailable.');
+    const title=$('#coachLeadFollowupTitle')?.value.trim();
+    if(!title) throw new Error('Follow-up title is required.');
+    const row={
+      owner_user_id:state.user.id,
+      workspace_type:'coach',
+      business_id:state.business.id,
+      organization_id:null,
+      related_user_id:null,
+      consultation_request_id:null,
+      lead_id:lead.id,
+      title,
+      note:$('#coachLeadFollowupNote')?.value.trim()||null,
+      due_at:$('#coachLeadFollowupDue')?.value?new Date($('#coachLeadFollowupDue').value).toISOString():null,
+      status:'open'
+    };
+    const {error}=await sb().from('crm_followups').insert(row);
+    if(error) throw error;
+    await openLeadManagement(lead.id);
   }
 
   function assignmentTargets(){
@@ -1100,6 +1275,16 @@
       e.preventDefault(); e.stopImmediatePropagation(); openMessage();
     }
 
+    const openService=e.target.closest('[data-coach-open-service]');
+    if(openService){ e.preventDefault(); openServiceManagement(openService.dataset.coachOpenService); }
+
+    const openLead=e.target.closest('[data-coach-open-lead]');
+    if(openLead){ e.preventDefault(); openLeadManagement(openLead.dataset.coachOpenLead); }
+    const leadInvite=e.target.closest('[data-lead-invite]');
+    if(leadInvite){ e.preventDefault(); inviteLeadAsClient(leadInvite.dataset.leadInvite).catch(err=>alert(err.message||String(err))); }
+    const leadFollowup=e.target.closest('[data-lead-followup]');
+    if(leadFollowup){ e.preventDefault(); openLeadFollowup(leadFollowup.dataset.leadFollowup); }
+
     const openGroup=e.target.closest('[data-coach-open-group]');
     if(openGroup){ e.preventDefault(); openGroupManagement(openGroup.dataset.coachOpenGroup); }
 
@@ -1168,6 +1353,9 @@
     if(id==='coachClientIntakeForm') run(assignClientIntake);
     if(id==='coachGroupManagementForm') run(saveGroupManagement);
     if(id==='coachGroupSessionForm') run(createGroupSession);
+    if(id==='coachServiceManagementForm') run(saveServiceManagement);
+    if(id==='coachLeadManagementForm') run(saveLeadManagement);
+    if(id==='coachLeadFollowupForm') run(createLeadFollowup);
   });
 
   function boot(){
