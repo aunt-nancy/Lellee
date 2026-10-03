@@ -997,7 +997,7 @@
   async function loadGroupWorkspaceData(group){
     const [members,sessions]=await Promise.all([
       sb().from('coach_group_members').select('relationship_id,status,joined_at').eq('group_id',group.id),
-      sb().from('coach_sessions').select('id,scheduled_start,duration_minutes,session_type,status,operational_note,created_at').eq('group_id',group.id).order('scheduled_start',{ascending:false}).limit(50)
+      sb().from('coach_schedule_events').select('id,title,scheduled_start,duration_minutes,session_scope,status,operational_note,meeting_location,meeting_url,created_at').eq('group_id',group.id).order('scheduled_start',{ascending:false}).limit(50)
     ]);
     if(members.error) throw members.error;
     if(sessions.error) throw sessions.error;
@@ -1018,7 +1018,7 @@
         '</article>';
     }).join('')||'<div class="coach-live-empty">No client relationships match this group program.</div>';
 
-    const sessionRows=(data.sessions||[]).map(s=>'<article class="coach-client-line"><div><b>'+esc(fmtDateTime(s.scheduled_start))+'</b><small>'+esc(statusLabel(s.session_type))+' · '+esc(s.duration_minutes)+' min'+(s.operational_note?' · '+esc(s.operational_note):'')+'</small></div><span class="coach-live-pill">'+esc(statusLabel(s.status))+'</span></article>').join('')||
+    const sessionRows=(data.sessions||[]).map(s=>'<article class="coach-client-line"><div><b>'+esc(s.title||fmtDateTime(s.scheduled_start))+'</b><small>'+esc(fmtDateTime(s.scheduled_start))+' · '+esc(s.duration_minutes)+' min'+(s.operational_note?' · '+esc(s.operational_note):'')+'</small></div><span class="coach-live-pill">'+esc(statusLabel(s.status))+'</span></article>').join('')||
       '<div class="coach-live-empty">No group sessions scheduled.</div>';
 
     inner.innerHTML=
@@ -1107,18 +1107,24 @@
     if(!group) throw new Error('Group is unavailable.');
     const start=$('#coachGroupSessionStart')?.value;
     if(!start) throw new Error('Choose a session date and time.');
+    const sessionKind=$('#coachGroupSessionType')?.value||'group_coaching';
     const row={
       business_id:state.business.id,
-      coach_user_id:state.user.id,
+      created_by:state.user.id,
       relationship_id:null,
       group_id:group.id,
+      consultation_request_id:null,
+      title:(sessionKind==='group_checkin'?'Group Check-in · ':'Group Coaching · ')+(group.name||'Group'),
+      session_scope:'group',
       scheduled_start:new Date(start).toISOString(),
       duration_minutes:Number($('#coachGroupSessionDuration')?.value||60),
-      session_type:$('#coachGroupSessionType')?.value||'group_coaching',
-      status:'scheduled',
-      operational_note:$('#coachGroupSessionNote')?.value.trim()||null
+      timezone:Intl.DateTimeFormat().resolvedOptions().timeZone||'America/Los_Angeles',
+      meeting_location:null,
+      meeting_url:null,
+      operational_note:$('#coachGroupSessionNote')?.value.trim()||null,
+      status:'scheduled'
     };
-    const {error}=await sb().from('coach_sessions').insert(row);
+    const {error}=await sb().from('coach_schedule_events').insert(row);
     if(error) throw error;
     await openGroupManagement(group.id);
   }
@@ -1139,7 +1145,7 @@
     if(!businessId) throw new Error('Coach business is unavailable.');
     const [memberships,sessions,shared,recipients,formAssignments,formDefinitions,followups]=await Promise.all([
       sb().from('coach_group_members').select('group_id,status,joined_at').eq('relationship_id',client.id),
-      sb().from('coach_sessions').select('id,scheduled_start,duration_minutes,session_type,status,operational_note,created_at').eq('relationship_id',client.id).order('scheduled_start',{ascending:false}).limit(50),
+      sb().from('coach_schedule_events').select('id,title,scheduled_start,duration_minutes,session_scope,status,operational_note,meeting_location,meeting_url,created_at').eq('relationship_id',client.id).order('scheduled_start',{ascending:false}).limit(50),
       sb().from('coach_shared_items').select('id,share_type,title,shared_content,source_reference,shared_at,revoked_at').eq('relationship_id',client.id).is('revoked_at',null).order('shared_at',{ascending:false}).limit(50),
       sb().from('coach_assignment_recipients').select('assignment_id,completed_at').eq('relationship_id',client.id),
       sb().from('form_assignments').select('id,form_id,due_at,status,completed_at,created_at').eq('business_id',businessId).eq('user_id',client.client_user_id).order('created_at',{ascending:false}).limit(50),
@@ -1176,7 +1182,7 @@
         '</article>';
     }).join('')||'<div class="coach-live-empty">No active groups match this client program.</div>';
 
-    const sessionRows=(data.sessions||[]).map(s=>'<article class="coach-client-line"><div><b>'+esc(fmtDateTime(s.scheduled_start))+'</b><small>'+esc(statusLabel(s.session_type))+' · '+esc(s.duration_minutes)+' min'+(s.operational_note?' · '+esc(s.operational_note):'')+'</small></div><span class="coach-live-pill">'+esc(statusLabel(s.status))+'</span></article>').join('')||
+    const sessionRows=(data.sessions||[]).map(s=>'<article class="coach-client-line"><div><b>'+esc(s.title||fmtDateTime(s.scheduled_start))+'</b><small>'+esc(fmtDateTime(s.scheduled_start))+' · '+esc(s.duration_minutes)+' min'+(s.operational_note?' · '+esc(s.operational_note):'')+'</small></div><span class="coach-live-pill">'+esc(statusLabel(s.status))+'</span></article>').join('')||
       '<div class="coach-live-empty">No sessions scheduled for this client.</div>';
 
     const assignmentRows=(data.assignments||[]).map(x=>'<article class="coach-client-line"><div><b>'+esc(x.assignment.title)+'</b><small>Due '+esc(x.assignment.due_at?fmtDateTime(x.assignment.due_at):'not set')+'</small></div><span class="coach-live-pill">'+esc(x.completed_at?'Completed':statusLabel(x.assignment.status))+'</span></article>').join('')||
@@ -1291,18 +1297,24 @@
     if(!client) throw new Error('Client relationship is unavailable.');
     const start=$('#coachClientSessionStart')?.value;
     if(!start) throw new Error('Choose a session date and time.');
+    const sessionKind=$('#coachClientSessionType')?.value||'coaching';
     const row={
       business_id:state.business.id,
-      coach_user_id:state.user.id,
+      created_by:state.user.id,
       relationship_id:client.id,
       group_id:null,
+      consultation_request_id:null,
+      title:(sessionKind==='checkin'?'Check-in · ':'Coaching Session · ')+(client.client_name||'Client'),
+      session_scope:'one_to_one',
       scheduled_start:new Date(start).toISOString(),
       duration_minutes:Number($('#coachClientSessionDuration')?.value||50),
-      session_type:$('#coachClientSessionType')?.value||'coaching',
-      status:'scheduled',
-      operational_note:$('#coachClientSessionNote')?.value.trim()||null
+      timezone:Intl.DateTimeFormat().resolvedOptions().timeZone||'America/Los_Angeles',
+      meeting_location:null,
+      meeting_url:null,
+      operational_note:$('#coachClientSessionNote')?.value.trim()||null,
+      status:'scheduled'
     };
-    const {error}=await sb().from('coach_sessions').insert(row);
+    const {error}=await sb().from('coach_schedule_events').insert(row);
     if(error) throw error;
     await openClientManagement(client.id);
   }
