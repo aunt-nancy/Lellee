@@ -7,6 +7,7 @@
     premium: { monthly: 14.99, annual: 149.00 },
     journalCompanion: { monthly: 4.99 },
     coachAddon: { monthly: 49.99, requires: 'premium' },
+    individualizedLiveCoaching: { monthly: 425.00, includes: 'plus' },
     extraCoach15: { each: 19.99, minutes: 15 }
   });
   window.LELLEE_PRICES = LELLEE_PRICES;
@@ -67,7 +68,8 @@
         else replacePriceInNode(card, LELLEE_PRICES.premium.monthly, 'mo');
       }
       if(/JOURNAL\s+COMPANION/i.test(text)) replacePriceInNode(card, LELLEE_PRICES.journalCompanion.monthly, 'month');
-      if(/(?:LELLEE\s+COACH|ADD\s+A\s+COACH|COACH\s+ADD[- ]?ON)/i.test(text)) replacePriceInNode(card, LELLEE_PRICES.coachAddon.monthly, 'month');
+      if(/INDIVIDUALIZED\s+LIVE\s+COACHING/i.test(text)) replacePriceInNode(card, LELLEE_PRICES.individualizedLiveCoaching.monthly, 'month');
+      else if(/(?:LELLEE\s+COACH|ADD\s+A\s+COACH|COACH\s+ADD[- ]?ON|LIGHT\s+COACH\s+SUPPORT)/i.test(text)) replacePriceInNode(card, LELLEE_PRICES.coachAddon.monthly, 'month');
       if(/15[- ]?MINUTE|15\s+MIN/i.test(text) && /COACH/i.test(text)) replacePriceInNode(card, LELLEE_PRICES.extraCoach15.each, 'session');
     }
   }
@@ -91,7 +93,7 @@
     const note=document.createElement('div');
     note.id='lelleeCanonicalPricingNote';
     note.className='plus-boundary-note';
-    note.innerHTML='<b>Current Lellee pricing:</b> Plus $5.99/month or $59.99/year · Premium $14.99/month or $149/year · Journal Companion $4.99/month · Lellee Coach add-on $49.99/month with Premium · Additional 15-minute coaching sessions $19.99 each.';
+    note.innerHTML='<b>Current Lellee pricing:</b> Plus $5.99/month or $59.99/year · Premium $14.99/month or $149/year · Journal Companion $4.99/month · Light Coach Support $49.99/month with Premium · Additional 15-minute coaching check-ins $19.99 each · Individualized Live Coaching $425/month with Lellee Plus included.';
     plusPage.appendChild(note);
   }
 
