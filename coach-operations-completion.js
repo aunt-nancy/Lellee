@@ -563,6 +563,23 @@
     if(e.target.closest('#coachAddTraining')){e.preventDefault();e.stopImmediatePropagation();openTraining()}
     if(e.target.closest('#coachAddIntakeForm')){e.preventDefault();e.stopImmediatePropagation();openIntake()}
 
+    const openScheduleBtn=e.target.closest('[data-open-coach-schedule]');
+    if(openScheduleBtn){e.preventDefault();openScheduleManagement(openScheduleBtn.dataset.openCoachSchedule).catch(err=>alert(err.message||String(err)))}
+
+    const openAvailabilityBtn=e.target.closest('[data-open-coach-availability]');
+    if(openAvailabilityBtn){e.preventDefault();openAvailabilityManagement(openAvailabilityBtn.dataset.openCoachAvailability)}
+
+    const openConsultationBtn=e.target.closest('[data-open-coach-consultation]');
+    if(openConsultationBtn){e.preventDefault();openConsultationManagement(openConsultationBtn.dataset.openCoachConsultation)}
+
+    const scheduleConsultation=e.target.closest('[data-schedule-consultation]');
+    if(scheduleConsultation){
+      e.preventDefault();
+      const consultation=(state.ctx?.scheduler?.consultations||[]).find(x=>x.id===scheduleConsultation.dataset.scheduleConsultation);
+      closeDialog();
+      openSchedule(consultation||null);
+    }
+
     const review=e.target.closest('[data-request-credential-review]');
     if(review){e.preventDefault();e.stopImmediatePropagation();requestCredentialReview(review.dataset.requestCredentialReview).catch(err=>alert(err.message||String(err)))}
 
@@ -587,6 +604,9 @@
     if(id==='coachOpsTrainingForm')run(saveTraining);
     if(id==='coachOpsIntakeForm')run(saveIntake);
     if(id==='coachOpsAssignIntakeForm')run(()=>assignIntake(e.target.dataset.formId));
+    if(id==='coachOpsScheduleManageForm')run(saveScheduleManagement);
+    if(id==='coachOpsAvailabilityManageForm')run(saveAvailabilityManagement);
+    if(id==='coachOpsConsultationManageForm')run(saveConsultationManagement);
   });
 
   function boot(){
