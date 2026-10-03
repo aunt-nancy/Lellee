@@ -5,6 +5,11 @@
   const esc = (v='') => String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const fmtDate = v => v ? new Date(v).toLocaleDateString() : '—';
   const fmtDateTime = v => v ? new Date(v).toLocaleString() : '—';
+  const datetimeLocal = v => {
+    if(!v) return '';
+    const d=new Date(v), local=new Date(d.getTime()-d.getTimezoneOffset()*60000);
+    return local.toISOString().slice(0,16);
+  };
   const money = v => (v===null || v===undefined || v==='') ? 'Price not set' : `$${Number(v).toFixed(2)}`;
   const typeLabel = v => ({one_to_one:'1-to-1',group:'Group',hybrid:'Hybrid'}[v] || String(v||'').replaceAll('_',' '));
   const statusLabel = v => String(v||'').replaceAll('_',' ').replace(/\b\w/g,c=>c.toUpperCase());
@@ -20,6 +25,8 @@
     groupWorkspace:null,
     selectedService:null,
     selectedLead:null,
+    selectedAssignment:null,
+    selectedConversation:null,
     loading:false
   };
 
@@ -307,35 +314,70 @@
     return 'Coaching';
   }
 
+  function conversationThreads(){
+    const threads=new Map();
+    (state.context?.clients||[]).forEach(function(client){
+      if(client.status==='ended')return;
+      threads.set('rel:'+client.id,{
+        kind:'rel',id:client.id,label:client.client_name||'Client',
+        sublabel:[client.client_email,client.program_name,statusLabel(client.status)].filter(Boolean).join(' · '),
+        replyEnabled:client.status==='active',latest:null,preview:'No messages yet',unread:0
+      });
+    });
+    (state.context?.groups||[]).forEach(function(group){
+      if(!['forming','active','paused'].includes(group.status))return;
+      threads.set('group:'+group.id,{
+        kind:'group',id:group.id,label:group.name||'Group',
+        sublabel:[group.program_name,statusLabel(group.status)].filter(Boolean).join(' · '),
+        replyEnabled:['forming','active'].includes(group.status),latest:null,preview:'No messages yet',unread:0
+      });
+    });
+    (state.context?.messages||[]).forEach(function(m){
+      const kind=m.relationship_id?'rel':'group';
+      const id=m.relationship_id||m.group_id;
+      if(!id)return;
+      const key=kind+':'+id;
+      if(!threads.has(key)){
+        threads.set(key,{kind:kind,id:id,label:messageTargetLabel(m),sublabel:kind==='rel'?'Client conversation':'Group conversation',replyEnabled:false,latest:null,preview:'',unread:0});
+      }
+      const t=threads.get(key),when=new Date(m.created_at).getTime();
+      if(!t.latest||when>new Date(t.latest.created_at).getTime()){t.latest=m;t.preview=m.body||'';}
+      if(!m.read_at&&m.sender_user_id!==state.user?.id)t.unread+=1;
+    });
+    return Array.from(threads.values()).sort(function(a,b){
+      const at=a.latest?new Date(a.latest.created_at).getTime():0;
+      const bt=b.latest?new Date(b.latest.created_at).getTime():0;
+      if(bt!==at)return bt-at;
+      return String(a.label).localeCompare(String(b.label));
+    });
+  }
+
   function renderMessages(){
-    const host=$('#coachMessageList'); if(!host) return;
-    const rows=state.context?.messages||[];
-    host.innerHTML=rows.length ? rows.map(m=>`
-      <article class="coach-live-item">
-        <div class="coach-live-row">
-          <div><b>${esc(m.sender_label||'Participant')}</b><small>${esc(messageTargetLabel(m))} · ${esc(fmtDateTime(m.created_at))}</small></div>
-          ${!m.read_at && m.sender_user_id!==state.user?.id?'<span class="coach-live-pill">NEW</span>':''}
-        </div>
-        <small style="font-size:.7rem;margin-top:8px;color:#403747">${esc(m.body)}</small>
-      </article>`).join('') :
-      `<div class="coach-live-empty">No coaching messages yet.</div>`;
+    const host=$('#coachMessageList');if(!host)return;
+    const rows=conversationThreads();
+    host.innerHTML=rows.length?rows.map(function(t){
+      return '<article class="coach-live-item coach-conversation-card">'+
+        '<div class="coach-live-row"><div><b>'+esc(t.label)+'</b><small>'+esc(t.sublabel||'')+'</small></div>'+
+        (t.unread?'<span class="coach-live-pill">'+esc(t.unread)+' NEW</span>':'')+'</div>'+
+        '<div class="coach-conversation-preview">'+esc(t.preview||'No messages yet')+'</div>'+
+        '<div class="coach-live-meta">'+(t.latest?'<span class="coach-live-pill">'+esc(fmtDateTime(t.latest.created_at))+'</span>':'')+'</div>'+
+        '<div class="coach-live-actions"><button class="primary" data-coach-conversation-kind="'+esc(t.kind)+'" data-coach-conversation-id="'+esc(t.id)+'">Open Conversation</button></div>'+
+      '</article>';
+    }).join(''):'<div class="coach-live-empty">No client or group conversations are available yet.</div>';
   }
 
   function renderAssignments(){
-    const host=$('#coachAssignmentList'); if(!host) return;
+    const host=$('#coachAssignmentList');if(!host)return;
     const rows=state.context?.assignments||[];
-    host.innerHTML=rows.length ? rows.map(a=>`
-      <article class="coach-live-item">
-        <div class="coach-live-row">
-          <div><b>${esc(a.title)}</b><small>${esc(a.instructions||'')} ${a.program_name?'· '+esc(a.program_name):''}</small></div>
-          <span class="coach-live-pill">${esc(statusLabel(a.status))}</span>
-        </div>
-        <div class="coach-live-meta">
-          <span class="coach-live-pill">Due ${esc(a.due_at?fmtDateTime(a.due_at):'not set')}</span>
-          <span class="coach-live-pill">${a.recipient_count||0} recipient${Number(a.recipient_count)===1?'':'s'}</span>
-        </div>
-      </article>`).join('') :
-      `<div class="coach-live-empty">No assignments yet.</div>`;
+    host.innerHTML=rows.length?rows.map(function(a){
+      return '<article class="coach-live-item">'+
+        '<div class="coach-live-row"><div><b>'+esc(a.title)+'</b><small>'+esc(a.instructions||'')+(a.program_name?' · '+esc(a.program_name):'')+'</small></div>'+
+        '<span class="coach-live-pill">'+esc(statusLabel(a.status))+'</span></div>'+
+        '<div class="coach-live-meta"><span class="coach-live-pill">Due '+esc(a.due_at?fmtDateTime(a.due_at):'not set')+'</span>'+
+        '<span class="coach-live-pill">'+esc(a.recipient_count||0)+' recipient'+(Number(a.recipient_count)===1?'':'s')+'</span></div>'+
+        '<div class="coach-live-actions"><button class="primary" data-coach-open-assignment="'+esc(a.id)+'">Open Assignment</button></div>'+
+      '</article>';
+    }).join(''):'<div class="coach-live-empty">No assignments yet.</div>';
   }
 
   function renderLeads(){
@@ -723,27 +765,158 @@
 
   async function createAssignment(){
     const target=$('#liveAssignmentTarget').value;
-    const [kind,targetId]=target.split(':');
+    const parts=target.split(':'),kind=parts[0],targetId=parts[1];
     const opt=$('#liveAssignmentTarget').selectedOptions[0];
     const programId=opt.dataset.program;
+    const out=await sb().rpc('create_my_coach_assignment',{
+      p_program_id:programId,
+      p_title:$('#liveAssignmentTitle').value.trim(),
+      p_instructions:$('#liveAssignmentInstructions').value.trim()||null,
+      p_due_at:$('#liveAssignmentDue').value?new Date($('#liveAssignmentDue').value).toISOString():null,
+      p_relationship_id:kind==='rel'?targetId:null,
+      p_group_id:kind==='group'?targetId:null
+    });
+    if(out.error)throw out.error;
+    closeDialog();
+    state.context=null;
+    await loadDashboard();
+  }
+
+  function assignmentForId(id){
+    return (state.context?.assignments||[]).find(function(x){return x.id===id})||null;
+  }
+
+  async function openAssignmentManagement(assignmentId){
+    const assignment=assignmentForId(assignmentId);
+    if(!assignment)return alert('Assignment could not be found.');
+    state.selectedAssignment=assignment;
+    const recipients=await sb().from('coach_assignment_recipients')
+      .select('id,relationship_id,group_id,origin_group_id,completed_at')
+      .eq('assignment_id',assignment.id)
+      .order('id',{ascending:true});
+    if(recipients.error)throw recipients.error;
+    const rows=recipients.data||[],completed=rows.filter(function(x){return !!x.completed_at}).length;
+    const recipientHtml=rows.map(function(r){
+      const client=(state.context?.clients||[]).find(function(x){return x.id===r.relationship_id})||null;
+      const origin=(state.context?.groups||[]).find(function(x){return x.id===r.origin_group_id})||null;
+      const legacyGroup=(state.context?.groups||[]).find(function(x){return x.id===r.group_id})||null;
+      const label=client?.client_name||legacyGroup?.name||'Recipient';
+      const detail=[client?.client_email,origin?'via '+origin.name:null,r.completed_at?'Completed '+fmtDateTime(r.completed_at):'Not completed'].filter(Boolean).join(' · ');
+      return '<article class="coach-assignment-recipient '+(r.completed_at?'complete':'')+'"><div><b>'+esc(label)+'</b><small>'+esc(detail)+'</small></div>'+
+        (client&&client.status==='active'?'<button type="button" data-coach-conversation-kind="rel" data-coach-conversation-id="'+esc(client.id)+'">Conversation</button>':'')+
+        '</article>';
+    }).join('')||'<div class="coach-live-empty">No assignment recipients were found.</div>';
+    dialog('Manage Assignment',assignment.program_name||'Program',
+      '<form id="coachAssignmentManagementForm"><div class="coach-live-form">'+
+        '<label class="wide">Title<input id="coachManageAssignmentTitle" value="'+esc(assignment.title)+'" required></label>'+
+        '<label class="wide">Instructions<textarea id="coachManageAssignmentInstructions">'+esc(assignment.instructions||'')+'</textarea></label>'+
+        '<label>Due date/time<input id="coachManageAssignmentDue" type="datetime-local" value="'+esc(datetimeLocal(assignment.due_at))+'"></label>'+
+        '<label>Status<select id="coachManageAssignmentStatus">'+
+          ['draft','active','closed'].map(function(x){return '<option value="'+x+'" '+(assignment.status===x?'selected':'')+'>'+esc(statusLabel(x))+'</option>'}).join('')+
+        '</select></label>'+
+      '</div>'+
+      '<div class="coach-assignment-summary"><b>'+esc(completed)+' of '+esc(rows.length)+' completed</b><span>'+esc(rows.length-completed)+' outstanding</span></div>'+
+      '<section class="coach-assignment-recipients"><h4>Recipients & Completion</h4>'+recipientHtml+'</section>'+
+      '<div class="coach-live-footer"><button type="button" data-coach-live-close>Cancel</button><button class="primary" type="submit">Save Assignment</button></div></form>');
+  }
+
+  async function saveAssignmentManagement(){
+    const a=state.selectedAssignment;
+    if(!a)throw new Error('Assignment is unavailable.');
+    const due=$('#coachManageAssignmentDue')?.value;
+    const out=await sb().rpc('update_my_coach_assignment',{
+      p_assignment_id:a.id,
+      p_title:$('#coachManageAssignmentTitle')?.value.trim(),
+      p_instructions:$('#coachManageAssignmentInstructions')?.value.trim()||null,
+      p_due_at:due?new Date(due).toISOString():null,
+      p_status:$('#coachManageAssignmentStatus')?.value||a.status
+    });
+    if(out.error)throw out.error;
+    closeDialog();
+    state.context=null;
+    await loadDashboard();
+  }
+
+  function conversationTarget(kind,id){
+    if(kind==='rel'){
+      const client=(state.context?.clients||[]).find(function(x){return x.id===id});
+      return client?{kind:kind,id:id,label:client.client_name||'Client',replyEnabled:client.status==='active'}:null;
+    }
+    const group=(state.context?.groups||[]).find(function(x){return x.id===id});
+    return group?{kind:kind,id:id,label:group.name||'Group',replyEnabled:['forming','active'].includes(group.status)}:null;
+  }
+
+  function conversationSenderLabel(message){
+    if(message.sender_user_id===state.user?.id)return 'You';
+    const client=(state.context?.clients||[]).find(function(x){return x.client_user_id===message.sender_user_id});
+    return client?.client_name||'Participant';
+  }
+
+  async function openConversation(kind,id){
+    const target=conversationTarget(kind,id);
+    if(!target)return alert('Conversation target could not be found.');
+    state.selectedConversation=target;
+    let query=sb().from('coach_messages')
+      .select('id,relationship_id,group_id,sender_user_id,body,created_at,read_at')
+      .eq('business_id',state.business.id)
+      .order('created_at',{ascending:true})
+      .limit(250);
+    query=kind==='rel'?query.eq('relationship_id',id):query.eq('group_id',id);
+    const result=await query;
+    if(result.error)throw result.error;
+
+    let mark=sb().from('coach_messages')
+      .update({read_at:new Date().toISOString()})
+      .eq('business_id',state.business.id)
+      .neq('sender_user_id',state.user.id)
+      .is('read_at',null);
+    mark=kind==='rel'?mark.eq('relationship_id',id):mark.eq('group_id',id);
+    const marked=await mark;
+    if(marked.error)console.warn('Could not mark conversation read',marked.error);
+
+    (state.context?.messages||[]).forEach(function(m){
+      const matches=kind==='rel'?m.relationship_id===id:m.group_id===id;
+      if(matches&&m.sender_user_id!==state.user?.id&&!m.read_at)m.read_at=new Date().toISOString();
+    });
+    const unread=(state.context?.messages||[]).filter(function(m){return !m.read_at&&m.sender_user_id!==state.user?.id}).length;
+    if($('#coachMetricMessages'))$('#coachMetricMessages').textContent=unread;
+    renderMessages();
+
+    const messages=result.data||[];
+    const history=messages.map(function(m){
+      const mine=m.sender_user_id===state.user?.id;
+      return '<div class="coach-conversation-message '+(mine?'mine':'theirs')+'"><div><b>'+esc(conversationSenderLabel(m))+'</b><small>'+esc(fmtDateTime(m.created_at))+'</small></div><p>'+esc(m.body)+'</p></div>';
+    }).join('')||'<div class="coach-live-empty">No messages yet. Start this conversation below.</div>';
+
+    dialog(target.label,kind==='rel'?'Client conversation':'Group conversation',
+      '<div class="coach-conversation-thread" id="coachConversationThread">'+history+'</div>'+
+      (target.replyEnabled?
+        '<form id="coachConversationForm"><div class="coach-live-form"><label class="wide">Reply<textarea id="coachConversationReply" maxlength="4000" required></textarea></label></div><div class="coach-live-footer"><button type="button" data-coach-live-close>Close</button><button class="primary" type="submit">Send Reply</button></div></form>':
+        '<div class="coach-live-review-note">This conversation is read-only because the coaching relationship or group is not currently active.</div><div class="coach-live-footer"><button type="button" data-coach-live-close>Close</button></div>'
+      ));
+    requestAnimationFrame(function(){
+      const thread=$('#coachConversationThread');
+      if(thread)thread.scrollTop=thread.scrollHeight;
+    });
+  }
+
+  async function sendConversationReply(){
+    const target=state.selectedConversation;
+    if(!target||!target.replyEnabled)throw new Error('This conversation is not available for replies.');
+    const body=$('#coachConversationReply')?.value.trim();
+    if(!body)throw new Error('Enter a message.');
     const row={
       business_id:state.business.id,
-      coach_user_id:state.user.id,
-      program_id:programId,
-      title:$('#liveAssignmentTitle').value.trim(),
-      instructions:$('#liveAssignmentInstructions').value.trim()||null,
-      due_at:$('#liveAssignmentDue').value ? new Date($('#liveAssignmentDue').value).toISOString() : null,
-      status:'active'
+      relationship_id:target.kind==='rel'?target.id:null,
+      group_id:target.kind==='group'?target.id:null,
+      sender_user_id:state.user.id,
+      body:body
     };
-    const {data,error}=await sb().from('coach_assignments').insert(row).select('id').single();
-    if(error) throw error;
-    const recipient={assignment_id:data.id,relationship_id:kind==='rel'?targetId:null,group_id:kind==='group'?targetId:null};
-    const rr=await sb().from('coach_assignment_recipients').insert(recipient);
-    if(rr.error){
-      await sb().from('coach_assignments').delete().eq('id',data.id);
-      throw rr.error;
-    }
-    closeDialog(); await loadDashboard();
+    const out=await sb().from('coach_messages').insert(row);
+    if(out.error)throw out.error;
+    state.context=null;
+    await loadDashboard();
+    await openConversation(target.kind,target.id);
   }
 
   function messageTargets(selectedKind='',selectedId=''){
@@ -1245,7 +1418,6 @@
       const el=$(`#coachPanel${name[0].toUpperCase()+name.slice(1)}`);
       if(el) el.classList.toggle('hidden',name!==tab);
     });
-    if(tab==='messages') markMessagesRead();
   }
 
   document.addEventListener('click',e=>{
@@ -1287,6 +1459,18 @@
       e.preventDefault(); e.stopImmediatePropagation(); openMessage();
     }
 
+    const assignmentOpen=e.target.closest('[data-coach-open-assignment]');
+    if(assignmentOpen){
+      e.preventDefault();
+      openAssignmentManagement(assignmentOpen.dataset.coachOpenAssignment).catch(function(err){alert(err.message||String(err));});
+    }
+
+    const conversation=e.target.closest('[data-coach-conversation-kind]');
+    if(conversation){
+      e.preventDefault();
+      openConversation(conversation.dataset.coachConversationKind,conversation.dataset.coachConversationId).catch(function(err){alert(err.message||String(err));});
+    }
+
     const openService=e.target.closest('[data-coach-open-service]');
     if(openService){ e.preventDefault(); openServiceManagement(openService.dataset.coachOpenService); }
 
@@ -1312,7 +1496,7 @@
     if(openClient){ e.preventDefault(); openClientManagement(openClient.dataset.coachOpenClient); }
 
     const clientMessage=e.target.closest('[data-client-message]');
-    if(clientMessage){ e.preventDefault(); openMessage('rel',clientMessage.dataset.clientMessage); }
+    if(clientMessage){e.preventDefault();openConversation('rel',clientMessage.dataset.clientMessage).catch(function(err){alert(err.message||String(err));});}
     const clientAssignment=e.target.closest('[data-client-assignment]');
     if(clientAssignment){ e.preventDefault(); openAssignment('rel',clientAssignment.dataset.clientAssignment); }
     const clientSession=e.target.closest('[data-client-session]');
@@ -1330,9 +1514,9 @@
     }
 
     const rel=e.target.closest('[data-coach-message-rel]');
-    if(rel){ e.preventDefault(); openMessage('rel',rel.dataset.coachMessageRel); }
+    if(rel){e.preventDefault();openConversation('rel',rel.dataset.coachMessageRel).catch(function(err){alert(err.message||String(err));});}
     const grp=e.target.closest('[data-coach-message-group]');
-    if(grp){ e.preventDefault(); openMessage('group',grp.dataset.coachMessageGroup); }
+    if(grp){e.preventDefault();openConversation('group',grp.dataset.coachMessageGroup).catch(function(err){alert(err.message||String(err));});}
 
     const dec=e.target.closest('[data-coach-admin-decision]');
     if(dec){
@@ -1368,6 +1552,8 @@
     if(id==='coachServiceManagementForm') run(saveServiceManagement);
     if(id==='coachLeadManagementForm') run(saveLeadManagement);
     if(id==='coachLeadFollowupForm') run(createLeadFollowup);
+    if(id==='coachAssignmentManagementForm') run(saveAssignmentManagement);
+    if(id==='coachConversationForm') run(sendConversationReply);
   });
 
   function boot(){
