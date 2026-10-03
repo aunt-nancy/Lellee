@@ -14,6 +14,8 @@
     certification:null,
     user:null,
     business:null,
+    selectedClient:null,
+    clientWorkspace:null,
     loading:false
   };
 
@@ -247,7 +249,7 @@
           <span class="coach-live-pill">${esc(statusLabel(r.status))}</span>
         </div>
         <div class="coach-live-meta"><span class="coach-live-pill">Started ${esc(fmtDate(r.started_at))}</span>${r.service_name?`<span class="coach-live-pill">${esc(r.service_name)}</span>`:''}</div>
-        <div class="coach-live-actions"><button class="primary" data-coach-message-rel="${r.id}">Message</button></div>
+        <div class="coach-live-actions"><button class="primary" data-coach-open-client="${r.id}">Open Client</button><button data-coach-message-rel="${r.id}">Message</button></div>
       </article>`).join('') :
       `<div class="coach-live-empty">No active coaching relationships yet. Invite a client after your business is approved.</div>`;
   }
@@ -511,7 +513,7 @@
     ].join('');
   }
 
-  function openAssignment(){
+  function openAssignment(kind='',targetId=''){
     if(!businessRequired()) return;
     if(!(state.context?.clients||[]).length && !(state.context?.groups||[]).length) return alert('Add a client relationship or group first.');
     dialog('New Assignment','Send a structured next step to one client or one group.',`
@@ -524,6 +526,10 @@
         </div>
         <div class="coach-live-footer"><button type="button" data-coach-live-close>Cancel</button><button class="primary" type="submit">Create assignment</button></div>
       </form>`);
+    if(kind&&targetId){
+      const target=$('#liveAssignmentTarget');
+      if(target) target.value=kind+':'+targetId;
+    }
   }
 
   async function createAssignment(){
@@ -611,6 +617,251 @@
       alert(`Could not accept coaching invitation: ${err.message||err}`);
       return true;
     }
+  }
+
+
+  function clientForRelationship(id){
+    return (state.context?.clients||[]).find(x=>x.id===id)||null;
+  }
+
+  function clientServiceOptions(client){
+    const rows=(state.context?.services||[]).filter(s=>s.active&&s.program_id===client.program_id);
+    return '<option value="">No service package</option>'+rows.map(s=>
+      '<option value="'+esc(s.id)+'" '+(s.id===client.service_package_id?'selected':'')+'>'+esc(s.name)+' · '+esc(money(s.price_amount))+'</option>'
+    ).join('');
+  }
+
+  async function loadClientWorkspaceData(client){
+    const businessId=state.business?.id;
+    if(!businessId) throw new Error('Coach business is unavailable.');
+    const [memberships,sessions,shared,recipients,formAssignments,formDefinitions,followups]=await Promise.all([
+      sb().from('coach_group_members').select('group_id,status,joined_at').eq('relationship_id',client.id),
+      sb().from('coach_sessions').select('id,scheduled_start,duration_minutes,session_type,status,operational_note,created_at').eq('relationship_id',client.id).order('scheduled_start',{ascending:false}).limit(50),
+      sb().from('coach_shared_items').select('id,share_type,title,shared_content,source_reference,shared_at,revoked_at').eq('relationship_id',client.id).is('revoked_at',null).order('shared_at',{ascending:false}).limit(50),
+      sb().from('coach_assignment_recipients').select('assignment_id,completed_at').eq('relationship_id',client.id),
+      sb().from('form_assignments').select('id,form_id,due_at,status,completed_at,created_at').eq('business_id',businessId).eq('user_id',client.client_user_id).order('created_at',{ascending:false}).limit(50),
+      sb().from('form_definitions').select('id,title,description,form_type,program_id,status').eq('business_id',businessId).order('updated_at',{ascending:false}),
+      sb().from('crm_followups').select('id,title,note,due_at,status,completed_at,created_at').eq('workspace_type','coach').eq('business_id',businessId).eq('related_user_id',client.client_user_id).order('created_at',{ascending:false}).limit(50)
+    ]);
+    for(const result of [memberships,sessions,shared,recipients,formAssignments,formDefinitions,followups]){
+      if(result.error) throw result.error;
+    }
+    const assignmentMap=new Map((state.context?.assignments||[]).map(a=>[a.id,a]));
+    const assigned=(recipients.data||[]).map(r=>({...r,assignment:assignmentMap.get(r.assignment_id)||null})).filter(x=>x.assignment);
+    const formMap=new Map((formDefinitions.data||[]).map(x=>[x.id,x]));
+    const forms=(formAssignments.data||[]).map(x=>({...x,definition:formMap.get(x.form_id)||null}));
+    const availableIntake=(formDefinitions.data||[]).filter(x=>x.form_type==='intake'&&x.status==='published'&&(x.program_id===null||x.program_id===client.program_id));
+    return {
+      memberships:memberships.data||[],
+      sessions:sessions.data||[],
+      shared:shared.data||[],
+      assignments:assigned,
+      forms,
+      availableIntake,
+      followups:followups.data||[]
+    };
+  }
+
+  function renderClientWorkspace(client,data){
+    const inner=$('#coachLiveDialogInner'); if(!inner) return;
+    const memberMap=new Map((data.memberships||[]).map(x=>[x.group_id,x]));
+    const groups=(state.context?.groups||[]).filter(g=>g.program_id===client.program_id&&['forming','active'].includes(g.status));
+    const groupRows=groups.map(g=>{
+      const m=memberMap.get(g.id),active=m?.status==='active';
+      return '<article class="coach-client-line"><div><b>'+esc(g.name)+'</b><small>'+esc(g.members||0)+'/'+esc(g.capacity)+' members · '+esc(statusLabel(g.status))+'</small></div>'+
+        (client.status==='active'?'<button type="button" data-client-group-toggle="'+esc(g.id)+'" data-relationship-id="'+esc(client.id)+'" data-next-active="'+(active?'false':'true')+'">'+(active?'Remove':'Add')+'</button>':'')+
+        '</article>';
+    }).join('')||'<div class="coach-live-empty">No active groups match this client program.</div>';
+
+    const sessionRows=(data.sessions||[]).map(s=>'<article class="coach-client-line"><div><b>'+esc(fmtDateTime(s.scheduled_start))+'</b><small>'+esc(statusLabel(s.session_type))+' · '+esc(s.duration_minutes)+' min'+(s.operational_note?' · '+esc(s.operational_note):'')+'</small></div><span class="coach-live-pill">'+esc(statusLabel(s.status))+'</span></article>').join('')||
+      '<div class="coach-live-empty">No sessions scheduled for this client.</div>';
+
+    const assignmentRows=(data.assignments||[]).map(x=>'<article class="coach-client-line"><div><b>'+esc(x.assignment.title)+'</b><small>Due '+esc(x.assignment.due_at?fmtDateTime(x.assignment.due_at):'not set')+'</small></div><span class="coach-live-pill">'+esc(x.completed_at?'Completed':statusLabel(x.assignment.status))+'</span></article>').join('')||
+      '<div class="coach-live-empty">No assignments for this client.</div>';
+
+    const formRows=(data.forms||[]).map(x=>'<article class="coach-client-line"><div><b>'+esc(x.definition?.title||'Assigned form')+'</b><small>'+esc(x.due_at?'Due '+fmtDateTime(x.due_at):'No due date')+'</small></div><span class="coach-live-pill">'+esc(statusLabel(x.status))+'</span></article>').join('')||
+      '<div class="coach-live-empty">No forms assigned to this client.</div>';
+
+    const followupRows=(data.followups||[]).map(x=>'<article class="coach-client-line"><div><b>'+esc(x.title)+'</b><small>'+esc(x.note||'')+(x.due_at?' · due '+esc(fmtDateTime(x.due_at)):'')+'</small></div><span class="coach-live-pill">'+esc(statusLabel(x.status))+'</span></article>').join('')||
+      '<div class="coach-live-empty">No follow-ups for this client.</div>';
+
+    const sharedRows=(data.shared||[]).map(x=>'<article class="coach-client-shared"><div class="coach-live-row"><div><b>'+esc(x.title||statusLabel(x.share_type))+'</b><small>'+esc(statusLabel(x.share_type))+' · shared '+esc(fmtDateTime(x.shared_at))+'</small></div><span class="coach-live-pill">CLIENT SHARED</span></div>'+(x.shared_content?'<p>'+esc(x.shared_content)+'</p>':'')+'</article>').join('')||
+      '<div class="coach-live-empty">This client has not shared any Lellee items with this coach.</div>';
+
+    const ended=client.status==='ended';
+    inner.innerHTML=
+      '<div class="coach-live-dialog-head"><div><span class="approved-kicker">CLIENT MANAGEMENT</span><h3>'+esc(client.client_name||'Client')+'</h3><p>'+esc(client.client_email||'')+' · '+esc(client.program_name||'Program')+'</p></div><button class="coach-live-close" type="button" data-coach-live-close>×</button></div>'+
+      '<div class="coach-client-summary"><span class="coach-live-pill">'+esc(statusLabel(client.status))+'</span><span>Started '+esc(fmtDate(client.started_at))+'</span><span>Consent recorded for this coaching relationship</span></div>'+
+      '<form id="coachClientRelationshipForm" data-relationship-id="'+esc(client.id)+'" class="coach-client-controls">'+
+        '<label>Service package<select id="coachClientService" '+(ended?'disabled':'')+'>'+clientServiceOptions(client)+'</select></label>'+
+        '<label>Relationship status<select id="coachClientStatus" '+(ended?'disabled':'')+'><option value="active" '+(client.status==='active'?'selected':'')+'>Active</option><option value="paused" '+(client.status==='paused'?'selected':'')+'>Paused</option>'+(ended?'<option value="ended" selected>Ended</option>':'')+'</select></label>'+
+        '<button class="primary" type="submit" '+(ended?'disabled':'')+'>Save Client Setup</button>'+
+      '</form>'+
+      '<div class="coach-client-actions">'+
+        '<button type="button" data-client-message="'+esc(client.id)+'">Message</button>'+
+        '<button type="button" data-client-assignment="'+esc(client.id)+'" '+(client.status!=='active'?'disabled':'')+'>New Assignment</button>'+
+        '<button type="button" data-client-session="'+esc(client.id)+'" '+(client.status!=='active'?'disabled':'')+'>Schedule Session</button>'+
+        '<button type="button" data-client-followup="'+esc(client.id)+'">Add Follow-Up</button>'+
+        '<button type="button" data-client-intake="'+esc(client.id)+'" '+(!(data.availableIntake||[]).length||client.status!=='active'?'disabled':'')+'>Assign Intake Form</button>'+
+        (!ended?'<button type="button" class="danger" data-client-end="'+esc(client.id)+'">End Relationship</button>':'')+
+      '</div>'+
+      '<div class="coach-client-grid">'+
+        '<section><h4>Groups</h4>'+groupRows+'</section>'+
+        '<section><h4>Sessions</h4>'+sessionRows+'</section>'+
+        '<section><h4>Assignments</h4>'+assignmentRows+'</section>'+
+        '<section><h4>Forms</h4>'+formRows+'</section>'+
+        '<section><h4>Follow-Ups</h4>'+followupRows+'</section>'+
+        '<section class="wide"><h4>Shared by Client</h4><p class="coach-client-privacy">Only information the client explicitly shared with this coaching relationship appears here. Private journals, private check-ins and other unshared Lellee data are not available to the coach.</p>'+sharedRows+'</section>'+
+      '</div>';
+  }
+
+  async function openClientManagement(relationshipId){
+    const client=clientForRelationship(relationshipId);
+    if(!client) return alert('Client relationship could not be found.');
+    state.selectedClient=client;
+    state.clientWorkspace=null;
+    dialog(client.client_name||'Client','Loading client workspace…','<div class="coach-live-empty">Loading service, groups, sessions, assignments, forms and client-shared items…</div>');
+    try{
+      const data=await loadClientWorkspaceData(client);
+      state.clientWorkspace=data;
+      renderClientWorkspace(client,data);
+    }catch(err){
+      const inner=$('#coachLiveDialogInner');
+      if(inner) inner.innerHTML='<div class="coach-live-dialog-head"><div><span class="approved-kicker">CLIENT MANAGEMENT</span><h3>Client workspace unavailable</h3></div><button class="coach-live-close" data-coach-live-close>×</button></div><div class="coach-live-error">'+esc(err.message||err)+'</div>';
+    }
+  }
+
+  async function saveClientRelationship(){
+    const client=state.selectedClient;
+    if(!client) throw new Error('Client relationship is unavailable.');
+    const service=$('#coachClientService')?.value||null;
+    const status=$('#coachClientStatus')?.value||client.status;
+    const {error}=await sb().rpc('update_my_coach_client_relationship',{
+      p_relationship_id:client.id,p_service_package_id:service,p_status:status
+    });
+    if(error) throw error;
+    closeDialog();
+    state.context=null;
+    await loadDashboard();
+  }
+
+  async function endClientRelationship(relationshipId){
+    const client=clientForRelationship(relationshipId);
+    if(!client) return;
+    if(!confirm('End the coaching relationship with '+(client.client_name||'this client')+'? This also removes active group memberships. The client must consent to a new invitation before coaching can restart.')) return;
+    const {error}=await sb().rpc('update_my_coach_client_relationship',{
+      p_relationship_id:client.id,
+      p_service_package_id:client.service_package_id||null,
+      p_status:'ended'
+    });
+    if(error) throw error;
+    closeDialog();
+    state.context=null;
+    await loadDashboard();
+  }
+
+  async function toggleClientGroup(relationshipId,groupId,active){
+    const {error}=await sb().rpc('set_my_coach_client_group_membership',{
+      p_relationship_id:relationshipId,p_group_id:groupId,p_active:active
+    });
+    if(error) throw error;
+    state.context=null;
+    await loadDashboard();
+    await openClientManagement(relationshipId);
+  }
+
+  function openClientSession(relationshipId){
+    const client=clientForRelationship(relationshipId);
+    if(!client||client.status!=='active') return alert('An active coaching relationship is required to schedule a session.');
+    state.selectedClient=client;
+    dialog('Schedule Session',client.client_name||'Client',
+      '<form id="coachClientSessionForm" data-relationship-id="'+esc(client.id)+'"><div class="coach-live-form">'+
+        '<label class="wide">Date & time<input id="coachClientSessionStart" type="datetime-local" required></label>'+
+        '<label>Duration (minutes)<input id="coachClientSessionDuration" type="number" min="10" max="240" value="50" required></label>'+
+        '<label>Session type<select id="coachClientSessionType"><option value="coaching">Coaching</option><option value="checkin">Check-in</option></select></label>'+
+        '<label class="wide">Operational note<textarea id="coachClientSessionNote" placeholder="Scheduling or operational note only."></textarea></label>'+
+      '</div><div class="coach-live-footer"><button type="button" data-coach-open-client="'+esc(client.id)+'">Back</button><button class="primary" type="submit">Schedule</button></div></form>');
+  }
+
+  async function createClientSession(){
+    const client=state.selectedClient;
+    if(!client) throw new Error('Client relationship is unavailable.');
+    const start=$('#coachClientSessionStart')?.value;
+    if(!start) throw new Error('Choose a session date and time.');
+    const row={
+      business_id:state.business.id,
+      coach_user_id:state.user.id,
+      relationship_id:client.id,
+      group_id:null,
+      scheduled_start:new Date(start).toISOString(),
+      duration_minutes:Number($('#coachClientSessionDuration')?.value||50),
+      session_type:$('#coachClientSessionType')?.value||'coaching',
+      status:'scheduled',
+      operational_note:$('#coachClientSessionNote')?.value.trim()||null
+    };
+    const {error}=await sb().from('coach_sessions').insert(row);
+    if(error) throw error;
+    await openClientManagement(client.id);
+  }
+
+  function openClientFollowup(relationshipId){
+    const client=clientForRelationship(relationshipId);
+    if(!client) return;
+    state.selectedClient=client;
+    dialog('Add Follow-Up',client.client_name||'Client',
+      '<form id="coachClientFollowupForm"><div class="coach-live-form">'+
+        '<label class="wide">Follow-up title<input id="coachClientFollowupTitle" required></label>'+
+        '<label class="wide">Due date/time<input id="coachClientFollowupDue" type="datetime-local"></label>'+
+        '<label class="wide">Note<textarea id="coachClientFollowupNote" placeholder="Business/operational follow-up note."></textarea></label>'+
+      '</div><div class="coach-live-footer"><button type="button" data-coach-open-client="'+esc(client.id)+'">Back</button><button class="primary" type="submit">Add Follow-Up</button></div></form>');
+  }
+
+  async function createClientFollowup(){
+    const client=state.selectedClient;
+    if(!client) throw new Error('Client relationship is unavailable.');
+    const row={
+      owner_user_id:state.user.id,
+      workspace_type:'coach',
+      business_id:state.business.id,
+      organization_id:null,
+      related_user_id:client.client_user_id,
+      consultation_request_id:null,
+      lead_id:null,
+      title:$('#coachClientFollowupTitle')?.value.trim(),
+      note:$('#coachClientFollowupNote')?.value.trim()||null,
+      due_at:$('#coachClientFollowupDue')?.value?new Date($('#coachClientFollowupDue').value).toISOString():null,
+      status:'open'
+    };
+    if(!row.title) throw new Error('Follow-up title is required.');
+    const {error}=await sb().from('crm_followups').insert(row);
+    if(error) throw error;
+    await openClientManagement(client.id);
+  }
+
+  function openClientIntake(relationshipId){
+    const client=clientForRelationship(relationshipId);
+    if(!client||client.status!=='active') return alert('An active coaching relationship is required.');
+    const forms=state.clientWorkspace?.availableIntake||[];
+    if(!forms.length) return alert('No published intake form is available for this client program.');
+    state.selectedClient=client;
+    dialog('Assign Intake Form',client.client_name||'Client',
+      '<form id="coachClientIntakeForm"><div class="coach-live-form">'+
+        '<label class="wide">Form<select id="coachClientIntakeSelect">'+forms.map(x=>'<option value="'+esc(x.id)+'">'+esc(x.title)+'</option>').join('')+'</select></label>'+
+        '<label class="wide">Due date/time<input id="coachClientIntakeDue" type="datetime-local"></label>'+
+      '</div><div class="coach-live-footer"><button type="button" data-coach-open-client="'+esc(client.id)+'">Back</button><button class="primary" type="submit">Assign Form</button></div></form>');
+  }
+
+  async function assignClientIntake(){
+    const client=state.selectedClient;
+    if(!client) throw new Error('Client relationship is unavailable.');
+    const due=$('#coachClientIntakeDue')?.value;
+    const {error}=await sb().rpc('assign_coach_intake_form',{
+      p_form_id:$('#coachClientIntakeSelect')?.value,
+      p_client_user_id:client.client_user_id,
+      p_due_at:due?new Date(due).toISOString():null
+    });
+    if(error) throw error;
+    await openClientManagement(client.id);
   }
 
   async function loadAdminCoachReview(){
@@ -706,6 +957,27 @@
       e.preventDefault(); e.stopImmediatePropagation(); openMessage();
     }
 
+    const openClient=e.target.closest('[data-coach-open-client]');
+    if(openClient){ e.preventDefault(); openClientManagement(openClient.dataset.coachOpenClient); }
+
+    const clientMessage=e.target.closest('[data-client-message]');
+    if(clientMessage){ e.preventDefault(); openMessage('rel',clientMessage.dataset.clientMessage); }
+    const clientAssignment=e.target.closest('[data-client-assignment]');
+    if(clientAssignment){ e.preventDefault(); openAssignment('rel',clientAssignment.dataset.clientAssignment); }
+    const clientSession=e.target.closest('[data-client-session]');
+    if(clientSession){ e.preventDefault(); openClientSession(clientSession.dataset.clientSession); }
+    const clientFollowup=e.target.closest('[data-client-followup]');
+    if(clientFollowup){ e.preventDefault(); openClientFollowup(clientFollowup.dataset.clientFollowup); }
+    const clientIntake=e.target.closest('[data-client-intake]');
+    if(clientIntake){ e.preventDefault(); openClientIntake(clientIntake.dataset.clientIntake); }
+    const clientEnd=e.target.closest('[data-client-end]');
+    if(clientEnd){ e.preventDefault(); endClientRelationship(clientEnd.dataset.clientEnd).catch(err=>alert(err.message||String(err))); }
+    const groupToggle=e.target.closest('[data-client-group-toggle]');
+    if(groupToggle){
+      e.preventDefault();
+      toggleClientGroup(groupToggle.dataset.relationshipId,groupToggle.dataset.clientGroupToggle,groupToggle.dataset.nextActive==='true').catch(err=>alert(err.message||String(err)));
+    }
+
     const rel=e.target.closest('[data-coach-message-rel]');
     if(rel){ e.preventDefault(); openMessage('rel',rel.dataset.coachMessageRel); }
     const grp=e.target.closest('[data-coach-message-group]');
@@ -736,6 +1008,10 @@
     if(id==='coachLeadForm') run(createLead);
     if(id==='coachAssignmentForm') run(createAssignment);
     if(id==='coachMessageForm') run(sendMessage);
+    if(id==='coachClientRelationshipForm') run(saveClientRelationship);
+    if(id==='coachClientSessionForm') run(createClientSession);
+    if(id==='coachClientFollowupForm') run(createClientFollowup);
+    if(id==='coachClientIntakeForm') run(assignClientIntake);
   });
 
   function boot(){
