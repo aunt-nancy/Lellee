@@ -15,7 +15,7 @@
   const timeInput=v=>String(v||'').slice(0,5);
   const title=v=>String(v||'').replaceAll('_',' ').replace(/\b\w/g,c=>c.toUpperCase());
 
-  let state={ctx:null,base:null,cert:null,user:null,selectedSchedule:null,selectedAvailability:null,selectedConsultation:null,loading:false};
+  let state={ctx:null,base:null,cert:null,user:null,selectedSchedule:null,selectedAvailability:null,selectedConsultation:null,selectedCredential:null,selectedTraining:null,selectedIntake:null,selectedIntakeQuestions:[],loading:false};
 
   function bridge(){return window.LelleeAuthContext?.client?window.LelleeAuthContext:null}
   function sb(){return bridge()?.client}
@@ -493,6 +493,140 @@
     if(error)throw error;
     await loadPage('coach-credentials');
     showCredTab('credentials');
+  }
+
+  function credentialForId(id){
+    return (state.cert?.credentials||state.ctx?.credentials?.credentials||[]).find(x=>x.id===id)||null;
+  }
+
+  function openCredentialManagement(id){
+    const claim=credentialForId(id);
+    if(!claim)return alert('Credential claim not found.');
+    state.selectedCredential=claim;
+    const locked=claim.verification_status==='revoked';
+    const warning=claim.verification_status==='verified'||claim.verification_status==='pending'
+      ? '<div class="coach-ops-warning"><b>Verification reset:</b> Saving edits will return this credential to Self Reported and require a new human review.</div>'
+      : '';
+    openDialog('Manage Credential',claim.label,
+      '<form id="coachOpsCredentialManageForm"><div class="coach-ops-form">'+
+      '<label class="wide">Credential label<input id="opsManageCredLabel" value="'+esc(claim.label||'')+'" '+(locked?'disabled':'')+' required></label>'+
+      '<label>Type<select id="opsManageCredType" '+(locked?'disabled':'')+'>'+['certification','license','education','training','lived_experience','other'].map(x=>'<option value="'+x+'" '+(claim.credential_type===x?'selected':'')+'>'+esc(title(x))+'</option>').join('')+'</select></label>'+
+      '<label>Issuer<input id="opsManageCredIssuer" value="'+esc(claim.issuer||'')+'" '+(locked?'disabled':'')+'></label>'+
+      '<label>Credential number (masked)<input id="opsManageCredNumber" value="'+esc(claim.credential_number_masked||'')+'" '+(locked?'disabled':'')+'></label>'+
+      '<label>Issued on<input id="opsManageCredIssued" type="date" value="'+esc(String(claim.issued_on||'').slice(0,10))+'" '+(locked?'disabled':'')+'></label>'+
+      '<label>Expires on<input id="opsManageCredExpires" type="date" value="'+esc(String(claim.expires_on||'').slice(0,10))+'" '+(locked?'disabled':'')+'></label>'+
+      '</div>'+warning+
+      (locked?'<div class="coach-ops-review-note">This credential was revoked and is preserved as a historical record. Add a new claim instead of editing it.</div>':'')+
+      '<div class="coach-ops-footer"><button type="button" data-coach-ops-close>Close</button>'+(locked?'':'<button class="primary" type="submit">Save Credential</button>')+'</div></form>');
+  }
+
+  async function saveCredentialManagement(){
+    const claim=state.selectedCredential;if(!claim)throw new Error('Credential claim is unavailable.');
+    const out=await sb().rpc('update_my_coach_credential',{
+      p_claim_id:claim.id,
+      p_label:$('#opsManageCredLabel').value.trim(),
+      p_credential_type:$('#opsManageCredType').value,
+      p_issuer:$('#opsManageCredIssuer').value.trim()||null,
+      p_credential_number_masked:$('#opsManageCredNumber').value.trim()||null,
+      p_issued_on:$('#opsManageCredIssued').value||null,
+      p_expires_on:$('#opsManageCredExpires').value||null
+    });
+    if(out.error)throw out.error;
+    closeDialog();await loadPage('coach-credentials');showCredTab('credentials');
+  }
+
+  async function openTrainingManagement(id){
+    const result=await sb().from('training_records')
+      .select('id,title,hours,status,completed_at,expires_on,verified,professional_course_id,professional_enrollment_id')
+      .eq('id',id).maybeSingle();
+    if(result.error)throw result.error;
+    const tr=result.data;if(!tr)return alert('Training record not found.');
+    state.selectedTraining=tr;
+    const locked=!!tr.verified||!!tr.professional_course_id||!!tr.professional_enrollment_id;
+    const reason=tr.professional_course_id||tr.professional_enrollment_id
+      ? 'This record was created by Professional Training and is managed there.'
+      : tr.verified?'This training record is verified and cannot be manually rewritten.':'';
+    openDialog('Manage Training',tr.title,
+      '<form id="coachOpsTrainingManageForm"><div class="coach-ops-form">'+
+      '<label class="wide">Training title<input id="opsManageTrainTitle" value="'+esc(tr.title||'')+'" '+(locked?'disabled':'')+' required></label>'+
+      '<label>Hours<input id="opsManageTrainHours" type="number" min="0" step="0.25" value="'+esc(tr.hours==null?'':tr.hours)+'" '+(locked?'disabled':'')+'></label>'+
+      '<label>Status<select id="opsManageTrainStatus" '+(locked?'disabled':'')+'>'+['assigned','in_progress','completed','expired'].map(x=>'<option value="'+x+'" '+(tr.status===x?'selected':'')+'>'+esc(title(x))+'</option>').join('')+'</select></label>'+
+      '<label>Completed on<input id="opsManageTrainCompleted" type="date" value="'+esc(String(tr.completed_at||'').slice(0,10))+'" '+(locked?'disabled':'')+'></label>'+
+      '<label>Expires on<input id="opsManageTrainExpires" type="date" value="'+esc(String(tr.expires_on||'').slice(0,10))+'" '+(locked?'disabled':'')+'></label>'+
+      '</div>'+(locked?'<div class="coach-ops-review-note">'+esc(reason)+'</div>':'')+
+      '<div class="coach-ops-footer"><button type="button" data-coach-ops-close>Close</button>'+(locked?'':'<button class="primary" type="submit">Save Training</button>')+'</div></form>');
+  }
+
+  async function saveTrainingManagement(){
+    const tr=state.selectedTraining;if(!tr)throw new Error('Training record is unavailable.');
+    const status=$('#opsManageTrainStatus').value;
+    const completed=$('#opsManageTrainCompleted').value;
+    const out=await sb().rpc('update_my_training_record',{
+      p_record_id:tr.id,
+      p_title:$('#opsManageTrainTitle').value.trim(),
+      p_hours:$('#opsManageTrainHours').value===''?null:Number($('#opsManageTrainHours').value),
+      p_status:status,
+      p_completed_at:status==='completed'&&completed?new Date(completed+'T12:00:00').toISOString():null,
+      p_expires_on:$('#opsManageTrainExpires').value||null
+    });
+    if(out.error)throw out.error;
+    closeDialog();await loadPage('coach-credentials');showCredTab('training');
+  }
+
+  async function openIntakeManagement(id){
+    const formResult=await sb().from('form_definitions')
+      .select('id,title,description,status,current_version,program_id')
+      .eq('id',id).maybeSingle();
+    if(formResult.error)throw formResult.error;
+    const form=formResult.data;if(!form)return alert('Intake form not found.');
+    const versionResult=await sb().from('form_versions')
+      .select('id,version_number,status')
+      .eq('form_id',form.id).eq('version_number',form.current_version).maybeSingle();
+    if(versionResult.error)throw versionResult.error;
+    const version=versionResult.data;
+    let questions=[];
+    if(version?.id){
+      const qr=await sb().from('form_questions')
+        .select('prompt,display_order')
+        .eq('form_version_id',version.id).order('display_order',{ascending:true});
+      if(qr.error)throw qr.error;
+      questions=(qr.data||[]).map(x=>x.prompt);
+    }
+    state.selectedIntake=form;
+    state.selectedIntakeQuestions=questions;
+    openDialog('Manage Intake Form','Editing creates a new published version. Existing assignments keep the version the client originally received.',
+      '<form id="coachOpsIntakeManageForm"><div class="coach-ops-form">'+
+      '<label class="wide">Form title<input id="opsManageIntakeTitle" value="'+esc(form.title||'')+'" required></label>'+
+      '<label class="wide">Description<textarea id="opsManageIntakeDescription">'+esc(form.description||'')+'</textarea></label>'+
+      '<label class="wide">Questions — one per line<textarea id="opsManageIntakeQuestions">'+esc(questions.join('\n'))+'</textarea></label>'+
+      '</div><div class="coach-ops-review-note">Current version: '+esc(form.current_version||1)+' · '+esc(title(form.status))+'. Publishing changes creates the next version instead of rewriting prior client assignments.</div>'+
+      '<div class="coach-ops-footer"><button type="button" class="danger" data-retire-coach-intake="'+esc(form.id)+'">Retire Form</button><button type="button" data-coach-ops-close>Cancel</button><button class="primary" type="submit">Publish New Version</button></div></form>');
+  }
+
+  async function saveIntakeManagement(){
+    const form=state.selectedIntake;if(!form)throw new Error('Intake form is unavailable.');
+    const questions=$('#opsManageIntakeQuestions').value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean);
+    const out=await sb().rpc('update_my_coach_intake_form',{
+      p_form_id:form.id,
+      p_title:$('#opsManageIntakeTitle').value.trim(),
+      p_description:$('#opsManageIntakeDescription').value.trim()||null,
+      p_questions:questions,
+      p_action:'publish'
+    });
+    if(out.error)throw out.error;
+    closeDialog();await loadPage('coach-credentials');showCredTab('intake');
+  }
+
+  async function retireIntakeManagement(id){
+    const form=state.selectedIntake?.id===id?state.selectedIntake:null;
+    if(!form)throw new Error('Intake form is unavailable.');
+    if(!confirm('Retire this intake form? Existing assignments and their historical versions will be preserved.'))return;
+    const out=await sb().rpc('update_my_coach_intake_form',{
+      p_form_id:form.id,p_title:form.title,p_description:form.description||null,
+      p_questions:state.selectedIntakeQuestions||[],p_action:'retire'
+    });
+    if(out.error)throw out.error;
+    closeDialog();await loadPage('coach-credentials');showCredTab('intake');
   }
 
   function openTraining(){
