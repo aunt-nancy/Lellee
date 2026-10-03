@@ -16,6 +16,7 @@ const OFFERS: Record<string, Offer> = {
   premium_annual: { entitlement: "premium", interval: "annual", price: "price_1UKkOQDpLc9a3tUu4oO2bU0y" },
   journal_companion_monthly: { entitlement: "journal_companion", interval: "monthly", price: "price_1UKkOPDpLc9a3tUutSwZPky7" },
   coach_addon_monthly: { entitlement: "coach", interval: "monthly", price: "price_1UKkL9DpLc9a3tUuoo3NE0HO" },
+  individualized_live_coaching: { entitlement: "live_coaching_425", interval: "monthly", price: "price_1UMGwiDpLc9a3tUuwuQ1jCBI" },
   coach_checkin: { entitlement: "coach_checkin", interval: "one_time", price: "price_1UKkL8DpLc9a3tUuVkHtcSRq" },
   coaching_foundations: { entitlement: "coaching_foundations", interval: "one_time", price: "price_1UKkaxDpLc9a3tUuT6Gsqfz7" },
   specialty_recovery: { entitlement: "specialty_recovery", interval: "one_time", price: "price_1UKkaxDpLc9a3tUuXJOj4OsM" },
