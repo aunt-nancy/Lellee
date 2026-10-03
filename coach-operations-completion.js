@@ -332,6 +332,94 @@
     closeDialog();await loadPage('coach-scheduler');showCrmTab('availability');
   }
 
+  async function openScheduleManagement(id){
+    const result=await sb().from('coach_schedule_events')
+      .select('id,title,session_scope,scheduled_start,duration_minutes,timezone,meeting_location,meeting_url,operational_note,status,relationship_id,group_id,consultation_request_id,created_by')
+      .eq('id',id).maybeSingle();
+    if(result.error)throw result.error;
+    const event=result.data;if(!event)return alert('Schedule event not found.');
+    state.selectedSchedule=event;
+    openDialog('Manage Session',event.title,
+      '<form id="coachOpsScheduleManageForm"><div class="coach-ops-form">'+
+      '<label class="wide">Session title<input id="opsManageScheduleTitle" value="'+esc(event.title||'')+'" required></label>'+
+      '<label>Scope<select id="opsManageScheduleScope">'+['one_to_one','group','consultation','admin'].map(x=>'<option value="'+x+'" '+(event.session_scope===x?'selected':'')+'>'+esc(title(x))+'</option>').join('')+'</select></label>'+
+      '<label>Status<select id="opsManageScheduleStatus">'+['scheduled','confirmed','completed','cancelled','no_show'].map(x=>'<option value="'+x+'" '+(event.status===x?'selected':'')+'>'+esc(title(x))+'</option>').join('')+'</select></label>'+
+      '<label>Start<input id="opsManageScheduleStart" type="datetime-local" value="'+esc(datetimeLocal(event.scheduled_start))+'" required></label>'+
+      '<label>Duration minutes<input id="opsManageScheduleDuration" type="number" min="10" max="240" value="'+esc(event.duration_minutes||50)+'"></label>'+
+      '<label>Meeting location<input id="opsManageScheduleLocation" value="'+esc(event.meeting_location||'')+'"></label>'+
+      '<label>Meeting URL<input id="opsManageScheduleUrl" type="url" value="'+esc(event.meeting_url||'')+'"></label>'+
+      '<label class="wide">Operational note<textarea id="opsManageScheduleNote">'+esc(event.operational_note||'')+'</textarea></label>'+
+      '</div><div class="coach-ops-footer"><button type="button" data-coach-ops-close>Cancel</button><button class="primary" type="submit">Save Session</button></div></form>');
+  }
+
+  async function saveScheduleManagement(){
+    const event=state.selectedSchedule;if(!event)throw new Error('Schedule event is unavailable.');
+    const start=$('#opsManageScheduleStart').value;
+    const out=await sb().rpc('update_my_coach_schedule_event',{
+      p_event_id:event.id,
+      p_title:$('#opsManageScheduleTitle').value.trim(),
+      p_session_scope:$('#opsManageScheduleScope').value,
+      p_scheduled_start:new Date(start).toISOString(),
+      p_duration_minutes:Number($('#opsManageScheduleDuration').value||50),
+      p_meeting_location:$('#opsManageScheduleLocation').value.trim()||null,
+      p_meeting_url:$('#opsManageScheduleUrl').value.trim()||null,
+      p_operational_note:$('#opsManageScheduleNote').value.trim()||null,
+      p_status:$('#opsManageScheduleStatus').value
+    });
+    if(out.error)throw out.error;
+    closeDialog();await loadPage('coach-scheduler');
+  }
+
+  function openAvailabilityManagement(id){
+    const rule=(state.ctx?.scheduler?.availability||[]).find(x=>x.id===id);
+    if(!rule)return alert('Availability rule not found.');
+    state.selectedAvailability=rule;
+    const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    openDialog('Edit Availability','Update or turn off this recurring window.',
+      '<form id="coachOpsAvailabilityManageForm"><div class="coach-ops-form">'+
+      '<label>Day<select id="opsManageAvailDay">'+days.map((d,i)=>'<option value="'+i+'" '+(Number(rule.day_of_week)===i?'selected':'')+'>'+d+'</option>').join('')+'</select></label>'+
+      '<label>Timezone<input id="opsManageAvailTimezone" value="'+esc(rule.timezone||'America/Los_Angeles')+'"></label>'+
+      '<label>Start time<input id="opsManageAvailStart" type="time" value="'+esc(timeInput(rule.start_time))+'" required></label>'+
+      '<label>End time<input id="opsManageAvailEnd" type="time" value="'+esc(timeInput(rule.end_time))+'" required></label>'+
+      '<label class="wide coach-ops-check"><input id="opsManageAvailActive" type="checkbox" '+(rule.active?'checked':'')+'><span>Availability window is active</span></label>'+
+      '</div><div class="coach-ops-footer"><button type="button" data-coach-ops-close>Cancel</button><button class="primary" type="submit">Save Availability</button></div></form>');
+  }
+
+  async function saveAvailabilityManagement(){
+    const rule=state.selectedAvailability;if(!rule)throw new Error('Availability rule is unavailable.');
+    const start=$('#opsManageAvailStart').value,end=$('#opsManageAvailEnd').value;
+    if(end<=start)throw new Error('End time must be after start time.');
+    const out=await sb().rpc('update_my_coach_availability',{
+      p_rule_id:rule.id,p_day_of_week:Number($('#opsManageAvailDay').value),
+      p_start_time:start,p_end_time:end,
+      p_timezone:$('#opsManageAvailTimezone').value.trim()||'America/Los_Angeles',
+      p_active:!!$('#opsManageAvailActive').checked
+    });
+    if(out.error)throw out.error;
+    closeDialog();await loadPage('coach-scheduler');showCrmTab('availability');
+  }
+
+  function openConsultationManagement(id){
+    const consultation=(state.ctx?.scheduler?.consultations||[]).find(x=>x.id===id);
+    if(!consultation)return alert('Consultation request not found.');
+    state.selectedConsultation=consultation;
+    openDialog('Manage Consultation',consultation.client_label||'Prospective client',
+      '<form id="coachOpsConsultationManageForm"><div class="coach-ops-form">'+
+      '<label class="wide">Request note<textarea disabled>'+esc(consultation.note||'No note provided')+'</textarea></label>'+
+      '<label>Status<select id="opsManageConsultationStatus">'+['new','contacted','scheduled','converted','closed'].map(x=>'<option value="'+x+'" '+(consultation.status===x?'selected':'')+'>'+esc(title(x))+'</option>').join('')+'</select></label>'+
+      '</div><div class="coach-ops-warning"><b>Conversion rule:</b> A consultation can be marked Converted only after the person has accepted a coaching relationship.</div>'+
+      '<div class="coach-ops-footer"><button type="button" data-schedule-consultation="'+esc(consultation.id)+'">Schedule Consultation</button><button type="button" data-coach-ops-close>Cancel</button><button class="primary" type="submit">Save Status</button></div></form>');
+  }
+
+  async function saveConsultationManagement(){
+    const consultation=state.selectedConsultation;if(!consultation)throw new Error('Consultation request is unavailable.');
+    const out=await sb().rpc('update_my_coach_consultation',{
+      p_request_id:consultation.id,p_status:$('#opsManageConsultationStatus').value
+    });
+    if(out.error)throw out.error;
+    closeDialog();await loadPage('coach-scheduler');showCrmTab('consultations');
+  }
+
   function openFollowup(){
     const clients=baseTargets('client');
     openDialog('Add Follow-Up','CRM notes are operational business notes, not clinical records.',`
