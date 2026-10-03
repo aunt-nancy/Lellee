@@ -77,3 +77,32 @@
   .coach-live-row{display:block}
   .coach-readiness-grid{grid-template-columns:1fr 1fr}
 }
+
+
+/* Client Management workspace — 2026-10-02 */
+.coach-client-summary{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:0 0 12px;padding:10px 12px;border:1px solid #e6e0e9;border-radius:12px;background:#faf8fc;color:#6d6570;font-size:calc(.63rem + 2px)}
+.coach-client-controls{display:grid;grid-template-columns:1.2fr .8fr auto;gap:9px;align-items:end;margin:0 0 10px}
+.coach-client-controls label{display:grid;gap:5px;font-size:calc(.62rem + 2px);font-weight:820;color:#554b5d}
+.coach-client-controls select{width:100%;border:1px solid #ded7e5;border-radius:10px;padding:9px;background:#fff;color:#302936}
+.coach-client-controls button{border:1px solid #65419b;background:#65419b;color:#fff;border-radius:10px;padding:10px 13px;font-weight:850}
+.coach-client-actions{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0 14px}
+.coach-client-actions button{border:1px solid #ddd5e5;background:#fff;color:#584764;border-radius:9px;padding:7px 10px;font-size:calc(.59rem + 2px);font-weight:850}
+.coach-client-actions button.danger{border-color:#edcbd2;background:#fff4f6;color:#8b4050}
+.coach-client-actions button:disabled,.coach-client-controls button:disabled{opacity:.48;cursor:not-allowed}
+.coach-client-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.coach-client-grid section{min-width:0;border:1px solid #e4dfea;background:#fff;border-radius:13px;padding:11px}
+.coach-client-grid section.wide{grid-column:1/-1}
+.coach-client-grid h4{margin:0 0 8px;font-size:calc(.72rem + 2px);color:#3f3549}
+.coach-client-line{display:flex;justify-content:space-between;gap:10px;align-items:center;border-top:1px solid #eee8f0;padding:8px 0}
+.coach-client-line:first-of-type{border-top:0}
+.coach-client-line b{display:block;font-size:calc(.63rem + 2px);color:#403647}
+.coach-client-line small{display:block;margin-top:2px;color:#77707d;font-size:calc(.55rem + 2px);line-height:1.35}
+.coach-client-line button{border:1px solid #ddd5e5;background:#fff;color:#65419b;border-radius:8px;padding:5px 8px;font-size:calc(.53rem + 2px);font-weight:850}
+.coach-client-privacy{margin:0 0 9px;padding:8px 10px;border-radius:9px;background:#f7f5fa;color:#6e6674;font-size:calc(.56rem + 2px);line-height:1.45}
+.coach-client-shared{border:1px solid #e3dce8;border-radius:10px;padding:9px 10px;margin:7px 0;background:#fbfafc}
+.coach-client-shared p{margin:7px 0 0;white-space:pre-wrap;overflow-wrap:anywhere;color:#453d49;font-size:calc(.59rem + 2px);line-height:1.48}
+@media(max-width:760px){
+  .coach-client-controls{grid-template-columns:1fr}
+  .coach-client-grid{grid-template-columns:1fr}
+  .coach-client-grid section.wide{grid-column:auto}
+}
