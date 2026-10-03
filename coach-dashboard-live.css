@@ -106,3 +106,10 @@
   .coach-client-grid{grid-template-columns:1fr}
   .coach-client-grid section.wide{grid-column:auto}
 }
+
+
+/* Service + Lead management — 2026-10-02 */
+.coach-service-active{display:flex!important;grid-column:1/-1!important;grid-template-columns:none!important;flex-direction:row;gap:8px!important;align-items:flex-start;font-weight:760!important}
+.coach-service-active input{width:auto;margin-top:2px}
+.coach-lead-followups{margin-top:12px;border:1px solid #e4dfea;border-radius:12px;background:#fff;padding:10px 11px}
+.coach-lead-followups h4{margin:0 0 7px;font-size:calc(.7rem + 2px);color:#403647}
