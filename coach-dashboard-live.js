@@ -573,10 +573,21 @@
     await loadDashboard();
   }
 
-  function openLeadManagement(leadId){
+  async function openLeadManagement(leadId){
     const lead=leadForId(leadId);
     if(!lead) return alert('Lead could not be found.');
     state.selectedLead=lead;
+    const follow=await sb().from('crm_followups')
+      .select('id,title,note,due_at,status,completed_at,created_at')
+      .eq('workspace_type','coach')
+      .eq('business_id',state.business.id)
+      .eq('lead_id',lead.id)
+      .order('created_at',{ascending:false})
+      .limit(30);
+    if(follow.error) throw follow.error;
+    const followRows=(follow.data||[]).map(x=>
+      '<article class="coach-client-line"><div><b>'+esc(x.title)+'</b><small>'+esc(x.note||'')+(x.due_at?' · due '+esc(fmtDateTime(x.due_at)):'')+'</small></div><span class="coach-live-pill">'+esc(statusLabel(x.status))+'</span></article>'
+    ).join('')||'<div class="coach-live-empty">No follow-ups for this lead.</div>';
     const canInvite=!!lead.email && state.business?.status==='approved' && lead.status!=='converted' && lead.status!=='closed';
     dialog('Manage Lead','Business prospect/contact record. Keep private support and recovery information out of lead notes.',
       '<form id="coachLeadManagementForm"><div class="coach-live-form">'+
@@ -594,6 +605,7 @@
         (canInvite?'<button type="button" data-lead-invite="'+esc(lead.id)+'">Invite as Client</button>':'')+
         '<button type="button" data-lead-followup="'+esc(lead.id)+'">Add Follow-Up</button>'+
       '</div>'+
+      '<section class="coach-lead-followups"><h4>Follow-Ups</h4>'+followRows+'</section>'+
       '<div class="coach-live-footer"><button type="button" data-coach-live-close>Cancel</button><button class="primary" type="submit">Save Lead</button></div></form>');
   }
 
@@ -1279,7 +1291,7 @@
     if(openService){ e.preventDefault(); openServiceManagement(openService.dataset.coachOpenService); }
 
     const openLead=e.target.closest('[data-coach-open-lead]');
-    if(openLead){ e.preventDefault(); openLeadManagement(openLead.dataset.coachOpenLead); }
+    if(openLead){ e.preventDefault(); openLeadManagement(openLead.dataset.coachOpenLead).catch(err=>alert(err.message||String(err))); }
     const leadInvite=e.target.closest('[data-lead-invite]');
     if(leadInvite){ e.preventDefault(); inviteLeadAsClient(leadInvite.dataset.leadInvite).catch(err=>alert(err.message||String(err))); }
     const leadFollowup=e.target.closest('[data-lead-followup]');
