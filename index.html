@@ -1103,7 +1103,7 @@ Includes the approved Lellee consumer experience from early recovery through lif
 </style>
 
 <link rel="stylesheet" href="/agent-command-center.css?v=20260827-1">
-<link rel="stylesheet" href="/coach-dashboard-live.css?v=20261002-service-lead-management">
+<link rel="stylesheet" href="/coach-dashboard-live.css?v=20261002-assignments-conversations">
 <link rel="stylesheet" href="/coach-operations-completion.css?v=20260929-1">
 <link rel="stylesheet" href="/organization-dashboard-live.css?v=20260827-1">
 <link rel="stylesheet" href="/organization-operations-completion.css?v=20260827-1">
@@ -5185,6 +5185,10 @@ html,body,.app,.content,.page{overflow-anchor:none!important}
 </div>
 <div class="coach-list" id="myCoachInvites"></div>
 <div class="coach-list" id="myCoachRelationships"></div>
+<div class="coach-panel-head"><div><span class="approved-kicker">ASSIGNMENTS</span><h3>Next steps from your coach</h3></div></div>
+<div class="coach-list" id="myCoachAssignments"></div>
+<div class="coach-panel-head"><div><span class="approved-kicker">MESSAGES</span><h3>Your coach conversations</h3></div></div>
+<div class="coach-list" id="myCoachMessages"></div>
 <div class="coach-guardrail"><b>Your private Lellee data is not automatically shared.</b><p>A coach can see only information you explicitly share through the coaching relationship. Your full journal, check-ins, support contacts and private history remain private by default.</p></div>
 </div>
 </section>
@@ -8204,7 +8208,7 @@ Includes:
 </div>
 <script src="/lellee-v1.js?v=20260928-wave1-billing"></script>
 <script src="/push-button-hotfix.js"></script>
-<div class="legal-acceptance-overlay hidden" id="legalAcceptanceOverlay"><div class="legal-acceptance-card"><span class="approved-kicker">PRIVACY &amp; SAFETY UPDATE</span><h2>Before continuing</h2><p>Lellee stores sensitive recovery information. Scroll through the four approved notices before accepting.</p><div class="legal-review-scroll legal-gate-scroll" id="legalGateScroll" tabindex="0" aria-label="Terms of Use, Privacy Policy, Consumer Health Data Privacy Notice, and Safety Notice"><p>Loading the approved legal notices…</p></div><p class="legal-review-progress" id="legalGateProgress" aria-live="polite">Scroll through all four notices to enable the acknowledgment.</p><label><input id="legalGateAgree" type="checkbox" disabled/> I confirm I am at least 18 years old and have read and agree to the Terms of Use, Privacy Policy, Consumer Health Data Privacy Notice, and Safety Notice.</label><div class="legal-acceptance-actions"><span id="legalGateStatus"></span><button class="approved-small-action" id="legalAcceptContinue">Accept &amp; Continue</button></div></div></div><script src="/legal-privacy-safety.js?v=20260928-ack-sync"></script><script src="/program-coach-core.js"></script>
+<div class="legal-acceptance-overlay hidden" id="legalAcceptanceOverlay"><div class="legal-acceptance-card"><span class="approved-kicker">PRIVACY &amp; SAFETY UPDATE</span><h2>Before continuing</h2><p>Lellee stores sensitive recovery information. Scroll through the four approved notices before accepting.</p><div class="legal-review-scroll legal-gate-scroll" id="legalGateScroll" tabindex="0" aria-label="Terms of Use, Privacy Policy, Consumer Health Data Privacy Notice, and Safety Notice"><p>Loading the approved legal notices…</p></div><p class="legal-review-progress" id="legalGateProgress" aria-live="polite">Scroll through all four notices to enable the acknowledgment.</p><label><input id="legalGateAgree" type="checkbox" disabled/> I confirm I am at least 18 years old and have read and agree to the Terms of Use, Privacy Policy, Consumer Health Data Privacy Notice, and Safety Notice.</label><div class="legal-acceptance-actions"><span id="legalGateStatus"></span><button class="approved-small-action" id="legalAcceptContinue">Accept &amp; Continue</button></div></div></div><script src="/legal-privacy-safety.js?v=20260928-ack-sync"></script><script src="/program-coach-core.js?v=20261002-client-assignments-messages"></script>
 <div class="admin-overlay hidden" id="programBuilderEditor">
 <div class="admin-editor-card program-builder-editor-card">
 <div class="admin-editor-head">
@@ -8606,7 +8610,7 @@ Transportation"></textarea></label>
 
 <script src="/journey-nav-label-hotfix.js?v=20260916-1"></script>\n<script src="/agent-command-center.js?v=20260827-1"></script>
 <script src="/coach-entry-router.js?v=20260827-1"></script>
-<script src="/coach-dashboard-live.js?v=20261002-service-lead-management"></script>
+<script src="/coach-dashboard-live.js?v=20261002-assignments-conversations"></script>
 <script src="/coach-operations-completion.js?v=20260929-1"></script>
 <script src="/organization-entry-router.js?v=20260827-1"></script>
 <script src="/organization-dashboard-live.js?v=20260827-1"></script>
