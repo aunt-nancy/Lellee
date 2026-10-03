@@ -7,9 +7,15 @@
   const money=v=>`$${Number(v||0).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2})}`;
   const dt=v=>v?new Date(v).toLocaleString():'—';
   const date=v=>v?new Date(v).toLocaleDateString():'—';
+  const datetimeLocal=v=>{
+    if(!v)return '';
+    const d=new Date(v),local=new Date(d.getTime()-d.getTimezoneOffset()*60000);
+    return local.toISOString().slice(0,16);
+  };
+  const timeInput=v=>String(v||'').slice(0,5);
   const title=v=>String(v||'').replaceAll('_',' ').replace(/\b\w/g,c=>c.toUpperCase());
 
-  let state={ctx:null,base:null,cert:null,user:null,loading:false};
+  let state={ctx:null,base:null,cert:null,user:null,selectedSchedule:null,selectedAvailability:null,selectedConsultation:null,loading:false};
 
   function bridge(){return window.LelleeAuthContext?.client?window.LelleeAuthContext:null}
   function sb(){return bridge()?.client}
