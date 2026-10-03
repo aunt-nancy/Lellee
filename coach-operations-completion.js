@@ -15,7 +15,7 @@
   const timeInput=v=>String(v||'').slice(0,5);
   const title=v=>String(v||'').replaceAll('_',' ').replace(/\b\w/g,c=>c.toUpperCase());
 
-  let state={ctx:null,base:null,cert:null,user:null,selectedSchedule:null,selectedAvailability:null,selectedConsultation:null,selectedCredential:null,selectedTraining:null,selectedIntake:null,selectedIntakeQuestions:[],loading:false};
+  let state={ctx:null,base:null,cert:null,user:null,selectedSchedule:null,selectedAvailability:null,selectedConsultation:null,selectedCredential:null,selectedTraining:null,selectedIntake:null,selectedIntakeQuestions:[],selectedAutomation:null,loading:false};
 
   function bridge(){return window.LelleeAuthContext?.client?window.LelleeAuthContext:null}
   function sb(){return bridge()?.client}
@@ -171,7 +171,7 @@
     const rl=$('#coachAutomationRuleList');
     if(rl) rl.innerHTML=(a.rules||[]).length?(a.rules||[]).map(x=>`
       <article class="coach-ops-item"><div class="coach-ops-row"><div><b>${esc(x.name)}</b><small>${esc(title(x.trigger_event))} → create follow-up</small></div><span class="coach-ops-pill">${esc(title(x.status))}</span></div>
-      <div class="coach-ops-actions"><button data-toggle-rule="${x.id}" class="primary">${x.status==='active'?'Pause':'Activate'}</button></div></article>`).join(''):
+      <div class="coach-ops-actions"><button data-open-coach-automation="${x.id}">Open</button><button data-toggle-rule="${x.id}" class="primary">${x.status==='active'?'Pause':'Activate'}</button></div></article>`).join(''):
       '<div class="coach-ops-empty">No automation rules yet. Add a safe operational rule.</div>';
     const rr=$('#coachAutomationRunList');
     if(rr) rr.innerHTML=(a.runs||[]).length?(a.runs||[]).map(x=>`
@@ -469,6 +469,59 @@
     const r=(state.ctx?.automation?.rules||[]).find(x=>x.id===id);if(!r)return;
     const {error}=await sb().from('automation_rules').update({status:r.status==='active'?'paused':'active',updated_at:new Date().toISOString()}).eq('id',id);if(error)throw error;
     await loadPage('coach-automation');
+  }
+
+  function automationRuleForId(id){
+    return (state.ctx?.automation?.rules||[]).find(x=>x.id===id)||null;
+  }
+
+  function automationDelayHours(rule){
+    if(rule.trigger_event==='group_start_due')return Number(rule.action_config?.days_before||1)*24;
+    return Number(rule.action_config?.due_hours||24);
+  }
+
+  function openAutomationManagement(id){
+    const rule=automationRuleForId(id);
+    if(!rule)return alert('Automation rule not found.');
+    state.selectedAutomation=rule;
+    openDialog('Manage Automation Rule','Coach automations remain limited to privacy-safe operational follow-ups.',
+      '<form id="coachOpsAutomationManageForm"><div class="coach-ops-form">'+
+      '<label class="wide">Rule name<input id="opsManageAutoName" value="'+esc(rule.name||'')+'" required></label>'+
+      '<label>Trigger<select id="opsManageAutoTrigger">'+['consultation_requested','session_scheduled','group_start_due'].map(x=>'<option value="'+x+'" '+(rule.trigger_event===x?'selected':'')+'>'+esc(title(x))+'</option>').join('')+'</select></label>'+
+      '<label>Status<select id="opsManageAutoStatus">'+['draft','active','paused'].map(x=>'<option value="'+x+'" '+(rule.status===x?'selected':'')+'>'+esc(title(x))+'</option>').join('')+'</select></label>'+
+      '<label>Follow-up delay (hours)<input id="opsManageAutoDelay" type="number" min="1" max="720" value="'+esc(automationDelayHours(rule))+'"></label>'+
+      '<label class="wide">Follow-up title<input id="opsManageAutoTitle" value="'+esc(rule.action_config?.title||'Coach follow-up')+'"></label>'+
+      '<label class="wide">Description<textarea id="opsManageAutoDescription">'+esc(rule.description||'')+'</textarea></label>'+
+      '</div><div class="coach-ops-review-note">Automation can create an operational follow-up only. It cannot read private journals, diagnose clients, send clinical advice, or change client consent.</div>'+
+      '<div class="coach-ops-footer"><button type="button" class="danger" data-retire-coach-automation="'+esc(rule.id)+'">Retire Rule</button><button type="button" data-coach-ops-close>Cancel</button><button class="primary" type="submit">Save Rule</button></div></form>');
+  }
+
+  async function saveAutomationManagement(){
+    const rule=state.selectedAutomation;if(!rule)throw new Error('Automation rule is unavailable.');
+    const out=await sb().rpc('update_my_coach_automation_rule',{
+      p_rule_id:rule.id,
+      p_name:$('#opsManageAutoName').value.trim(),
+      p_description:$('#opsManageAutoDescription').value.trim()||null,
+      p_trigger_event:$('#opsManageAutoTrigger').value,
+      p_delay_hours:Number($('#opsManageAutoDelay').value||24),
+      p_followup_title:$('#opsManageAutoTitle').value.trim()||'Coach follow-up',
+      p_status:$('#opsManageAutoStatus').value
+    });
+    if(out.error)throw out.error;
+    closeDialog();await loadPage('coach-automation');
+  }
+
+  async function retireAutomationManagement(id){
+    const rule=state.selectedAutomation?.id===id?state.selectedAutomation:automationRuleForId(id);
+    if(!rule)throw new Error('Automation rule is unavailable.');
+    if(!confirm('Retire this automation rule? Its prior run history will be preserved.'))return;
+    const out=await sb().rpc('update_my_coach_automation_rule',{
+      p_rule_id:rule.id,p_name:rule.name,p_description:rule.description||null,
+      p_trigger_event:rule.trigger_event,p_delay_hours:automationDelayHours(rule),
+      p_followup_title:rule.action_config?.title||'Coach follow-up',p_status:'retired'
+    });
+    if(out.error)throw out.error;
+    closeDialog();await loadPage('coach-automation');
   }
 
   function openCredential(){
