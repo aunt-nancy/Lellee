@@ -48,15 +48,18 @@
     const c=bridge(),u=user(); if(!c||!u) return null;
     state.loading=true;
     try{
-      const [ops,base,cert]=await Promise.all([
+      const [ops,base,cert,automation]=await Promise.all([
         c.client.rpc('get_my_coach_operations_context'),
         c.client.rpc('get_my_coach_dashboard_context'),
-        c.client.rpc('get_my_coach_certification_context')
+        c.client.rpc('get_my_coach_certification_context'),
+        c.client.rpc('get_my_coach_automation_context')
       ]);
       if(ops.error) throw ops.error;
       if(base.error) throw base.error;
       if(cert.error) throw cert.error;
+      if(automation.error) throw automation.error;
       state.ctx=ops.data||{};
+      state.ctx.automation=automation.data||state.ctx.automation||{};
       state.base=base.data||{};
       state.cert=cert.data||{};
       state.user=u;
