@@ -16,6 +16,8 @@
     business:null,
     selectedClient:null,
     clientWorkspace:null,
+    selectedGroup:null,
+    groupWorkspace:null,
     loading:false
   };
 
@@ -267,7 +269,7 @@
           <span class="coach-live-pill">${g.members||0}/${g.capacity} members</span>
           <span class="coach-live-pill">${esc(money(g.group_price))}</span>
         </div>
-        <div class="coach-live-actions"><button class="primary" data-coach-message-group="${g.id}">Message group</button></div>
+        <div class="coach-live-actions"><button class="primary" data-coach-open-group="${g.id}">Open Group</button><button data-coach-message-group="${g.id}">Message group</button></div>
       </article>`).join('') :
       `<div class="coach-live-empty">No groups yet. Create a group or hybrid coaching program when you are ready.</div>`;
   }
@@ -620,6 +622,147 @@
   }
 
 
+
+  function groupForId(id){
+    return (state.context?.groups||[]).find(x=>x.id===id)||null;
+  }
+
+  function groupServiceOptions(group){
+    const rows=(state.context?.services||[]).filter(s=>s.active&&s.program_id===group.program_id);
+    return '<option value="">No service package</option>'+rows.map(s=>
+      '<option value="'+esc(s.id)+'" '+(s.id===group.service_package_id?'selected':'')+'>'+esc(s.name)+' · '+esc(money(s.price_amount))+'</option>'
+    ).join('');
+  }
+
+  async function loadGroupWorkspaceData(group){
+    const [members,sessions]=await Promise.all([
+      sb().from('coach_group_members').select('relationship_id,status,joined_at').eq('group_id',group.id),
+      sb().from('coach_sessions').select('id,scheduled_start,duration_minutes,session_type,status,operational_note,created_at').eq('group_id',group.id).order('scheduled_start',{ascending:false}).limit(50)
+    ]);
+    if(members.error) throw members.error;
+    if(sessions.error) throw sessions.error;
+    return {members:members.data||[],sessions:sessions.data||[]};
+  }
+
+  function renderGroupWorkspace(group,data){
+    const inner=$('#coachLiveDialogInner'); if(!inner) return;
+    const memberMap=new Map((data.members||[]).map(x=>[x.relationship_id,x]));
+    const eligible=(state.context?.clients||[]).filter(c=>c.program_id===group.program_id);
+    const memberRows=eligible.map(client=>{
+      const membership=memberMap.get(client.id);
+      const active=membership?.status==='active';
+      const canAdd=client.status==='active'&&['forming','active'].includes(group.status);
+      return '<article class="coach-client-line"><div><b>'+esc(client.client_name||'Client')+'</b><small>'+esc(client.client_email||'')+' · '+esc(statusLabel(client.status))+(active?' · joined '+esc(fmtDate(membership.joined_at)):'')+'</small></div>'+
+        (active?'<button type="button" data-group-client-toggle="'+esc(client.id)+'" data-group-id="'+esc(group.id)+'" data-next-active="false">Remove</button>':
+          (canAdd?'<button type="button" data-group-client-toggle="'+esc(client.id)+'" data-group-id="'+esc(group.id)+'" data-next-active="true">Add</button>':''))+
+        '</article>';
+    }).join('')||'<div class="coach-live-empty">No client relationships match this group program.</div>';
+
+    const sessionRows=(data.sessions||[]).map(s=>'<article class="coach-client-line"><div><b>'+esc(fmtDateTime(s.scheduled_start))+'</b><small>'+esc(statusLabel(s.session_type))+' · '+esc(s.duration_minutes)+' min'+(s.operational_note?' · '+esc(s.operational_note):'')+'</small></div><span class="coach-live-pill">'+esc(statusLabel(s.status))+'</span></article>').join('')||
+      '<div class="coach-live-empty">No group sessions scheduled.</div>';
+
+    inner.innerHTML=
+      '<div class="coach-live-dialog-head"><div><span class="approved-kicker">GROUP MANAGEMENT</span><h3>'+esc(group.name)+'</h3><p>'+esc(group.program_name||'Program')+' · '+esc(group.members||0)+'/'+esc(group.capacity)+' active members</p></div><button class="coach-live-close" type="button" data-coach-live-close>×</button></div>'+
+      '<form id="coachGroupManagementForm" data-group-id="'+esc(group.id)+'" class="coach-live-form">'+
+        '<label class="wide">Group name<input id="coachManageGroupName" value="'+esc(group.name)+'" required></label>'+
+        '<label>Service package<select id="coachManageGroupService">'+groupServiceOptions(group)+'</select></label>'+
+        '<label>Status<select id="coachManageGroupStatus">'+
+          ['forming','active','paused','completed','archived'].map(x=>'<option value="'+x+'" '+(group.status===x?'selected':'')+'>'+esc(statusLabel(x))+'</option>').join('')+
+        '</select></label>'+
+        '<label>Capacity<input id="coachManageGroupCapacity" type="number" min="2" max="50" value="'+esc(group.capacity)+'" required></label>'+
+        '<label>Group price<input id="coachManageGroupPrice" type="number" min="0" step="0.01" value="'+esc(group.group_price==null?'':group.group_price)+'"></label>'+
+        '<label>Start date<input id="coachManageGroupStart" type="date" value="'+esc(group.start_date||'')+'"></label>'+
+        '<label>End date<input id="coachManageGroupEnd" type="date" value="'+esc(group.end_date||'')+'"></label>'+
+        '<label class="wide">Description<textarea id="coachManageGroupDescription">'+esc(group.description||'')+'</textarea></label>'+
+        '<div class="wide coach-live-footer"><button type="button" data-coach-message-group="'+esc(group.id)+'">Message Group</button><button type="button" data-group-session="'+esc(group.id)+'">Schedule Session</button><button class="primary" type="submit">Save Group</button></div>'+
+      '</form>'+
+      '<div class="coach-client-grid" style="margin-top:14px">'+
+        '<section><h4>Members</h4>'+memberRows+'</section>'+
+        '<section><h4>Group Sessions</h4>'+sessionRows+'</section>'+
+      '</div>';
+  }
+
+  async function openGroupManagement(groupId){
+    const group=groupForId(groupId);
+    if(!group) return alert('Coaching group could not be found.');
+    state.selectedGroup=group;
+    state.groupWorkspace=null;
+    dialog(group.name,'Loading group workspace…','<div class="coach-live-empty">Loading members and sessions…</div>');
+    try{
+      const data=await loadGroupWorkspaceData(group);
+      state.groupWorkspace=data;
+      renderGroupWorkspace(group,data);
+    }catch(err){
+      const inner=$('#coachLiveDialogInner');
+      if(inner) inner.innerHTML='<div class="coach-live-dialog-head"><div><span class="approved-kicker">GROUP MANAGEMENT</span><h3>Group workspace unavailable</h3></div><button class="coach-live-close" data-coach-live-close>×</button></div><div class="coach-live-error">'+esc(err.message||err)+'</div>';
+    }
+  }
+
+  async function saveGroupManagement(){
+    const group=state.selectedGroup;
+    if(!group) throw new Error('Group is unavailable.');
+    const payload={
+      p_group_id:group.id,
+      p_name:$('#coachManageGroupName')?.value.trim(),
+      p_description:$('#coachManageGroupDescription')?.value.trim()||null,
+      p_service_package_id:$('#coachManageGroupService')?.value||null,
+      p_capacity:Number($('#coachManageGroupCapacity')?.value||group.capacity),
+      p_status:$('#coachManageGroupStatus')?.value||group.status,
+      p_start_date:$('#coachManageGroupStart')?.value||null,
+      p_end_date:$('#coachManageGroupEnd')?.value||null,
+      p_group_price:$('#coachManageGroupPrice')?.value===''?null:Number($('#coachManageGroupPrice')?.value)
+    };
+    const {error}=await sb().rpc('update_my_coach_group',payload);
+    if(error) throw error;
+    closeDialog();
+    state.context=null;
+    await loadDashboard();
+  }
+
+  async function toggleGroupClient(groupId,relationshipId,active){
+    const {error}=await sb().rpc('set_my_coach_client_group_membership',{
+      p_relationship_id:relationshipId,p_group_id:groupId,p_active:active
+    });
+    if(error) throw error;
+    state.context=null;
+    await loadDashboard();
+    await openGroupManagement(groupId);
+  }
+
+  function openGroupSession(groupId){
+    const group=groupForId(groupId);
+    if(!group||!['forming','active'].includes(group.status)) return alert('The group must be forming or active to schedule a session.');
+    state.selectedGroup=group;
+    dialog('Schedule Group Session',group.name,
+      '<form id="coachGroupSessionForm"><div class="coach-live-form">'+
+        '<label class="wide">Date & time<input id="coachGroupSessionStart" type="datetime-local" required></label>'+
+        '<label>Duration (minutes)<input id="coachGroupSessionDuration" type="number" min="10" max="240" value="60" required></label>'+
+        '<label>Session type<select id="coachGroupSessionType"><option value="group_coaching">Group Coaching</option><option value="group_checkin">Group Check-in</option></select></label>'+
+        '<label class="wide">Operational note<textarea id="coachGroupSessionNote" placeholder="Scheduling or operational note only."></textarea></label>'+
+      '</div><div class="coach-live-footer"><button type="button" data-coach-open-group="'+esc(group.id)+'">Back</button><button class="primary" type="submit">Schedule</button></div></form>');
+  }
+
+  async function createGroupSession(){
+    const group=state.selectedGroup;
+    if(!group) throw new Error('Group is unavailable.');
+    const start=$('#coachGroupSessionStart')?.value;
+    if(!start) throw new Error('Choose a session date and time.');
+    const row={
+      business_id:state.business.id,
+      coach_user_id:state.user.id,
+      relationship_id:null,
+      group_id:group.id,
+      scheduled_start:new Date(start).toISOString(),
+      duration_minutes:Number($('#coachGroupSessionDuration')?.value||60),
+      session_type:$('#coachGroupSessionType')?.value||'group_coaching',
+      status:'scheduled',
+      operational_note:$('#coachGroupSessionNote')?.value.trim()||null
+    };
+    const {error}=await sb().from('coach_sessions').insert(row);
+    if(error) throw error;
+    await openGroupManagement(group.id);
+  }
+
   function clientForRelationship(id){
     return (state.context?.clients||[]).find(x=>x.id===id)||null;
   }
@@ -957,6 +1100,17 @@
       e.preventDefault(); e.stopImmediatePropagation(); openMessage();
     }
 
+    const openGroup=e.target.closest('[data-coach-open-group]');
+    if(openGroup){ e.preventDefault(); openGroupManagement(openGroup.dataset.coachOpenGroup); }
+
+    const groupClientToggle=e.target.closest('[data-group-client-toggle]');
+    if(groupClientToggle){
+      e.preventDefault();
+      toggleGroupClient(groupClientToggle.dataset.groupId,groupClientToggle.dataset.groupClientToggle,groupClientToggle.dataset.nextActive==='true').catch(err=>alert(err.message||String(err)));
+    }
+    const groupSession=e.target.closest('[data-group-session]');
+    if(groupSession){ e.preventDefault(); openGroupSession(groupSession.dataset.groupSession); }
+
     const openClient=e.target.closest('[data-coach-open-client]');
     if(openClient){ e.preventDefault(); openClientManagement(openClient.dataset.coachOpenClient); }
 
@@ -1012,6 +1166,8 @@
     if(id==='coachClientSessionForm') run(createClientSession);
     if(id==='coachClientFollowupForm') run(createClientFollowup);
     if(id==='coachClientIntakeForm') run(assignClientIntake);
+    if(id==='coachGroupManagementForm') run(saveGroupManagement);
+    if(id==='coachGroupSessionForm') run(createGroupSession);
   });
 
   function boot(){
