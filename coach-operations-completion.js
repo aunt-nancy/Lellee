@@ -203,12 +203,13 @@
     if(cl) cl.innerHTML=(cert.credentials||c.credentials||[]).length?(cert.credentials||c.credentials||[]).map(x=>`
       <article class="coach-ops-item"><div class="coach-ops-row"><div><b>${esc(x.label)}</b><small>${esc(title(x.credential_type))}${x.issuer?' · '+esc(x.issuer):''}</small></div><span class="coach-ops-pill">${esc(title(x.verification_status))}</span></div>
       ${x.expires_on?`<small>Expires ${esc(date(x.expires_on))}</small>`:''}
-      ${['self_reported','unable_to_verify'].includes(x.verification_status)?`<div class="coach-ops-actions"><button class="primary" data-request-credential-review="${x.id}">Request human review</button></div>`:''}
+      <div class="coach-ops-actions"><button data-open-coach-credential="${x.id}">Open</button>${['self_reported','unable_to_verify'].includes(x.verification_status)?`<button class="primary" data-request-credential-review="${x.id}">Request human review</button>`:''}</div>
       ${x.verification_status==='pending'?'<div class="coach-ops-review-note">Human review requested. Public display remains off while review is pending.</div>':''}</article>`).join(''):
       '<div class="coach-ops-empty">No credential claims yet. Self-entered claims remain unverified until human review.</div>';
     const tl=$('#coachTrainingList');
     if(tl) tl.innerHTML=(cert.training||c.training||[]).length?(cert.training||c.training||[]).map(x=>`
-      <article class="coach-ops-item"><div class="coach-ops-row"><div><b>${esc(x.title)}</b><small>${x.hours!=null?esc(x.hours)+' hours':''}${x.completed_at?' · completed '+esc(date(x.completed_at)):''}</small></div><span class="coach-ops-pill">${x.verified?'VERIFIED':esc(title(x.status))}</span></div></article>`).join(''):
+      <article class="coach-ops-item"><div class="coach-ops-row"><div><b>${esc(x.title)}</b><small>${x.hours!=null?esc(x.hours)+' hours':''}${x.completed_at?' · completed '+esc(date(x.completed_at)):''}</small></div><span class="coach-ops-pill">${x.verified?'VERIFIED':esc(title(x.status))}</span></div>
+      <div class="coach-ops-actions"><button class="primary" data-open-coach-training="${x.id}">Open</button></div></article>`).join(''):
       '<div class="coach-ops-empty">No training records yet.</div>';
     const certificates=$('#coachCertificateList');
     if(certificates) certificates.innerHTML=(cert.certificates||[]).length?(cert.certificates||[]).map(x=>`
@@ -217,8 +218,8 @@
       '<div class="coach-ops-empty">No Lellee certificates have been issued yet. Verified credentials or completed, verified training can be reviewed by an administrator for certificate issuance.</div>';
     const il=$('#coachIntakeFormList');
     if(il) il.innerHTML=(c.intake_forms||[]).length?(c.intake_forms||[]).map(x=>`
-      <article class="coach-ops-item"><div class="coach-ops-row"><div><b>${esc(x.title)}</b><small>${esc(x.description||'')} · ${x.assignment_count||0} assignments</small></div><span class="coach-ops-pill">${esc(title(x.status))}</span></div>
-      <div class="coach-ops-actions"><button class="primary" data-assign-intake="${x.id}">Assign to Client</button></div></article>`).join(''):
+      <article class="coach-ops-item"><div class="coach-ops-row"><div><b>${esc(x.title)}</b><small>${esc(x.description||'')} · v${x.current_version||1} · ${x.assignment_count||0} assignments</small></div><span class="coach-ops-pill">${esc(title(x.status))}</span></div>
+      <div class="coach-ops-actions"><button data-open-coach-intake="${x.id}">Open</button>${x.status==='published'?'<button class="primary" data-assign-intake="'+x.id+'">Assign to Client</button>':''}</div></article>`).join(''):
       '<div class="coach-ops-empty">No intake forms yet.</div>';
     showCredTab(tab);
   }
