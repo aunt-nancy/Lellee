@@ -6,6 +6,7 @@ const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&
 const toast=(m,e=false)=>{const t=q('#globalToast');if(t){t.textContent=m;t.classList.remove('hidden');if(e)t.style.background='#7f2634';setTimeout(()=>{t.classList.add('hidden');t.style.background=''},2600)}};
 
 let business=null,programs=[],coachTab='clients';
+let myCoachState={relationships:[],messages:[]};
 
 async function loadPrograms(){
  if(typeof sb==='undefined')return;
@@ -103,12 +104,179 @@ async function newLead(){
  if(!business)return;const email=prompt('Lead email:');if(!email)return;await sb.from('coach_leads').insert({business_id:business.id,email,status:'new'});loadDashboard();
 }
 
+function ensureMyCoachingDialog(){
+ let d=q('#myCoachingDialog');
+ if(!d){
+  d=document.createElement('dialog');
+  d.id='myCoachingDialog';
+  d.className='coach-live-dialog';
+  d.innerHTML='<div class="coach-live-dialog-inner" id="myCoachingDialogInner"></div>';
+  document.body.appendChild(d);
+ }
+ return d;
+}
+function closeMyCoachingDialog(){q('#myCoachingDialog')?.close()}
+
+function myCoachName(rel){
+ return rel?.coach_businesses?.public_name||rel?.coach_businesses?.business_name||'Coach';
+}
+
 async function loadMyCoaching(){
  if(!currentUser)return;
- const {data:rels}=await sb.from('coach_client_relationships').select('id,status,business_id,coach_businesses(business_name,public_name)').eq('client_user_id',currentUser.id);
- const box=q('#myCoachRelationships');if(box)box.innerHTML=(rels||[]).length?(rels||[]).map(r=>`<div class="coach-list-row"><div class="coach-list-icon">◎</div><div><b>${esc(r.coach_businesses?.public_name||r.coach_businesses?.business_name||'Coach')}</b><small>${esc(r.status)} · Your private data stays private unless you share it.</small></div><button data-share-rel="${r.id}">Share Item</button></div>`).join(''):'<div class="approved-resource-empty">No active coaching relationships yet.</div>';
- const token=new URLSearchParams(location.search).get('invite');
- if(token){const {data,error}=await sb.rpc('accept_coach_invite',{p_token:token});if(!error&&data){toast('Coaching invitation accepted.');history.replaceState({},'',location.pathname+'?page=my-coaching');}}
+
+ const params=new URLSearchParams(location.search);
+ const token=params.get('invite')||params.get('coach_invite');
+ if(token){
+  const accepted=await sb.rpc('accept_coach_invite',{p_token:token});
+  if(!accepted.error&&accepted.data){
+   toast('Coaching invitation accepted.');
+   const url=new URL(location.href);
+   url.searchParams.delete('invite');
+   url.searchParams.delete('coach_invite');
+   history.replaceState({},'',url.pathname+(url.searchParams.toString()?'?'+url.searchParams.toString():'')+url.hash);
+  }else if(accepted.error){
+   toast(accepted.error.message||'Could not accept coaching invitation.',true);
+  }
+ }
+
+ const relResult=await sb.from('coach_client_relationships')
+  .select('id,status,business_id,program_id,coach_businesses(business_name,public_name)')
+  .eq('client_user_id',currentUser.id)
+  .order('started_at',{ascending:false});
+ if(relResult.error)return toast(relResult.error.message,true);
+ const rels=relResult.data||[];
+ myCoachState.relationships=rels;
+
+ const box=q('#myCoachRelationships');
+ if(box)box.innerHTML=rels.length?rels.map(function(r){
+  return '<div class="coach-list-row"><div class="coach-list-icon">◎</div><div><b>'+esc(myCoachName(r))+'</b>'+
+   '<small>'+esc(r.status)+' · Your private data stays private unless you share it.</small></div>'+
+   '<button data-my-coach-conversation="'+esc(r.id)+'">Conversation</button></div>';
+ }).join(''):'<div class="approved-resource-empty">No coaching relationships yet.</div>';
+
+ const assignmentBox=q('#myCoachAssignments'),messageBox=q('#myCoachMessages');
+ const relIds=rels.map(function(r){return r.id});
+ if(!relIds.length){
+  if(assignmentBox)assignmentBox.innerHTML='<div class="approved-resource-empty">No coaching assignments yet.</div>';
+  if(messageBox)messageBox.innerHTML='<div class="approved-resource-empty">No coach conversations yet.</div>';
+  return;
+ }
+
+ const recipientResult=await sb.from('coach_assignment_recipients')
+  .select('id,assignment_id,relationship_id,completed_at')
+  .in('relationship_id',relIds);
+ if(recipientResult.error)return toast(recipientResult.error.message,true);
+ const recipients=recipientResult.data||[];
+ const assignmentIds=[...new Set(recipients.map(function(x){return x.assignment_id}))];
+ let assignments=[];
+ if(assignmentIds.length){
+  const assignmentResult=await sb.from('coach_assignments')
+   .select('id,title,instructions,due_at,status,program_id,created_at')
+   .in('id',assignmentIds)
+   .order('created_at',{ascending:false});
+  if(assignmentResult.error)return toast(assignmentResult.error.message,true);
+  assignments=assignmentResult.data||[];
+ }
+ const assignmentMap=new Map(assignments.map(function(a){return [a.id,a]}));
+ const relMap=new Map(rels.map(function(r){return [r.id,r]}));
+ const assignmentRows=recipients.map(function(rec){
+  const a=assignmentMap.get(rec.assignment_id),rel=relMap.get(rec.relationship_id);
+  if(!a)return '';
+  const canComplete=!rec.completed_at&&a.status==='active'&&rel?.status==='active';
+  return '<article class="coach-live-item"><div class="coach-live-row"><div><b>'+esc(a.title)+'</b>'+
+   '<small>'+esc(myCoachName(rel))+(a.due_at?' · due '+esc(new Date(a.due_at).toLocaleString()):'')+'</small></div>'+
+   '<span class="coach-live-pill">'+esc(rec.completed_at?'COMPLETED':String(a.status||'active').toUpperCase())+'</span></div>'+
+   (a.instructions?'<div class="coach-conversation-preview">'+esc(a.instructions)+'</div>':'')+
+   '<div class="coach-live-actions">'+(canComplete?'<button class="primary" data-my-coach-complete="'+esc(rec.id)+'">Mark Complete</button>':'')+
+   '<button data-my-coach-conversation="'+esc(rec.relationship_id)+'">Conversation</button></div></article>';
+ }).filter(Boolean);
+ if(assignmentBox)assignmentBox.innerHTML=assignmentRows.length?assignmentRows.join(''):'<div class="approved-resource-empty">No coaching assignments yet.</div>';
+
+ const messageResult=await sb.from('coach_messages')
+  .select('id,relationship_id,sender_user_id,body,created_at,read_at')
+  .in('relationship_id',relIds)
+  .order('created_at',{ascending:false})
+  .limit(100);
+ if(messageResult.error)return toast(messageResult.error.message,true);
+ const messages=messageResult.data||[];
+ myCoachState.messages=messages;
+
+ const threadMap=new Map();
+ rels.forEach(function(rel){
+  if(rel.status==='ended')return;
+  threadMap.set(rel.id,{rel:rel,latest:null,unread:0});
+ });
+ messages.forEach(function(m){
+  if(!threadMap.has(m.relationship_id)){
+   const rel=relMap.get(m.relationship_id);
+   if(rel)threadMap.set(m.relationship_id,{rel:rel,latest:null,unread:0});
+  }
+  const t=threadMap.get(m.relationship_id);if(!t)return;
+  if(!t.latest)t.latest=m;
+  if(!m.read_at&&m.sender_user_id!==currentUser.id)t.unread+=1;
+ });
+ const threads=[...threadMap.values()];
+ if(messageBox)messageBox.innerHTML=threads.length?threads.map(function(t){
+  return '<article class="coach-live-item"><div class="coach-live-row"><div><b>'+esc(myCoachName(t.rel))+'</b>'+
+   '<small>'+esc(t.latest?String(t.latest.body||'').slice(0,140):'No messages yet')+'</small></div>'+
+   (t.unread?'<span class="coach-live-pill">'+esc(t.unread)+' NEW</span>':'')+'</div>'+
+   '<div class="coach-live-actions"><button class="primary" data-my-coach-conversation="'+esc(t.rel.id)+'">Open Conversation</button></div></article>';
+ }).join(''):'<div class="approved-resource-empty">No coach conversations yet.</div>';
+}
+
+async function completeMyCoachAssignment(recipientId){
+ const out=await sb.rpc('complete_my_coach_assignment_recipient',{p_recipient_id:recipientId});
+ if(out.error)return toast(out.error.message,true);
+ toast('Assignment marked complete.');
+ await loadMyCoaching();
+}
+
+async function openMyCoachConversation(relId){
+ const rel=myCoachState.relationships.find(function(x){return x.id===relId});
+ if(!rel)return toast('Coaching relationship could not be found.',true);
+ const result=await sb.from('coach_messages')
+  .select('id,relationship_id,sender_user_id,body,created_at,read_at')
+  .eq('relationship_id',relId)
+  .order('created_at',{ascending:true})
+  .limit(250);
+ if(result.error)return toast(result.error.message,true);
+
+ const mark=await sb.from('coach_messages')
+  .update({read_at:new Date().toISOString()})
+  .eq('relationship_id',relId)
+  .neq('sender_user_id',currentUser.id)
+  .is('read_at',null);
+ if(mark.error)console.warn('Could not mark coach messages read',mark.error);
+
+ const history=(result.data||[]).map(function(m){
+  const mine=m.sender_user_id===currentUser.id;
+  return '<div class="coach-conversation-message '+(mine?'mine':'theirs')+'"><div><b>'+esc(mine?'You':myCoachName(rel))+'</b>'+
+   '<small>'+esc(new Date(m.created_at).toLocaleString())+'</small></div><p>'+esc(m.body)+'</p></div>';
+ }).join('')||'<div class="coach-live-empty">No messages yet. Start the conversation below.</div>';
+
+ const d=ensureMyCoachingDialog(),inner=q('#myCoachingDialogInner');
+ inner.innerHTML='<div class="coach-live-dialog-head"><div><span class="approved-kicker">MY COACHING</span><h3>'+esc(myCoachName(rel))+'</h3>'+
+  '<p>Messages stay inside this coaching relationship.</p></div><button class="coach-live-close" type="button" data-my-coaching-close>×</button></div>'+
+  '<div class="coach-conversation-thread" id="myCoachConversationThread">'+history+'</div>'+
+  (rel.status==='active'?'<form id="myCoachConversationForm" data-relationship-id="'+esc(rel.id)+'"><div class="coach-live-form"><label class="wide">Reply<textarea id="myCoachConversationReply" maxlength="4000" required></textarea></label></div>'+
+   '<div class="coach-live-footer"><button type="button" data-my-coaching-close>Close</button><button class="primary" type="submit">Send Reply</button></div></form>':
+   '<div class="coach-live-review-note">This conversation is read-only because the coaching relationship is not active.</div><div class="coach-live-footer"><button type="button" data-my-coaching-close>Close</button></div>');
+ d.showModal();
+ requestAnimationFrame(function(){const thread=q('#myCoachConversationThread');if(thread)thread.scrollTop=thread.scrollHeight;});
+ await loadMyCoaching();
+}
+
+async function sendMyCoachConversation(relId){
+ const rel=myCoachState.relationships.find(function(x){return x.id===relId});
+ if(!rel||rel.status!=='active')return toast('This coaching relationship is not active.',true);
+ const body=q('#myCoachConversationReply')?.value.trim();
+ if(!body)return toast('Enter a message.',true);
+ const out=await sb.from('coach_messages').insert({
+  business_id:rel.business_id,relationship_id:rel.id,group_id:null,sender_user_id:currentUser.id,body:body
+ });
+ if(out.error)return toast(out.error.message,true);
+ await loadMyCoaching();
+ await openMyCoachConversation(rel.id);
 }
 
 async function init(){
@@ -121,6 +289,20 @@ q('#coachInviteClient')?.addEventListener('click',promptInvite);
 q('#coachNewGroup')?.addEventListener('click',newGroup);
 q('#coachNewService')?.addEventListener('click',newService);
 q('#coachNewLead')?.addEventListener('click',newLead);
+
+document.addEventListener('click',function(event){
+ const complete=event.target.closest('[data-my-coach-complete]');
+ if(complete){event.preventDefault();completeMyCoachAssignment(complete.dataset.myCoachComplete);return;}
+ const conversation=event.target.closest('[data-my-coach-conversation]');
+ if(conversation){event.preventDefault();openMyCoachConversation(conversation.dataset.myCoachConversation);return;}
+ if(event.target.closest('[data-my-coaching-close]')){event.preventDefault();closeMyCoachingDialog();}
+},true);
+
+document.addEventListener('submit',function(event){
+ if(event.target?.id!=='myCoachConversationForm')return;
+ event.preventDefault();
+ sendMyCoachConversation(event.target.dataset.relationshipId);
+});
 
 if(typeof showPage==='function'){
  const oldShow=showPage;showPage=function(name){oldShow(name);if(name==='programs')loadPrograms();if(name==='coach-business'){loadPrograms();loadBusiness()}if(name==='coach-dashboard')loadDashboard();if(name==='my-coaching')loadMyCoaching()};
