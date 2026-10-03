@@ -768,6 +768,12 @@
       openSchedule(consultation||null);
     }
 
+    const openAutomationBtn=e.target.closest('[data-open-coach-automation]');
+    if(openAutomationBtn){e.preventDefault();openAutomationManagement(openAutomationBtn.dataset.openCoachAutomation)}
+
+    const retireAutomationBtn=e.target.closest('[data-retire-coach-automation]');
+    if(retireAutomationBtn){e.preventDefault();retireAutomationManagement(retireAutomationBtn.dataset.retireCoachAutomation).catch(err=>alert(err.message||String(err)))}
+
     const openCredentialBtn=e.target.closest('[data-open-coach-credential]');
     if(openCredentialBtn){e.preventDefault();openCredentialManagement(openCredentialBtn.dataset.openCoachCredential)}
 
@@ -810,6 +816,7 @@
     if(id==='coachOpsCredentialManageForm')run(saveCredentialManagement);
     if(id==='coachOpsTrainingManageForm')run(saveTrainingManagement);
     if(id==='coachOpsIntakeManageForm')run(saveIntakeManagement);
+    if(id==='coachOpsAutomationManageForm')run(saveAutomationManagement);
   });
 
   function boot(){
