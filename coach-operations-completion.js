@@ -270,35 +270,48 @@
     return rows;
   }
 
-  function openSchedule(){
+  function openSchedule(consultation=null){
     if(!requireBusiness())return;
     const t=baseTargets();
-    openDialog('Schedule Session','Create a 1-to-1, group, consultation or administrative coaching event.',`
-      <form id="coachOpsScheduleForm"><div class="coach-ops-form">
-        <label class="wide">Session title<input id="opsScheduleTitle" required></label>
-        <label>Scope<select id="opsScheduleScope"><option value="one_to_one">1-to-1</option><option value="group">Group</option><option value="consultation">Consultation</option><option value="admin">Administrative</option></select></label>
-        <label>Client / group<select id="opsScheduleTarget"><option value="">No linked participant</option>${t.map(x=>`<option value="${x.kind}:${x.id}">${esc(x.label)}</option>`).join('')}</select></label>
+    const consultationId=consultation?.id||'';
+    const isConsult=!!consultation;
+    openDialog(isConsult?'Schedule Consultation':'Schedule Session',isConsult?(consultation.client_label||'Prospective client'):'Create a 1-to-1, group, consultation or administrative coaching event.',`
+      <form id="coachOpsScheduleForm" data-consultation-id="${esc(consultationId)}"><div class="coach-ops-form">
+        <label class="wide">Session title<input id="opsScheduleTitle" value="${esc(isConsult?'Consultation · '+(consultation.client_label||'Prospective client'):'')}" required></label>
+        <label>Scope<select id="opsScheduleScope"><option value="one_to_one">1-to-1</option><option value="group">Group</option><option value="consultation" ${isConsult?'selected':''}>Consultation</option><option value="admin">Administrative</option></select></label>
+        <label>Client / group<select id="opsScheduleTarget" ${isConsult?'disabled':''}><option value="">No linked participant</option>${t.map(x=>`<option value="${x.kind}:${x.id}">${esc(x.label)}</option>`).join('')}</select></label>
         <label>Start<input id="opsScheduleStart" type="datetime-local" required></label>
-        <label>Duration minutes<input id="opsScheduleDuration" type="number" min="10" max="240" value="50"></label>
+        <label>Duration minutes<input id="opsScheduleDuration" type="number" min="10" max="240" value="${isConsult?'30':'50'}"></label>
         <label>Meeting location<input id="opsScheduleLocation"></label>
         <label>Meeting URL<input id="opsScheduleUrl" type="url"></label>
+        <label class="wide">Operational note<textarea id="opsScheduleNote" placeholder="Scheduling/business note only."></textarea></label>
       </div><div class="coach-ops-footer"><button type="button" data-coach-ops-close>Cancel</button><button class="primary" type="submit">Schedule</button></div></form>`);
   }
 
   async function saveSchedule(){
-    const target=$('#opsScheduleTarget').value;
+    const form=$('#coachOpsScheduleForm');
+    const consultationId=form?.dataset.consultationId||null;
+    const target=$('#opsScheduleTarget')?.value||'';
     let relationship_id=null,group_id=null;
-    if(target){const [k,id]=target.split(':');if(k==='rel')relationship_id=id;else group_id=id}
+    if(target){const parts=target.split(':');if(parts[0]==='rel')relationship_id=parts[1];else group_id=parts[1]}
     const row={
       business_id:state.ctx.business_id,created_by:state.user.id,
-      relationship_id,group_id,title:$('#opsScheduleTitle').value.trim(),
-      session_scope:$('#opsScheduleScope').value,
+      relationship_id,group_id,consultation_request_id:consultationId,
+      title:$('#opsScheduleTitle').value.trim(),
+      session_scope:consultationId?'consultation':$('#opsScheduleScope').value,
       scheduled_start:new Date($('#opsScheduleStart').value).toISOString(),
       duration_minutes:Number($('#opsScheduleDuration').value||50),
+      timezone:Intl.DateTimeFormat().resolvedOptions().timeZone||'America/Los_Angeles',
       meeting_location:$('#opsScheduleLocation').value.trim()||null,
-      meeting_url:$('#opsScheduleUrl').value.trim()||null,status:'scheduled'
+      meeting_url:$('#opsScheduleUrl').value.trim()||null,
+      operational_note:$('#opsScheduleNote').value.trim()||null,
+      status:'scheduled'
     };
     const {error}=await sb().from('coach_schedule_events').insert(row);if(error)throw error;
+    if(consultationId){
+      const up=await sb().rpc('update_my_coach_consultation',{p_request_id:consultationId,p_status:'scheduled'});
+      if(up.error)throw up.error;
+    }
     await logHistory('schedule_created',`Scheduled ${row.title}`,relationship_id?baseTargets('client').find(x=>x.id===relationship_id)?.user_id:null);
     closeDialog();await loadPage('coach-scheduler');
   }
