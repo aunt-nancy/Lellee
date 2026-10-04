@@ -28,7 +28,7 @@
     selectedAssignment:null,
     selectedConversation:null,
     loading:false,
-    ethicsStatus:null,ethicsHistory:[],ethicsLesson:null,ethicsWatchSession:null,ethicsHeartbeat:null
+    ethicsStatus:null,ethicsHistory:[],ethicsLesson:null,ethicsWatchSession:null,ethicsHeartbeat:null,professionalStatus:null
   };
 
   function bridge(){ return window.LelleeAuthContext?.client ? window.LelleeAuthContext : null; }
@@ -199,6 +199,23 @@
 
   function ensureEthicsStyles(){if($('#coachEthicsStyles'))return;const s=document.createElement('style');s.id='coachEthicsStyles';s.textContent='.coach-ethics-card{border:1px solid #dfe8e3;background:#fbfcfb;border-radius:14px;padding:14px;margin:12px 0 16px}.coach-ethics-head{display:flex;justify-content:space-between;gap:12px}.coach-ethics-head h3{margin:2px 0 4px;color:#075b4d;font-family:Georgia,serif}.coach-ethics-head p{margin:0;color:#667;font-size:.72rem}.coach-ethics-status{padding:5px 8px;border-radius:999px;background:#edf7f3;color:#075b4d;font-size:.58rem;font-weight:800;height:max-content}.coach-ethics-status.due{background:#fff1df;color:#8b5a16}.coach-ethics-status.pending{background:#f0edf7;color:#65419b}.coach-ethics-meta,.coach-ethics-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}.coach-ethics-meta span{font-size:.6rem;padding:5px 7px;border-radius:999px;background:#f0f3f1}.coach-ethics-actions button{border:1px solid #cfd9d4;background:white;border-radius:8px;padding:7px 10px}.coach-ethics-actions .primary{background:#075b4d;color:white}.coach-ethics-dialog{width:min(900px,92vw);max-height:90vh;border:0;border-radius:16px;padding:0}.coach-ethics-dialog::backdrop{background:rgba(18,28,25,.55)}.coach-ethics-shell{padding:22px;color:#173047}.coach-ethics-video{width:100%;max-height:430px;background:#111;border-radius:12px;margin:10px 0}.coach-ethics-progress{height:7px;background:#e7ece9;border-radius:999px;overflow:hidden;margin:8px 0}.coach-ethics-progress i{display:block;height:100%;background:#075b4d;width:0}.coach-ethics-script{white-space:pre-wrap;border:1px solid #e2e7e4;background:#fbfaf7;border-radius:10px;padding:12px;max-height:220px;overflow:auto;font-size:.72rem;line-height:1.5}.coach-ethics-question{border:1px solid #e1e6e3;border-radius:10px;padding:11px;margin:9px 0}.coach-ethics-choice{display:block;margin:5px 0;font-size:.72rem}.coach-ethics-history-row{display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid #e7ebe9;padding:8px 0;font-size:.7rem}';document.head.appendChild(s)}
   function ensureEthicsCard(){ensureEthicsStyles();let x=$('#coachEthicsCard');if(x)return x;const r=$('#coachReadinessGrid');if(!r)return null;x=document.createElement('section');x.id='coachEthicsCard';x.className='coach-ethics-card';(r.parentElement||r).insertAdjacentElement('afterend',x);return x}
+
+  async function loadProfessionalStatus(){
+    const r=await sb().rpc('get_my_coach_professional_status');
+    if(r.error){console.warn('Professional status',r.error);return;}
+    state.professionalStatus=r.data||{};
+    renderProfessionalStatus();
+  }
+  function renderProfessionalStatus(){
+    const ready=$('#coachReadinessGrid');if(!ready)return;
+    let card=$('#coachProfessionalStatusCard');
+    if(!card){card=document.createElement('section');card.id='coachProfessionalStatusCard';card.className='coach-ethics-card';(ready.parentElement||ready).insertAdjacentElement('afterend',card);}
+    const s=state.professionalStatus||{},cred=s.credentials||{},tr=s.training||{},cert=s.certificates||{};
+    const label=({current:'CURRENT',business_review:'BUSINESS REVIEW',ethics_due:'ETHICS DUE',ethics_pending_release:'ETHICS PENDING RELEASE',review_pending:'REVIEW PENDING',certificate_attention:'CERTIFICATE ATTENTION',setup_required:'SETUP REQUIRED'})[s.status]||statusLabel(s.status||'');
+    const attention=!['current','ethics_pending_release'].includes(s.status);
+    card.innerHTML='<div class="coach-ethics-head"><div><span class="approved-kicker">PROFESSIONAL STATUS</span><h3>Coaching Standing</h3><p>One view of your Lellee business approval, credential review, verified training, certificates and ongoing ethics status. Items marked due or pending do not automatically suspend coaching access.</p></div><span class="coach-ethics-status '+(attention?'due':'')+'">'+esc(label)+'</span></div><div class="coach-ethics-meta"><span>Verified credentials '+esc(cred.verified||0)+'</span><span>Pending credentials '+esc(cred.pending||0)+'</span><span>Verified training '+esc(tr.verified||0)+'</span><span>Active certificates '+esc(cert.active||0)+'</span><span>Expired '+esc(cert.expired||0)+'</span><span>Revoked '+esc(cert.revoked||0)+'</span></div><div class="coach-ethics-actions"><button data-page="coach-credentials">Open Credentials & Certificates</button></div>';
+  }
+
   async function loadEthicsDashboard(){const [a,h]=await Promise.all([sb().rpc('get_my_coach_ethics_status'),sb().rpc('get_my_coach_ethics_history')]);if(a.error){console.warn(a.error);return}state.ethicsStatus=a.data||{};state.ethicsHistory=h.error?[]:(h.data||[]);renderEthicsCard()}
   function renderEthicsCard(){const x=ensureEthicsCard();if(!x)return;const s=state.ethicsStatus||{},n=s.next_microlearning||null,d=s.status==='due',p=s.status==='pending_content_review',cur=s.status==='current';const label=({current:'CURRENT',due:'DUE',pending_content_review:'PENDING CONTENT APPROVAL',not_required:'NOT REQUIRED'})[s.status]||statusLabel(s.status||'');x.innerHTML='<div class="coach-ethics-head"><div><span class="approved-kicker">ONGOING ETHICS</span><h3>Monthly Ethics Microlearning</h3><p>'+(p?'Curriculum is awaiting required human review and video approval before release.':cur?'Current through '+esc(fmtDateTime(s.next_due_at))+'.':d&&n?'Your next 15-minute ethics lesson is ready. Complete the video and score at least 90%.':'Ongoing ethics status appears here.')+'</p></div><span class="coach-ethics-status '+(d?'due':p?'pending':'')+'">'+esc(label)+'</span></div><div class="coach-ethics-meta"><span>15-minute video</span><span>10 questions</span><span>90% minimum</span><span>Failed quiz = full rewatch</span>'+(s.last_score!=null?'<span>Last score '+esc(s.last_score)+'%</span>':'')+'</div><div class="coach-ethics-actions">'+(d&&n?'<button class="primary" data-coach-ethics-open="'+esc(n.id)+'">Start ethics lesson</button>':'')+'<button data-coach-ethics-history>Completion history</button></div>'}
   function ensureEthicsDialog(){let d=$('#coachEthicsDialog');if(d)return d;d=document.createElement('dialog');d.id='coachEthicsDialog';d.className='coach-ethics-dialog';d.innerHTML='<div class="coach-ethics-shell" id="coachEthicsDialogBody"></div>';document.body.appendChild(d);return d}
@@ -226,7 +243,7 @@
       $('#coachMetricCapacity').textContent=ctx.metrics?.open_seats ?? 0;
       $('#coachMetricMessages').textContent=ctx.metrics?.unread_messages ?? 0;
       renderReadiness();
-      await loadEthicsDashboard();
+      await Promise.all([loadProfessionalStatus(),loadEthicsDashboard()]);
 
       renderClients();
       renderGroups();
