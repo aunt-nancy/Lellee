@@ -268,7 +268,7 @@
 
   async function openCertificate(id,mode='view'){
     const d=await getCertificatePrintData(id);
-    const w=window.open('','_blank','noopener,noreferrer');
+    const w=window.open('','_blank');
     if(!w)throw new Error('Allow pop-ups to view or print the certificate.');
     w.document.open();
     w.document.write(certificateHtml(d,mode!=='view'));
