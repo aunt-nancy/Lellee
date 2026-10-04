@@ -57,6 +57,20 @@
 }
 .coach-live-footer .primary{background:#65419b;color:#fff;border-color:#65419b}
 #coachDashboardRefresh{margin-left:auto}
+.coach-dashboard-heading{align-items:center}
+.coach-dashboard-actions{
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;
+  margin:0 0 14px
+}
+.coach-dashboard-actions section{
+  min-width:0;border:1px solid #e4ddea;border-radius:14px;background:#fbf9fd;
+  padding:12px
+}
+.coach-dashboard-actions section>.approved-kicker{display:block;margin:0 0 8px}
+.coach-dashboard-actions section>div{display:flex;gap:7px;flex-wrap:wrap}
+.coach-dashboard-actions .approved-small-action{
+  min-height:36px;flex:1 1 auto;text-align:center;white-space:normal
+}
 .coach-admin-review-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}
 .coach-admin-review-actions button{border:1px solid #ddd5e4;border-radius:9px;background:#fff;padding:6px 9px;font-size:calc(.59rem + 2px);font-weight:850}
 .coach-admin-review-actions .approve{background:#edf8f0;color:#245b36;border-color:#cfe5d6}
@@ -72,6 +86,9 @@
 .coach-readiness-step b{display:grid;place-items:center;width:22px;height:22px;border-radius:50%;background:#eee8f3;color:#755595}
 .coach-readiness-step.complete{border-color:#cde2d2;background:#f4fbf6;color:#2e603d}.coach-readiness-step.complete b{background:#dcefe2;color:#28603a}
 @media(max-width:650px){
+  .coach-dashboard-actions{grid-template-columns:1fr}
+  .coach-dashboard-actions section>div{display:grid;grid-template-columns:1fr}
+  .coach-dashboard-actions .approved-small-action{width:100%}
   .coach-live-form{grid-template-columns:1fr}
   .coach-live-form label.wide{grid-column:auto}
   .coach-live-row{display:block}
