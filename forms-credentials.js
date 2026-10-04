@@ -4,7 +4,7 @@
 const q=s=>document.querySelector(s),qa=s=>[...document.querySelectorAll(s)];
 const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot',"'":'&#39;'}[m]));
 const toast=(m,bad=false)=>{const t=q('#globalToast');if(t){t.textContent=m;t.classList.remove('hidden');if(bad)t.style.background='#7f2634';setTimeout(()=>{t.classList.add('hidden');t.style.background=''},2200)}};
-let isAdmin=false,coachBusiness=null,organization=null;
+let isAdmin=false,organization=null;
 
 async function rpc(name,args={}){
  const {data,error}=await sb.rpc(name,args);
@@ -44,26 +44,10 @@ async function addVaultDocument(){
  if(error)return toast(error.message,true);loadVault();
 }
 
-function setCoachCredTab(tab){qa('[data-coach-cred-tab]').forEach(b=>b.classList.toggle('active',b.dataset.coachCredTab===tab));['credentials','training','certifications','intake'].forEach(x=>q('#coachCredPanel'+x[0].toUpperCase()+x.slice(1))?.classList.toggle('hidden',x!==tab))}
-async function loadCoachCredentials(){
- if(typeof currentUser==='undefined'||!currentUser)return;
- const {data:b}=await sb.from('coach_businesses').select('id,business_name,public_name').eq('owner_user_id',currentUser.id).maybeSingle();coachBusiness=b||null;if(!b)return;
- q('#coachCredentialName').textContent=b.public_name||b.business_name;
- const d=await rpc('get_my_coach_certification_context');if(!d)return;
- const s=d.summary||{};
- q('#coachCredCount').textContent=s.credentials||0;q('#coachCredVerified').textContent=s.verified||0;q('#coachCredTraining').textContent=s.training||0;q('#coachCredCertificates').textContent=s.certificates||0;
- q('#coachCredentialList').innerHTML=(d.credentials||[]).map(x=>row('C',x.label,`${x.credential_type} · ${x.issuer||'issuer not listed'}`,x.verification_status,x.verification_status==='verified'?'ok':x.verification_status==='expired'?'attention':'' )).join('')||'<div class="approved-resource-empty">No credentials entered.</div>';
- q('#coachTrainingList').innerHTML=(d.training||[]).map(x=>row('T',x.title,`${x.status}${x.completed_at?' · '+new Date(x.completed_at).toLocaleDateString():''}`,x.hours?x.hours+' hrs':'')).join('')||'<div class="approved-resource-empty">No training records.</div>';
- q('#coachCertificateList').innerHTML=(d.certificates||[]).map(x=>row('✓',x.title,`${x.certificate_number} · issued ${new Date(x.issued_on).toLocaleDateString()}`,x.status,x.status==='active'?'ok':'attention')).join('')||'<div class="approved-resource-empty">No Lellee certificates issued.</div>';
-}
-async function addCoachCredential(){
- if(!coachBusiness)return;
- const label=prompt('Credential/certification name:');if(!label)return;
- const type=prompt('Type: certification, license, training, education, lived_experience, other','certification')||'certification';
- const issuer=prompt('Issuer/organization (optional):','')||null;
- const {error}=await sb.from('professional_credential_claims').insert({business_id:coachBusiness.id,user_id:currentUser.id,label,credential_type:type,issuer,verification_status:'self_reported'});
- if(error)return toast(error.message,true);loadCoachCredentials();
-}
+// Coach-facing credential, training, certificate, and intake interactions are
+// owned by coach-operations-completion.js. Keep this bundle focused on shared
+// forms/vault features and the administrator credentialing center so the two
+// runtimes do not fetch or render the same coach page concurrently.
 
 function setOrgFormsTab(tab){qa('[data-org-forms-tab]').forEach(b=>b.classList.toggle('active',b.dataset.orgFormsTab===tab));['assignments','surveys','templates'].forEach(x=>q('#orgFormsPanel'+x[0].toUpperCase()+x.slice(1))?.classList.toggle('hidden',x!==tab))}
 async function loadOrgForms(){
@@ -194,12 +178,10 @@ document.addEventListener('click',e=>{
 },true);
 
 qa('[data-my-forms-tab]').forEach(b=>b.onclick=()=>setMyFormsTab(b.dataset.myFormsTab));
-qa('[data-coach-cred-tab]').forEach(b=>b.onclick=()=>setCoachCredTab(b.dataset.coachCredTab));
 qa('[data-org-forms-tab]').forEach(b=>b.onclick=()=>setOrgFormsTab(b.dataset.orgFormsTab));
 qa('[data-forms-studio-tab]').forEach(b=>b.onclick=()=>setFormsStudioTab(b.dataset.formsStudioTab));
 qa('[data-credential-tab]').forEach(b=>b.onclick=()=>setCredentialTab(b.dataset.credentialTab));
 q('#vaultAddDocument')?.addEventListener('click',addVaultDocument);
-q('#coachAddCredential')?.addEventListener('click',addCoachCredential);
 q('#formsStudioAddForm')?.addEventListener('click',addForm);
 
 if(typeof showPage==='function'){
@@ -207,7 +189,6 @@ if(typeof showPage==='function'){
    old(name);
    if(name==='my-forms')loadMyForms();
    if(name==='document-vault')loadVault();
-   if(name==='coach-credentials')loadCoachCredentials();
    if(name==='organization-forms')loadOrgForms();
    if(name==='forms-studio')loadFormsStudio();
    if(name==='credentialing-center')loadCredentialing();
