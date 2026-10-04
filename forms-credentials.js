@@ -132,10 +132,10 @@ async function loadCredentialing(){
  const s=d.summary||{};
  q('#credentialClaims').textContent=s.claims||0;q('#credentialPending').textContent=s.pending||0;q('#credentialVerified').textContent=s.verified||0;q('#credentialExpiring').textContent=s.expiring||0;
  q('#credentialCertificates').textContent=s.certificates||0;
- q('#credentialClaimList').innerHTML=(d.claims||[]).map(x=>`<article class="forms-admin-review ${x.verification_status==='verified'?'ok':'attention'}"><div>${row('C',x.label,`${x.credential_type} · ${x.owner_label}${x.issuer?' · '+x.issuer:''}`,x.verification_status,x.verification_status==='verified'?'ok':'attention')}</div><div class="forms-admin-actions">${x.verification_status!=='verified'?`<button data-admin-credential-review="${x.id}" data-review-status="verified">Verify</button><button data-admin-credential-review="${x.id}" data-review-status="unable_to_verify">Unable to verify</button>`:x.certificate_id?`<span>Record ${esc(x.certificate_number)}</span>`:`<button data-admin-issue-claim-certificate="${x.id}">Issue verification record</button>`}</div></article>`).join('')||'<div class="approved-resource-empty">No credential claims.</div>';
+ q('#credentialClaimList').innerHTML=(d.claims||[]).map(x=>`<article class="forms-admin-review ${x.verification_status==='verified'?'ok':'attention'}"><div>${row('C',x.label,`${x.credential_type} · ${x.owner_label}${x.issuer?' · '+x.issuer:''}`,x.verification_status,x.verification_status==='verified'?'ok':'attention')}</div><div class="forms-admin-actions">${x.verification_status!=='verified'?`<button data-admin-credential-review="${x.id}" data-review-status="verified">Verify</button><button data-admin-credential-review="${x.id}" data-review-status="unable_to_verify">Unable to verify</button>`:x.certificate_id?`<span>Record ${esc(x.certificate_number)}</span>`:`<button data-admin-preview-claim-certificate="${x.id}">Preview & issue record</button>`}</div></article>`).join('')||'<div class="approved-resource-empty">No credential claims.</div>';
  q('#credentialTypeList').innerHTML=(d.types||[]).map(x=>row('T',x.label,x.description,x.status)).join('');
- q('#credentialTrainingList').innerHTML=(d.training||[]).map(x=>`<article class="forms-admin-review ${x.verified?'ok':''}"><div>${row('L',x.title,`${x.owner_label} · ${x.status}${x.hours?' · '+x.hours+' hrs':''}`,x.verified?'verified':'unverified',x.verified?'ok':'attention')}</div><div class="forms-admin-actions">${!x.verified&&x.status==='completed'?`<button data-admin-verify-training="${x.id}">Verify completion</button>`:x.verified&&!x.certificate_id?`<button data-admin-issue-training-certificate="${x.id}">Issue Lellee certificate</button>`:x.certificate_id?`<span>Certificate ${esc(x.certificate_number)}</span>`:''}</div></article>`).join('')||'<div class="approved-resource-empty">No training records.</div>';
- q('#credentialCertificateList').innerHTML=(d.certificates||[]).map(x=>`<article class="forms-admin-review ${x.status==='active'?'ok':'attention'}">${row('✓',x.title,`${x.owner_label} · ${x.certificate_number} · issued ${new Date(x.issued_on).toLocaleDateString()}`,x.status,x.status==='active'?'ok':'attention')}<div class="forms-admin-actions">${x.status==='active'?`<button data-admin-revoke-certificate="${x.id}">Revoke</button>`:''}</div></article>`).join('')||'<div class="approved-resource-empty">No certificates issued.</div>';
+ q('#credentialTrainingList').innerHTML=(d.training||[]).map(x=>`<article class="forms-admin-review ${x.verified?'ok':''}"><div>${row('L',x.title,`${x.owner_label} · ${x.status}${x.hours?' · '+x.hours+' hrs':''}`,x.verified?'verified':'unverified',x.verified?'ok':'attention')}</div><div class="forms-admin-actions">${!x.verified&&x.status==='completed'?`<button data-admin-verify-training="${x.id}">Verify completion</button>`:x.verified&&!x.certificate_id?`<button data-admin-preview-training-certificate="${x.id}">Preview & issue certificate</button>`:x.certificate_id?`<span>Certificate ${esc(x.certificate_number)}</span>`:''}</div></article>`).join('')||'<div class="approved-resource-empty">No training records.</div>';
+ q('#credentialCertificateList').innerHTML=(d.certificates||[]).map(x=>`<article class="forms-admin-review ${x.status==='active'?'ok':'attention'}">${row('✓',x.title,`${x.owner_label} · ${x.certificate_number} · issued ${new Date(x.issued_on).toLocaleDateString()}`,x.status,x.status==='active'?'ok':'attention')}<div class="forms-admin-actions"><button data-admin-view-certificate="${x.id}">View certificate</button><button data-admin-verify-issued-certificate="${esc(x.certificate_number)}">Verify</button>${x.status==='active'?`<button data-admin-revoke-certificate="${x.id}">Revoke</button>`:''}</div></article>`).join('')||'<div class="approved-resource-empty">No certificates issued.</div>';
  q('#credentialRequirementList').innerHTML='<article class="forms-guardrail"><b>✓ Business review</b><small>The coaching business must be approved before public operation.</small></article><article class="forms-guardrail"><b>✓ Human verification</b><small>Professional claims stay self-reported until reviewed by a Lellee administrator.</small></article><article class="forms-guardrail"><b>✓ Certificate scope</b><small>Lellee certificates record reviewed completion only and never represent a professional license or clinical credential.</small></article>';
 }
 
@@ -145,13 +145,65 @@ async function reviewCredential(id,status){
  if(error)return toast(error.message,true);toast(status==='verified'?'Credential verified.':'Credential updated.');loadCredentialing();
 }
 async function verifyTraining(id){
- const {error}=await sb.rpc('admin_review_training_record',{p_training_record_id:id,p_verified:true});
- if(error)return toast(error.message,true);toast('Training completion verified.');loadCredentialing();
+ const record=await sb.from('training_records').select('id,professional_enrollment_id').eq('id',id).maybeSingle();
+ if(record.error)return toast(record.error.message,true);
+ let error=null;
+ if(record.data?.professional_enrollment_id){
+   const out=await sb.rpc('admin_verify_professional_enrollment',{p_enrollment_id:record.data.professional_enrollment_id,p_verified:true});
+   error=out.error;
+ }else{
+   const out=await sb.rpc('admin_review_training_record',{p_training_record_id:id,p_verified:true});
+   error=out.error;
+ }
+ if(error)return toast(error.message,true);
+ toast('Training completion verified.');
+ loadCredentialing();
+}
+function ensureCertificateAdminDialog(){
+ let d=q('#adminCertificatePreviewDialog');
+ if(d)return d;
+ d=document.createElement('dialog');
+ d.id='adminCertificatePreviewDialog';
+ d.innerHTML='<div class="admin-cert-preview-shell" id="adminCertificatePreviewBody"></div>';
+ document.body.appendChild(d);
+ if(!q('#adminCertificatePreviewStyle')){
+   const s=document.createElement('style');s.id='adminCertificatePreviewStyle';s.textContent=
+   '.admin-cert-preview-shell{width:min(680px,88vw);padding:22px;font-family:Arial;color:#173047}.admin-cert-preview-head{border-bottom:2px solid #b57abd;padding-bottom:12px;margin-bottom:16px}.admin-cert-preview-head h3{margin:4px 0;color:#075b4d;font-family:Georgia,serif;font-size:25px}.admin-cert-preview-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.admin-cert-preview-grid div{border:1px solid #e1e7e4;border-radius:10px;padding:10px}.admin-cert-preview-grid span{display:block;font-size:9px;letter-spacing:1.2px;color:#707980;margin-bottom:4px}.admin-cert-preview-scope{margin-top:12px;padding:11px;background:#f4f7f5;border-radius:9px;font-size:12px;line-height:1.45}.admin-cert-preview-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}.admin-cert-preview-actions button{padding:9px 13px}.admin-cert-preview-ready{font-size:11px;font-weight:800;color:#075b4d}.admin-cert-preview-blocked{font-size:11px;font-weight:800;color:#9b3e4d}@media(max-width:600px){.admin-cert-preview-grid{grid-template-columns:1fr}}';
+   document.head.appendChild(s);
+ }
+ return d;
+}
+async function previewCertificate(source,id){
+ const args={p_credential_claim_id:source==='claim'?id:null,p_training_record_id:source==='training'?id:null};
+ const {data,error}=await sb.rpc('admin_preview_coach_certificate',args);
+ if(error)return toast(error.message,true);
+ const d=ensureCertificateAdminDialog(),body=q('#adminCertificatePreviewBody');
+ const fmt=v=>v?new Date(String(v).slice(0,10)+'T12:00:00').toLocaleDateString():'—';
+ body.innerHTML='<div class="admin-cert-preview-head"><span class="approved-kicker">LELLEE COACHING · TEMPLATE V1</span><h3>Certificate Preview</h3><div class="'+(data.eligible?'admin-cert-preview-ready':'admin-cert-preview-blocked')+'">'+esc(data.eligibility_note||'')+'</div></div>'+
+ '<div class="admin-cert-preview-grid"><div><span>RECIPIENT</span><b>'+esc(data.recipient_name||'—')+'</b></div><div><span>CERTIFICATE</span><b>'+esc(data.certificate_title||'—')+'</b></div>'+
+ '<div><span>COURSE / RECORD</span><b>'+esc(data.course_title||'—')+'</b></div><div><span>TRAINING HOURS</span><b>'+esc(data.training_hours==null?'—':data.training_hours+' hours')+'</b></div>'+
+ '<div><span>COMPLETION DATE</span><b>'+esc(fmt(data.completion_date))+'</b></div><div><span>EXPIRATION</span><b>'+esc(fmt(data.expires_on))+'</b></div>'+
+ '<div><span>ISSUER</span><b>'+esc(data.issuer||'Lellee')+'</b></div><div><span>CERTIFICATE NUMBER</span><b>'+esc(data.certificate_number||'Assigned automatically when issued')+'</b></div></div>'+
+ '<div class="admin-cert-preview-scope">'+esc(data.scope_note||'')+'</div>'+
+ '<div class="admin-cert-preview-actions"><button type="button" data-admin-cert-preview-close>Cancel</button>'+(data.eligible?'<button type="button" class="primary" data-admin-confirm-certificate="'+esc(id)+'" data-source="'+esc(source)+'">Issue Certificate</button>':'')+'</div>';
+ d.showModal();
 }
 async function issueCertificate(source,id){
  const args={p_credential_claim_id:source==='claim'?id:null,p_training_record_id:source==='training'?id:null,p_title:null,p_expires_on:null,p_note:null};
- const {error}=await sb.rpc('admin_issue_coach_certificate',args);
- if(error)return toast(error.message,true);toast(source==='claim'?'Verification record issued.':'Lellee certificate issued.');loadCredentialing();
+ const {data,error}=await sb.rpc('admin_issue_coach_certificate',args);
+ if(error)return toast(error.message,true);
+ q('#adminCertificatePreviewDialog')?.close();
+ toast(source==='claim'?'Verification record issued.':'Lellee certificate issued.');
+ await loadCredentialing();
+ return data;
+}
+async function viewAdminCertificate(id){
+ const {data,error}=await sb.rpc('get_printable_coach_certificate',{p_certificate_id:id});
+ if(error)return toast(error.message,true);
+ const w=window.open('','_blank');if(!w)return toast('Allow pop-ups to view the certificate.',true);
+ const fmt=v=>v?new Date(String(v).slice(0,10)+'T12:00:00').toLocaleDateString():'—';
+ w.document.write('<!doctype html><html><head><title>'+esc(data.certificate_number||'Certificate')+'</title><style>@page{size:landscape;margin:.25in}body{font-family:Arial;color:#173047;padding:30px}main{border:8px solid #075b4d;padding:40px;text-align:center}h1{font-family:Georgia;color:#075b4d;letter-spacing:4px}.name{font-family:Georgia;font-size:34px;border-bottom:1px solid #aaa;padding:12px}.meta{display:flex;justify-content:space-around;margin:28px 0}.scope{font-size:11px;color:#667}.actions{position:fixed;top:10px;right:10px}@media print{.actions{display:none}}</style></head><body><div class="actions"><button onclick="print()">Print / Save PDF</button></div><main><img src="/lellee-coaching-logo-light-v1.png" style="max-width:330px;max-height:120px"><h1>CERTIFICATE OF COMPLETION</h1><p>THIS CERTIFIES THAT</p><div class="name">'+esc(data.recipient_name||'Certificate Recipient')+'</div><h2>'+esc(data.course_title||data.certificate_title||'Lellee Training')+'</h2><div class="meta"><span>Completed<br><b>'+esc(fmt(data.completion_date))+'</b></span><span>Hours<br><b>'+esc(data.training_hours==null?'—':data.training_hours)+'</b></span><span>Issued<br><b>'+esc(fmt(data.issued_on))+'</b></span><span>Certificate<br><b>'+esc(data.certificate_number||'')+'</b></span></div><p class="scope">'+esc(data.scope_note||'')+'<br>'+esc(data.verification_statement||'')+'</p></main></body></html>');
+ w.document.close();
 }
 async function revokeCertificate(id){
  const note=prompt('Reason for revocation:','')||null;if(!note)return;
@@ -169,10 +221,17 @@ document.addEventListener('click',e=>{
  if(credentialAction){e.preventDefault();reviewCredential(credentialAction.dataset.adminCredentialReview,credentialAction.dataset.reviewStatus)}
  const trainingAction=e.target.closest('[data-admin-verify-training]');
  if(trainingAction){e.preventDefault();verifyTraining(trainingAction.dataset.adminVerifyTraining)}
- const claimCertificate=e.target.closest('[data-admin-issue-claim-certificate]');
- if(claimCertificate){e.preventDefault();issueCertificate('claim',claimCertificate.dataset.adminIssueClaimCertificate)}
- const trainingCertificate=e.target.closest('[data-admin-issue-training-certificate]');
- if(trainingCertificate){e.preventDefault();issueCertificate('training',trainingCertificate.dataset.adminIssueTrainingCertificate)}
+ const claimCertificate=e.target.closest('[data-admin-preview-claim-certificate]');
+ if(claimCertificate){e.preventDefault();previewCertificate('claim',claimCertificate.dataset.adminPreviewClaimCertificate)}
+ const trainingCertificate=e.target.closest('[data-admin-preview-training-certificate]');
+ if(trainingCertificate){e.preventDefault();previewCertificate('training',trainingCertificate.dataset.adminPreviewTrainingCertificate)}
+ const confirmCertificate=e.target.closest('[data-admin-confirm-certificate]');
+ if(confirmCertificate){e.preventDefault();issueCertificate(confirmCertificate.dataset.source,confirmCertificate.dataset.adminConfirmCertificate)}
+ if(e.target.closest('[data-admin-cert-preview-close]'))q('#adminCertificatePreviewDialog')?.close();
+ const viewCertificate=e.target.closest('[data-admin-view-certificate]');
+ if(viewCertificate){e.preventDefault();viewAdminCertificate(viewCertificate.dataset.adminViewCertificate)}
+ const verifyIssued=e.target.closest('[data-admin-verify-issued-certificate]');
+ if(verifyIssued){e.preventDefault();window.open('/certificate-verify.html?certificate='+encodeURIComponent(verifyIssued.dataset.adminVerifyIssuedCertificate),'_blank','noopener')}
  const revokeAction=e.target.closest('[data-admin-revoke-certificate]');
  if(revokeAction){e.preventDefault();revokeCertificate(revokeAction.dataset.adminRevokeCertificate)}
 },true);
