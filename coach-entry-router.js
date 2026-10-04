@@ -175,3 +175,19 @@
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',loadPricingOps,{once:true});
   else loadPricingOps();
 })();
+
+(() => {
+  'use strict';
+  if(window.__lelleeCoachConsultConversionLoader)return;
+  window.__lelleeCoachConsultConversionLoader=true;
+  function loadConsultConversion(){
+    if(document.querySelector('script[data-coach-consultation-conversion-ui]'))return;
+    const s=document.createElement('script');
+    s.src='/coach-consultation-conversion-ui.js?v=20261004-1';
+    s.defer=true;
+    s.dataset.coachConsultationConversionUi='1';
+    document.head.appendChild(s);
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',loadConsultConversion,{once:true});
+  else loadConsultConversion();
+})();
