@@ -27,7 +27,8 @@
     selectedLead:null,
     selectedAssignment:null,
     selectedConversation:null,
-    loading:false
+    loading:false,
+    ethicsStatus:null,ethicsHistory:[],ethicsLesson:null,ethicsWatchSession:null,ethicsHeartbeat:null
   };
 
   function bridge(){ return window.LelleeAuthContext?.client ? window.LelleeAuthContext : null; }
@@ -195,6 +196,20 @@
     return true;
   }
 
+
+  function ensureEthicsStyles(){if($('#coachEthicsStyles'))return;const s=document.createElement('style');s.id='coachEthicsStyles';s.textContent='.coach-ethics-card{border:1px solid #dfe8e3;background:#fbfcfb;border-radius:14px;padding:14px;margin:12px 0 16px}.coach-ethics-head{display:flex;justify-content:space-between;gap:12px}.coach-ethics-head h3{margin:2px 0 4px;color:#075b4d;font-family:Georgia,serif}.coach-ethics-head p{margin:0;color:#667;font-size:.72rem}.coach-ethics-status{padding:5px 8px;border-radius:999px;background:#edf7f3;color:#075b4d;font-size:.58rem;font-weight:800;height:max-content}.coach-ethics-status.due{background:#fff1df;color:#8b5a16}.coach-ethics-status.pending{background:#f0edf7;color:#65419b}.coach-ethics-meta,.coach-ethics-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}.coach-ethics-meta span{font-size:.6rem;padding:5px 7px;border-radius:999px;background:#f0f3f1}.coach-ethics-actions button{border:1px solid #cfd9d4;background:white;border-radius:8px;padding:7px 10px}.coach-ethics-actions .primary{background:#075b4d;color:white}.coach-ethics-dialog{width:min(900px,92vw);max-height:90vh;border:0;border-radius:16px;padding:0}.coach-ethics-dialog::backdrop{background:rgba(18,28,25,.55)}.coach-ethics-shell{padding:22px;color:#173047}.coach-ethics-video{width:100%;max-height:430px;background:#111;border-radius:12px;margin:10px 0}.coach-ethics-progress{height:7px;background:#e7ece9;border-radius:999px;overflow:hidden;margin:8px 0}.coach-ethics-progress i{display:block;height:100%;background:#075b4d;width:0}.coach-ethics-script{white-space:pre-wrap;border:1px solid #e2e7e4;background:#fbfaf7;border-radius:10px;padding:12px;max-height:220px;overflow:auto;font-size:.72rem;line-height:1.5}.coach-ethics-question{border:1px solid #e1e6e3;border-radius:10px;padding:11px;margin:9px 0}.coach-ethics-choice{display:block;margin:5px 0;font-size:.72rem}.coach-ethics-history-row{display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid #e7ebe9;padding:8px 0;font-size:.7rem}';document.head.appendChild(s)}
+  function ensureEthicsCard(){ensureEthicsStyles();let x=$('#coachEthicsCard');if(x)return x;const r=$('#coachReadinessGrid');if(!r)return null;x=document.createElement('section');x.id='coachEthicsCard';x.className='coach-ethics-card';(r.parentElement||r).insertAdjacentElement('afterend',x);return x}
+  async function loadEthicsDashboard(){const [a,h]=await Promise.all([sb().rpc('get_my_coach_ethics_status'),sb().rpc('get_my_coach_ethics_history')]);if(a.error){console.warn(a.error);return}state.ethicsStatus=a.data||{};state.ethicsHistory=h.error?[]:(h.data||[]);renderEthicsCard()}
+  function renderEthicsCard(){const x=ensureEthicsCard();if(!x)return;const s=state.ethicsStatus||{},n=s.next_microlearning||null,d=s.status==='due',p=s.status==='pending_content_review',cur=s.status==='current';const label=({current:'CURRENT',due:'DUE',pending_content_review:'PENDING CONTENT APPROVAL',not_required:'NOT REQUIRED'})[s.status]||statusLabel(s.status||'');x.innerHTML='<div class="coach-ethics-head"><div><span class="approved-kicker">ONGOING ETHICS</span><h3>Monthly Ethics Microlearning</h3><p>'+(p?'Curriculum is awaiting required human review and video approval before release.':cur?'Current through '+esc(fmtDateTime(s.next_due_at))+'.':d&&n?'Your next 15-minute ethics lesson is ready. Complete the video and score at least 90%.':'Ongoing ethics status appears here.')+'</p></div><span class="coach-ethics-status '+(d?'due':p?'pending':'')+'">'+esc(label)+'</span></div><div class="coach-ethics-meta"><span>15-minute video</span><span>10 questions</span><span>90% minimum</span><span>Failed quiz = full rewatch</span>'+(s.last_score!=null?'<span>Last score '+esc(s.last_score)+'%</span>':'')+'</div><div class="coach-ethics-actions">'+(d&&n?'<button class="primary" data-coach-ethics-open="'+esc(n.id)+'">Start ethics lesson</button>':'')+'<button data-coach-ethics-history>Completion history</button></div>'}
+  function ensureEthicsDialog(){let d=$('#coachEthicsDialog');if(d)return d;d=document.createElement('dialog');d.id='coachEthicsDialog';d.className='coach-ethics-dialog';d.innerHTML='<div class="coach-ethics-shell" id="coachEthicsDialogBody"></div>';document.body.appendChild(d);return d}
+  function stopEthicsHeartbeat(){if(state.ethicsHeartbeat){clearInterval(state.ethicsHeartbeat);state.ethicsHeartbeat=null}}
+  async function pulseEthics(){if(!state.ethicsWatchSession)return;const r=await sb().rpc('heartbeat_my_coach_ethics_video',{p_watch_session_id:state.ethicsWatchSession});if(r.error)return;const b=$('#coachEthicsWatchProgress i'),l=$('#coachEthicsWatchLabel');if(b&&r.data?.required_seconds)b.style.width=Math.min(100,Number(r.data.watched_seconds||0)/Number(r.data.required_seconds)*100)+'%';if(l)l.textContent=Math.floor(Number(r.data?.watched_seconds||0)/60)+' / '+Math.ceil(Number(r.data?.required_seconds||0)/60)+' min watched'}
+  async function beginEthicsWatch(id){if(state.ethicsWatchSession)return;const r=await sb().rpc('start_my_coach_ethics_video',{p_microlearning_id:id});if(r.error)throw r.error;state.ethicsWatchSession=r.data.watch_session_id;stopEthicsHeartbeat();state.ethicsHeartbeat=setInterval(()=>{const v=$('#coachEthicsVideo');if(v&&!v.paused&&!v.ended)pulseEthics()},15000)}
+  async function finishEthicsWatch(id){await pulseEthics();const r=await sb().rpc('finish_my_coach_ethics_video',{p_watch_session_id:state.ethicsWatchSession});if(r.error)throw r.error;stopEthicsHeartbeat();state.ethicsWatchSession=null;await openEthicsLesson(id,true)}
+  async function openEthicsLesson(id,after=false){const r=await sb().rpc('get_my_coach_ethics_lesson',{p_microlearning_id:id});if(r.error)return alert(r.error.message||String(r.error));state.ethicsLesson=r.data||{};state.ethicsWatchSession=null;stopEthicsHeartbeat();const l=state.ethicsLesson,d=ensureEthicsDialog(),b=$('#coachEthicsDialogBody'),qs=l.questions||[];const quiz=qs.length?'<form id="coachEthicsQuizForm" data-ethics-id="'+esc(id)+'"><h4>Ethics quiz · 90% required</h4>'+qs.map(q=>'<div class="coach-ethics-question"><b>'+q.sequence+'. '+esc(q.question)+'</b>'+(q.choices||[]).map(ch=>'<label class="coach-ethics-choice"><input type="radio" name="ethics_'+q.id+'" value="'+esc(ch)+'" required> '+esc(ch)+'</label>').join('')+'</div>').join('')+'<div class="coach-live-footer"><button type="button" data-coach-ethics-close>Close</button><button class="primary" type="submit">Submit Quiz</button></div></form>':'<div class="coach-live-review-note">'+(l.rewatch_required?'Rewatch required. Complete the full video again before the quiz unlocks.':'Complete the full video to unlock the quiz.')+'</div><div class="coach-live-footer"><button data-coach-ethics-close>Close</button></div>';b.innerHTML='<div class="coach-live-dialog-head"><div><span class="approved-kicker">MONTHLY ETHICS · MODULE '+esc(l.sequence)+'</span><h3>'+esc(l.title)+'</h3><p>'+esc(l.description||'')+'</p></div><button class="coach-live-close" data-coach-ethics-close>×</button></div><video id="coachEthicsVideo" class="coach-ethics-video" controls preload="metadata" src="'+esc(l.video_url||'')+'"></video><div class="coach-ethics-progress" id="coachEthicsWatchProgress"><i></i></div><small id="coachEthicsWatchLabel">Full video completion is required before the quiz unlocks.</small><details><summary>Lesson transcript / accessibility text</summary><div class="coach-ethics-script">'+esc(l.video_script_md||'')+'</div></details>'+quiz;const v=$('#coachEthicsVideo');if(v&&!l.video_watched){v.addEventListener('play',()=>beginEthicsWatch(id).catch(e=>{v.pause();alert(e.message||String(e))}),{once:true});v.addEventListener('ended',()=>finishEthicsWatch(id).catch(e=>alert(e.message||String(e))),{once:true})}d.showModal();if(after)$('#coachEthicsQuizForm')?.scrollIntoView({behavior:'smooth'})}
+  async function submitEthicsQuiz(f){const id=f.dataset.ethicsId,a={};(state.ethicsLesson?.questions||[]).forEach(q=>{const v=f.querySelector('input[name="ethics_'+q.id+'"]:checked');if(v)a[q.id]=v.value});if(Object.keys(a).length!==(state.ethicsLesson?.questions||[]).length)throw new Error('Answer all 10 questions.');const r=await sb().rpc('submit_my_coach_ethics_quiz',{p_microlearning_id:id,p_answers:a});if(r.error)throw r.error;if(r.data.passed){alert('Passed: '+r.data.score+'%. Next due '+fmtDateTime(r.data.next_due_at)+'.');ensureEthicsDialog().close();await loadEthicsDashboard()}else{alert('Score: '+r.data.score+'%. Minimum 90%. Rewatch the full video before retaking.');await openEthicsLesson(id)}}
+  function openEthicsHistory(){const d=ensureEthicsDialog(),b=$('#coachEthicsDialogBody'),r=state.ethicsHistory||[];b.innerHTML='<div class="coach-live-dialog-head"><div><span class="approved-kicker">ONGOING ETHICS</span><h3>Completion History</h3></div><button class="coach-live-close" data-coach-ethics-close>×</button></div>'+(r.length?r.map(x=>'<div class="coach-ethics-history-row"><div><b>'+esc(x.title)+'</b><small style="display:block">Completed '+esc(fmtDateTime(x.completed_at))+'</small></div><div><b>'+esc(x.score)+'%</b><small style="display:block">Next due '+esc(fmtDateTime(x.next_due_at))+'</small></div></div>').join(''):'<div class="coach-live-empty">No completed ethics lessons yet.</div>')+'<div class="coach-live-footer"><button data-coach-ethics-close>Close</button></div>';d.showModal()}
+
   async function loadDashboard(){
     try{
       state.context=null;
@@ -211,6 +226,7 @@
       $('#coachMetricCapacity').textContent=ctx.metrics?.open_seats ?? 0;
       $('#coachMetricMessages').textContent=ctx.metrics?.unread_messages ?? 0;
       renderReadiness();
+      await loadEthicsDashboard();
 
       renderClients();
       renderGroups();
@@ -1434,6 +1450,10 @@
 
   document.addEventListener('click',e=>{
     if(e.target.closest('[data-coach-live-close]')) closeDialog();
+    if(e.target.closest('[data-coach-ethics-close]')){stopEthicsHeartbeat();state.ethicsWatchSession=null;$('#coachEthicsDialog')?.close();}
+    const eo=e.target.closest('[data-coach-ethics-open]');if(eo){e.preventDefault();openEthicsLesson(eo.dataset.coachEthicsOpen);}
+    if(e.target.closest('[data-coach-ethics-history]')){e.preventDefault();openEthicsHistory();}
+
 
     const page=e.target.closest('[data-page]');
     if(page){
@@ -1549,6 +1569,7 @@
       e.preventDefault();
       try{ await fn(); }catch(err){ alert(err.message||String(err)); }
     };
+    if(id==='coachEthicsQuizForm') run(()=>submitEthicsQuiz(e.target));
     if(id==='coachInviteForm') run(createInvite);
     if(id==='coachServiceForm') run(createService);
     if(id==='coachGroupForm') run(createGroup);
