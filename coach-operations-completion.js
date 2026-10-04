@@ -217,7 +217,13 @@
     const certificates=$('#coachCertificateList');
     if(certificates) certificates.innerHTML=(cert.certificates||[]).length?(cert.certificates||[]).map(x=>`
       <article class="coach-ops-item coach-certificate-item"><div class="coach-ops-row"><div><span class="approved-kicker">${esc(x.certificate_number)}</span><b>${esc(x.title)}</b><small>Issued by ${esc(x.issuer)} on ${esc(date(x.issued_on))}${x.expires_on?' · expires '+esc(date(x.expires_on)):''}</small></div><span class="coach-ops-pill">${esc(title(x.status))}</span></div>
-      <div class="coach-ops-certificate-scope">${esc(x.scope_note)}</div></article>`).join(''):
+      <div class="coach-ops-certificate-scope">${esc(x.scope_note)}</div>
+      <div class="coach-ops-actions">
+        <button class="primary" data-view-coach-certificate="${x.id}">View Certificate</button>
+        <button data-print-coach-certificate="${x.id}">Print</button>
+        <button data-save-coach-certificate="${x.id}">Save PDF</button>
+        <button data-verify-coach-certificate="${esc(x.certificate_number)}">Verify Certificate</button>
+      </div></article>`).join(''):
       '<div class="coach-ops-empty">No Lellee certificates have been issued yet. Verified credentials or completed, verified training can be reviewed by an administrator for certificate issuance.</div>';
     const il=$('#coachIntakeFormList');
     if(il) il.innerHTML=(c.intake_forms||[]).length?(c.intake_forms||[]).map(x=>`
@@ -233,6 +239,40 @@
       const id='coachCredPanel'+(k==='credentials'?'Credentials':k==='training'?'Training':k==='certifications'?'Certifications':'Intake');
       $('#'+id)?.classList.toggle('hidden',k!==tab);
     });
+  }
+
+  async function getCertificatePrintData(id){
+    const out=await sb().rpc('get_printable_coach_certificate',{p_certificate_id:id});
+    if(out.error)throw out.error;
+    return out.data||{};
+  }
+
+  function certificateHtml(d,autoPrint=false){
+    const safe=v=>esc(v==null?'':v);
+    const num=safe(d.certificate_number||'');
+    const hours=d.training_hours==null?'—':safe(d.training_hours)+' Hours';
+    const completion=safe(date(d.completion_date));
+    const issued=safe(date(d.issued_on));
+    const expires=d.expires_on?'<div><span>EXPIRATION DATE</span><b>'+safe(date(d.expires_on))+'</b></div>':'';
+    return '<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+num+' · Lellee Coaching Certificate</title><style>'+
+      '@page{size:landscape;margin:0}*{box-sizing:border-box}body{margin:0;background:#e8ece9;font-family:Arial,Helvetica,sans-serif;color:#173047}.sheet{width:11in;height:8.5in;margin:0 auto;background:#fbfaf7;display:grid;grid-template-columns:2.15in 1fr;overflow:hidden}.side{background:#075b4d;padding:.55in .32in;color:white;display:flex;flex-direction:column;justify-content:space-between}.side img{width:100%;max-height:1.55in;object-fit:contain}.side .steps{font-size:12px;line-height:2.05;letter-spacing:2px}.side .quote{font-family:Georgia,serif;font-style:italic;font-size:17px;line-height:1.5;color:#e8e0cf}.main{position:relative;padding:.35in .48in .22in;text-align:center}.main:after{content:"";position:absolute;right:.25in;top:1.65in;width:2.1in;height:3.2in;background:radial-gradient(ellipse at center,rgba(151,181,143,.10),transparent 67%);pointer-events:none}.brand img{height:.95in;max-width:3.25in;object-fit:contain}.brand .tag{font-size:14px;color:#555c67;margin-top:-5px}.cert-title{font-family:Georgia,serif;color:#075b4d;font-size:31px;letter-spacing:5px;margin:.18in 0 .1in}.smallcap{font-size:11px;letter-spacing:4px}.recipient{font-family:Georgia,serif;font-size:36px;margin:.12in 0;border-bottom:1px solid #b8c0c3;padding-bottom:.05in}.course{font-family:Georgia,serif;font-size:24px;margin:.12in 0}.requirements{font-size:11px;letter-spacing:3px;margin-bottom:.2in}.meta{border-top:2px solid #b37bb4;display:grid;grid-template-columns:repeat(5,1fr);gap:0;padding-top:.13in}.meta div{padding:0 .1in;border-right:1px solid #aab3b5}.meta div:last-child{border-right:0}.meta span{display:block;font-size:8px;letter-spacing:1.7px}.meta b{display:block;font-size:12px;margin-top:5px;font-weight:500}.bottom{display:grid;grid-template-columns:1fr 1fr 1fr;align-items:end;margin-top:.25in}.signature{font-family:cursive;font-size:31px;border-bottom:1px solid #75858a;margin:0 .2in}.siglabel{font-size:8px;letter-spacing:2px;margin-top:5px}.seal{width:1.25in;height:1.25in;border-radius:50%;margin:auto;background:radial-gradient(circle,#f7e6a7 0,#d5aa42 68%,#b78725 69%);border:7px double #c6952d;display:flex;align-items:center;justify-content:center;color:#075b4d;font-family:Georgia,serif;font-size:15px;font-weight:bold}.company{font-family:Georgia,serif;font-size:19px;color:#173047}.company small{display:block;font-family:Arial;font-size:11px;margin-top:6px}.footer{position:absolute;left:0;right:0;bottom:0;background:#eef2f0;padding:.1in .35in;font-size:8px;line-height:1.45;color:#4f5d63}.status{position:absolute;right:.35in;top:.25in;font-size:9px;letter-spacing:2px;color:#075b4d}.screen-actions{position:fixed;right:18px;top:18px;z-index:5;display:flex;gap:8px}.screen-actions button{border:0;border-radius:8px;padding:10px 14px;background:#075b4d;color:white;font-weight:700;cursor:pointer}@media print{body{background:white}.screen-actions{display:none}.sheet{margin:0}}'+
+      '</style></head><body><div class="screen-actions"><button onclick="window.print()">Print / Save PDF</button><button onclick="window.close()">Close</button></div>'+
+      '<section class="sheet"><aside class="side"><div><img src="/lellee-coaching-logo-dark-transparent-v3.png" alt="Lellee Coaching"><div class="steps">LEARN<br>GROW<br>BELONG<br>MAKE A DIFFERENCE</div></div><div class="quote">A brighter<br>tomorrow<br>through people.</div></aside>'+
+      '<main class="main"><div class="status">'+safe(String(d.status||'active').toUpperCase())+'</div><div class="brand"><img src="/lellee-coaching-logo-light-v1.png" alt="Lellee Coaching"><div class="tag">Support. Guide. Create Change.</div></div>'+
+      '<div class="cert-title">CERTIFICATE OF COMPLETION</div><div class="smallcap">THIS CERTIFIES THAT</div><div class="recipient">'+safe(d.recipient_name||'Certificate Recipient')+'</div><div class="smallcap">HAS SUCCESSFULLY COMPLETED</div><div class="course">'+safe(d.course_title||d.certificate_title||'Lellee Training')+'</div><div class="requirements">AND HAS MET ALL REQUIREMENTS FOR THIS TRAINING PROGRAM.</div>'+
+      '<div class="meta"><div><span>COMPLETION DATE</span><b>'+completion+'</b></div><div><span>TRAINING HOURS</span><b>'+hours+'</b></div><div><span>ISSUE DATE</span><b>'+issued+'</b></div>'+expires+'<div><span>CERTIFICATE NUMBER</span><b>'+num+'</b></div></div>'+
+      '<div class="bottom"><div><div class="signature">Lellee</div><div class="siglabel">LELLEE COACHING<br>AUTHORIZED REPRESENTATIVE</div></div><div class="seal">LELLEE<br>COACHING</div><div class="company">Lellee Coaching<small>Support. Guide. Create Change.</small></div></div>'+
+      '<div class="footer">'+safe(d.scope_note||'')+'<br>'+safe(d.verification_statement||'Verify this certificate using the certificate number shown on this document.')+'</div></main></section>'+
+      (autoPrint?'<script>addEventListener("load",()=>setTimeout(()=>print(),350))<\/script>':'')+'</body></html>';
+  }
+
+  async function openCertificate(id,mode='view'){
+    const d=await getCertificatePrintData(id);
+    const w=window.open('','_blank','noopener,noreferrer');
+    if(!w)throw new Error('Allow pop-ups to view or print the certificate.');
+    w.document.open();
+    w.document.write(certificateHtml(d,mode!=='view'));
+    w.document.close();
   }
 
   function renderQuickstart(){
@@ -782,6 +822,18 @@
 
     const openTrainingBtn=e.target.closest('[data-open-coach-training]');
     if(openTrainingBtn){e.preventDefault();openTrainingManagement(openTrainingBtn.dataset.openCoachTraining).catch(err=>alert(err.message||String(err)))}
+
+    const viewCertificate=e.target.closest('[data-view-coach-certificate]');
+    if(viewCertificate){e.preventDefault();openCertificate(viewCertificate.dataset.viewCoachCertificate,'view').catch(err=>alert(err.message||String(err)))}
+
+    const printCertificate=e.target.closest('[data-print-coach-certificate]');
+    if(printCertificate){e.preventDefault();openCertificate(printCertificate.dataset.printCoachCertificate,'print').catch(err=>alert(err.message||String(err)))}
+
+    const saveCertificate=e.target.closest('[data-save-coach-certificate]');
+    if(saveCertificate){e.preventDefault();openCertificate(saveCertificate.dataset.saveCoachCertificate,'save').catch(err=>alert(err.message||String(err)))}
+
+    const verifyCertificate=e.target.closest('[data-verify-coach-certificate]');
+    if(verifyCertificate){e.preventDefault();window.open('/certificate-verify.html?certificate='+encodeURIComponent(verifyCertificate.dataset.verifyCoachCertificate),'_blank','noopener')}
 
     const openIntakeBtn=e.target.closest('[data-open-coach-intake]');
     if(openIntakeBtn){e.preventDefault();openIntakeManagement(openIntakeBtn.dataset.openCoachIntake).catch(err=>alert(err.message||String(err)))}
