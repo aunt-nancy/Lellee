@@ -135,7 +135,7 @@ async function loadCredentialing(){
  q('#credentialClaimList').innerHTML=(d.claims||[]).map(x=>`<article class="forms-admin-review ${x.verification_status==='verified'?'ok':'attention'}"><div>${row('C',x.label,`${x.credential_type} · ${x.owner_label}${x.issuer?' · '+x.issuer:''}`,x.verification_status,x.verification_status==='verified'?'ok':'attention')}</div><div class="forms-admin-actions">${x.verification_status!=='verified'?`<button data-admin-credential-review="${x.id}" data-review-status="verified">Verify</button><button data-admin-credential-review="${x.id}" data-review-status="unable_to_verify">Unable to verify</button>`:x.certificate_id?`<span>Record ${esc(x.certificate_number)}</span>`:`<button data-admin-preview-claim-certificate="${x.id}">Preview & issue record</button>`}</div></article>`).join('')||'<div class="approved-resource-empty">No credential claims.</div>';
  q('#credentialTypeList').innerHTML=(d.types||[]).map(x=>row('T',x.label,x.description,x.status)).join('');
  q('#credentialTrainingList').innerHTML=(d.training||[]).map(x=>`<article class="forms-admin-review ${x.verified?'ok':''}"><div>${row('L',x.title,`${x.owner_label} · ${x.status}${x.hours?' · '+x.hours+' hrs':''}`,x.verified?'verified':'unverified',x.verified?'ok':'attention')}</div><div class="forms-admin-actions">${!x.verified&&x.status==='completed'?`<button data-admin-verify-training="${x.id}">Verify completion</button>`:x.verified&&!x.certificate_id?`<button data-admin-preview-training-certificate="${x.id}">Preview & issue certificate</button>`:x.certificate_id?`<span>Certificate ${esc(x.certificate_number)}</span>`:''}</div></article>`).join('')||'<div class="approved-resource-empty">No training records.</div>';
- q('#credentialCertificateList').innerHTML=(d.certificates||[]).map(x=>`<article class="forms-admin-review ${x.status==='active'?'ok':'attention'}">${row('✓',x.title,`${x.owner_label} · ${x.certificate_number} · issued ${new Date(x.issued_on).toLocaleDateString()}`,x.status,x.status==='active'?'ok':'attention')}<div class="forms-admin-actions"><button data-admin-view-certificate="${x.id}">View certificate</button><button data-admin-verify-issued-certificate="${esc(x.certificate_number)}">Verify</button>${x.status==='active'?`<button data-admin-revoke-certificate="${x.id}">Revoke</button>`:''}</div></article>`).join('')||'<div class="approved-resource-empty">No certificates issued.</div>';
+ q('#credentialCertificateList').innerHTML=(d.certificates||[]).map(x=>`<article class="forms-admin-review ${x.status==='active'?'ok':'attention'}">${row('✓',x.title,`${x.owner_label} · ${x.certificate_number} · issued ${new Date(x.issued_on).toLocaleDateString()}`,x.status,x.status==='active'?'ok':'attention')}<div class="forms-admin-actions"><button data-admin-view-certificate="${x.id}">View certificate</button><button data-admin-verify-issued-certificate="${esc(x.certificate_number)}">Verify</button><button data-admin-certificate-history="${x.id}">History</button>${x.status==='active'?`<button data-admin-revoke-certificate="${x.id}">Revoke</button>`:x.status==='revoked'?`<button data-admin-reissue-certificate="${x.id}">Reissue</button>`:''}</div></article>`).join('')||'<div class="approved-resource-empty">No certificates issued.</div>';
  q('#credentialRequirementList').innerHTML='<article class="forms-guardrail"><b>✓ Business review</b><small>The coaching business must be approved before public operation.</small></article><article class="forms-guardrail"><b>✓ Human verification</b><small>Professional claims stay self-reported until reviewed by a Lellee administrator.</small></article><article class="forms-guardrail"><b>✓ Certificate scope</b><small>Lellee certificates record reviewed completion only and never represent a professional license or clinical credential.</small></article>';
 }
 
@@ -211,6 +211,29 @@ async function revokeCertificate(id){
  if(error)return toast(error.message,true);toast('Certificate revoked.');loadCredentialing();
 }
 
+async function reissueCertificate(id){
+ const reason=prompt('Reason for reissuing this revoked certificate:','')||null;
+ if(!reason)return;
+ if(!confirm('Issue a replacement certificate with a NEW certificate number? The revoked certificate will remain permanently in history.'))return;
+ const {data,error}=await sb.rpc('admin_reissue_coach_certificate',{p_certificate_id:id,p_reason:reason});
+ if(error)return toast(error.message,true);
+ toast('Replacement certificate issued with a new certificate number.');
+ await loadCredentialing();
+ if(data)viewCertificateHistory(data);
+}
+async function viewCertificateHistory(id){
+ const {data,error}=await sb.rpc('get_admin_coach_certificate_history',{p_certificate_id:id});
+ if(error)return toast(error.message,true);
+ const d=ensureCertificateAdminDialog(),body=q('#adminCertificatePreviewBody');
+ const chain=data?.chain||[],audit=data?.audit||[];
+ const fmt=v=>v?new Date(v).toLocaleString():'—';
+ body.innerHTML='<div class="admin-cert-preview-head"><span class="approved-kicker">LELLEE COACHING · CERTIFICATE AUDIT</span><h3>Certificate History</h3><div class="admin-cert-preview-ready">Revoked records are permanent and certificate numbers are never reused.</div></div>'+
+ '<div>'+chain.map((x,i)=>'<div class="forms-admin-review '+(x.status==='active'?'ok':'attention')+'" style="margin-bottom:8px"><b>'+(i===0?'Original':'Replacement '+i)+' · '+esc(x.certificate_number)+'</b><small style="display:block">'+esc(x.title||'')+' · '+esc(String(x.status||'').toUpperCase())+' · issued '+esc(String(x.issued_on||''))+(x.revoked_at?' · revoked '+esc(fmt(x.revoked_at)):'')+'</small>'+(x.reissue_reason?'<small style="display:block">Reissue reason: '+esc(x.reissue_reason)+'</small>':'')+'</div>').join('')+'</div>'+
+ '<h4 style="margin:16px 0 7px">Audit trail</h4><div>'+audit.map(a=>'<div class="forms-admin-review" style="margin-bottom:6px"><b>'+esc(a.action_label||a.action)+'</b><small style="display:block">'+esc(fmt(a.created_at))+'</small></div>').join('')+'</div>'+
+ '<div class="admin-cert-preview-actions"><button type="button" data-admin-cert-preview-close>Close</button></div>';
+ d.showModal();
+}
+
 function relabelAdminCoachTraining(){
  qa('#page-admin .admin-home-tool-row>span').forEach(el=>{if(el.textContent.trim()==='Credentialing')el.textContent='Coach Training & Credentialing'});
 }
@@ -234,6 +257,10 @@ document.addEventListener('click',e=>{
  if(verifyIssued){e.preventDefault();window.open('/certificate-verify.html?certificate='+encodeURIComponent(verifyIssued.dataset.adminVerifyIssuedCertificate),'_blank','noopener')}
  const revokeAction=e.target.closest('[data-admin-revoke-certificate]');
  if(revokeAction){e.preventDefault();revokeCertificate(revokeAction.dataset.adminRevokeCertificate)}
+ const reissueAction=e.target.closest('[data-admin-reissue-certificate]');
+ if(reissueAction){e.preventDefault();reissueCertificate(reissueAction.dataset.adminReissueCertificate)}
+ const historyAction=e.target.closest('[data-admin-certificate-history]');
+ if(historyAction){e.preventDefault();viewCertificateHistory(historyAction.dataset.adminCertificateHistory)}
 },true);
 
 qa('[data-my-forms-tab]').forEach(b=>b.onclick=()=>setMyFormsTab(b.dataset.myFormsTab));
