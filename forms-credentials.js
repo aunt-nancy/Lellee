@@ -97,9 +97,10 @@ function ensureCoachTrainingAdminUi(){
    const style=document.createElement('style');style.id='coachTrainingAdminStyle';style.textContent=`
     .coach-training-admin-metrics{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin:0 0 12px}.coach-training-admin-metrics article{border:1px solid #e6e0e9;background:#fff;border-radius:9px;padding:10px}.coach-training-admin-metrics b{display:block;font-size:1rem;color:#65409a}.coach-training-admin-metrics small{font-size:.56rem;color:#777}.coach-training-admin-section{margin:12px 0}.coach-training-admin-section h4{font-size:.68rem;margin:0 0 7px}.coach-training-admin-actions{display:flex;gap:7px;flex-wrap:wrap;margin:0 0 10px}@media(max-width:760px){.coach-training-admin-metrics{grid-template-columns:1fr 1fr}.coach-training-admin-metrics article:last-child{grid-column:1/-1}}`;
    document.head.appendChild(style);
-   panel.insertAdjacentHTML('afterbegin',`<div id="coachTrainingAdminSummary"></div><div class="coach-training-admin-actions"><button class="approved-small-action" id="openLelleeTrainingCenter" type="button">Open Training Center</button><button class="approved-small-action" id="refreshCoachTrainingAdmin" type="button">Refresh Training Data</button></div><section class="coach-training-admin-section"><h4>Lellee course catalog</h4><div id="coachTrainingCatalogList"></div></section><section class="coach-training-admin-section"><h4>Enrollments</h4><div id="coachTrainingEnrollmentList"></div></section><section class="coach-training-admin-section"><h4>Recent competency progress</h4><div id="coachTrainingProgressList"></div></section>`);
+   panel.insertAdjacentHTML('afterbegin',`<div id="coachTrainingAdminSummary"></div><div class="coach-training-admin-actions"><button class="approved-small-action" id="openLelleeTrainingCenter" type="button">Open Training Center</button><button class="approved-small-action" id="refreshCoachTrainingAdmin" type="button">Refresh Training Data</button><button class="approved-small-action" id="openEthicsReviewCenter" type="button">Ethics Review Center</button></div><section class="coach-training-admin-section hidden" id="coachEthicsReviewCenter"><h4>Ongoing ethics microlearning review</h4><div id="coachEthicsReviewSummary"></div><div id="coachEthicsReviewList"></div></section><section class="coach-training-admin-section"><h4>Lellee course catalog</h4><div id="coachTrainingCatalogList"></div></section><section class="coach-training-admin-section"><h4>Enrollments</h4><div id="coachTrainingEnrollmentList"></div></section><section class="coach-training-admin-section"><h4>Recent competency progress</h4><div id="coachTrainingProgressList"></div></section>`);
    q('#openLelleeTrainingCenter')?.addEventListener('click',()=>{if(typeof showPage==='function')showPage('training-center')});
    q('#refreshCoachTrainingAdmin')?.addEventListener('click',loadCoachTrainingAdmin);
+   q('#openEthicsReviewCenter')?.addEventListener('click',()=>{q('#coachEthicsReviewCenter')?.classList.remove('hidden');loadEthicsReviewCenter()});
  }
 }
 
@@ -124,6 +125,57 @@ async function loadCoachTrainingAdmin(){
  q('#coachTrainingEnrollmentList').innerHTML=enrollments.map(e=>row('E',catalog.find(c=>c.course_key===e.course_key)?.display_name||e.course_key,`${e.learner_type||'learner'} · learner ${String(e.user_id).slice(0,8)} · ${e.payment_status||'n/a'} · ${Number(e.current_unlock_percent||0)}% unlocked`,e.status||'unknown',e.status==='completed'?'ok':'' )).join('')||'<div class="approved-resource-empty">No training enrollments yet.</div>';
  const moduleById=Object.fromEntries(modules.map(m=>[m.id,m]));
  q('#coachTrainingProgressList').innerHTML=progress.slice(0,50).map(x=>{const m=moduleById[x.module_id];return row(x.status==='passed'?'✓':'•',m?.title||'Training module',`${m?.course_key||'course'} · learner ${String(x.user_id).slice(0,8)} · ${x.attempts||0} attempt(s)`,x.score==null?x.status:`${Number(x.score)}%`,x.status==='passed'?'ok':x.status==='failed'?'attention':'')}).join('')||'<div class="approved-resource-empty">No module progress yet.</div>';
+}
+
+
+let ethicsReviewData=null;
+async function loadEthicsReviewCenter(){
+ if(!await checkAdmin())return;
+ const d=await rpc('get_admin_coach_ethics_review_center');if(!d)return;
+ ethicsReviewData=d;
+ const s=d.summary||{},settings=d.settings||{};
+ q('#coachEthicsReviewSummary').innerHTML=`<div class="coach-training-admin-metrics"><article><b>${s.modules||0}</b><small>ethics modules</small></article><article><b>${s.pending||0}</b><small>pending review</small></article><article><b>${s.changes_required||0}</b><small>changes required</small></article><article><b>${s.approved||0}</b><small>approved</small></article><article><b>${settings.quiz_pass_percent||90}%</b><small>minimum quiz score</small></article></div>`;
+ q('#coachEthicsReviewList').innerHTML=(d.modules||[]).map(m=>{
+   const reviews=m.reviews||[];
+   const badges=reviews.map(r=>`<span class="coach-ethics-review-badge ${r.status}">${esc(r.review_domain.replaceAll('_',' '))}: ${esc(r.status.replaceAll('_',' '))}</span>`).join('');
+   return `<article class="forms-admin-review ${m.review_status==='approved'?'ok':m.review_status==='changes_required'?'attention':''}"><div>${row(String(m.sequence),m.title,`${m.video_minutes} min · ${m.estimated_word_count||0} words · ${(m.quiz||[]).length} questions`,m.review_status,m.review_status==='approved'?'ok':'attention')}</div><div class="coach-ethics-review-badges">${badges}</div><div class="forms-admin-actions"><button data-admin-open-ethics-module="${m.id}">Review module</button></div></article>`;
+ }).join('')||'<div class="approved-resource-empty">No ethics modules.</div>';
+ if(!q('#coachEthicsReviewStyle')){
+   const st=document.createElement('style');st.id='coachEthicsReviewStyle';st.textContent='.coach-ethics-review-badges{display:flex;gap:5px;flex-wrap:wrap;margin:5px 0 8px}.coach-ethics-review-badge{font-size:.55rem;padding:4px 7px;border-radius:999px;background:#eee}.coach-ethics-review-badge.approved{background:#e7f4ee;color:#075b4d}.coach-ethics-review-badge.changes_required{background:#fae9ed;color:#8d3346}.coach-ethics-review-dialog{width:min(960px,92vw);max-height:86vh;padding:0;border:0;border-radius:14px}.coach-ethics-review-dialog::backdrop{background:rgba(20,30,35,.55)}.ethics-review-shell{padding:22px;color:#173047}.ethics-review-script{white-space:pre-wrap;max-height:300px;overflow:auto;border:1px solid #e2e6e4;background:#fbfaf7;padding:15px;border-radius:10px;font-size:.76rem;line-height:1.55}.ethics-review-question{border:1px solid #e4e4e4;border-radius:9px;padding:10px;margin:7px 0}.ethics-review-question small{display:block;color:#667;margin-top:4px}.ethics-review-domain{border-top:1px solid #ddd;padding:10px 0}.ethics-review-actions{display:flex;gap:7px;flex-wrap:wrap}.ethics-review-evidence{background:#f2f6f4;padding:12px;border-radius:9px;font-size:.72rem;line-height:1.5;margin:10px 0}';document.head.appendChild(st);
+ }
+}
+function ensureEthicsReviewDialog(){
+ let d=q('#coachEthicsReviewDialog');if(d)return d;
+ d=document.createElement('dialog');d.id='coachEthicsReviewDialog';d.className='coach-ethics-review-dialog';d.innerHTML='<div class="ethics-review-shell" id="coachEthicsReviewDialogBody"></div>';document.body.appendChild(d);return d;
+}
+function openEthicsModuleReview(id){
+ const m=(ethicsReviewData?.modules||[]).find(x=>x.id===id);if(!m)return;
+ const d=ensureEthicsReviewDialog(),body=q('#coachEthicsReviewDialogBody');
+ const reviews=m.reviews||[],quiz=m.quiz||[];
+ body.innerHTML=`<div class="admin-cert-preview-head"><span class="approved-kicker">ETHICS MODULE ${m.sequence} · HUMAN REVIEW REQUIRED</span><h3>${esc(m.title)}</h3><div>${esc(m.description||'')}</div></div>
+ <div class="ethics-review-evidence"><b>Evidence summary</b><br>${esc(m.evidence_summary||'No evidence summary recorded.')}</div>
+ <h4>Learning objectives</h4><ul>${(m.learning_objectives||[]).map(x=>'<li>'+esc(x)+'</li>').join('')}</ul>
+ <h4>Lesson / video script</h4><div class="ethics-review-script">${esc(m.video_script_md||'')}</div>
+ <h4>Scored quiz · 90% required</h4><div>${quiz.map(x=>`<div class="ethics-review-question"><b>${x.sequence}. ${esc(x.question)}</b><small>Correct: ${esc(x.correct_choice)}</small><small>Rationale: ${esc(x.rationale||'')}</small></div>`).join('')}</div>
+ <h4>Required review domains</h4><div>${reviews.map(r=>`<div class="ethics-review-domain"><b>${esc(r.review_domain.replaceAll('_',' '))}</b> · ${esc(r.status.replaceAll('_',' '))}${r.reviewer_name?'<small style="display:block">Reviewed by '+esc(r.reviewer_name)+' · '+esc(r.reviewer_qualification||'')+'</small>':''}<div class="ethics-review-actions"><button data-ethics-review-decision="approved" data-domain="${r.review_domain}" data-module="${m.id}">Approve domain</button><button data-ethics-review-decision="changes_required" data-domain="${r.review_domain}" data-module="${m.id}">Changes required</button></div></div>`).join('')}</div>
+ <div class="admin-cert-preview-actions"><button data-ethics-return-module="${m.id}">Return entire module for changes</button><button data-ethics-review-close>Close</button></div>`;
+ d.showModal();
+}
+async function decideEthicsReview(moduleId,domain,decision){
+ const reviewerName=prompt('Reviewer name:','');if(!reviewerName)return;
+ const qualification=prompt('Reviewer qualification / role:','');if(!qualification)return;
+ const findings=prompt(decision==='approved'?'Optional review notes:':'Required changes / findings:','')||'';
+ if(decision==='changes_required'&&!findings.trim())return toast('Describe the required changes.',true);
+ const {error}=await sb.rpc('admin_review_coach_ethics_lesson',{p_microlearning_id:moduleId,p_review_domain:domain,p_decision:decision,p_reviewer_name:reviewerName,p_reviewer_qualification:qualification,p_findings:findings||null});
+ if(error)return toast(error.message,true);
+ toast(decision==='approved'?'Review domain approved.':'Changes required recorded.');
+ await loadEthicsReviewCenter();openEthicsModuleReview(moduleId);
+}
+async function returnEthicsModule(id){
+ const note=prompt('What changes are required for this module?','');if(!note)return;
+ const {error}=await sb.rpc('admin_return_coach_ethics_lesson_to_review',{p_microlearning_id:id,p_note:note});
+ if(error)return toast(error.message,true);
+ toast('Module returned for changes.');q('#coachEthicsReviewDialog')?.close();loadEthicsReviewCenter();
 }
 
 async function loadCredentialing(){
@@ -261,6 +313,14 @@ document.addEventListener('click',e=>{
  if(reissueAction){e.preventDefault();reissueCertificate(reissueAction.dataset.adminReissueCertificate)}
  const historyAction=e.target.closest('[data-admin-certificate-history]');
  if(historyAction){e.preventDefault();viewCertificateHistory(historyAction.dataset.adminCertificateHistory)}
+
+ const openEthics=e.target.closest('[data-admin-open-ethics-module]');
+ if(openEthics){e.preventDefault();openEthicsModuleReview(openEthics.dataset.adminOpenEthicsModule)}
+ const ethicsDecision=e.target.closest('[data-ethics-review-decision]');
+ if(ethicsDecision){e.preventDefault();decideEthicsReview(ethicsDecision.dataset.module,ethicsDecision.dataset.domain,ethicsDecision.dataset.ethicsReviewDecision)}
+ const ethicsReturn=e.target.closest('[data-ethics-return-module]');
+ if(ethicsReturn){e.preventDefault();returnEthicsModule(ethicsReturn.dataset.ethicsReturnModule)}
+ if(e.target.closest('[data-ethics-review-close]'))q('#coachEthicsReviewDialog')?.close();
 },true);
 
 qa('[data-my-forms-tab]').forEach(b=>b.onclick=()=>setMyFormsTab(b.dataset.myFormsTab));
