@@ -143,3 +143,19 @@
     boot();
   }
 })();
+
+(() => {
+  'use strict';
+  if(window.__lelleeCoachPricingUiLoader)return;
+  window.__lelleeCoachPricingUiLoader=true;
+  function loadPricingUi(){
+    if(document.querySelector('script[data-coach-pricing-service-ui]'))return;
+    const s=document.createElement('script');
+    s.src='/coach-pricing-service-ui.js?v=20261004-1';
+    s.defer=true;
+    s.dataset.coachPricingServiceUi='1';
+    document.head.appendChild(s);
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',loadPricingUi,{once:true});
+  else loadPricingUi();
+})();
