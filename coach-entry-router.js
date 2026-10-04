@@ -159,3 +159,19 @@
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',loadPricingUi,{once:true});
   else loadPricingUi();
 })();
+
+(() => {
+  'use strict';
+  if(window.__lelleeCoachPricingOpsLoader)return;
+  window.__lelleeCoachPricingOpsLoader=true;
+  function loadPricingOps(){
+    if(document.querySelector('script[data-coach-pricing-operations-ui]'))return;
+    const s=document.createElement('script');
+    s.src='/coach-pricing-operations-ui.js?v=20261004-1';
+    s.defer=true;
+    s.dataset.coachPricingOperationsUi='1';
+    document.head.appendChild(s);
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',loadPricingOps,{once:true});
+  else loadPricingOps();
+})();
