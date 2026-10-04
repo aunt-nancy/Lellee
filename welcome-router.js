@@ -90,3 +90,19 @@ if(typeof showPage==='function'){
 }
 let tries=0;const timer=setInterval(()=>{tries++;if(typeof currentUser!=='undefined'&&currentUser){clearInterval(timer);routeQuery()}else if(tries>40)clearInterval(timer)},200);
 })();
+
+(()=>{
+'use strict';
+if(window.__lelleeCoachClientAcceptanceLoader)return;
+window.__lelleeCoachClientAcceptanceLoader=true;
+function loadCoachClientAcceptance(){
+ if(document.querySelector('script[data-coach-client-acceptance-ui]'))return;
+ const s=document.createElement('script');
+ s.src='/coach-client-acceptance-ui.js?v=20261004-1';
+ s.defer=true;
+ s.dataset.coachClientAcceptanceUi='1';
+ document.head.appendChild(s);
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',loadCoachClientAcceptance,{once:true});
+else loadCoachClientAcceptance();
+})();
