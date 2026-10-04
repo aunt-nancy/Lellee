@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Verify Certificate · Lellee Coaching</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--green:#075b4d;--ink:#173047;--muted:#68727b;--line:#dfe5e2;--cream:#fbfaf7;--purple:#b57abd}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--cream);color:var(--ink)}
+main{max-width:780px;margin:0 auto;padding:42px 20px 70px}.brand{text-align:center;margin-bottom:28px}.brand img{width:min(390px,80vw);max-height:145px;object-fit:contain}
+.card{background:white;border:1px solid var(--line);border-radius:20px;padding:28px;box-shadow:0 14px 40px rgba(23,48,71,.07)}
+h1{font-family:Georgia,serif;color:var(--green);font-weight:500;text-align:center;margin:0 0 8px;font-size:34px}.lead{text-align:center;color:var(--muted);margin:0 0 24px}
+form{display:flex;gap:10px;max-width:620px;margin:0 auto 24px}input{flex:1;min-width:0;border:1px solid #bdc9c5;border-radius:10px;padding:13px 14px;font-size:16px;text-transform:uppercase}button{border:0;border-radius:10px;padding:13px 18px;background:var(--green);color:white;font-weight:700;cursor:pointer}
+.result{display:none;border-top:2px solid var(--purple);padding-top:22px}.result.show{display:block}.status{display:inline-block;padding:6px 10px;border-radius:999px;background:#edf7f3;color:var(--green);font-size:12px;font-weight:800;letter-spacing:1px}.status.bad{background:#fff1f2;color:#9b3e4d}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px}.field{padding:14px;border:1px solid var(--line);border-radius:12px}.field span{display:block;font-size:10px;letter-spacing:1.4px;color:var(--muted);margin-bottom:6px}.field b{font-size:15px}.scope{margin-top:18px;padding:14px;background:#f4f7f5;border-radius:12px;color:#59656b;font-size:13px;line-height:1.5}
+.privacy{margin-top:24px;text-align:center;color:var(--muted);font-size:12px;line-height:1.5}
+@media(max-width:600px){form{display:block}button{width:100%;margin-top:10px}.grid{grid-template-columns:1fr}.card{padding:20px}h1{font-size:28px}}
+</style>
+</head>
+<body>
+<main>
+  <div class="brand"><img src="/lellee-coaching-logo-light-v1.png" alt="Lellee Coaching — Support. Guide. Create Change."></div>
+  <section class="card">
+    <h1>Verify a Certificate</h1>
+    <p class="lead">Enter the certificate number exactly as it appears on the Lellee Coaching certificate.</p>
+    <form id="verifyForm">
+      <input id="certificateNumber" autocomplete="off" placeholder="XXXXXXX-AAAAAAAAA-000000" aria-label="Certificate number">
+      <button type="submit">Verify Certificate</button>
+    </form>
+    <div class="result" id="result" aria-live="polite"></div>
+  </section>
+  <p class="privacy">Public verification confirms certificate status only. It does not display private learner records, credential numbers, reviewer notes, or administrator information.</p>
+</main>
+<script>
+(()=>{
+'use strict';
+const URL='https://hkrrxscyhtxmbvxevfkw.supabase.co';
+const KEY='sb_publishable_QPwVWU-qNnc3GJb_FoFnlQ_kEHa3dtU';
+const sb=window.supabase.createClient(URL,KEY);
+const form=document.getElementById('verifyForm'),input=document.getElementById('certificateNumber'),result=document.getElementById('result');
+const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+const fmt=v=>v?new Date(v+'T12:00:00').toLocaleDateString():'—';
+async function verify(){
+ const number=input.value.trim().toUpperCase();
+ result.className='result show';result.innerHTML='<p>Checking certificate…</p>';
+ const {data,error}=await sb.rpc('verify_coach_certificate',{p_certificate_number:number});
+ if(error){result.innerHTML='<span class="status bad">UNAVAILABLE</span><p>Certificate verification could not be completed right now.</p>';return}
+ if(!data||data.status==='not_found'){result.innerHTML='<span class="status bad">NOT FOUND</span><p>No Lellee Coaching certificate matches that number.</p>';return}
+ const active=data.status==='active';
+ result.innerHTML='<span class="status '+(active?'':'bad')+'">'+esc(String(data.status||'').toUpperCase())+'</span>'+
+ '<div class="grid"><div class="field"><span>CERTIFICATE NUMBER</span><b>'+esc(data.certificate_number)+'</b></div>'+
+ '<div class="field"><span>CERTIFICATE</span><b>'+esc(data.title)+'</b></div>'+
+ '<div class="field"><span>ISSUER</span><b>'+esc(data.issuer||'Lellee')+'</b></div>'+
+ '<div class="field"><span>COACHING BUSINESS</span><b>'+esc(data.business_name||'—')+'</b></div>'+
+ '<div class="field"><span>ISSUED</span><b>'+esc(fmt(data.issued_on))+'</b></div>'+
+ '<div class="field"><span>EXPIRES</span><b>'+esc(fmt(data.expires_on))+'</b></div></div>'+
+ '<div class="scope">'+esc(data.scope_note||'')+'</div>';
+}
+form.addEventListener('submit',e=>{e.preventDefault();verify()});
+const q=new URLSearchParams(location.search).get('certificate');
+if(q){input.value=q;verify()}
+})();
+</script>
+</body>
+</html>
