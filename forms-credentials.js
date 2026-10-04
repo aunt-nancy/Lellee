@@ -154,6 +154,7 @@ function openEthicsModuleReview(id){
  const reviews=m.reviews||[],quiz=m.quiz||[];
  body.innerHTML=`<div class="admin-cert-preview-head"><span class="approved-kicker">ETHICS MODULE ${m.sequence} · HUMAN REVIEW REQUIRED</span><h3>${esc(m.title)}</h3><div>${esc(m.description||'')}</div></div>
  <div class="ethics-review-evidence"><b>Evidence summary</b><br>${esc(m.evidence_summary||'No evidence summary recorded.')}</div>
+ <div class="ethics-review-evidence"><b>Video release gate</b><br>${m.video_url?'Video attached: '+esc(m.video_url):'No video attached. This module cannot be released to coaches even after human review until a playable HTTPS video URL is attached.'}<div class="ethics-review-actions" style="margin-top:8px"><button data-ethics-set-video="${m.id}">${m.video_url?'Replace video URL':'Attach video URL'}</button></div></div>
  <h4>Learning objectives</h4><ul>${(m.learning_objectives||[]).map(x=>'<li>'+esc(x)+'</li>').join('')}</ul>
  <h4>Lesson / video script</h4><div class="ethics-review-script">${esc(m.video_script_md||'')}</div>
  <h4>Scored quiz · 90% required</h4><div>${quiz.map(x=>`<div class="ethics-review-question"><b>${x.sequence}. ${esc(x.question)}</b><small>Correct: ${esc(x.correct_choice)}</small><small>Rationale: ${esc(x.rationale||'')}</small></div>`).join('')}</div>
@@ -320,6 +321,8 @@ document.addEventListener('click',e=>{
  if(ethicsDecision){e.preventDefault();decideEthicsReview(ethicsDecision.dataset.module,ethicsDecision.dataset.domain,ethicsDecision.dataset.ethicsReviewDecision)}
  const ethicsReturn=e.target.closest('[data-ethics-return-module]');
  if(ethicsReturn){e.preventDefault();returnEthicsModule(ethicsReturn.dataset.ethicsReturnModule)}
+ const ethicsVideo=e.target.closest('[data-ethics-set-video]');
+ if(ethicsVideo){e.preventDefault();const url=prompt('Playable HTTPS video URL:','');if(url){sb.rpc('admin_set_coach_ethics_video',{p_microlearning_id:ethicsVideo.dataset.ethicsSetVideo,p_video_url:url}).then(({error})=>{if(error)return toast(error.message,true);toast('Ethics video attached.');loadEthicsReviewCenter().then(()=>openEthicsModuleReview(ethicsVideo.dataset.ethicsSetVideo));});}}
  if(e.target.closest('[data-ethics-review-close]'))q('#coachEthicsReviewDialog')?.close();
 },true);
 
