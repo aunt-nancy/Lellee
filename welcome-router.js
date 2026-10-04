@@ -103,6 +103,15 @@ function loadCoachClientAcceptance(){
  s.dataset.coachClientAcceptanceUi='1';
  document.head.appendChild(s);
 }
-if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',loadCoachClientAcceptance,{once:true});
-else loadCoachClientAcceptance();
+function loadCoachClientSharing(){
+ if(document.querySelector('script[data-coach-client-sharing-ui]'))return;
+ const s=document.createElement('script');
+ s.src='/coach-client-sharing-ui.js?v=20261004-1';
+ s.defer=true;
+ s.dataset.coachClientSharingUi='1';
+ document.head.appendChild(s);
+}
+function loadCoachClientControls(){loadCoachClientAcceptance();loadCoachClientSharing();}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',loadCoachClientControls,{once:true});
+else loadCoachClientControls();
 })();
