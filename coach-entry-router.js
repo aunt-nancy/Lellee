@@ -17,7 +17,6 @@
   function storeCoachIntent(){
     try { sessionStorage.setItem(ROUTE_KEY, 'coach'); } catch (_) {}
     try { localStorage.setItem(ROUTE_KEY, 'coach'); } catch (_) {}
-    try { localStorage.setItem(ACTIVE_WORKSPACE_KEY, 'coach'); } catch (_) {}
   }
 
   function clearCoachIntent(){
@@ -80,16 +79,13 @@
   function openCoachPage(page){
     forceCoachWorkspace();
     let opened = false;
-
     if(typeof window.showPage === 'function'){
       try { window.showPage(page); opened = true; } catch (_) {}
     }
-
     const el = document.querySelector(`[data-page="${page}"]`);
     if(el){
       try { el.click(); opened = true; } catch (_) {}
     }
-
     if(activatePageDom(page)) opened = true;
     try { history.replaceState({}, '', location.pathname + '?entry=coach#' + page); } catch (_) {}
     return opened;
@@ -106,6 +102,14 @@
     return {ctx, user, client: ctx.client};
   }
 
+  function redirectToCoachLogin(){
+    storeCoachIntent();
+    const target = '/app?entry=coach';
+    const login = '/coach-login.html?return=' + encodeURIComponent(target);
+    showBanner('Sign in to open Coach Business. Redirecting to Coach Log In…');
+    try { location.replace(login); } catch (_) { location.href = login; }
+  }
+
   let handoffStarted = false;
   async function coachHandoff(){
     if(handoffStarted) return;
@@ -115,8 +119,6 @@
 
     forceCoachWorkspace();
     showBanner('Opening your coaching workspace…');
-
-    // Safe immediate landing: leave Recovery Today first, without waiting on database checks.
     openCoachPage('coach-business');
 
     try{
@@ -172,18 +174,21 @@
   function boot(){
     setCoachAuthCopy();
     storeCoachIntent();
-    forceCoachWorkspace();
-    // Try a safe landing once the page has had a moment to build, but do not loop page activation.
-    setTimeout(() => openCoachPage('coach-business'), 500);
 
     let attempts = 0;
     const timer = setInterval(() => {
       attempts += 1;
       setCoachAuthCopy();
-      forceCoachWorkspace();
-      coachHandoff();
-      if(handoffStarted || attempts > 40){
+      const auth = authContext();
+      if(auth){
         clearInterval(timer);
+        forceCoachWorkspace();
+        coachHandoff();
+        return;
+      }
+      if(attempts > 8){
+        clearInterval(timer);
+        redirectToCoachLogin();
       }
     }, 500);
   }
