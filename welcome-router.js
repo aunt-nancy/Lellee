@@ -143,7 +143,15 @@ function loadCoachMarketplaceDisclosures(){
  s.dataset.coachMarketplaceDisclosuresUi='1';
  document.head.appendChild(s);
 }
-function loadCoachClientControls(){loadCoachClientAcceptance();loadCoachClientSharing();loadCoachClientPaid();loadCoachingLaunchAcceptance();loadCoachMarketplaceLaunchGate();loadCoachMarketplaceDisclosures();}
+function loadCoachDisclosureAcknowledgements(){
+ if(document.querySelector('script[data-coach-disclosure-acknowledgement-ui]'))return;
+ const s=document.createElement('script');
+ s.src='/coach-disclosure-acknowledgement-ui.js?v=20261004-1';
+ s.defer=true;
+ s.dataset.coachDisclosureAcknowledgementUi='1';
+ document.head.appendChild(s);
+}
+function loadCoachClientControls(){loadCoachClientAcceptance();loadCoachClientSharing();loadCoachClientPaid();loadCoachingLaunchAcceptance();loadCoachMarketplaceLaunchGate();loadCoachMarketplaceDisclosures();loadCoachDisclosureAcknowledgements();}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',loadCoachClientControls,{once:true});
 else loadCoachClientControls();
 })();
