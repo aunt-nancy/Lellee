@@ -122,3 +122,19 @@
 
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, {once:true}); else boot();
 })();
+
+(() => {
+  'use strict';
+  if(window.__lelleeCoachDisclosureAcknowledgementLoader) return;
+  window.__lelleeCoachDisclosureAcknowledgementLoader = true;
+  function loadAcknowledgements(){
+    if(document.querySelector('script[data-coach-disclosure-acknowledgement-ui]')) return;
+    const s = document.createElement('script');
+    s.src = '/coach-disclosure-acknowledgement-ui.js?v=20261004-1';
+    s.defer = true;
+    s.dataset.coachDisclosureAcknowledgementUi = '1';
+    document.head.appendChild(s);
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', loadAcknowledgements, {once:true});
+  else loadAcknowledgements();
+})();
