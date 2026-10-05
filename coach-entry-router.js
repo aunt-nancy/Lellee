@@ -58,9 +58,6 @@
     showBanner('Opening your coaching workspace…');
 
     try{
-      // If the restored Coach Business foundation is present and the signed-in
-      // user already belongs to a business, prefer the Dashboard. Otherwise,
-      // send them to the Business Setup/Application page.
       const membership = await sb
         .from('coach_business_members')
         .select('business_id,role,status')
@@ -69,7 +66,6 @@
         .limit(1);
 
       if(membership.error){
-        // 42P01 / missing relation: keep the page usable and make the issue explicit.
         const code = membership.error.code || '';
         if(code === '42P01' || /does not exist|not found/i.test(membership.error.message || '')){
           showBanner('Coach Business setup is not installed in the database yet. Run the Coach Business Foundation Restore.', 'error');
@@ -103,8 +99,6 @@
         showBanner(`Coaching business status: ${status.replaceAll('_',' ')}. Opened Business Settings.`);
       }
 
-      // Clean professional entry flag after successful routing without creating
-      // a new history entry.
       try {
         sessionStorage.removeItem(ROUTE_KEY);
         const clean = location.pathname + location.hash;
@@ -126,10 +120,7 @@
     let attempts = 0;
     const timer = setInterval(async () => {
       attempts += 1;
-
-      // Keep coach-specific login wording while the sign-in overlay is visible.
       setCoachAuthCopy();
-
       const routed = await resolveCoachDestination();
       if(routed || attempts > 240){
         clearInterval(timer);
@@ -190,4 +181,20 @@
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',loadConsultConversion,{once:true});
   else loadConsultConversion();
+})();
+
+(() => {
+  'use strict';
+  if(window.__lelleeCoachPaidOpsLoader)return;
+  window.__lelleeCoachPaidOpsLoader=true;
+  function loadPaidOps(){
+    if(document.querySelector('script[data-coach-paid-operations-ui]'))return;
+    const s=document.createElement('script');
+    s.src='/coach-paid-operations-ui.js?v=20261004-1';
+    s.defer=true;
+    s.dataset.coachPaidOperationsUi='1';
+    document.head.appendChild(s);
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',loadPaidOps,{once:true});
+  else loadPaidOps();
 })();
