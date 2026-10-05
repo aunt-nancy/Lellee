@@ -4,10 +4,11 @@
 const SUPABASE_URL='https://hkrrxscyhtxmbvxevfkw.supabase.co';
 const SUPABASE_KEY='sb_publishable_QPwVWU-qNnc3GJb_FoFnlQ_kEHa3dtU';
 const page=document.body.dataset.coachAuth||'login';
+const DEFAULT_COACH_RETURN='/app#coach-business';
 const $=id=>document.getElementById(id);
-const safeReturn=value=>{try{const u=new URL(value||'/app?entry=coach',location.origin);return u.origin===location.origin&&u.pathname.startsWith('/')?u.pathname+u.search+u.hash:'/app?entry=coach'}catch(_){return '/app?entry=coach'}};
+const safeReturn=value=>{try{const u=new URL(value||DEFAULT_COACH_RETURN,location.origin);return u.origin===location.origin&&u.pathname.startsWith('/')?u.pathname+u.search+u.hash:DEFAULT_COACH_RETURN}catch(_){return DEFAULT_COACH_RETURN}};
 const params=new URLSearchParams(location.search);
-const returnTarget=safeReturn(params.get('return')||'/app?entry=coach');
+const returnTarget=safeReturn(params.get('return')||DEFAULT_COACH_RETURN);
 let client=null,loading=false,mode=page==='signup'?'signup':'signin',recoveryReady=false;
 
 function setStatus(message,type=''){const el=$('status');if(!el)return;el.textContent=message||'';el.className='status'+(type?' '+type:'')}
@@ -38,27 +39,27 @@ function configureLoginMode(next){
   if(forgot)forgot.classList.toggle('hidden',next!=='signin');
   if(back)back.classList.toggle('hidden',next==='signin');
   if(next==='forgot'){
-    title.textContent='Reset your Coach Business password';
+    title.textContent='Reset your Coaching Practice password';
     intro.textContent='Enter the email connected to your Lellee account and we will send a secure reset link.';
     emailField?.classList.remove('hidden');passField?.classList.add('hidden');confirmField?.classList.add('hidden');
     submit.textContent='Send reset link';
   }else if(next==='reset'){
     title.textContent='Choose a new password';
-    intro.textContent='Set a new password for your Lellee identity. It will work for Coach Business and any other Lellee role tied to this account.';
+    intro.textContent='Set a new password for your Lellee identity. It will work for your Coaching Practice and any other Lellee role tied to this account.';
     emailField?.classList.add('hidden');passField?.classList.remove('hidden');confirmField?.classList.remove('hidden');
     submit.textContent='Save new password';
   }else{
-    title.textContent='Coach Business Log In';
-    intro.textContent='Sign in to manage your independent coaching business, clients, groups, scheduling and operations.';
+    title.textContent='Coaching Practice Log In';
+    intro.textContent='Sign in to manage your independent coaching practice, clients, groups, scheduling and operations.';
     emailField?.classList.remove('hidden');passField?.classList.remove('hidden');confirmField?.classList.add('hidden');
-    submit.textContent='Log in to Coach Business';
+    submit.textContent='Log in to Coaching Practice';
   }
 }
 async function prepare(){
   try{
     const lib=await loadSupabase();
     client=lib.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
-    const service=$('serviceState');if(service){service.className='service-state ready';service.innerHTML='<span class="dot"></span><span>Secure Coach Business sign-in ready</span>'}
+    const service=$('serviceState');if(service){service.className='service-state ready';service.innerHTML='<span class="dot"></span><span>Secure Coaching Practice sign-in ready</span>'}
     client.auth.onAuthStateChange((event,session)=>{
       if(event==='PASSWORD_RECOVERY'){recoveryReady=!!session;if(page==='login')configureLoginMode('reset');return}
       if(event==='SIGNED_IN'&&session&&!loading&&mode!=='reset')location.replace(returnTarget);
@@ -71,7 +72,7 @@ async function prepare(){
       return;
     }
     if(session.data?.session?.user){location.replace(returnTarget);return}
-    if(page==='login'&&params.get('confirmed')==='1')setStatus('Email confirmed. Log in to continue to Coach Business.','success');
+    if(page==='login'&&params.get('confirmed')==='1')setStatus('Email confirmed. Log in to continue to your Coaching Practice.','success');
   }catch(error){
     const service=$('serviceState');if(service){service.className='service-state error';service.innerHTML='<span class="dot"></span><span>Secure sign-in unavailable</span>'}
     setStatus(error.message,'error');
@@ -100,7 +101,7 @@ if(page==='login'){
         if(!recoveryReady){const s=await client.auth.getSession();recoveryReady=!!s.data?.session}
         if(!recoveryReady)throw new Error('Open the secure reset link from your email before choosing a new password.');
         const {error}=await client.auth.updateUser({password:p});if(error)throw error;
-        setStatus('Password updated. Opening Coach Business…','success');
+        setStatus('Password updated. Opening Coaching Practice…','success');
         setTimeout(()=>location.replace(returnTarget),350);
       }else{
         const email=$('email').value.trim(),password=$('password').value;
@@ -120,13 +121,13 @@ if(page==='login'){
       if(!$('email').validity.valid)throw new Error('Enter a valid email address.');
       if(password.length<8)throw new Error('Use a password with at least 8 characters.');
       if(password!==confirm)throw new Error('The two passwords do not match.');
-      if(!$('agreements').checked)throw new Error('Confirm the Coach Business account terms before continuing.');
+      if(!$('agreements').checked)throw new Error('Confirm the Coaching Practice account terms before continuing.');
       const result=await client.auth.signUp({
         email,password,
         options:{
           emailRedirectTo:'https://lellee.com/coach-login.html?confirmed=1',
           data:{
-            lellee_entry:'coach_business',
+            lellee_entry:'coaching_practice',
             lellee_role_intent:'independent_coach',
             lellee_adult_confirmed:true,
             lellee_terms_privacy_reviewed:true,
@@ -138,12 +139,12 @@ if(page==='login'){
       if(result.error)throw result.error;
       const identities=result.data?.user?.identities;
       if(Array.isArray(identities)&&identities.length===0){
-        setStatus('This email already has a Lellee account. Use Coach Log In with your existing email and password.','error');
+        setStatus('This email already has a Lellee account. Use Coaching Practice Log In with your existing email and password.','error');
         return;
       }
       if(result.data?.session){location.replace(returnTarget);return}
       $('password').value='';$('confirmPassword').value='';
-      setStatus('Coach Business account created. Check your email to confirm it, then use Coach Log In.','success');
+      setStatus('Coaching Practice account created. Check your email to confirm it, then use Coaching Practice Log In.','success');
     }catch(error){setStatus(friendly(error),'error')}finally{setBusy(false)}
   });
 }
