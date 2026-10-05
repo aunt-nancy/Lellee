@@ -111,7 +111,15 @@ function loadCoachClientSharing(){
  s.dataset.coachClientSharingUi='1';
  document.head.appendChild(s);
 }
-function loadCoachClientControls(){loadCoachClientAcceptance();loadCoachClientSharing();}
+function loadCoachClientPaid(){
+ if(document.querySelector('script[data-coach-client-paid-ui]'))return;
+ const s=document.createElement('script');
+ s.src='/coach-client-paid-ui.js?v=20261004-1';
+ s.defer=true;
+ s.dataset.coachClientPaidUi='1';
+ document.head.appendChild(s);
+}
+function loadCoachClientControls(){loadCoachClientAcceptance();loadCoachClientSharing();loadCoachClientPaid();}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',loadCoachClientControls,{once:true});
 else loadCoachClientControls();
 })();
