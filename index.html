@@ -7593,8 +7593,17 @@ function showPage(name){
   if(name==='program-preview')renderProgramBrowseChrome();
   try{
     const url=new URL(location.href);
-    url.hash=navName==='today'?'':navName;
-    history.replaceState(null,'',url.pathname+url.search+url.hash);
+    let existingHash='';
+    try{existingHash=decodeURIComponent((url.hash||'').replace(/^#/,''))}catch(_){existingHash=(url.hash||'').replace(/^#/,'')}
+    const preserveRequestedDeepLink =
+      navName==='today' &&
+      existingHash &&
+      existingHash!=='today' &&
+      Boolean(document.getElementById('page-'+existingHash));
+    if(!preserveRequestedDeepLink){
+      url.hash=navName==='today'?'':navName;
+      history.replaceState(null,'',url.pathname+url.search+url.hash);
+    }
   }catch(_){}
 }
 // MENU/NAVIGATION REPAIR — 2026-08-28
