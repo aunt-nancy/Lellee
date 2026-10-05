@@ -119,7 +119,15 @@ function loadCoachClientPaid(){
  s.dataset.coachClientPaidUi='1';
  document.head.appendChild(s);
 }
-function loadCoachClientControls(){loadCoachClientAcceptance();loadCoachClientSharing();loadCoachClientPaid();}
+function loadCoachingLaunchAcceptance(){
+ if(document.querySelector('script[data-coaching-launch-acceptance-ui]'))return;
+ const s=document.createElement('script');
+ s.src='/coaching-launch-acceptance-ui.js?v=20261004-1';
+ s.defer=true;
+ s.dataset.coachingLaunchAcceptanceUi='1';
+ document.head.appendChild(s);
+}
+function loadCoachClientControls(){loadCoachClientAcceptance();loadCoachClientSharing();loadCoachClientPaid();loadCoachingLaunchAcceptance();}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',loadCoachClientControls,{once:true});
 else loadCoachClientControls();
 })();
