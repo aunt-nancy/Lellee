@@ -95,24 +95,63 @@ let tries=0;const timer=setInterval(()=>{tries++;if(typeof currentUser!=='undefi
 'use strict';
 if(window.__lelleeCoachClientAcceptanceLoader)return;
 window.__lelleeCoachClientAcceptanceLoader=true;
-function addScript(src, attr){
- if(document.querySelector(`script[${attr}]`))return;
+function loadCoachClientAcceptance(){
+ if(document.querySelector('script[data-coach-client-acceptance-ui]'))return;
  const s=document.createElement('script');
- s.src=src;
+ s.src='/coach-client-acceptance-ui.js?v=20261004-1';
  s.defer=true;
- s.setAttribute(attr,'1');
+ s.dataset.coachClientAcceptanceUi='1';
  document.head.appendChild(s);
 }
-// TEMPORARILY DISABLED: coach-entry-router was causing app-shell hangs. Use /coach-login.html as the coach/practice entry until router is rebuilt safely.
-function loadCoachPracticeCopyFix(){addScript('/coach-practice-copy-fix.js?v=20261005-1','data-coach-practice-copy-fix')}
-function loadCoachClientAcceptance(){addScript('/coach-client-acceptance-ui.js?v=20261004-1','data-coach-client-acceptance-ui')}
-function loadCoachClientSharing(){addScript('/coach-client-sharing-ui.js?v=20261004-1','data-coach-client-sharing-ui')}
-function loadCoachClientPaid(){addScript('/coach-client-paid-ui.js?v=20261004-1','data-coach-client-paid-ui')}
-function loadCoachingLaunchAcceptance(){addScript('/coaching-launch-acceptance-ui.js?v=20261004-2','data-coaching-launch-acceptance-ui')}
-function loadCoachMarketplaceLaunchGate(){addScript('/coach-marketplace-launch-gate-ui.js?v=20261004-1','data-coach-marketplace-launch-gate-ui')}
-function loadCoachMarketplaceDisclosures(){addScript('/coach-marketplace-disclosures-ui.js?v=20261004-1','data-coach-marketplace-disclosures-ui')}
-function loadCoachDisclosureAcknowledgements(){addScript('/coach-disclosure-acknowledgement-ui.js?v=20261004-1','data-coach-disclosure-acknowledgement-ui')}
-function loadCoachClientControls(){loadCoachPracticeCopyFix();loadCoachClientAcceptance();loadCoachClientSharing();loadCoachClientPaid();loadCoachingLaunchAcceptance();loadCoachMarketplaceLaunchGate();loadCoachMarketplaceDisclosures();loadCoachDisclosureAcknowledgements();}
+function loadCoachClientSharing(){
+ if(document.querySelector('script[data-coach-client-sharing-ui]'))return;
+ const s=document.createElement('script');
+ s.src='/coach-client-sharing-ui.js?v=20261004-1';
+ s.defer=true;
+ s.dataset.coachClientSharingUi='1';
+ document.head.appendChild(s);
+}
+function loadCoachClientPaid(){
+ if(document.querySelector('script[data-coach-client-paid-ui]'))return;
+ const s=document.createElement('script');
+ s.src='/coach-client-paid-ui.js?v=20261004-1';
+ s.defer=true;
+ s.dataset.coachClientPaidUi='1';
+ document.head.appendChild(s);
+}
+function loadCoachingLaunchAcceptance(){
+ if(document.querySelector('script[data-coaching-launch-acceptance-ui]'))return;
+ const s=document.createElement('script');
+ s.src='/coaching-launch-acceptance-ui.js?v=20261004-2';
+ s.defer=true;
+ s.dataset.coachingLaunchAcceptanceUi='1';
+ document.head.appendChild(s);
+}
+function loadCoachMarketplaceLaunchGate(){
+ if(document.querySelector('script[data-coach-marketplace-launch-gate-ui]'))return;
+ const s=document.createElement('script');
+ s.src='/coach-marketplace-launch-gate-ui.js?v=20261004-1';
+ s.defer=true;
+ s.dataset.coachMarketplaceLaunchGateUi='1';
+ document.head.appendChild(s);
+}
+function loadCoachMarketplaceDisclosures(){
+ if(document.querySelector('script[data-coach-marketplace-disclosures-ui]'))return;
+ const s=document.createElement('script');
+ s.src='/coach-marketplace-disclosures-ui.js?v=20261004-1';
+ s.defer=true;
+ s.dataset.coachMarketplaceDisclosuresUi='1';
+ document.head.appendChild(s);
+}
+function loadCoachDisclosureAcknowledgements(){
+ if(document.querySelector('script[data-coach-disclosure-acknowledgement-ui]'))return;
+ const s=document.createElement('script');
+ s.src='/coach-disclosure-acknowledgement-ui.js?v=20261004-1';
+ s.defer=true;
+ s.dataset.coachDisclosureAcknowledgementUi='1';
+ document.head.appendChild(s);
+}
+function loadCoachClientControls(){loadCoachClientAcceptance();loadCoachClientSharing();loadCoachClientPaid();loadCoachingLaunchAcceptance();loadCoachMarketplaceLaunchGate();loadCoachMarketplaceDisclosures();loadCoachDisclosureAcknowledgements();}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',loadCoachClientControls,{once:true});
 else loadCoachClientControls();
 })();
