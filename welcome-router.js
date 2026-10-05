@@ -135,7 +135,15 @@ function loadCoachMarketplaceLaunchGate(){
  s.dataset.coachMarketplaceLaunchGateUi='1';
  document.head.appendChild(s);
 }
-function loadCoachClientControls(){loadCoachClientAcceptance();loadCoachClientSharing();loadCoachClientPaid();loadCoachingLaunchAcceptance();loadCoachMarketplaceLaunchGate();}
+function loadCoachMarketplaceDisclosures(){
+ if(document.querySelector('script[data-coach-marketplace-disclosures-ui]'))return;
+ const s=document.createElement('script');
+ s.src='/coach-marketplace-disclosures-ui.js?v=20261004-1';
+ s.defer=true;
+ s.dataset.coachMarketplaceDisclosuresUi='1';
+ document.head.appendChild(s);
+}
+function loadCoachClientControls(){loadCoachClientAcceptance();loadCoachClientSharing();loadCoachClientPaid();loadCoachingLaunchAcceptance();loadCoachMarketplaceLaunchGate();loadCoachMarketplaceDisclosures();}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',loadCoachClientControls,{once:true});
 else loadCoachClientControls();
 })();
