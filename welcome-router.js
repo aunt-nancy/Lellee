@@ -122,12 +122,20 @@ function loadCoachClientPaid(){
 function loadCoachingLaunchAcceptance(){
  if(document.querySelector('script[data-coaching-launch-acceptance-ui]'))return;
  const s=document.createElement('script');
- s.src='/coaching-launch-acceptance-ui.js?v=20261004-1';
+ s.src='/coaching-launch-acceptance-ui.js?v=20261004-2';
  s.defer=true;
  s.dataset.coachingLaunchAcceptanceUi='1';
  document.head.appendChild(s);
 }
-function loadCoachClientControls(){loadCoachClientAcceptance();loadCoachClientSharing();loadCoachClientPaid();loadCoachingLaunchAcceptance();}
+function loadCoachMarketplaceLaunchGate(){
+ if(document.querySelector('script[data-coach-marketplace-launch-gate-ui]'))return;
+ const s=document.createElement('script');
+ s.src='/coach-marketplace-launch-gate-ui.js?v=20261004-1';
+ s.defer=true;
+ s.dataset.coachMarketplaceLaunchGateUi='1';
+ document.head.appendChild(s);
+}
+function loadCoachClientControls(){loadCoachClientAcceptance();loadCoachClientSharing();loadCoachClientPaid();loadCoachingLaunchAcceptance();loadCoachMarketplaceLaunchGate();}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',loadCoachClientControls,{once:true});
 else loadCoachClientControls();
 })();
