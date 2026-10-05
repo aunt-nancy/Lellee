@@ -95,6 +95,14 @@ let tries=0;const timer=setInterval(()=>{tries++;if(typeof currentUser!=='undefi
 'use strict';
 if(window.__lelleeCoachClientAcceptanceLoader)return;
 window.__lelleeCoachClientAcceptanceLoader=true;
+function loadCoachEntryRouter(){
+ if(document.querySelector('script[data-coach-entry-router]'))return;
+ const s=document.createElement('script');
+ s.src='/coach-entry-router.js?v=20261005-1';
+ s.defer=true;
+ s.dataset.coachEntryRouter='1';
+ document.head.appendChild(s);
+}
 function loadCoachClientAcceptance(){
  if(document.querySelector('script[data-coach-client-acceptance-ui]'))return;
  const s=document.createElement('script');
@@ -151,7 +159,7 @@ function loadCoachDisclosureAcknowledgements(){
  s.dataset.coachDisclosureAcknowledgementUi='1';
  document.head.appendChild(s);
 }
-function loadCoachClientControls(){loadCoachClientAcceptance();loadCoachClientSharing();loadCoachClientPaid();loadCoachingLaunchAcceptance();loadCoachMarketplaceLaunchGate();loadCoachMarketplaceDisclosures();loadCoachDisclosureAcknowledgements();}
+function loadCoachClientControls(){loadCoachEntryRouter();loadCoachClientAcceptance();loadCoachClientSharing();loadCoachClientPaid();loadCoachingLaunchAcceptance();loadCoachMarketplaceLaunchGate();loadCoachMarketplaceDisclosures();loadCoachDisclosureAcknowledgements();}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',loadCoachClientControls,{once:true});
 else loadCoachClientControls();
 })();
