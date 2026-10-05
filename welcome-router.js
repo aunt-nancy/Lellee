@@ -103,7 +103,7 @@ function addScript(src, attr){
  s.setAttribute(attr,'1');
  document.head.appendChild(s);
 }
-function loadCoachEntryRouter(){addScript('/coach-entry-router.js?v=20261005-2','data-coach-entry-router')}
+// TEMPORARILY DISABLED: coach-entry-router was causing app-shell hangs. Use /coach-login.html as the coach/practice entry until router is rebuilt safely.
 function loadCoachPracticeCopyFix(){addScript('/coach-practice-copy-fix.js?v=20261005-1','data-coach-practice-copy-fix')}
 function loadCoachClientAcceptance(){addScript('/coach-client-acceptance-ui.js?v=20261004-1','data-coach-client-acceptance-ui')}
 function loadCoachClientSharing(){addScript('/coach-client-sharing-ui.js?v=20261004-1','data-coach-client-sharing-ui')}
@@ -112,7 +112,7 @@ function loadCoachingLaunchAcceptance(){addScript('/coaching-launch-acceptance-u
 function loadCoachMarketplaceLaunchGate(){addScript('/coach-marketplace-launch-gate-ui.js?v=20261004-1','data-coach-marketplace-launch-gate-ui')}
 function loadCoachMarketplaceDisclosures(){addScript('/coach-marketplace-disclosures-ui.js?v=20261004-1','data-coach-marketplace-disclosures-ui')}
 function loadCoachDisclosureAcknowledgements(){addScript('/coach-disclosure-acknowledgement-ui.js?v=20261004-1','data-coach-disclosure-acknowledgement-ui')}
-function loadCoachClientControls(){loadCoachEntryRouter();loadCoachPracticeCopyFix();loadCoachClientAcceptance();loadCoachClientSharing();loadCoachClientPaid();loadCoachingLaunchAcceptance();loadCoachMarketplaceLaunchGate();loadCoachMarketplaceDisclosures();loadCoachDisclosureAcknowledgements();}
+function loadCoachClientControls(){loadCoachPracticeCopyFix();loadCoachClientAcceptance();loadCoachClientSharing();loadCoachClientPaid();loadCoachingLaunchAcceptance();loadCoachMarketplaceLaunchGate();loadCoachMarketplaceDisclosures();loadCoachDisclosureAcknowledgements();}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',loadCoachClientControls,{once:true});
 else loadCoachClientControls();
 })();
