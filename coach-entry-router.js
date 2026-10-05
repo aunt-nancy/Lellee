@@ -1,11 +1,30 @@
 (() => {
   'use strict';
 
-  const params = new URLSearchParams(location.search);
-  if (params.get('entry') !== 'coach') return;
-
   const ROUTE_KEY = 'lellee_pending_entry';
-  try { sessionStorage.setItem(ROUTE_KEY, 'coach'); } catch (_) {}
+  const params = new URLSearchParams(location.search);
+  const urlCoachIntent = params.get('entry') === 'coach' || params.get('page') === 'coach-dashboard' || params.get('page') === 'coach-business';
+
+  function readStoredIntent(){
+    try {
+      return sessionStorage.getItem(ROUTE_KEY) === 'coach' || localStorage.getItem(ROUTE_KEY) === 'coach';
+    } catch (_) {
+      return false;
+    }
+  }
+
+  function storeCoachIntent(){
+    try { sessionStorage.setItem(ROUTE_KEY, 'coach'); } catch (_) {}
+    try { localStorage.setItem(ROUTE_KEY, 'coach'); } catch (_) {}
+  }
+
+  function clearCoachIntent(){
+    try { sessionStorage.removeItem(ROUTE_KEY); } catch (_) {}
+    try { localStorage.removeItem(ROUTE_KEY); } catch (_) {}
+  }
+
+  if(urlCoachIntent) storeCoachIntent();
+  if(!urlCoachIntent && !readStoredIntent()) return;
 
   function qs(sel){ return document.querySelector(sel); }
 
@@ -49,6 +68,10 @@
     return true;
   }
 
+  function currentPage(){
+    return document.querySelector('.page.active')?.id?.replace(/^page-/, '') || '';
+  }
+
   async function resolveCoachDestination(){
     const ctx = window.LelleeAuthContext;
     const user = ctx?.getCurrentUser?.();
@@ -90,23 +113,27 @@
 
       if(business.error) throw business.error;
 
+      let routed = false;
       if(business.data?.status === 'approved'){
-        clickPage('coach-dashboard');
+        routed = clickPage('coach-dashboard');
         showBanner(`Coach Dashboard opened${business.data.business_name ? ': '+business.data.business_name : ''}.`);
       }else{
-        clickPage('coach-business');
+        routed = clickPage('coach-business');
         const status = business.data?.status || 'setup';
         showBanner(`Coaching business status: ${status.replaceAll('_',' ')}. Opened Business Settings.`);
       }
 
-      try {
-        sessionStorage.removeItem(ROUTE_KEY);
-        const clean = location.pathname + location.hash;
-        history.replaceState({}, '', clean);
-      } catch (_) {}
+      if(routed){
+        clearCoachIntent();
+        try {
+          const clean = location.pathname + location.hash;
+          history.replaceState({}, '', clean);
+        } catch (_) {}
+        setTimeout(() => qs('#coachEntryStatus')?.remove(), 4200);
+        return true;
+      }
 
-      setTimeout(() => qs('#coachEntryStatus')?.remove(), 4200);
-      return true;
+      return false;
     }catch(err){
       console.error('Coach entry routing failed', err);
       showBanner('Could not open the coaching workspace. Open Coach Business from the app settings and try again.', 'error');
@@ -122,7 +149,9 @@
       attempts += 1;
       setCoachAuthCopy();
       const routed = await resolveCoachDestination();
-      if(routed || attempts > 240){
+      const page = currentPage();
+      if(routed || page === 'coach-dashboard' || page === 'coach-business' || attempts > 360){
+        if(page === 'coach-dashboard' || page === 'coach-business') clearCoachIntent();
         clearInterval(timer);
       }
     }, 250);
