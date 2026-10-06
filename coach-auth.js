@@ -4,9 +4,18 @@
 const SUPABASE_URL='https://hkrrxscyhtxmbvxevfkw.supabase.co';
 const SUPABASE_KEY='sb_publishable_QPwVWU-qNnc3GJb_FoFnlQ_kEHa3dtU';
 const page=document.body.dataset.coachAuth||'login';
-const DEFAULT_COACH_RETURN='/app#coach-business';
+const DEFAULT_COACH_RETURN='/coaching/index.html#coach-dashboard';
 const $=id=>document.getElementById(id);
-const safeReturn=value=>{try{const u=new URL(value||DEFAULT_COACH_RETURN,location.origin);return u.origin===location.origin&&u.pathname.startsWith('/')?u.pathname+u.search+u.hash:DEFAULT_COACH_RETURN}catch(_){return DEFAULT_COACH_RETURN}};
+// Coaching authentication must not accept a return target in the consumer app.
+const safeReturn=value=>{
+  try{
+    const u=new URL(value||DEFAULT_COACH_RETURN,location.origin);
+    if(u.origin!==location.origin||!['/coaching/index.html','/coaching/','/coaching'].includes(u.pathname))return DEFAULT_COACH_RETURN;
+    const allowed=new Set(['coach-dashboard','coach-business','coach-cohorts','coach-scheduler','coach-credentials','coach-analytics','coach-revenue','coach-automation','coach-quickstart']);
+    const hash=decodeURIComponent(u.hash.slice(1));
+    return '/coaching/index.html#'+(allowed.has(hash)?hash:'coach-dashboard');
+  }catch(_){return DEFAULT_COACH_RETURN;}
+};
 const params=new URLSearchParams(location.search);
 const returnTarget=safeReturn(params.get('return')||DEFAULT_COACH_RETURN);
 let client=null,loading=false,mode=page==='signup'?'signup':'signin',recoveryReady=false;
