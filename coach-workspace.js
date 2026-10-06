@@ -24,8 +24,7 @@
     '/coach-pricing-service-ui.js?v=20261005-shell1',
     '/coach-pricing-operations-ui.js?v=20261005-shell1',
     '/coach-consultation-conversion-ui.js?v=20261005-shell1',
-    '/coach-paid-operations-ui.js?v=20261005-shell1',
-    '/coach-disclosure-acknowledgement-ui.js?v=20261005-shell1'
+    '/coach-paid-operations-ui.js?v=20261005-shell1'
   ];
   const state={client:null,user:null,context:null,modulesReady:false};
 
