@@ -4,7 +4,7 @@
 const SUPABASE_URL='https://hkrrxscyhtxmbvxevfkw.supabase.co';
 const SUPABASE_KEY='sb_publishable_QPwVWU-qNnc3GJb_FoFnlQ_kEHa3dtU';
 const page=document.body.dataset.coachAuth||'login';
-const DEFAULT_COACH_RETURN='/coach-workspace.html';
+const DEFAULT_COACH_RETURN='/app#coach-business';
 const $=id=>document.getElementById(id);
 const safeReturn=value=>{try{const u=new URL(value||DEFAULT_COACH_RETURN,location.origin);return u.origin===location.origin&&u.pathname.startsWith('/')?u.pathname+u.search+u.hash:DEFAULT_COACH_RETURN}catch(_){return DEFAULT_COACH_RETURN}};
 const params=new URLSearchParams(location.search);
