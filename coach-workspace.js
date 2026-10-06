@@ -44,6 +44,32 @@
   }
   function hideLoading(){ $('#coachWorkspaceLoading')?.classList.add('hidden'); }
 
+  function loadSupabase(){
+    return new Promise((resolve,reject)=>{
+      if(window.supabase?.createClient){ resolve(window.supabase); return; }
+      const existing=document.querySelector('script[data-coach-supabase-loader]');
+      if(existing){
+        let tries=0;
+        const timer=setInterval(()=>{
+          tries++;
+          if(window.supabase?.createClient){ clearInterval(timer); resolve(window.supabase); }
+          else if(tries>=40){ clearInterval(timer); reject(new Error('Secure Coaching sign-in service is taking too long to load.')); }
+        },250);
+        return;
+      }
+      const s=document.createElement('script');
+      s.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
+      s.async=true;
+      s.dataset.coachSupabaseLoader='1';
+      let settled=false;
+      const done=(fn,value)=>{ if(settled)return; settled=true; clearTimeout(timeout); fn(value); };
+      s.onload=()=>window.supabase?.createClient ? done(resolve,window.supabase) : done(reject,new Error('Secure Coaching sign-in did not initialize.'));
+      s.onerror=()=>done(reject,new Error('Secure Coaching sign-in service could not load.'));
+      const timeout=setTimeout(()=>done(reject,new Error('Secure Coaching sign-in service is taking too long to load.')),10000);
+      document.head.appendChild(s);
+    });
+  }
+
   function currentPage(){
     return $('.page.active')?.id?.replace(/^page-/,'')||'';
   }
@@ -228,8 +254,9 @@
     setupCountPrivacy();
     $('#saveCoachTaxProfile')?.addEventListener('click',saveTaxProfile);
     try{
-      if(!window.supabase?.createClient)throw new Error('Secure Coaching sign-in service did not load.');
-      const client=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+      setLoading('Connecting securely to Lellee Coaching…');
+      const lib=await loadSupabase();
+      const client=lib.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
       const {data,error}=await client.auth.getSession();
       if(error)throw error;
       const user=data?.session?.user;
