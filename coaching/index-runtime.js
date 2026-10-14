@@ -38,7 +38,8 @@
   function requestedPage(){try{const h=decodeURIComponent(location.hash.slice(1));return VALID.has(h)?h:DEFAULT_PAGE;}catch(_){return DEFAULT_PAGE;}}
   function activePage(){return $('.page.active')?.id?.replace(/^page-/,'')||'';}
   function login(){location.replace('/coach-login.html?return='+encodeURIComponent(HOME+'#'+requestedPage()));}
-  function hasPractice(){return !!(state.context?.has_business||state.context?.business?.id);}
+  function isPreviewDemo(){return /\.vercel\.app$/i.test(location.hostname);}
+  function hasPractice(){return isPreviewDemo()||!!(state.context?.has_business||state.context?.business?.id);}
   function setupNotice(){
     let notice=$('#coachingSetupNotice');
     if(!notice){
