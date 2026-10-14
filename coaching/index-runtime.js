@@ -143,7 +143,7 @@
     $$('.coach-workspace-nav [data-page], .coach-workspace-nav [data-coach-tab-target]').forEach(b=>{
       let active=false;
       if(tab&&b.dataset.coachTabTarget===tab)active=true;
-      else if(!tab&&b.dataset.page==='coach-dashboard'&&b.dataset.dashboardSectionTarget===section)active=true;
+      else if(!tab&&b.dataset.page==='coach-dashboard'&&b.dataset.dashboardSectionTarget===section&&!b.dataset.coachTabTarget)active=true;
       b.classList.toggle('active',active);
       if(active){
         b.setAttribute('aria-current','page');
