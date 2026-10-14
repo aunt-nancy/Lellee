@@ -1,7 +1,7 @@
 /* Coaching-only index runtime. Consumer /app and index.html are not dependencies. */
 (() => {
   'use strict';
-  const VERSION='coaching-index-20261014-layout1';
+  const VERSION='coaching-index-20261014-consolidated1';
   const HOME='/coaching/index.html';
   const DEFAULT_PAGE='coach-dashboard';
   const SUPABASE_URL='https://hkrrxscyhtxmbvxevfkw.supabase.co';
@@ -73,13 +73,12 @@
     if(!state.user)return false;
     if(!VALID.has(page))return false;
     const target=$('#page-'+page);if(!target)return false;
-    $$('.page').forEach(p=>p.classList.toggle('active',p===target));
-    $$('.coach-workspace-nav [data-page]').forEach(b=>{
-      const active=b.dataset.page===page;b.classList.toggle('active',active);
+    $('.page').forEach(p=>p.classList.toggle('active',p===target));
+    $('.coach-workspace-nav [data-page]').forEach(b=>{
+      const dashboardOverview=page==='coach-dashboard'&&b.dataset.page==='coach-dashboard'&&b.dataset.dashboardSectionTarget==='overview';
+      const active=page==='coach-dashboard'?dashboardOverview:(b.dataset.page===page);
+      b.classList.toggle('active',active);
       if(active)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');
-    });
-    $$('.coach-workspace-nav [data-workspace-tab]').forEach(b=>{
-      b.classList.remove('active');b.removeAttribute('aria-current');
     });
     text('#coachWorkspacePageTitle',TITLES[page]);
     history.replaceState(history.state,'',HOME+'#'+page);
@@ -140,16 +139,42 @@
     }catch(error){toast(error.message||'Could not save identity profile.',true);}
     finally{if(btn)btn.disabled=false;}
   }
+  function setSidebarActiveForDashboard(section,tab=null){
+    $$('.coach-workspace-nav [data-page], .coach-workspace-nav [data-coach-tab-target]').forEach(b=>{
+      let active=false;
+      if(tab&&b.dataset.coachTabTarget===tab)active=true;
+      else if(!tab&&b.dataset.page==='coach-dashboard'&&b.dataset.dashboardSectionTarget===section)active=true;
+      b.classList.toggle('active',active);
+      if(active){
+        b.setAttribute('aria-current','page');
+        b.closest('details')?.setAttribute('open','');
+      }else b.removeAttribute('aria-current');
+    });
+  }
+
+  function showDashboardSection(section,{focus=false,nav=true}={}){
+    const allowed=['overview','coaching','clients','training','business'];
+    if(!allowed.includes(section))section='overview';
+    $$('[data-dashboard-section]').forEach(b=>b.classList.toggle('active',b.dataset.dashboardSection===section));
+    $$('[data-dashboard-panel]').forEach(panel=>{
+      const active=panel.dataset.dashboardPanel===section;
+      panel.classList.toggle('hidden',!active);
+      panel.classList.toggle('active',active);
+    });
+    const labels={overview:'Dashboard',coaching:'Coaching',clients:'Clients',training:'Training',business:'Business'};
+    text('#coachWorkspacePageTitle',labels[section]||'Dashboard');
+    if(nav)setSidebarActiveForDashboard(section,null);
+    if(focus){
+      const panel=$('[data-dashboard-panel="'+section+'"]');
+      setTimeout(()=>panel?.scrollIntoView({behavior:'smooth',block:'start'}),50);
+    }
+  }
+
   function dashboardTab(tab,{focus=true}={}){
     if(!['clients','groups','services','messages','assignments','leads'].includes(tab))return;
-    const labels={clients:'Clients',groups:'Groups',services:'Services & Pricing',messages:'Messages',assignments:'Assignments',leads:'Leads'};
+    const section=['groups','services'].includes(tab)?'coaching':'clients';
+    showDashboardSection(section,{focus:false,nav:false});
     $$('[data-coach-tab]').forEach(b=>b.classList.toggle('active',b.dataset.coachTab===tab));
-    $$('.coach-workspace-nav [data-page]').forEach(b=>b.classList.remove('active'));
-    $$('.coach-workspace-nav [data-workspace-tab]').forEach(b=>{
-      const active=b.dataset.workspaceTab===tab;
-      b.classList.toggle('active',active);
-      if(active)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');
-    });
     let selected=null;
     ['clients','groups','services','messages','assignments','leads'].forEach(name=>{
       const el=$('#coachPanel'+name[0].toUpperCase()+name.slice(1));
@@ -158,11 +183,14 @@
         if(name===tab)selected=el;
       }
     });
+    const labels={clients:'Clients',groups:'Groups',services:'Services & Pricing',messages:'Messages',assignments:'Assignments',leads:'Leads'};
     text('#coachWorkspacePageTitle',labels[tab]||'Dashboard');
-    if(focus&&selected)setTimeout(()=>selected.scrollIntoView({behavior:'smooth',block:'start'}),60);
+    setSidebarActiveForDashboard(section,tab);
+    if(focus&&selected)setTimeout(()=>selected.scrollIntoView({behavior:'smooth',block:'start'}),50);
   }
+
   async function toolsFor(page){
-    const base='/coach-dashboard-live.js?v=20261014-layout1';
+    const base='/coach-dashboard-live.js?v=20261014-consolidated1';
     const ops='/coach-operations-completion.js?v=20261005-shell1';
     // Reuse Coaching-only feature bundles, never the consumer runtime.
     if(page==='coach-dashboard'||page==='coach-business'){
@@ -214,11 +242,14 @@
     if(cohortHook)return activate(page);
     void navigate(page);return VALID.has(page);
   }
-  async function navigate(page,{tab=null}={}){
+  async function navigate(page,{tab=null,section=null}={}){
     if(!state.user||!VALID.has(page))return false;
     const sequence=++state.sequence;
     activate(page);
-    if(tab)dashboardTab(tab,{focus:false});
+    if(page==='coach-dashboard'){
+      if(tab)dashboardTab(tab,{focus:false});
+      else showDashboardSection(section||'overview',{focus:false});
+    }
     try{
       if(!state.contextKnown||!hasPractice())await refreshContext();
       if(sequence!==state.sequence)return false;
@@ -230,7 +261,10 @@
       $('#coachingSetupNotice')?.remove();
       if(page==='coach-cohorts')cohortHook=true;
       try{await toolsFor(page);}finally{cohortHook=false;}
-      if(sequence===state.sequence&&tab)dashboardTab(tab,{focus:true});
+      if(sequence===state.sequence&&page==='coach-dashboard'){
+        if(tab)dashboardTab(tab,{focus:true});
+        else showDashboardSection(section||'overview',{focus:false});
+      }
       return true;
     }catch(error){
       if(sequence===state.sequence)toast(error.message||'This Coaching tool could not load.',true);
@@ -256,14 +290,19 @@
       const button=e.target.closest?.('[data-page]');
       if(button){
         e.preventDefault();
-        const target=button.dataset.page,credTarget=button.dataset.coachCredTarget;
-        void navigate(target).then(()=>{
+        const target=button.dataset.page;
+        const credTarget=button.dataset.coachCredTarget;
+        const section=button.dataset.dashboardSectionTarget||null;
+        const coachTab=button.dataset.coachTabTarget||null;
+        void navigate(target,{section,tab:coachTab}).then(()=>{
           if(target==='coach-credentials'&&credTarget){
             setTimeout(()=>document.querySelector('[data-coach-cred-tab="'+credTarget+'"]')?.click(),80);
           }
         });
         return;
       }
+      const sectionButton=e.target.closest?.('[data-dashboard-section]');
+      if(sectionButton){e.preventDefault();showDashboardSection(sectionButton.dataset.dashboardSection,{focus:false});return;}
       const tab=e.target.closest?.('[data-workspace-tab]');
       if(tab){e.preventDefault();void navigate(DEFAULT_PAGE,{tab:tab.dataset.workspaceTab});return;}
       const format=e.target.closest?.('[data-coach-format]');
