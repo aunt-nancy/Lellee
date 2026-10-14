@@ -13,7 +13,8 @@
     'coach-cohorts':'Group Programs','coach-scheduler':'Schedule & CRM',
     'coach-credentials':'Credentials & Training','coach-analytics':'Analytics',
     'coach-revenue':'Revenue','coach-automation':'Automation','coach-quickstart':'Quick Start',
-    'training-center':'Training & Learning'
+    'training-center':'Course Center',
+    'training-videos':'Training Videos'
   };
   const VALID=new Set(Object.keys(TITLES));
   const OPERATIONS=new Set(['coach-analytics','coach-revenue','coach-scheduler','coach-automation','coach-credentials','coach-quickstart']);
@@ -182,12 +183,29 @@
       const fresh=!scripts.has(training);
       await loadScript(training);
       if(!fresh)await window.LelleeProfessionalTraining?.refresh?.();
+    }else if(page==='training-videos'){
+      await loadTrainingVideos();
     }
     if(page==='coach-dashboard')await loadScript('/coach-pricing-service-ui.js?v=20261005-shell1');
     if(page==='coach-revenue'||page==='coach-scheduler')await loadScript('/coach-pricing-operations-ui.js?v=20261005-shell1');
     if(page==='coach-scheduler')await loadScript('/coach-consultation-conversion-ui.js?v=20261005-shell1');
     if(page==='coach-dashboard')await loadScript('/coach-paid-operations-ui.js?v=20261005-shell1');
   }
+  async function loadTrainingVideos(){
+    const host=$('#coachTrainingVideoLibrary');if(!host)return;
+    host.innerHTML='<div class="coach-live-empty">Loading training videos…</div>';
+    const {data,error}=await state.client.rpc('get_my_coach_training_video_library');
+    if(error){host.innerHTML='<div class="coach-live-error">'+String(error.message||error)+'</div>';return;}
+    const videos=data?.videos||[],planned=data?.planned||[];
+    if(videos.length){
+      host.innerHTML='<div class="coach-training-video-grid">'+videos.map(v=>
+        '<article class="coach-training-video-card"><div class="coach-training-video-player"><video controls preload="metadata" src="'+String(v.video_url||'').replace(/"/g,'&quot;')+'"></video></div><span class="approved-kicker">VIDEO '+String(v.sequence||'')+'</span><h3>'+String(v.title||'Training Video').replace(/[&<>"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]))+'</h3><p>'+String(v.description||'').replace(/[&<>"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]))+'</p><small>'+String(v.video_minutes||'')+' minutes</small></article>'
+      ).join('')+'</div>';
+      return;
+    }
+    host.innerHTML='<div class="coach-training-video-empty"><h3>No playable training videos are attached yet.</h3><p>The Coaching video library is ready, but the actual video files/URLs still need to be uploaded and approved. The '+planned.length+' planned ethics video modules will appear here automatically once videos are attached.</p><button class="approved-small-action" data-page="training-center">Open Course Center Instead</button></div>';
+  }
+
   let cohortHook=false;
   function featureNavigate(page){
     // Feature callbacks stay inside the Coaching index; unsupported destinations
