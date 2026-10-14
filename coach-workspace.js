@@ -14,7 +14,8 @@
     'coach-analytics':'Analytics',
     'coach-revenue':'Revenue',
     'coach-automation':'Automation',
-    'coach-quickstart':'Quick Start'
+    'coach-quickstart':'Quick Start',
+    'training-center':'Training & Learning'
   };
   const VALID_PAGES=new Set(Object.keys(PAGE_TITLES));
   const MODULES=[
@@ -24,7 +25,8 @@
     '/coach-pricing-service-ui.js?v=20261005-shell1',
     '/coach-pricing-operations-ui.js?v=20261005-shell1',
     '/coach-consultation-conversion-ui.js?v=20261005-shell1',
-    '/coach-paid-operations-ui.js?v=20261005-shell1'
+    '/coach-paid-operations-ui.js?v=20261005-shell1',
+    '/professional-training-runtime.js?v=20261014-coach1'
   ];
   const state={client:null,user:null,context:null,modulesReady:false};
 
@@ -99,6 +101,7 @@
       }
     }
     document.dispatchEvent(new CustomEvent('lellee:coachpagechange',{detail:{page}}));
+    document.dispatchEvent(new CustomEvent('lellee:pagechange',{detail:{page}}));
     return true;
   }
   window.showPage=showPage;
@@ -118,12 +121,25 @@
       if(page){
         e.preventDefault();
         showPage(page.dataset.page);
+        const credTarget=page.dataset.coachCredTarget;
+        if(page.dataset.page==='coach-credentials'&&credTarget){
+          setTimeout(()=>document.querySelector('[data-coach-cred-tab="'+credTarget+'"]')?.click(),120);
+        }
         return;
       }
       const tab=e.target.closest?.('[data-workspace-tab]');
       if(tab){
         e.preventDefault();
         openDashboardTab(tab.dataset.workspaceTab);
+        return;
+      }
+      const format=e.target.closest?.('[data-coach-format]');
+      if(format){
+        e.preventDefault();
+        const selected=format.dataset.coachFormat;
+        document.querySelectorAll('[data-coach-format]').forEach(b=>b.classList.toggle('active',b===format));
+        const map={one_to_one:'coachFormatPanelOneToOne',group:'coachFormatPanelGroup',hybrid:'coachFormatPanelHybrid'};
+        Object.entries(map).forEach(([key,id])=>document.getElementById(id)?.classList.toggle('hidden',key!==selected));
       }
     });
     $('#coachWorkspaceMenu')?.addEventListener('click',()=>{
