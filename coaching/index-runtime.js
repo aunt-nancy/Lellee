@@ -72,9 +72,12 @@
     if(!VALID.has(page))return false;
     const target=$('#page-'+page);if(!target)return false;
     $$('.page').forEach(p=>p.classList.toggle('active',p===target));
-    $$('.coach-workspace-nav [data-page]').forEach(b=>{
+    $('.coach-workspace-nav [data-page]').forEach(b=>{
       const active=b.dataset.page===page;b.classList.toggle('active',active);
       if(active)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');
+    });
+    $('.coach-workspace-nav [data-workspace-tab]').forEach(b=>{
+      b.classList.remove('active');b.removeAttribute('aria-current');
     });
     text('#coachWorkspacePageTitle',TITLES[page]);
     history.replaceState(history.state,'',HOME+'#'+page);
