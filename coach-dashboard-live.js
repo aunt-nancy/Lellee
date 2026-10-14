@@ -35,6 +35,60 @@
   function sb(){ return bridge()?.client; }
   function user(){ return bridge()?.getCurrentUser?.() || null; }
   function pageClick(page){ const el=document.querySelector(`[data-page="${page}"]`); if(el){ el.click(); return true; } return false; }
+  function isPreviewDemo(){ return /\.vercel\.app$/i.test(location.hostname); }
+  function demoClients(programs=[]){
+    const p=programs.find(x=>['active','pilot'].includes(x.status))||programs[0]||null;
+    const pid=p?.id||'demo-program';
+    const pname=p?.name||'Lellee Coaching Demo';
+    const started=['2026-09-08T16:00:00Z','2026-09-15T17:30:00Z','2026-09-22T19:00:00Z','2026-10-01T18:15:00Z','2026-10-07T20:00:00Z'];
+    const names=['TEST · Jordan M.','TEST · Avery R.','TEST · Morgan K.','TEST · Taylor S.','TEST · Casey D.'];
+    const services=['Weekly 1-to-1 Coaching','Recovery Support Coaching','Goal & Accountability Coaching','Reentry Support Coaching','Life Transition Coaching'];
+    return names.map((name,i)=>({
+      id:'demo-client-'+String(i+1).padStart(2,'0'),
+      client_user_id:'demo-user-'+String(i+1).padStart(2,'0'),
+      client_name:name,
+      client_email:'test.client'+String(i+1)+'@example.test',
+      program_id:pid,
+      program_name:pname,
+      service_package_id:null,
+      service_name:services[i],
+      status:i===3?'paused':'active',
+      started_at:started[i],
+      demo:true
+    }));
+  }
+  function applyPreviewDemoContext(ctx){
+    if(!isPreviewDemo()||ctx?.has_business)return ctx;
+    const clients=demoClients(ctx?.programs||[]);
+    return {
+      ...(ctx||{}),
+      has_business:true,
+      member_role:'owner',
+      business:{
+        id:'demo-business',
+        business_name:'Lellee Coaching · Preview Practice',
+        public_name:'Preview Coaching Practice',
+        primary_program_id:clients[0]?.program_id||null,
+        business_model:'solo',
+        target_audience:'Preview/test clients only',
+        bio:'Preview-only coaching workspace used to test dashboard workflows.',
+        credentials_disclosure:'TEST PRACTICE — no real clients',
+        status:'approved',
+        marketplace_visible:false,
+        demo:true
+      },
+      metrics:{clients:5,groups:0,open_seats:0,unread_messages:2},
+      clients,
+      groups:[],
+      services:[],
+      leads:[],
+      messages:[
+        {id:'demo-msg-1',relationship_id:'demo-client-01',group_id:null,sender_user_id:'demo-user-01',sender_label:'Jordan',body:'TEST MESSAGE · Can we review my goals at our next session?',created_at:'2026-10-13T18:45:00Z',read_at:null},
+        {id:'demo-msg-2',relationship_id:'demo-client-03',group_id:null,sender_user_id:'demo-user-03',sender_label:'Morgan',body:'TEST MESSAGE · I completed the action step from last week.',created_at:'2026-10-14T15:20:00Z',read_at:null}
+      ],
+      assignments:[]
+    };
+  }
 
   function ensureDialog(){
     let d = $('#coachLiveDialog');
@@ -75,7 +129,7 @@
       ]);
       if(dashboardResult.error) throw dashboardResult.error;
       if(certificationResult.error) throw certificationResult.error;
-      state.context=dashboardResult.data || {};
+      state.context=applyPreviewDemoContext(dashboardResult.data || {});
       state.certification=certificationResult.data || {};
       state.user=u;
       state.business=state.context.business || null;
@@ -339,10 +393,10 @@
       <article class="coach-live-item">
         <div class="coach-live-row">
           <div><b>${esc(r.client_name||'Client')}</b><small>${esc(r.client_email||'')} ${r.program_name?'· '+esc(r.program_name):''}</small></div>
-          <span class="coach-live-pill">${esc(statusLabel(r.status))}</span>
+          <span class="coach-live-pill">${r.demo?'TEST':esc(statusLabel(r.status))}</span>
         </div>
-        <div class="coach-live-meta"><span class="coach-live-pill">Started ${esc(fmtDate(r.started_at))}</span>${r.service_name?`<span class="coach-live-pill">${esc(r.service_name)}</span>`:''}</div>
-        <div class="coach-live-actions"><button class="primary" data-coach-open-client="${r.id}">Open Client</button><button data-coach-message-rel="${r.id}">Message</button></div>
+        <div class="coach-live-meta"><span class="coach-live-pill">Started ${esc(fmtDate(r.started_at))}</span>${r.service_name?`<span class="coach-live-pill">${esc(r.service_name)}</span>`:''}${r.demo?'<span class="coach-live-pill">PREVIEW ONLY</span>':''}</div>
+        <div class="coach-live-actions"><button class="primary" data-coach-open-client="${r.id}">Open Client</button>${r.demo?'':'<button data-coach-message-rel="'+r.id+'">Message</button>'}</div>
       </article>`).join('') :
       `<div class="coach-live-empty">No active coaching relationships yet. Invite a client after your business is approved.</div>`;
   }
@@ -1223,6 +1277,20 @@
   }
 
   async function loadClientWorkspaceData(client){
+    if(client?.demo){
+      let savedNotes=[];
+      try{savedNotes=JSON.parse(localStorage.getItem('lellee_demo_notes_'+client.id)||'[]')}catch(_){}
+      return {
+        memberships:[],
+        sessions:[{id:'demo-session-'+client.id,title:'TEST Coaching Session',scheduled_start:'2026-10-16T18:00:00Z',duration_minutes:50,session_scope:'one_to_one',status:'scheduled',operational_note:'Preview-only test session'}],
+        shared:[],
+        assignments:[],
+        forms:[],
+        availableIntake:[],
+        followups:[{id:'demo-followup-'+client.id,title:'TEST follow-up',note:'Review progress and next action step.',due_at:'2026-10-17T18:00:00Z',status:'open',created_at:'2026-10-14T18:00:00Z'}],
+        notes:savedNotes
+      };
+    }
     const businessId=state.business?.id;
     if(!businessId) throw new Error('Coach business is unavailable.');
     const [memberships,sessions,shared,recipients,formAssignments,formDefinitions,followups,notes]=await Promise.all([
@@ -1290,18 +1358,19 @@
       '<div class="coach-live-dialog-head"><div><span class="approved-kicker">CLIENT MANAGEMENT</span><h3>'+esc(client.client_name||'Client')+'</h3><p>'+esc(client.client_email||'')+' · '+esc(client.program_name||'Program')+'</p></div><button class="coach-live-close" type="button" data-coach-live-close>×</button></div>'+
       '<div class="coach-client-summary"><span class="coach-live-pill">'+esc(statusLabel(client.status))+'</span><span>Started '+esc(fmtDate(client.started_at))+'</span><span>Consent recorded for this coaching relationship</span></div>'+
       '<nav class="coach-client-workspace-tabs" aria-label="Client workspace"><button class="active" type="button" data-client-workspace-tab="overview">Overview</button><button type="button" data-client-workspace-tab="notes">Client Notes</button></nav>'+
+      (client.demo?'<div class="coach-client-notes-warning coach-client-overview-block"><b>Preview test client.</b><br>This client is synthetic and exists only in the Vercel preview. Actions that would contact or modify a real client are disabled.</div>':'')+
       '<form id="coachClientRelationshipForm" data-relationship-id="'+esc(client.id)+'" class="coach-client-controls coach-client-overview-block">'+
         '<label>Service package<select id="coachClientService" '+(ended?'disabled':'')+'>'+clientServiceOptions(client)+'</select></label>'+
         '<label>Relationship status<select id="coachClientStatus" '+(ended?'disabled':'')+'><option value="active" '+(client.status==='active'?'selected':'')+'>Active</option><option value="paused" '+(client.status==='paused'?'selected':'')+'>Paused</option>'+(ended?'<option value="ended" selected>Ended</option>':'')+'</select></label>'+
-        '<button class="primary" type="submit" '+(ended?'disabled':'')+'>Save Client Setup</button>'+
+        '<button class="primary" type="submit" '+(ended||client.demo?'disabled':'')+'>Save Client Setup</button>'+
       '</form>'+
       '<div class="coach-client-actions coach-client-overview-block">'+
-        '<button type="button" data-client-message="'+esc(client.id)+'">Message</button>'+
-        '<button type="button" data-client-assignment="'+esc(client.id)+'" '+(client.status!=='active'?'disabled':'')+'>New Assignment</button>'+
-        '<button type="button" data-client-session="'+esc(client.id)+'" '+(client.status!=='active'?'disabled':'')+'>Schedule Session</button>'+
-        '<button type="button" data-client-followup="'+esc(client.id)+'">Add Follow-Up</button>'+
-        '<button type="button" data-client-intake="'+esc(client.id)+'" '+(!(data.availableIntake||[]).length||client.status!=='active'?'disabled':'')+'>Assign Intake Form</button>'+
-        (!ended?'<button type="button" class="danger" data-client-end="'+esc(client.id)+'">End Relationship</button>':'')+
+        '<button type="button" data-client-message="'+esc(client.id)+'" '+(client.demo?'disabled':'')+'>Message</button>'+
+        '<button type="button" data-client-assignment="'+esc(client.id)+'" '+(client.status!=='active'||client.demo?'disabled':'')+'>New Assignment</button>'+
+        '<button type="button" data-client-session="'+esc(client.id)+'" '+(client.status!=='active'||client.demo?'disabled':'')+'>Schedule Session</button>'+
+        '<button type="button" data-client-followup="'+esc(client.id)+'" '+(client.demo?'disabled':'')+'>Add Follow-Up</button>'+
+        '<button type="button" data-client-intake="'+esc(client.id)+'" '+(!(data.availableIntake||[]).length||client.status!=='active'||client.demo?'disabled':'')+'>Assign Intake Form</button>'+
+        (!ended&&!client.demo?'<button type="button" class="danger" data-client-end="'+esc(client.id)+'">End Relationship</button>':'')+
       '</div>'+
       '<div class="coach-client-grid coach-client-overview-block">'+
         '<section><h4>Groups</h4>'+groupRows+'</section>'+
@@ -1334,6 +1403,17 @@
     const body=$('#coachClientNoteBody')?.value.trim()||'';
     if(!body) throw new Error('Enter a coaching note before saving.');
     if(body.length>5000) throw new Error('Coaching notes are limited to 5,000 characters.');
+    if(client.demo){
+      let notes=[];
+      try{notes=JSON.parse(localStorage.getItem('lellee_demo_notes_'+client.id)||'[]')}catch(_){}
+      notes.unshift({id:'demo-note-'+Date.now(),note_type:$('#coachClientNoteType')?.value||'general',body,author_user_id:current.id,created_at:new Date().toISOString(),updated_at:new Date().toISOString()});
+      localStorage.setItem('lellee_demo_notes_'+client.id,JSON.stringify(notes.slice(0,100)));
+      const data=await loadClientWorkspaceData(client);
+      state.clientWorkspace=data;
+      renderClientWorkspace(client,data);
+      showClientWorkspaceTab('notes');
+      return;
+    }
     const row={
       business_id:business.id,
       relationship_id:client.id,
