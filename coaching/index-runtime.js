@@ -73,11 +73,11 @@
     if(!VALID.has(page))return false;
     const target=$('#page-'+page);if(!target)return false;
     $$('.page').forEach(p=>p.classList.toggle('active',p===target));
-    $('.coach-workspace-nav [data-page]').forEach(b=>{
+    $$('.coach-workspace-nav [data-page]').forEach(b=>{
       const active=b.dataset.page===page;b.classList.toggle('active',active);
       if(active)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');
     });
-    $('.coach-workspace-nav [data-workspace-tab]').forEach(b=>{
+    $$('.coach-workspace-nav [data-workspace-tab]').forEach(b=>{
       b.classList.remove('active');b.removeAttribute('aria-current');
     });
     text('#coachWorkspacePageTitle',TITLES[page]);
@@ -142,9 +142,9 @@
   function dashboardTab(tab,{focus=true}={}){
     if(!['clients','groups','services','messages','assignments','leads'].includes(tab))return;
     const labels={clients:'Clients',groups:'Groups',services:'Services & Pricing',messages:'Messages',assignments:'Assignments',leads:'Leads'};
-    $('[data-coach-tab]').forEach(b=>b.classList.toggle('active',b.dataset.coachTab===tab));
-    $('.coach-workspace-nav [data-page]').forEach(b=>b.classList.remove('active'));
-    $('.coach-workspace-nav [data-workspace-tab]').forEach(b=>{
+    $$('[data-coach-tab]').forEach(b=>b.classList.toggle('active',b.dataset.coachTab===tab));
+    $$('.coach-workspace-nav [data-page]').forEach(b=>b.classList.remove('active'));
+    $$('.coach-workspace-nav [data-workspace-tab]').forEach(b=>{
       const active=b.dataset.workspaceTab===tab;
       b.classList.toggle('active',active);
       if(active)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');
@@ -269,7 +269,7 @@
       if(format){
         e.preventDefault();
         const selected=format.dataset.coachFormat;
-        $('[data-coach-format]').forEach(b=>b.classList.toggle('active',b===format));
+        $$('[data-coach-format]').forEach(b=>b.classList.toggle('active',b===format));
         const panels={one_to_one:'#coachFormatPanelOneToOne',group:'#coachFormatPanelGroup',hybrid:'#coachFormatPanelHybrid'};
         Object.entries(panels).forEach(([key,selector])=>$(selector)?.classList.toggle('hidden',key!==selected));
         return;
