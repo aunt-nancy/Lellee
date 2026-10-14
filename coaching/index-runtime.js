@@ -1,7 +1,7 @@
 /* Coaching-only index runtime. Consumer /app and index.html are not dependencies. */
 (() => {
   'use strict';
-  const VERSION='coaching-index-20261006-1';
+  const VERSION='coaching-index-20261014-layout1';
   const HOME='/coaching/index.html';
   const DEFAULT_PAGE='coach-dashboard';
   const SUPABASE_URL='https://hkrrxscyhtxmbvxevfkw.supabase.co';
@@ -12,7 +12,8 @@
     'coach-dashboard':'Dashboard','coach-business':'Practice Setup',
     'coach-cohorts':'Group Programs','coach-scheduler':'Schedule & CRM',
     'coach-credentials':'Credentials & Training','coach-analytics':'Analytics',
-    'coach-revenue':'Revenue','coach-automation':'Automation','coach-quickstart':'Quick Start'
+    'coach-revenue':'Revenue','coach-automation':'Automation','coach-quickstart':'Quick Start',
+    'training-center':'Training & Learning'
   };
   const VALID=new Set(Object.keys(TITLES));
   const OPERATIONS=new Set(['coach-analytics','coach-revenue','coach-scheduler','coach-automation','coach-credentials','coach-quickstart']);
@@ -79,6 +80,8 @@
     history.replaceState(history.state,'',HOME+'#'+page);
     $('#coachWorkspaceSidebar')?.classList.remove('open');
     $('#coachWorkspaceMenu')?.setAttribute('aria-expanded','false');
+    document.dispatchEvent(new CustomEvent('lellee:coachpagechange',{detail:{page}}));
+    document.dispatchEvent(new CustomEvent('lellee:pagechange',{detail:{page}}));
     return true;
   }
   function loadScript(src){
@@ -140,7 +143,7 @@
     });
   }
   async function toolsFor(page){
-    const base='/coach-dashboard-live.js?v=20261005-shell1';
+    const base='/coach-dashboard-live.js?v=20261014-layout1';
     const ops='/coach-operations-completion.js?v=20261005-shell1';
     // Reuse Coaching-only feature bundles, never the consumer runtime.
     if(page==='coach-dashboard'||page==='coach-business'){
@@ -157,6 +160,11 @@
       await loadScript('/coach-marketplace.js?v=20261005-shell1');
       // This legacy Coaching-only bundle owns cohort loading through its page hook.
       if(window.showPage!==featureNavigate)window.showPage(page);
+    }else if(page==='training-center'){
+      const training='/professional-training-runtime.js?v=20261014-coach1';
+      const fresh=!scripts.has(training);
+      await loadScript(training);
+      if(!fresh)await window.LelleeProfessionalTraining?.refresh?.();
     }
     if(page==='coach-dashboard')await loadScript('/coach-pricing-service-ui.js?v=20261005-shell1');
     if(page==='coach-revenue'||page==='coach-scheduler')await loadScript('/coach-pricing-operations-ui.js?v=20261005-shell1');
@@ -210,9 +218,27 @@
   function bind(){
     document.addEventListener('click',e=>{
       const button=e.target.closest?.('[data-page]');
-      if(button){e.preventDefault();void navigate(button.dataset.page);return;}
+      if(button){
+        e.preventDefault();
+        const target=button.dataset.page,credTarget=button.dataset.coachCredTarget;
+        void navigate(target).then(()=>{
+          if(target==='coach-credentials'&&credTarget){
+            setTimeout(()=>document.querySelector('[data-coach-cred-tab="'+credTarget+'"]')?.click(),80);
+          }
+        });
+        return;
+      }
       const tab=e.target.closest?.('[data-workspace-tab]');
       if(tab){e.preventDefault();void navigate(DEFAULT_PAGE,{tab:tab.dataset.workspaceTab});return;}
+      const format=e.target.closest?.('[data-coach-format]');
+      if(format){
+        e.preventDefault();
+        const selected=format.dataset.coachFormat;
+        $('[data-coach-format]').forEach(b=>b.classList.toggle('active',b===format));
+        const panels={one_to_one:'#coachFormatPanelOneToOne',group:'#coachFormatPanelGroup',hybrid:'#coachFormatPanelHybrid'};
+        Object.entries(panels).forEach(([key,selector])=>$(selector)?.classList.toggle('hidden',key!==selected));
+        return;
+      }
       const ownTab=e.target.closest?.('[data-coach-tab]');if(ownTab)dashboardTab(ownTab.dataset.coachTab);
     });
     $('#coachWorkspaceMenu')?.addEventListener('click',()=>{
