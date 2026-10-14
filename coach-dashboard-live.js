@@ -28,7 +28,7 @@
     selectedAssignment:null,
     selectedConversation:null,
     loading:false,
-    ethicsStatus:null,ethicsHistory:[],ethicsLesson:null,ethicsWatchSession:null,ethicsHeartbeat:null,professionalStatus:null
+    ethicsStatus:null,ethicsHistory:[],ethicsLesson:null,ethicsWatchSession:null,ethicsHeartbeat:null,professionalStatus:null,goLiveReadiness:null
   };
 
   function bridge(){ return window.LelleeAuthContext?.client ? window.LelleeAuthContext : null; }
@@ -242,8 +242,14 @@
       $('#coachMetricGroups').textContent=ctx.metrics?.groups ?? 0;
       $('#coachMetricCapacity').textContent=ctx.metrics?.open_seats ?? 0;
       $('#coachMetricMessages').textContent=ctx.metrics?.unread_messages ?? 0;
+      const messageBadge=$('#coachHeaderMessageBadge');
+      if(messageBadge){
+        const unread=Number(ctx.metrics?.unread_messages||0);
+        messageBadge.textContent=String(unread);
+        messageBadge.hidden=unread===0;
+      }
       renderReadiness();
-      await Promise.all([loadProfessionalStatus(),loadEthicsDashboard()]);
+      await Promise.all([loadProfessionalStatus(),loadEthicsDashboard(),loadGoLiveReadiness()]);
 
       renderClients();
       renderGroups();
@@ -281,6 +287,49 @@
     host.innerHTML=items.map(([label,complete])=>`
       <span class="coach-readiness-step ${complete?'complete':''}"><b>${complete?'✓':'○'}</b>${esc(label)}</span>
     `).join('');
+  }
+
+  async function loadGoLiveReadiness(){
+    const client=sb(); if(!client) return;
+    const {data,error}=await client.rpc('get_my_coach_go_live_readiness');
+    if(error){
+      console.warn('Coach go-live readiness',error);
+      state.goLiveReadiness=null;
+      renderGoLiveReadiness();
+      return;
+    }
+    state.goLiveReadiness=data||{};
+    renderGoLiveReadiness();
+  }
+
+  function renderGoLiveReadiness(){
+    const host=$('#coachGoLiveGrid'),status=$('#coachGoLiveStatus'),bar=$('#coachGoLiveProgress');
+    if(!host)return;
+    const r=state.goLiveReadiness;
+    if(!r){
+      host.innerHTML='<span class="coach-go-live-step"><b>○</b>Readiness unavailable<small>Refresh the dashboard to try again.</small></span>';
+      if(status){status.textContent='LOCKED';status.classList.remove('ready');}
+      if(bar)bar.style.width='0%';
+      return;
+    }
+    const items=[
+      ['Business approved',!!r.business_approved,'Legitimate practice setup reviewed.'],
+      ['Lellee Orientation',!!r.orientation_complete,'Platform, privacy, boundaries, and expectations.'],
+      ['Ethics',!!r.ethics_complete,'Ethical conduct, scope, confidentiality, and safety.'],
+      ['Entrepreneurship',!!r.entrepreneur_complete,'Running a responsible coaching business.'],
+      ['3 Core Courses',Number(r.core_completed||0)>=Number(r.core_required||3),String(r.core_completed||0)+' of '+String(r.core_required||3)+' verified.'],
+      ['1 Specialty',Number(r.specialty_completed||0)>=Number(r.specialty_required||1),String(r.specialty_completed||0)+' of '+String(r.specialty_required||1)+' verified.']
+    ];
+    host.innerHTML=items.map(([label,complete,detail])=>
+      '<span class="coach-go-live-step '+(complete?'complete':'')+'"><b>'+(complete?'✓':'○')+' '+esc(label)+'</b><small>'+esc(detail)+'</small></span>'
+    ).join('');
+    const total=Math.max(1,Number(r.required_count||8));
+    const complete=Math.min(total,Number(r.completed_count||0));
+    if(bar)bar.style.width=Math.round(complete/total*100)+'%';
+    if(status){
+      status.textContent=r.ready?'READY FOR FINAL REVIEW':'LOCKED';
+      status.classList.toggle('ready',!!r.ready);
+    }
   }
 
   function renderClients(){
@@ -1176,16 +1225,17 @@
   async function loadClientWorkspaceData(client){
     const businessId=state.business?.id;
     if(!businessId) throw new Error('Coach business is unavailable.');
-    const [memberships,sessions,shared,recipients,formAssignments,formDefinitions,followups]=await Promise.all([
+    const [memberships,sessions,shared,recipients,formAssignments,formDefinitions,followups,notes]=await Promise.all([
       sb().from('coach_group_members').select('group_id,status,joined_at').eq('relationship_id',client.id),
       sb().from('coach_schedule_events').select('id,title,scheduled_start,duration_minutes,session_scope,status,operational_note,meeting_location,meeting_url,created_at').eq('relationship_id',client.id).order('scheduled_start',{ascending:false}).limit(50),
       sb().from('coach_shared_items').select('id,share_type,title,shared_content,source_reference,shared_at,revoked_at').eq('relationship_id',client.id).is('revoked_at',null).order('shared_at',{ascending:false}).limit(50),
       sb().from('coach_assignment_recipients').select('assignment_id,completed_at').eq('relationship_id',client.id),
       sb().from('form_assignments').select('id,form_id,due_at,status,completed_at,created_at').eq('business_id',businessId).eq('user_id',client.client_user_id).order('created_at',{ascending:false}).limit(50),
       sb().from('form_definitions').select('id,title,description,form_type,program_id,status').eq('business_id',businessId).order('updated_at',{ascending:false}),
-      sb().from('crm_followups').select('id,title,note,due_at,status,completed_at,created_at').eq('workspace_type','coach').eq('business_id',businessId).eq('related_user_id',client.client_user_id).order('created_at',{ascending:false}).limit(50)
+      sb().from('crm_followups').select('id,title,note,due_at,status,completed_at,created_at').eq('workspace_type','coach').eq('business_id',businessId).eq('related_user_id',client.client_user_id).order('created_at',{ascending:false}).limit(50),
+      sb().from('coach_client_notes').select('id,note_type,body,author_user_id,created_at,updated_at').eq('relationship_id',client.id).order('created_at',{ascending:false}).limit(100)
     ]);
-    for(const result of [memberships,sessions,shared,recipients,formAssignments,formDefinitions,followups]){
+    for(const result of [memberships,sessions,shared,recipients,formAssignments,formDefinitions,followups,notes]){
       if(result.error) throw result.error;
     }
     const assignmentMap=new Map((state.context?.assignments||[]).map(a=>[a.id,a]));
@@ -1200,7 +1250,8 @@
       assignments:assigned,
       forms,
       availableIntake,
-      followups:followups.data||[]
+      followups:followups.data||[],
+      notes:notes.data||[]
     };
   }
 
@@ -1230,16 +1281,21 @@
     const sharedRows=(data.shared||[]).map(x=>'<article class="coach-client-shared"><div class="coach-live-row"><div><b>'+esc(x.title||statusLabel(x.share_type))+'</b><small>'+esc(statusLabel(x.share_type))+' · shared '+esc(fmtDateTime(x.shared_at))+'</small></div><span class="coach-live-pill">CLIENT SHARED</span></div>'+(x.shared_content?'<p>'+esc(x.shared_content)+'</p>':'')+'</article>').join('')||
       '<div class="coach-live-empty">This client has not shared any Lellee items with this coach.</div>';
 
+    const noteRows=(data.notes||[]).map(n=>
+      '<article class="coach-client-note"><div class="coach-client-note-head"><div><b>'+esc(statusLabel(n.note_type||'general'))+'</b><small>'+(n.author_user_id===state.user?.id?'You':'Practice team')+'</small></div><small>'+esc(fmtDateTime(n.created_at))+'</small></div><p>'+esc(n.body||'')+'</p></article>'
+    ).join('')||'<div class="coach-live-empty">No coaching notes yet.</div>';
+
     const ended=client.status==='ended';
     inner.innerHTML=
       '<div class="coach-live-dialog-head"><div><span class="approved-kicker">CLIENT MANAGEMENT</span><h3>'+esc(client.client_name||'Client')+'</h3><p>'+esc(client.client_email||'')+' · '+esc(client.program_name||'Program')+'</p></div><button class="coach-live-close" type="button" data-coach-live-close>×</button></div>'+
       '<div class="coach-client-summary"><span class="coach-live-pill">'+esc(statusLabel(client.status))+'</span><span>Started '+esc(fmtDate(client.started_at))+'</span><span>Consent recorded for this coaching relationship</span></div>'+
-      '<form id="coachClientRelationshipForm" data-relationship-id="'+esc(client.id)+'" class="coach-client-controls">'+
+      '<nav class="coach-client-workspace-tabs" aria-label="Client workspace"><button class="active" type="button" data-client-workspace-tab="overview">Overview</button><button type="button" data-client-workspace-tab="notes">Client Notes</button></nav>'+
+      '<form id="coachClientRelationshipForm" data-relationship-id="'+esc(client.id)+'" class="coach-client-controls coach-client-overview-block">'+
         '<label>Service package<select id="coachClientService" '+(ended?'disabled':'')+'>'+clientServiceOptions(client)+'</select></label>'+
         '<label>Relationship status<select id="coachClientStatus" '+(ended?'disabled':'')+'><option value="active" '+(client.status==='active'?'selected':'')+'>Active</option><option value="paused" '+(client.status==='paused'?'selected':'')+'>Paused</option>'+(ended?'<option value="ended" selected>Ended</option>':'')+'</select></label>'+
         '<button class="primary" type="submit" '+(ended?'disabled':'')+'>Save Client Setup</button>'+
       '</form>'+
-      '<div class="coach-client-actions">'+
+      '<div class="coach-client-actions coach-client-overview-block">'+
         '<button type="button" data-client-message="'+esc(client.id)+'">Message</button>'+
         '<button type="button" data-client-assignment="'+esc(client.id)+'" '+(client.status!=='active'?'disabled':'')+'>New Assignment</button>'+
         '<button type="button" data-client-session="'+esc(client.id)+'" '+(client.status!=='active'?'disabled':'')+'>Schedule Session</button>'+
@@ -1247,14 +1303,50 @@
         '<button type="button" data-client-intake="'+esc(client.id)+'" '+(!(data.availableIntake||[]).length||client.status!=='active'?'disabled':'')+'>Assign Intake Form</button>'+
         (!ended?'<button type="button" class="danger" data-client-end="'+esc(client.id)+'">End Relationship</button>':'')+
       '</div>'+
-      '<div class="coach-client-grid">'+
+      '<div class="coach-client-grid coach-client-overview-block">'+
         '<section><h4>Groups</h4>'+groupRows+'</section>'+
         '<section><h4>Sessions</h4>'+sessionRows+'</section>'+
         '<section><h4>Assignments</h4>'+assignmentRows+'</section>'+
         '<section><h4>Forms</h4>'+formRows+'</section>'+
         '<section><h4>Follow-Ups</h4>'+followupRows+'</section>'+
         '<section class="wide"><h4>Shared by Client</h4><p class="coach-client-privacy">Only information the client explicitly shared with this coaching relationship appears here. Private journals, private check-ins and other unshared Lellee data are not available to the coach.</p>'+sharedRows+'</section>'+
-      '</div>';
+      '</div>'+
+      '<section class="coach-client-notes-panel hidden" id="coachClientNotesPanel">'+
+        '<div class="coach-client-notes-warning"><b>Coaching notes—not clinical records.</b><br>Record objective coaching activity, progress, and agreed next steps. Do not copy private journal entries, diagnoses, treatment notes, or unnecessary sensitive information.</div>'+
+        '<form id="coachClientNoteForm" class="coach-client-note-form" data-relationship-id="'+esc(client.id)+'">'+
+          '<label>Note type<select id="coachClientNoteType"><option value="general">General</option><option value="progress">Progress</option><option value="session">Session</option><option value="goal">Goal</option><option value="follow_up">Follow-Up</option></select></label>'+
+          '<label>Coaching note<textarea id="coachClientNoteBody" maxlength="5000" required placeholder="Objective coaching note or agreed next step…"></textarea></label>'+
+          '<button type="submit">Save Note</button>'+
+        '</form>'+
+        '<div class="coach-client-notes-list">'+noteRows+'</div>'+
+      '</section>';
+  }
+
+  function showClientWorkspaceTab(tab){
+    document.querySelectorAll('[data-client-workspace-tab]').forEach(b=>b.classList.toggle('active',b.dataset.clientWorkspaceTab===tab));
+    document.querySelectorAll('.coach-client-overview-block').forEach(el=>el.classList.toggle('hidden',tab!=='overview'));
+    $('#coachClientNotesPanel')?.classList.toggle('hidden',tab!=='notes');
+  }
+
+  async function saveClientNote(){
+    const client=state.selectedClient, business=state.business, current=state.user;
+    if(!client||!business||!current) throw new Error('Client workspace is unavailable.');
+    const body=$('#coachClientNoteBody')?.value.trim()||'';
+    if(!body) throw new Error('Enter a coaching note before saving.');
+    if(body.length>5000) throw new Error('Coaching notes are limited to 5,000 characters.');
+    const row={
+      business_id:business.id,
+      relationship_id:client.id,
+      author_user_id:current.id,
+      note_type:$('#coachClientNoteType')?.value||'general',
+      body
+    };
+    const {error}=await sb().from('coach_client_notes').insert(row);
+    if(error) throw error;
+    const data=await loadClientWorkspaceData(client);
+    state.clientWorkspace=data;
+    renderClientWorkspace(client,data);
+    showClientWorkspaceTab('notes');
   }
 
   async function openClientManagement(relationshipId){
@@ -1544,6 +1636,9 @@
     const openClient=e.target.closest('[data-coach-open-client]');
     if(openClient){ e.preventDefault(); openClientManagement(openClient.dataset.coachOpenClient); }
 
+    const clientWorkspaceTab=e.target.closest('[data-client-workspace-tab]');
+    if(clientWorkspaceTab){e.preventDefault();showClientWorkspaceTab(clientWorkspaceTab.dataset.clientWorkspaceTab);}
+
     const clientMessage=e.target.closest('[data-client-message]');
     if(clientMessage){e.preventDefault();openConversation('rel',clientMessage.dataset.clientMessage).catch(function(err){alert(err.message||String(err));});}
     const clientAssignment=e.target.closest('[data-client-assignment]');
@@ -1594,6 +1689,7 @@
     if(id==='coachAssignmentForm') run(createAssignment);
     if(id==='coachMessageForm') run(sendMessage);
     if(id==='coachClientRelationshipForm') run(saveClientRelationship);
+    if(id==='coachClientNoteForm') run(saveClientNote);
     if(id==='coachClientSessionForm') run(createClientSession);
     if(id==='coachClientFollowupForm') run(createClientFollowup);
     if(id==='coachClientIntakeForm') run(assignClientIntake);
