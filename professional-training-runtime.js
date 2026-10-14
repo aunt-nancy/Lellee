@@ -55,7 +55,8 @@ function mount(){
  var box=q('.b5-page',page)||page;
  if(q('#professionalTrainingV2',box)){root=q('#professionalTrainingV2',box);return true}
  ensureStyles();
- box.innerHTML='<div class="pt2" id="professionalTrainingV2"><div class="pt2-head"><div><span class="pt2-kicker">LELLEE PROFESSIONAL TRAINING</span><h2>Build skills in stages, with real review gates.</h2><p>Professional courses use sequential modules, applied assessments and human-reviewed capstones. Course completion records learning only; it does not create a professional license, clinical credential or legal authority.</p></div><div class="pt2-actions"><button class="pt2-btn" data-pt2-back>← Professional Hub</button></div></div><div id="pt2Body"><div class="pt2-note">Loading professional training…</div></div></div>';
+ var backLabel=document.body.dataset.coachingIndex?'← Coaching Dashboard':'← Professional Hub';
+ box.innerHTML='<div class="pt2" id="professionalTrainingV2"><div class="pt2-head"><div><span class="pt2-kicker">LELLEE PROFESSIONAL TRAINING</span><h2>Build skills in stages, with real review gates.</h2><p>Professional courses use sequential modules, applied assessments and human-reviewed capstones. Course completion records learning only; it does not create a professional license, clinical credential or legal authority.</p></div><div class="pt2-actions"><button class="pt2-btn" data-pt2-back>'+backLabel+'</button></div></div><div id="pt2Body"><div class="pt2-note">Loading professional training…</div></div></div>';
  root=q('#professionalTrainingV2',box);
  return true;
 }
@@ -185,7 +186,7 @@ async function buyCourse(key){
  }catch(error){toast(error.message||'Secure checkout is unavailable.',true)}
 }
 document.addEventListener('click',function(e){
- var back=e.target.closest('[data-pt2-back]');if(back){e.preventDefault();navigate('professional-hub');return}
+ var back=e.target.closest('[data-pt2-back]');if(back){e.preventDefault();navigate(document.body.dataset.coachingIndex?'coach-dashboard':'professional-hub');return}
  var catalog=e.target.closest('[data-pt2-catalog]');if(catalog){e.preventDefault();state.course=null;state.module=null;renderCatalog();return}
  var course=e.target.closest('[data-pt2-course]');if(course){e.preventDefault();openCourse(course.dataset.pt2Course);return}
  var buy=e.target.closest('[data-pt2-buy]');if(buy){e.preventDefault();buyCourse(buy.dataset.pt2Buy);return}
