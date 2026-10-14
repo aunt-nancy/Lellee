@@ -135,12 +135,26 @@
     }catch(error){toast(error.message||'Could not save identity profile.',true);}
     finally{if(btn)btn.disabled=false;}
   }
-  function dashboardTab(tab){
+  function dashboardTab(tab,{focus=true}={}){
     if(!['clients','groups','services','messages','assignments','leads'].includes(tab))return;
-    $$('[data-coach-tab]').forEach(b=>b.classList.toggle('active',b.dataset.coachTab===tab));
-    ['clients','groups','services','messages','assignments','leads'].forEach(name=>{
-      $('#coachPanel'+name[0].toUpperCase()+name.slice(1))?.classList.toggle('hidden',name!==tab);
+    const labels={clients:'Clients',groups:'Groups',services:'Services & Pricing',messages:'Messages',assignments:'Assignments',leads:'Leads'};
+    $('[data-coach-tab]').forEach(b=>b.classList.toggle('active',b.dataset.coachTab===tab));
+    $('.coach-workspace-nav [data-page]').forEach(b=>b.classList.remove('active'));
+    $('.coach-workspace-nav [data-workspace-tab]').forEach(b=>{
+      const active=b.dataset.workspaceTab===tab;
+      b.classList.toggle('active',active);
+      if(active)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');
     });
+    let selected=null;
+    ['clients','groups','services','messages','assignments','leads'].forEach(name=>{
+      const el=$('#coachPanel'+name[0].toUpperCase()+name.slice(1));
+      if(el){
+        el.classList.toggle('hidden',name!==tab);
+        if(name===tab)selected=el;
+      }
+    });
+    text('#coachWorkspacePageTitle',labels[tab]||'Dashboard');
+    if(focus&&selected)setTimeout(()=>selected.scrollIntoView({behavior:'smooth',block:'start'}),60);
   }
   async function toolsFor(page){
     const base='/coach-dashboard-live.js?v=20261014-layout1';
@@ -182,7 +196,7 @@
     if(!state.user||!VALID.has(page))return false;
     const sequence=++state.sequence;
     activate(page);
-    if(tab)dashboardTab(tab);
+    if(tab)dashboardTab(tab,{focus:false});
     try{
       if(!state.contextKnown||!hasPractice())await refreshContext();
       if(sequence!==state.sequence)return false;
@@ -194,7 +208,7 @@
       $('#coachingSetupNotice')?.remove();
       if(page==='coach-cohorts')cohortHook=true;
       try{await toolsFor(page);}finally{cohortHook=false;}
-      if(sequence===state.sequence&&tab)dashboardTab(tab);
+      if(sequence===state.sequence&&tab)dashboardTab(tab,{focus:true});
       return true;
     }catch(error){
       if(sequence===state.sequence)toast(error.message||'This Coaching tool could not load.',true);
