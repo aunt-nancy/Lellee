@@ -39,3 +39,46 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}.hidden{display:
 @media(max-width:650px){
   .coach-workspace-content{padding:16px 10px 40px}.approved-inner{padding:15px}.approved-inner-head{display:block}.approved-inner-head>.approved-link{margin-top:10px}.coach-business-grid,.coach-tax-grid,.analytics-two-col{grid-template-columns:1fr}.coach-wide,.coach-tax-grid .wide{grid-column:auto}.coach-business-value{grid-template-columns:1fr}.coach-metric-grid,.analytics-kpi-grid,.access-summary-grid,.calendar-summary-grid,.automation-summary-grid,.forms-summary-grid,.coach-cohort-metrics{grid-template-columns:1fr 1fr}
 }
+
+/* coach-dashboard-layout-20261014 */
+.coach-header-messages{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--coach-line);background:#fff;color:#315e58;border-radius:10px;padding:8px 10px;font-size:.7rem;font-weight:850}
+.coach-header-messages:hover{background:#f5faf8}.coach-header-messages span{display:grid;place-items:center;min-width:19px;height:19px;padding:0 5px;border-radius:999px;background:var(--coach-green);color:#fff;font-size:.58rem}
+.coach-dashboard-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:16px}
+.coach-dashboard-actions section{border:1px solid var(--coach-line);border-radius:13px;background:#fbfcfb;padding:13px}
+.coach-dashboard-actions section p{margin:5px 0 10px;color:var(--coach-muted);font-size:.64rem;line-height:1.4}
+.coach-dashboard-actions section>div{display:flex;gap:6px;flex-wrap:wrap}
+.coach-metric-explain{display:block;margin-top:6px;color:var(--coach-muted);font-style:normal;font-size:.58rem;line-height:1.35}
+
+.coach-format-card,.coach-training-card,.coach-go-live-card,.coach-business-guide{border:1px solid var(--coach-line);border-radius:14px;background:#fbfcfb;padding:15px;margin:14px 0}
+.coach-format-card .coach-panel-head p,.coach-business-guide .coach-panel-head p{margin:4px 0 0;color:var(--coach-muted);font-size:.7rem;line-height:1.45}
+.coach-format-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:10px 0}
+.coach-format-tabs button{border:1px solid #d9e3df;background:#fff;border-radius:11px;padding:10px;text-align:left;color:#40504d}
+.coach-format-tabs button.active{border-color:#99bdb5;background:#eef6f3;color:#214f49}
+.coach-format-tabs b{display:block;font-size:.72rem}.coach-format-tabs small{display:block;margin-top:4px;color:var(--coach-muted);font-size:.58rem;line-height:1.35}
+.coach-format-panel{border-top:1px solid var(--coach-line);padding-top:11px}.coach-format-panel p{margin:0 0 9px;color:var(--coach-muted);font-size:.68rem;line-height:1.45}.coach-format-panel>div{display:flex;gap:7px;flex-wrap:wrap}
+
+.coach-training-card{display:flex;align-items:center;justify-content:space-between;gap:18px;background:#f7faf8}
+.coach-training-card h3{margin:3px 0 5px;font-size:1rem;color:#28403d}.coach-training-card p{margin:0;color:var(--coach-muted);font-size:.68rem;line-height:1.45;max-width:760px}
+.coach-training-actions{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}.approved-small-action.primary{background:var(--coach-green);color:#fff;border-color:var(--coach-green)}
+
+.coach-go-live-head{display:flex;justify-content:space-between;gap:16px;align-items:flex-start}.coach-go-live-head h3{margin:3px 0 5px;color:#28403d}.coach-go-live-head p{margin:0;color:var(--coach-muted);font-size:.68rem;line-height:1.45}
+.coach-go-live-status{border:1px solid #ead5a9;background:#fff7e7;color:#7f5711;border-radius:999px;padding:6px 9px;font-size:.58rem;font-weight:900;white-space:nowrap}.coach-go-live-status.ready{border-color:#cfe1d7;background:#eef8f1;color:#17623f}
+.coach-go-live-progress{height:7px;background:#e7ece9;border-radius:999px;overflow:hidden;margin:12px 0}.coach-go-live-progress span{display:block;height:100%;width:0;background:var(--coach-green);transition:width .2s ease}
+.coach-go-live-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-bottom:10px}.coach-go-live-step{border:1px solid var(--coach-line);background:#fff;border-radius:10px;padding:9px;font-size:.62rem;color:#586662}.coach-go-live-step b{display:block;margin-bottom:3px;color:#815c24}.coach-go-live-step.complete b{color:#27634e}.coach-go-live-step small{display:block;color:var(--coach-muted);font-size:.56rem;line-height:1.35;margin-top:2px}
+
+.coach-business-guide-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.coach-business-guide-grid article{border:1px solid var(--coach-line);background:#fff;border-radius:11px;padding:11px}.coach-business-guide-grid b{display:block;font-size:.68rem;color:#314a46}.coach-business-guide-grid small{display:block;margin-top:4px;color:var(--coach-muted);font-size:.59rem;line-height:1.4}
+
+.coach-client-workspace-tabs{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 12px;border-bottom:1px solid #e1e8e5;padding-bottom:9px}.coach-client-workspace-tabs button{border:1px solid #d8e1de;background:#fff;border-radius:999px;padding:7px 10px;font-size:.65rem;font-weight:850;color:#51625f}.coach-client-workspace-tabs button.active{background:#e9f4f0;color:#285c55;border-color:#cbe0d9}
+.coach-client-notes-panel{border:1px solid #dfe8e3;background:#fbfcfb;border-radius:13px;padding:13px}.coach-client-notes-warning{border:1px solid #eadfc9;background:#fffaf0;border-radius:10px;padding:10px 11px;font-size:.64rem;line-height:1.45;color:#705c34;margin-bottom:10px}
+.coach-client-note-form{display:grid;grid-template-columns:180px 1fr auto;gap:8px;align-items:end;margin-bottom:12px}.coach-client-note-form label{display:grid;gap:5px;font-size:.64rem;font-weight:800;color:#4d5c59}.coach-client-note-form textarea,.coach-client-note-form select{width:100%;border:1px solid #d9e2de;border-radius:9px;padding:9px;background:#fff}.coach-client-note-form textarea{min-height:72px;resize:vertical}.coach-client-note-form button{border:0;border-radius:9px;background:var(--coach-green);color:#fff;padding:10px 12px;font-weight:850}
+.coach-client-notes-list{display:grid;gap:8px}.coach-client-note{border:1px solid #e1e8e5;background:#fff;border-radius:11px;padding:10px}.coach-client-note-head{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.coach-client-note-head small{color:var(--coach-muted);font-size:.56rem}.coach-client-note p{margin:7px 0 0;white-space:pre-wrap;font-size:.68rem;line-height:1.5;color:#3f4d4a}
+
+@media(max-width:980px){
+  .coach-dashboard-actions,.coach-business-guide-grid{grid-template-columns:1fr 1fr}.coach-go-live-grid{grid-template-columns:1fr 1fr}
+  .coach-training-card{align-items:flex-start}.coach-training-actions{justify-content:flex-start}
+}
+@media(max-width:650px){
+  .coach-workspace-account>span{display:none}.coach-dashboard-actions,.coach-format-tabs,.coach-business-guide-grid,.coach-go-live-grid{grid-template-columns:1fr}
+  .coach-training-card,.coach-go-live-head{display:block}.coach-training-actions{margin-top:10px}.coach-go-live-status{display:inline-flex;margin-top:9px}
+  .coach-client-note-form{grid-template-columns:1fr}.coach-client-note-form button{width:100%}
+}
