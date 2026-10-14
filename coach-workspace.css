@@ -82,3 +82,14 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}.hidden{display:
   .coach-training-card,.coach-go-live-head{display:block}.coach-training-actions{margin-top:10px}.coach-go-live-status{display:inline-flex;margin-top:9px}
   .coach-client-note-form{grid-template-columns:1fr}.coach-client-note-form button{width:100%}
 }
+
+.coach-training-video-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.coach-training-video-card{border:1px solid var(--coach-line);background:#fff;border-radius:14px;padding:13px}
+.coach-training-video-player{background:#111;border-radius:10px;overflow:hidden;margin-bottom:10px}
+.coach-training-video-player video{display:block;width:100%;aspect-ratio:16/9;background:#111}
+.coach-training-video-card h3{margin:4px 0 6px;font-size:.95rem;color:#28403d}
+.coach-training-video-card p{margin:0 0 8px;color:var(--coach-muted);font-size:.66rem;line-height:1.45}
+.coach-training-video-card small{color:var(--coach-muted);font-size:.58rem}
+.coach-training-video-empty{border:1px solid var(--coach-line);background:#fbfcfb;border-radius:14px;padding:18px}
+.coach-training-video-empty h3{margin:0 0 6px;color:#28403d}.coach-training-video-empty p{margin:0 0 12px;color:var(--coach-muted);font-size:.7rem;line-height:1.5}
+@media(max-width:700px){.coach-training-video-grid{grid-template-columns:1fr}}
