@@ -1,0 +1,62 @@
+name: Lellee Circle UI Regression
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'trusted-circle.js'
+      - 'trusted-circle.css'
+      - 'index.html'
+      - 'tests/trusted-circle/**'
+      - '.github/workflows/lellee-circle-ui.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: circle-ui-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  isolated-circle-ui:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Syntax checks
+        run: |
+          node --check trusted-circle.js
+          node --check tests/trusted-circle/mock.js
+          python -m py_compile tests/trusted-circle/browser.py
+      - name: Install pinned test driver and Chromium
+        run: |
+          python -m pip install playwright==1.55.0
+          python -m playwright install --with-deps chromium
+      - name: Test current feature-section DOM with synthetic responses
+        run: python tests/trusted-circle/browser.py
+      - name: Record static integration evidence (no keys or private records)
+        if: always()
+        run: |
+          python - <<'PY'
+          import hashlib,json,pathlib,re
+          root=pathlib.Path('.')
+          out=root/'tests/trusted-circle/evidence'
+          out.mkdir(parents=True,exist_ok=True)
+          files=['index.html','trusted-circle.js','trusted-circle.css','auth.html']
+          evidence={}
+          for name in files:
+              data=(root/name).read_bytes()
+              source=data.decode('utf-8')
+              evidence[name]={'sha256':hashlib.sha256(data).hexdigest(),'supabase_origins':sorted(set(re.findall(r'https://[a-z0-9]+\.supabase\.co',source)))}
+          (out/'static-integration.json').write_text(json.dumps(evidence,indent=2))
+          print(json.dumps(evidence,indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lellee-circle-ui-evidence
+          path: tests/trusted-circle/evidence/
+          retention-days: 14
