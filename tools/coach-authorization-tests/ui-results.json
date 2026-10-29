@@ -1,0 +1,25 @@
+{
+  "scope": "Headless Chromium; real page and scripts; mocked Auth/backend",
+  "results": [
+    {
+      "scenario": "new",
+      "passed": true
+    },
+    {
+      "scenario": "approved",
+      "passed": true
+    },
+    {
+      "scenario": "expired",
+      "passed": true
+    },
+    {
+      "scenario": "revoked",
+      "passed": true
+    },
+    {
+      "scenario": "backend_failure",
+      "passed": true
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "devDependencies": {
+    "@electric-sql/pglite": "0.5.13",
+    "playwright": "1.62.1"
+  },
+  "name": "lellee-independent-coach-authorization-tests",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test:sql": "node run.mjs",
+    "test:ui": "node ui.mjs",
+    "test": "node run.mjs && node ui.mjs"
+  }
+}

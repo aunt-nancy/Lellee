@@ -1,7 +1,7 @@
 /* Coaching-only index runtime. Consumer /app and index.html are not dependencies. */
 (() => {
   'use strict';
-  const VERSION='coaching-index-20261006-1';
+  const VERSION='coaching-index-20261029-service-authorization';
   const HOME='/coaching/index.html';
   const DEFAULT_PAGE='coach-dashboard';
   const SUPABASE_URL='https://hkrrxscyhtxmbvxevfkw.supabase.co';
@@ -16,7 +16,7 @@
   };
   const VALID=new Set(Object.keys(TITLES));
   const OPERATIONS=new Set(['coach-analytics','coach-revenue','coach-scheduler','coach-automation','coach-credentials','coach-quickstart']);
-  const state={client:null,user:null,context:null,contextKnown:false,ready:false,sequence:0};
+  const state={client:null,user:null,context:null,contextKnown:false,ready:false,sequence:0,servicePrograms:[]};
   const scripts=new Map();
   let countVisible=false;
   let authSubscription=null;
@@ -107,6 +107,29 @@
     state.context=data||{};state.contextKnown=true;loadTaxProfile(state.context.business);
     return state.context;
   }
+  async function refreshServiceAuthorization(){
+    state.servicePrograms=[];
+    const notice=$('#coachingServiceAuthorizationNotice');
+    try{
+      const {data,error}=await bounded(state.client.rpc('get_my_independent_coach_service_authorization'),'Service approval');
+      if(error)throw error;
+      state.servicePrograms=Array.isArray(data?.programs)?data.programs:[];
+      const authorized=state.servicePrograms.filter(p=>p.authorized===true).length;
+      const attention=state.servicePrograms.some(p=>['expired','revoked','approval_attention'].includes(p.status));
+      if(notice)notice.textContent=authorized
+        ? 'Client services are approved for '+authorized+' program'+(authorized===1?'':'s')+'. Other programs remain in onboarding. Current approval is checked again when you use client services.'
+        : attention
+          ? 'Client service approval needs attention. Your setup and training remain available. Review Credentials & Training before resuming client services.'
+          : 'Onboarding in progress. You can complete setup, submit training and prepare draft services. Client services require verified orientation, onboarding certification and business approval.';
+    }catch(_){
+      if(notice)notice.textContent='Service approval could not be checked. Your setup and training remain available. Client services require verified approval.';
+    }
+  }
+  // This presentation helper cannot grant services: the database guards every write.
+  window.LelleeIndependentCoachAuthorization={
+    canOfferService:programId=>state.servicePrograms.some(p=>p.program_id===programId&&p.authorized===true),
+    refresh:refreshServiceAuthorization
+  };
   function loadTaxProfile(b){
     if(!b)return;
     const fields={coachTaxLegalName:b.legal_business_name||b.business_name||'',coachTaxEntityType:b.business_entity_type||'sole_proprietor',coachTaxClassification:b.business_tax_classification||'',coachTaxIdType:b.tax_id_type||'ein',coachTaxLast4:b.tax_id_last4||'',coachTaxAddress1:b.business_address_line1||'',coachTaxAddress2:b.business_address_line2||'',coachTaxCity:b.business_city||'',coachTaxState:b.business_state||'',coachTaxPostal:b.business_postal_code||''};
@@ -140,7 +163,7 @@
     });
   }
   async function toolsFor(page){
-    const base='/coach-dashboard-live.js?v=20261005-shell1';
+    const base='/coach-dashboard-live.js?v=20261029-service-authorization';
     const ops='/coach-operations-completion.js?v=20261005-shell1';
     // Reuse Coaching-only feature bundles, never the consumer runtime.
     if(page==='coach-dashboard'||page==='coach-business'){
@@ -177,6 +200,7 @@
     if(tab)dashboardTab(tab);
     try{
       if(!state.contextKnown||!hasPractice())await refreshContext();
+      await refreshServiceAuthorization();
       if(sequence!==state.sequence)return false;
       if(!hasPractice()&&page!=='coach-business'){
         if(page==='coach-dashboard')setupNotice();

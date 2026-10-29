@@ -478,7 +478,7 @@
 
   function openService(){
     if(!businessRequired()) return;
-    dialog('New Service','Define the offer now. Coach payment collection remains disabled.',`
+    dialog('New Service','Prepare your offer now. Services stay in draft until orientation, onboarding certification and business approval are verified.',`
       <form id="coachServiceForm">
         <div class="coach-live-form">
           <label class="wide">Service name<input id="liveServiceName" required></label>
@@ -507,7 +507,7 @@
       sessions_included:$('#liveServiceSessions').value===''?null:Number($('#liveServiceSessions').value),
       group_capacity:$('#liveServiceCapacity').value===''?null:Number($('#liveServiceCapacity').value),
       individual_touchpoints:$('#liveServiceTouchpoints').value===''?null:Number($('#liveServiceTouchpoints').value),
-      active:true
+      active:window.LelleeIndependentCoachAuthorization?.canOfferService($('#liveServiceProgram').value)===true
     };
     const {error}=await sb().from('coach_service_packages').insert(row);
     if(error) throw error;
@@ -1520,18 +1520,18 @@
       openConversation(conversation.dataset.coachConversationKind,conversation.dataset.coachConversationId).catch(function(err){alert(err.message||String(err));});
     }
 
-    const openService=e.target.closest('[data-coach-open-service]');
-    if(openService){ e.preventDefault(); openServiceManagement(openService.dataset.coachOpenService); }
+    const serviceTarget=e.target.closest('[data-coach-open-service]');
+    if(serviceTarget){ e.preventDefault(); openServiceManagement(serviceTarget.dataset.coachOpenService); }
 
-    const openLead=e.target.closest('[data-coach-open-lead]');
-    if(openLead){ e.preventDefault(); openLeadManagement(openLead.dataset.coachOpenLead).catch(err=>alert(err.message||String(err))); }
+    const leadTarget=e.target.closest('[data-coach-open-lead]');
+    if(leadTarget){ e.preventDefault(); openLeadManagement(leadTarget.dataset.coachOpenLead).catch(err=>alert(err.message||String(err))); }
     const leadInvite=e.target.closest('[data-lead-invite]');
     if(leadInvite){ e.preventDefault(); inviteLeadAsClient(leadInvite.dataset.leadInvite).catch(err=>alert(err.message||String(err))); }
     const leadFollowup=e.target.closest('[data-lead-followup]');
     if(leadFollowup){ e.preventDefault(); openLeadFollowup(leadFollowup.dataset.leadFollowup); }
 
-    const openGroup=e.target.closest('[data-coach-open-group]');
-    if(openGroup){ e.preventDefault(); openGroupManagement(openGroup.dataset.coachOpenGroup); }
+    const groupTarget=e.target.closest('[data-coach-open-group]');
+    if(groupTarget){ e.preventDefault(); openGroupManagement(groupTarget.dataset.coachOpenGroup); }
 
     const groupClientToggle=e.target.closest('[data-group-client-toggle]');
     if(groupClientToggle){
