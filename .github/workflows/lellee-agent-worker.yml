@@ -2,13 +2,8 @@ name: Lellee Agent Worker
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "*/5 * * * *"
-  push:
-    branches:
-      - main
-    paths:
-      - ".github/workflows/lellee-agent-worker.yml"
+
+# Scheduled checks run in Supabase Cron; this is the manual fallback.
 
 jobs:
   run-lellee-agents:
