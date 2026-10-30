@@ -29,3 +29,35 @@ jobs:
       - run: node approval-lock.mjs
       - run: node native-pg17.mjs
       # No deployment, production database, email, checkout or repository secrets.
+  real-auth-contract:
+    needs: isolated-postgresql-17
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      FIXTURE_WORKDIR: ${{ runner.temp }}/lellee-auth-fixture
+      LELLEE_SUPABASE_TEST_STATUS_FILE: ${{ runner.temp }}/lellee-auth-status.json
+      LELLEE_ISOLATED_AUTH_TEST: 'yes'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '22.14.0'
+      - run: npm ci
+        working-directory: tools/coach-authorization-tests
+      - name: Prepare fresh local Supabase contract fixture
+        run: |
+          mkdir -p "$FIXTURE_WORKDIR"
+          npx --yes supabase@2.122.0 init --workdir "$FIXTURE_WORKDIR"
+          npx --yes supabase@2.122.0 migration new isolated_auth_fixture --workdir "$FIXTURE_WORKDIR"
+          node tools/coach-authorization-tests/prepare-local-supabase.mjs "$FIXTURE_WORKDIR"
+      - name: Start isolated Auth and REST services
+        run: |
+          npx --yes supabase@2.122.0 start --workdir "$FIXTURE_WORKDIR" -x realtime,storage-api,imgproxy,studio,edge-runtime,logflare,vector,supavisor,postgres-meta > "$RUNNER_TEMP/lellee-auth-start.log" 2>&1
+          npx --yes supabase@2.122.0 status --workdir "$FIXTURE_WORKDIR" -o json > "$LELLEE_SUPABASE_TEST_STATUS_FILE"
+      - name: Verify real Auth and REST authorization contract
+        run: node tools/coach-authorization-tests/real-auth-contract.mjs
+      - name: Stop isolated services
+        if: always()
+        run: npx --yes supabase@2.122.0 stop --workdir "$FIXTURE_WORKDIR"

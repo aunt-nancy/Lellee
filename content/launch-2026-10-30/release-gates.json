@@ -1,0 +1,82 @@
+{
+  "observed_date": "2026-10-30",
+  "launch_ready": false,
+  "production_rollout_approved": false,
+  "locked_approvals_preserved": true,
+  "evidence": {
+    "authorization_and_privacy_local_checks": {
+      "status": "passed",
+      "count": 152,
+      "scope": "Reduced captured schema, synthetic JWT/roles, local PGlite"
+    },
+    "draft_content_staging_local_checks": {
+      "status": "passed",
+      "count": 12,
+      "scope": "Actual captured Content Studio schema/constraints/RLS and synthetic records"
+    },
+    "browser_fixture_checks": {
+      "status": "passed",
+      "scope": "Supported cloud Chromium; real scripts; simulated Auth/backend; synthetic notes only"
+    },
+    "native_postgresql_17": {
+      "status": "passed",
+      "run_url": "https://github.com/aunt-nancy/Lellee/actions/runs/41124742505",
+      "tested_commit": "0219e7b814f3c06eebc9422c088c4117fbeae034",
+      "counts_as_passed": true,
+      "engine": "PostgreSQL 17.6 native Linux x64",
+      "count": 164
+    },
+    "isolated_real_auth_contract": {
+      "status": "prepared_not_run",
+      "counts_as_passed": false,
+      "scope": "Real local Supabase Auth/PostgREST with reduced application fixtures; no production accounts or full UI acceptance"
+    }
+  },
+  "required_gates": [
+    {
+      "id": "training_mapping",
+      "status": "unresolved",
+      "detail": "Concrete proposed orientation plus existing Foundations certificate mapping is prepared, but no exact course mapping or legacy formula decision is approved."
+    },
+    {
+      "id": "training_content_signoffs",
+      "status": "not_complete",
+      "detail": "Existing professional-course reviews, verification and capstone requirements remain in force. No signoffs or qualified reviewer identities are invented."
+    },
+    {
+      "id": "canonical_authenticated_acceptance",
+      "status": "not_run",
+      "detail": "No existing isolated Supabase branch. Real coach/client/admin sign-in, consent, scheduling and sharing-revocation acceptance remain unexecuted."
+    },
+    {
+      "id": "actual_device_accessibility",
+      "status": "not_run",
+      "detail": "No actual iPhone/Safari or complete screen-reader acceptance of the new code."
+    },
+    {
+      "id": "program_content_acceptance",
+      "status": "draft_prepared",
+      "detail": "210 review drafts across seven non-Recovery programs; no publication or claim of full multi-year parity."
+    },
+    {
+      "id": "program_feature_acceptance",
+      "status": "not_complete",
+      "detail": "Program-specific tools, including multi-person care records and their consolidated dashboard, need acceptance evidence. Content prompts alone are not feature implementation."
+    },
+    {
+      "id": "production_rollout",
+      "status": "held",
+      "detail": "Separate final rollout approval follows completed prerequisite evidence. Marketplace and payments remain off."
+    }
+  ],
+  "phased_release_rule": "An individually ready program may release after its own applicable gates pass; the approved eight-program portfolio and 1+20 roadmap are unchanged.",
+  "claims_excluded": [
+    "All launch work finished",
+    "Full security audit passed",
+    "Live real-account acceptance passed",
+    "Actual iPhone verified",
+    "Draft content clinically validated",
+    "All eight pathways ready",
+    "Marketplace or payments activated"
+  ]
+}

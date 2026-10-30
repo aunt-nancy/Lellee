@@ -25,8 +25,8 @@ work is finished.
   distinguish partial saves, and block overwrite when prior responses cannot
   be read. Add accessible choice states, reflection labeling and save messages.
 - A native PostgreSQL 17 test runner and isolated pull-request check, without
-  production credentials or deployment steps. Its execution outcome must be
-  inspected before counting it as passed.
+  production credentials or deployment steps. Its first isolated run passed all 164 checks on native PostgreSQL 17.6
+  (GitHub Actions run 41124742505, tested commit 0219e7b).
 
 ## Evidence and limits
 
@@ -35,6 +35,10 @@ Local PGlite: 140 authorization/RPC assertions, 12 schedule privacy checks and
 not a complete production clone. Supported-browser fixtures verify all seven
 packs, selection/save/reload, program separation and three failure cases.
 These browser accounts and backends are simulated, not real Supabase sessions.
+A separate real-Auth/PostgREST contract fixture is prepared for the isolated
+runner; its result must be recorded before counting it as passed. It preserves
+real Supabase Auth definitions and uses only synthetic business/training data.
+It is not a complete canonical application clone or deployed UI acceptance.
 
 Native PostgreSQL could not start in the local managed environment because its
 required non-root filesystem ownership was unavailable. The native runner now
