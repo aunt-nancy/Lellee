@@ -1,0 +1,35 @@
+{
+  "version": "independent-onboarding-proposal-2026-10-30",
+  "status": "proposal_not_approved_or_active",
+  "user_requirement": "Independent coaches complete orientation, onboarding certification and business approval before client-facing work; onboarding access remains available.",
+  "orientation": {
+    "candidate_course_key": "independent_coaching_orientation",
+    "existing_course": false,
+    "content_file": "independent-coach-orientation.md",
+    "reuses_existing_foundation_topics": ["scope_role_boundaries", "ethics_privacy_consent", "documentation_shared_progress"],
+    "includes_product_walkthrough": true,
+    "evidence_needed": "Administrator-verified completed orientation training record linked to the exact reviewed and published orientation course/version; self-reported evidence is insufficient."
+  },
+  "onboarding_certification": {
+    "candidate_existing_course_key": "coaching_foundations",
+    "existing_course_status": "draft",
+    "required_existing_modules": ["scope_role_boundaries", "ethics_privacy_consent", "trauma_cultural_responsiveness", "communication_skills", "goals_accountability", "documentation_shared_progress", "risk_referral_escalation", "foundations_capstone"],
+    "evidence_needed": "Current administrator-issued certificate linked to completed, verified training and the same coach and business; course/module/assessment/capstone reviews remain mandatory."
+  },
+  "legacy_publication_formula": {
+    "status": "unchanged_pending_reconciliation",
+    "orientation": "Candidate separate orientation above, not seeded or approved",
+    "ethics": "Existing Foundations ethics module is relevant content, but is not automatically a separately approved ethics course",
+    "entrepreneurship": "No distinct qualifying course was established in the current seven-course catalog",
+    "three_core_courses": "Current catalog has one foundation course; modules are not silently counted as three courses",
+    "specialty": "Existing specialty courses remain draft and do not supply automatic service authorization"
+  },
+  "professional_course_review_controls": "Retain existing qualified in-house review, capstone, verification, issue/expiry/revocation controls and recorded signoffs; do not fabricate reviewer identities or turn on the temporary dual-review override.",
+  "monthly_ethics_policy": "Existing informational reminder policy is unchanged.",
+  "future_staff_learning_coaching": "No change, no activation and no cross-lane qualification.",
+  "changes_to_approved_pricing": false,
+  "publishes_course_or_sets_checkout": false,
+  "grants_coach_approval": false,
+  "seeds_active_requirements_version": false,
+  "remaining_decision": "Confirm this exact orientation/certification evidence mapping and reconcile the legacy extra-course formula before enabling a requirements version. A mandatory-orientation product decision alone does not establish these course IDs or certify content."
+}

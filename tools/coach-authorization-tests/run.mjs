@@ -1,12 +1,12 @@
 import assert from 'node:assert/strict';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { PGlite } from '@electric-sql/pglite';
-import { pgcrypto } from '@electric-sql/pglite/contrib/pgcrypto';
+import { testDatabase, resultName } from './test-database.mjs';
 
 const here=new URL('./',import.meta.url);
 const sql=f=>readFileSync(new URL(f,here),'utf8');
-const db=new PGlite({extensions:{pgcrypto}});
+const db=await testDatabase();
+const engine=(await db.query('select version() as version')).rows[0].version;
 const id=n=>`00000000-0000-0000-0000-${String(n).padStart(12,'0')}`;
 const q=n=>`'${id(n)}'`;
 const results=[];
@@ -160,7 +160,7 @@ try{
  });
 }catch(e){console.error('SETUP FAILED',e.message,e.where||'');results.push({name:'Fixture setup',passed:false,error:e.message});}
 finally{await db.close();}
-const summary={engine:'PostgreSQL 18.6 / PGlite 0.5.13',scope:'Actual migration and guards with reduced catalog-derived schema; real RPC bodies; synthetic accounts; payment/admin helpers isolated',passed:results.filter(r=>r.passed).length,total:results.length,results};
-writeFileSync(fileURLToPath(new URL('./results.json',here)),JSON.stringify(summary,null,2)+'\n');
+const summary={engine,scope:'Actual migration and guards with reduced catalog-derived schema; real RPC bodies; synthetic accounts; payment/admin helpers isolated',passed:results.filter(r=>r.passed).length,total:results.length,results};
+writeFileSync(fileURLToPath(new URL('./'+resultName('results.json'),here)),JSON.stringify(summary,null,2)+'\n');
 console.log(JSON.stringify({passed:summary.passed,total:summary.total}));
 if(summary.passed!==summary.total)process.exitCode=1;

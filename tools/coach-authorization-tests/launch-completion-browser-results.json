@@ -1,0 +1,15 @@
+{
+  "date": "2026-10-30",
+  "scope": "Supported cloud Chromium, actual pilot DOM and pilot-runtime.js, simulated Auth/backend, synthetic local fixture records only",
+  "results": [
+    {"check":"Seven non-Recovery packs render full exercise steps and allow a response in their isolated fixture", "passed":true},
+    {"check":"Select Get Organized, choose Build separate appointment pages, select an answer and save a private reflection", "passed":true},
+    {"check":"A saved Caregiving reflection does not appear in Returning Home", "passed":true},
+    {"check":"Reload preserves the Caregiving stage, selected activity and saved reflection", "passed":true},
+    {"check":"Choice aria-pressed reflects selection; reflection has an accessible label; save message is a status region", "passed":true},
+    {"check":"Response-save failure reports failure and performs no fixture write", "passed":true},
+    {"check":"Position-save failure distinguishes the saved response from the failed position update", "passed":true},
+    {"check":"Response-load failure disables saving and reports the load failure, preserving unknown prior responses", "passed":true}
+  ],
+  "limits":["No real Supabase Auth, email, client invitations or payments", "No actual iPhone/Safari or complete screen-reader acceptance", "No production release or live user data"]
+}

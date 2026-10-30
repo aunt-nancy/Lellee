@@ -1,6 +1,8 @@
 {
   "devDependencies": {
     "@electric-sql/pglite": "0.5.13",
+    "embedded-postgres": "17.6.0-beta.15",
+    "pg": "8.23.1",
     "playwright": "1.62.1"
   },
   "name": "lellee-independent-coach-authorization-tests",
@@ -11,6 +13,8 @@
     "test:sql": "node run.mjs",
     "test:ui": "node ui.mjs",
     "test:privacy": "node schedule-privacy.mjs",
+    "test:content": "node content-package.mjs",
+    "test:native17": "node native-pg17.mjs",
     "test": "node run.mjs && node ui.mjs"
   }
 }

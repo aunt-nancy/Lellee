@@ -1,10 +1,10 @@
 import assert from 'node:assert/strict';
 import { readFileSync, writeFileSync } from 'node:fs';
-import { PGlite } from '@electric-sql/pglite';
+import { testDatabase, resultName } from './test-database.mjs';
 
 // Captured canonical policies, synthetic users only; never connects to Supabase.
 const here = new URL('./', import.meta.url);
-const db = new PGlite();
+const db = await testDatabase();
 const id = n => `00000000-0000-0000-0000-${String(n).padStart(12, '0')}`;
 const q = n => `'${id(n)}'`;
 const results = [];
@@ -99,6 +99,6 @@ try {
   results.push({ name: 'Fixture setup', passed: false, error: error.message });
 } finally { await db.close(); }
 const summary = { scope: 'Actual SELECT policy; reduced captured schema; synthetic actors and JWT/role simulation; no live Auth', passed: results.filter(r => r.passed).length, total: results.length, results };
-writeFileSync(new URL('schedule-results.json', here), JSON.stringify(summary, null, 2) + '\n');
+writeFileSync(new URL(resultName('schedule-results.json'), here), JSON.stringify(summary, null, 2) + '\n');
 console.log(JSON.stringify(summary));
 if (summary.passed !== summary.total) process.exitCode = 1;
