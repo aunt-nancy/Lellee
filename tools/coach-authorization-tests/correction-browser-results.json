@@ -1,0 +1,28 @@
+{
+  "date": "2026-10-30",
+  "environment": "Cloud Chromium via cua_repl, isolated Sites preview",
+  "scope": "Real HTML and scripts; Auth/backend simulated with existing ui.mjs fixtures; no live accounts, messages, payments or customer records",
+  "scenarios": [
+    {"state": "new", "status": "Onboarding in progress", "draft_preparation": true, "saved_service_active": false, "passed": true},
+    {"state": "approved", "status": "Client services are approved for 1 program", "draft_preparation": true, "saved_service_active": true, "passed": true},
+    {"state": "expired", "status": "Client service approval needs attention", "draft_preparation": true, "saved_service_active": false, "passed": true},
+    {"state": "revoked", "status": "Client service approval needs attention", "draft_preparation": true, "saved_service_active": false, "passed": true},
+    {"state": "backend_failure", "status": "Service approval could not be checked", "draft_preparation": true, "saved_service_active": false, "passed": true}
+  ],
+  "accessibility_checks": [
+    {"page": "Coaching workspace with simulated account", "action": "Activate Skip to main content with Enter", "focused_id": "coachWorkspaceMain", "main_count": 1, "skip_count": 1, "passed": true},
+    {"page": "Consumer guest Caregiving preview", "action": "Activate Skip to main content with Enter", "focused_id": "lelleeMain", "skip_count": 1, "obsolete_target_link": false, "passed": true}
+  ],
+  "public_preview": {"page": "coach.html", "sample_label_and_disclosure_visible_in_accessibility_tree": true, "passed": true},
+  "execution_notes": [
+    "Browser-binary download through npm Playwright was unavailable; checks were performed in the supported cloud browser.",
+    "One expired-state navigation check initially raced dashboard hydration; rerun after the fixture practice heading loaded passed. Other states waited for that heading.",
+    "Temporary qa HTML was generated outside the repository and is excluded from all production source changes."
+  ],
+  "not_verified": [
+    "Real Supabase Auth and canonical PostgreSQL 17 integration",
+    "Real desktop/mobile Safari or actual iPhone",
+    "Full keyboard/screen-reader/zoom/reduced-motion/accessibility acceptance",
+    "Production deployment parity, marketplace, checkout or payouts"
+  ]
+}

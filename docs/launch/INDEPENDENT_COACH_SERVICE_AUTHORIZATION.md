@@ -3,6 +3,11 @@
 Review branch only. No production migration, account approval, record backfill,
 marketplace activation, payment activation, or deployment is authorized here.
 
+October 30 follow-up: [authorized correction scope](CORRECTION_SCOPE_2026-10-30.md)
+records the user's approval lock, the separate schedule privacy correction,
+additional tests and current release conditions. That correction is prepared on
+this branch; it has not been applied to production.
+
 ## Behavior
 
 Account and dashboard access remain separate from permission to deliver services.
@@ -43,7 +48,9 @@ replaced. The new service gate is not a full audit of those existing controls.
 Read permissions and retained historical client records are not globally
 redesigned; this change principally gates service writes and public discovery.
 The separate schedule SELECT-policy correlation defect identified in the review
-requires its own privacy regression and correction before release.
+has a dedicated policy migration and twelve passing synthetic privacy tests on
+this branch. Canonical authenticated integration and rollout remain required
+before release.
 
 Training and credential review-field guards execute as INVOKER. Direct browser
 writes cannot assert verification or forge system course links. Existing

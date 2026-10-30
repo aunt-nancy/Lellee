@@ -1,7 +1,7 @@
 /* Coaching-only index runtime. Consumer /app and index.html are not dependencies. */
 (() => {
   'use strict';
-  const VERSION='coaching-index-20261029-service-authorization';
+  const VERSION='coaching-index-20261030-launch-corrections';
   const HOME='/coaching/index.html';
   const DEFAULT_PAGE='coach-dashboard';
   const SUPABASE_URL='https://hkrrxscyhtxmbvxevfkw.supabase.co';
@@ -163,7 +163,7 @@
     });
   }
   async function toolsFor(page){
-    const base='/coach-dashboard-live.js?v=20261029-service-authorization';
+    const base='/coach-dashboard-live.js?v=20261030-launch-corrections';
     const ops='/coach-operations-completion.js?v=20261005-shell1';
     // Reuse Coaching-only feature bundles, never the consumer runtime.
     if(page==='coach-dashboard'||page==='coach-business'){

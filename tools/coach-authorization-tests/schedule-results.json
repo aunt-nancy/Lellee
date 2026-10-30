@@ -1,0 +1,55 @@
+{
+  "scope": "Actual SELECT policy; reduced captured schema; synthetic actors and JWT/role simulation; no live Auth",
+  "passed": 12,
+  "total": 12,
+  "results": [
+    {
+      "name": "Reproduces original defect: one group member sees unrelated private sessions",
+      "passed": true
+    },
+    {
+      "name": "Client A sees only own private session and Group A",
+      "passed": true
+    },
+    {
+      "name": "Client B sees own session and its two groups, not Client A or internal events",
+      "passed": true
+    },
+    {
+      "name": "Unrelated signed-in user sees no schedule rows",
+      "passed": true
+    },
+    {
+      "name": "Practice A coach retains Practice A schedule access only",
+      "passed": true
+    },
+    {
+      "name": "Practice B coach retains only Practice B access",
+      "passed": true
+    },
+    {
+      "name": "Inactive group membership removes group access and preserves own appointment",
+      "passed": true
+    },
+    {
+      "name": "Mismatched business IDs do not expose schedule rows to the client",
+      "passed": true
+    },
+    {
+      "name": "Cross-practice membership cannot borrow another practice relationship",
+      "passed": true
+    },
+    {
+      "name": "Anonymous role has no schedule access",
+      "passed": true
+    },
+    {
+      "name": "Schedule write policy remains unchanged",
+      "passed": true
+    },
+    {
+      "name": "Policy migration creates no extra permissive read policy",
+      "passed": true
+    }
+  ]
+}
