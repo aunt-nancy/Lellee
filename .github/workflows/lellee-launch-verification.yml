@@ -34,8 +34,6 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     env:
-      FIXTURE_WORKDIR: ${{ runner.temp }}/lellee-auth-fixture
-      LELLEE_SUPABASE_TEST_STATUS_FILE: ${{ runner.temp }}/lellee-auth-status.json
       LELLEE_ISOLATED_AUTH_TEST: 'yes'
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
@@ -46,6 +44,15 @@ jobs:
           node-version: '22.14.0'
       - run: npm ci
         working-directory: tools/coach-authorization-tests
+      - name: Set isolated fixture paths
+        run: |
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          with Path(os.environ['GITHUB_ENV']).open('a') as out:
+              out.write('FIXTURE_WORKDIR='+os.environ['RUNNER_TEMP']+'/lellee-auth-fixture\n')
+              out.write('LELLEE_SUPABASE_TEST_STATUS_FILE='+os.environ['RUNNER_TEMP']+'/lellee-auth-status.json\n')
+          PY
       - name: Prepare fresh local Supabase contract fixture
         run: |
           mkdir -p "$FIXTURE_WORKDIR"
