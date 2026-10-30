@@ -20,16 +20,19 @@
     },
     "native_postgresql_17": {
       "status": "passed",
-      "run_url": "https://github.com/aunt-nancy/Lellee/actions/runs/41124742505",
-      "tested_commit": "0219e7b814f3c06eebc9422c088c4117fbeae034",
+      "run_url": "https://github.com/aunt-nancy/Lellee/actions/runs/41126084322",
+      "tested_commit": "1cb864471caed5b442902509c597a21bab586cf4",
       "counts_as_passed": true,
       "engine": "PostgreSQL 17.6 native Linux x64",
       "count": 164
     },
     "isolated_real_auth_contract": {
-      "status": "prepared_not_run",
-      "counts_as_passed": false,
-      "scope": "Real local Supabase Auth/PostgREST with reduced application fixtures; no production accounts or full UI acceptance"
+      "status": "passed",
+      "counts_as_passed": true,
+      "scope": "Real local Supabase Auth/PostgREST with reduced application fixtures; no production accounts or full UI acceptance",
+      "count": 24,
+      "run_url": "https://github.com/aunt-nancy/Lellee/actions/runs/41126084322",
+      "tested_commit": "1cb864471caed5b442902509c597a21bab586cf4"
     }
   },
   "required_gates": [
@@ -46,7 +49,7 @@
     {
       "id": "canonical_authenticated_acceptance",
       "status": "not_run",
-      "detail": "No existing isolated Supabase branch. Real coach/client/admin sign-in, consent, scheduling and sharing-revocation acceptance remain unexecuted."
+      "detail": "The isolated real Auth/PostgREST contract passed 24 tests with a reduced application fixture. Full canonical frontend/onboarding/curriculum/consent acceptance is still unexecuted; no existing hosted development branch was found."
     },
     {
       "id": "actual_device_accessibility",

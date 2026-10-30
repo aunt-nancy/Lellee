@@ -46,7 +46,9 @@ Do not retain passwords, tokens, private journals or unredacted Auth traces.
 | Staff/independent dual role | Qualification in one lane never grants rights in the other |
 | Actual iPhone/Safari and assistive technology | Sign-in, navigation, readable text, keyboard/focus, labels, zoom, reduced motion and core save/reload work |
 
-All scripted local/browser results in this branch remain useful supporting
-evidence, but none substitutes for the unexecuted rows above. Existing user
+The isolated Auth/PostgREST contract subset passed 24 checks in run
+41126084322, with real tokens and reduced application fixtures. This table
+describes complete application acceptance, including frontend and curriculum
+workflows; it is not all satisfied by that narrower API contract. Existing user
 approvals are not reopened by this test plan. Production approval is requested
 only after applicable launch prerequisites are supported by recorded results.

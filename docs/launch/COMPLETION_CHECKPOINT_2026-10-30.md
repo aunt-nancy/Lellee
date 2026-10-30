@@ -35,10 +35,13 @@ Local PGlite: 140 authorization/RPC assertions, 12 schedule privacy checks and
 not a complete production clone. Supported-browser fixtures verify all seven
 packs, selection/save/reload, program separation and three failure cases.
 These browser accounts and backends are simulated, not real Supabase sessions.
-A separate real-Auth/PostgREST contract fixture is prepared for the isolated
-runner; its result must be recorded before counting it as passed. It preserves
-real Supabase Auth definitions and uses only synthetic business/training data.
-It is not a complete canonical application clone or deployed UI acceptance.
+The isolated real-Auth/PostgREST contract passed 24/24 checks in run
+41126084322 on commit 1cb8644. It preserved real Supabase Auth definitions
+and used synthetic business/training data. Tested real signup/password login,
+REST/RPC qualification in five states, invitation acceptance, group isolation,
+forged verification/metadata denial and revocation with an unchanged token.
+The runner was stopped successfully. This is not a complete canonical application
+clone or deployed frontend/curriculum acceptance.
 
 Native PostgreSQL could not start in the local managed environment because its
 required non-root filesystem ownership was unavailable. The native runner now
@@ -56,13 +59,14 @@ they do not authorize changing settled product decisions.
 ## Remaining launch blockers
 
 1. **Training mapping/review:** no approved exact orientation/certification course
-   mapping exists. All seven existing professional courses are draft. Required
+   mapping exists. All seven existing professional courses are draft. A final read-only check found zero recorded course signoffs. Required
    human reviews and authentic evidence cannot be fabricated by completing code.
 2. **Authenticated staging:** the canonical Supabase project has no existing
    development branch. No paid branch or new project was created. Existing
-   production projects are not disposable staging environments. Real
-   coach/client/admin Auth, consent, invitations, scheduling, sharing revocation
-   and side-effect acceptance remain unexecuted.
+   production projects are not disposable staging environments. The isolated Auth/REST contract now passes, including real tokens,
+   invitations, scheduling authorization and group isolation. Complete canonical
+   frontend/onboarding/curriculum, sharing revocation, notifications and
+   side-effect acceptance still require execution.
 3. **Actual-device acceptance:** no actual iPhone/Safari or full screen-reader
    acceptance was performed. Earlier beta attestations are preserved as
    historical approvals; they do not verify this new code.

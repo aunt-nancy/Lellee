@@ -1,0 +1,107 @@
+{
+  "date": "2026-10-30",
+  "tested_commit": "1cb864471caed5b442902509c597a21bab586cf4",
+  "run_url": "https://github.com/aunt-nancy/Lellee/actions/runs/41126084322",
+  "job_id": 124305001505,
+  "scope": "Real isolated Supabase Auth tokens and PostgREST requests; reduced captured application schema; synthetic business/course/evidence and isolated payment/admin helpers; not full production acceptance",
+  "passed": 24,
+  "total": 24,
+  "results": [
+    {
+      "name": "Real Supabase signup and password sign-in produce a server-validated coach session",
+      "passed": true
+    },
+    {
+      "name": "new: real authenticated onboarding status remains available",
+      "passed": true
+    },
+    {
+      "name": "new: real REST draft preparation remains available",
+      "passed": true
+    },
+    {
+      "name": "new: real REST active offer and scheduling RPC enforce current qualification",
+      "passed": true
+    },
+    {
+      "name": "pending: real authenticated onboarding status remains available",
+      "passed": true
+    },
+    {
+      "name": "pending: real REST draft preparation remains available",
+      "passed": true
+    },
+    {
+      "name": "pending: real REST active offer and scheduling RPC enforce current qualification",
+      "passed": true
+    },
+    {
+      "name": "approved: real authenticated onboarding status remains available",
+      "passed": true
+    },
+    {
+      "name": "approved: real REST draft preparation remains available",
+      "passed": true
+    },
+    {
+      "name": "approved: real REST active offer and scheduling RPC enforce current qualification",
+      "passed": true
+    },
+    {
+      "name": "expired: real authenticated onboarding status remains available",
+      "passed": true
+    },
+    {
+      "name": "expired: real REST draft preparation remains available",
+      "passed": true
+    },
+    {
+      "name": "expired: real REST active offer and scheduling RPC enforce current qualification",
+      "passed": true
+    },
+    {
+      "name": "revoked: real authenticated onboarding status remains available",
+      "passed": true
+    },
+    {
+      "name": "revoked: real REST draft preparation remains available",
+      "passed": true
+    },
+    {
+      "name": "revoked: real REST active offer and scheduling RPC enforce current qualification",
+      "passed": true
+    },
+    {
+      "name": "Second coach cannot borrow owner approval through real RPC",
+      "passed": true
+    },
+    {
+      "name": "Real REST request cannot forge verified training",
+      "passed": true
+    },
+    {
+      "name": "Non-admin cannot issue their own authorization through real RPC",
+      "passed": true
+    },
+    {
+      "name": "Invitation and client acceptance use real signed-in identities and record explicit acceptance",
+      "passed": true
+    },
+    {
+      "name": "Real REST schedule reads remain isolated across two groups and clients",
+      "passed": true
+    },
+    {
+      "name": "Revocation denies the next real request with the unchanged access token",
+      "passed": true
+    },
+    {
+      "name": "Editable Auth metadata and a fresh real token cannot grant services",
+      "passed": true
+    },
+    {
+      "name": "Anonymous RPC cannot inspect onboarding authorization",
+      "passed": true
+    }
+  ]
+}
