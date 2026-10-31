@@ -33,6 +33,12 @@ const readSetting = async (key: string) => {
 
 const isTrue = (value: string) => value.toLowerCase() === "true";
 
+// An explicit research requirement must never fall back to an offline draft.
+const requiresPublicResearch = (task: any) =>
+  task.external_execution_required === true ||
+  ["provider_research", "prospect_research", "trend_intelligence", "resource_freshness"].includes(task.agent_type) ||
+  task.agent_key === "professional-training-evidence-builder";
+
 const outputTypeFor = (taskType: string) => {
   switch (taskType) {
     case "research": return "research_brief";
@@ -199,6 +205,7 @@ const callOpenAI = async (task: any, useWebSearch: boolean) => {
       type: "web_search",
       search_context_size: evidenceBuild ? "medium" : "low"
     }];
+    body.tool_choice = "required";
   }
 
   if (evidenceBuild) {
@@ -232,10 +239,17 @@ const callOpenAI = async (task: any, useWebSearch: boolean) => {
 
   const text = extractOutputText(data);
   if (!text) throw new Error("OpenAI returned no output text.");
+  const sources = collectSources(data);
+  const searched = (data?.output ?? []).some((item: any) =>
+    item.type === "web_search_call" && item.status === "completed"
+  );
+  if (useWebSearch && !searched) throw new Error("required_public_research_not_performed");
+  if (useWebSearch && sources.length === 0) throw new Error("required_public_research_sources_missing");
+  if (task.agent_key === "trend-demand-intelligence" && sources.length < 3) throw new Error("demand_research_needs_three_sources");
 
   return {
     text,
-    sources: collectSources(data),
+    sources,
     responseId: data?.id ?? null,
     usage: data?.usage ?? null,
   };
@@ -257,7 +271,7 @@ Deno.serve(async (req) => {
     return json({
       ok: Boolean(SUPABASE_URL && SERVICE_ROLE_KEY && WORKER_SECRET),
       worker: "dynamic-worker",
-      version: "1.2",
+      version: "1.3-agent-operations",
       model: MODEL,
       has_supabase_url: Boolean(SUPABASE_URL),
       has_service_role_key: Boolean(SERVICE_ROLE_KEY),
@@ -294,6 +308,13 @@ Deno.serve(async (req) => {
   const requestedLimit = Number(payload?.limit ?? 3);
   const limit = Math.max(1, Math.min(Number.isFinite(requestedLimit) ? requestedLimit : 3, 5));
 
+  let missionQueue: any = null;
+  if (isTrue(await readSetting("agent_recurring_missions_enabled"))) {
+    const { data, error } = await sb.rpc("lellee_queue_due_agent_missions_v2", { p_dry_run: false });
+    if (error) return json({ ok: false, error: "mission_queue_failed", detail: error.message }, 500);
+    missionQueue = data;
+  }
+
   const { data: tasks, error: claimError } = await sb.rpc(
     "lellee_claim_agent_tasks",
     { p_limit: limit },
@@ -303,7 +324,7 @@ Deno.serve(async (req) => {
     return json({ ok: false, error: "claim_failed", detail: claimError.message }, 500);
   }
 
-  if (!tasks?.length) return json({ ok: true, processed: 0, message: "No queued tasks." });
+  if (!tasks?.length) return json({ ok: true, processed: 0, message: "No queued tasks.", mission_queue: missionQueue });
 
   const results: any[] = [];
   let externalCreditBlocked = false;
@@ -324,13 +345,15 @@ Deno.serve(async (req) => {
     }
 
     let runId: string | null = null;
+    const needsResearch = requiresPublicResearch(task);
+    if (needsResearch && !researchEnabled) {
+      await sb.from("agent_tasks").update({ status: "blocked", updated_at: new Date().toISOString() }).eq("id", task.task_id);
+      await sb.from("agent_audit_log").insert({ event_type: "worker_blocked_public_research", agent_id: task.agent_id, task_id: task.task_id, safe_metadata: { reason: "public_research_disabled" } });
+      results.push({ task_id: task.task_id, title: task.title, status: "blocked", error: "public_research_disabled" });
+      continue;
+    }
     try {
-      const useWebSearch =
-        researchEnabled &&
-        (
-          ["provider_research", "prospect_research"].includes(task.agent_type) ||
-          task.agent_key === "professional-training-evidence-builder"
-        );
+      const useWebSearch = researchEnabled && needsResearch;
 
       const { data: run, error: runError } = await sb
         .from("agent_runs")
@@ -432,6 +455,8 @@ Deno.serve(async (req) => {
   return json({
     ok: true,
     processed: results.length,
+    mission_queue: missionQueue,
     results,
   });
 });
+
