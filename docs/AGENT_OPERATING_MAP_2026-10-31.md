@@ -256,6 +256,10 @@ The queue function is invoker-security and executable only by the service role (
 
 To pause newly recurring work, set agent_recurring_missions_enabled to false. Existing worker scheduling, task history, review requirements, publishing restrictions, and other approved settings remain in place. Restore the prior worker source if a worker rollback is required. Do not automatically requeue cancelled or credit-blocked tasks.
 
+## Live verification
+
+The repaired worker returned HTTP 200. The demand assignment completed with web_search_used=true and nine source references; its output remains pending review. The operations assignment completed separately. Context completeness checks additionally verify named specialists, the review queue and timestamps, program registry, and handoff counts. The initial research brief remains a draft, not validated product demand.
+
 ## Source checkpoint
 
 Live Lellee agent definitions, missions, memberships, tasks, outputs, handoffs, cadence records and worker source were inspected. Raw participant records, journal entries, private messages and safety activity were not used. This file intentionally omits account identifiers and secrets.
