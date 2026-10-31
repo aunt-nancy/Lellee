@@ -29,6 +29,13 @@ work is finished.
   production credentials or deployment steps. Its first isolated run passed all 164 checks on native PostgreSQL 17.6
   (GitHub Actions run 41124742505, tested commit 0219e7b).
 
+- Internal orientation/Foundations editorial and technical review is recorded in
+  `FOUNDATIONS_CONTENT_REVIEW_2026-10-30.md`. Added 53 concrete fictional practice
+  cases and capstone submission guidance. Eighteen isolated curriculum contract
+  checks pass. Existing server-side choice randomization and answer-text grading
+  were verified; no redundant runtime correction was retained. Human signoffs
+  and complete application/device acceptance remain open.
+
 ## Evidence and limits
 
 Local PGlite: 140 authorization/RPC assertions, 12 schedule privacy checks and

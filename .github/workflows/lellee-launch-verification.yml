@@ -27,6 +27,7 @@ jobs:
           node-version: '22.14.0'
       - run: npm ci
       - run: node approval-lock.mjs
+      - run: node foundations-contract.mjs
       - run: node native-pg17.mjs
       # No deployment, production database, email, checkout or repository secrets.
   real-auth-contract:

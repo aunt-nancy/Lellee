@@ -33,6 +33,12 @@
       "count": 24,
       "run_url": "https://github.com/aunt-nancy/Lellee/actions/runs/41126084322",
       "tested_commit": "1cb864471caed5b442902509c597a21bab586cf4"
+    },
+    "foundations_curriculum_contract": {
+      "status": "passed",
+      "count": 18,
+      "scope": "In-memory PostgreSQL, original table definitions, 56 original assessment items and existing shuffled-choice/text-grading functions. No hosted Auth, RLS, full frontend or publication acceptance.",
+      "results_file": "tools/coach-authorization-tests/foundations-contract-results.json"
     }
   },
   "required_gates": [
@@ -44,7 +50,7 @@
     {
       "id": "training_content_signoffs",
       "status": "not_complete",
-      "detail": "Existing professional-course reviews, verification and capstone requirements remain in force. No signoffs or qualified reviewer identities are invented."
+      "detail": "Internal editorial/technical review completed; 53 fictional practice cases and a capstone submission companion prepared. Existing randomization/text grading verified, with 18 isolated curriculum contract checks passing. Qualified source/curriculum/assessment/scope/capstone signoffs and operational-procedure verification remain incomplete; no signoffs invented."
     },
     {
       "id": "canonical_authenticated_acceptance",

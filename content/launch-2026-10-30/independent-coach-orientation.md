@@ -120,3 +120,7 @@ Existing topic references: Foundations modules `scope_role_boundaries`,
 must be checked against the exact deployed authorization/consent implementation
 before this orientation can claim to describe live behavior. Current corrections
 remain on the review branch.
+
+The review-draft `foundations-practice-workbook.md` supplies fictional practice
+cases for the mapped Foundations modules. It does not replace this orientation,
+course signoffs, the existing capstone rubric or a reviewed operational policy.
