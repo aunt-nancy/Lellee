@@ -35,6 +35,12 @@ work is finished.
   checks pass. Existing server-side choice randomization and answer-text grading
   were verified; no redundant runtime correction was retained. Human signoffs
   and complete application/device acceptance remain open.
+- Pull-request run 41171508057 passed the approval lock, 18 Foundations contract
+  checks, 164 native PostgreSQL 17.6 checks and all 24 isolated real Auth/REST
+  checks on commit `d87ba19`. Its protected Vercel preview is READY and matches
+  that commit. The connected Vercel account returned HTTP 403 while requesting a
+  temporary protected-preview link, so browser-facing route and account-flow
+  acceptance was not performed or claimed.
 
 ## Evidence and limits
 
@@ -71,7 +77,9 @@ they do not authorize changing settled product decisions.
    existing professional courses remain draft. A final read-only check found zero recorded course signoffs. Required
    human reviews and authentic evidence cannot be fabricated by completing code.
 2. **Authenticated staging:** the canonical Supabase project has no existing
-   development branch. No paid branch or new project was created. Existing
+   development branch. No paid branch or new project was created. The exact-commit
+   Vercel preview exists, but the current Vercel connection cannot open its protected
+   routes. Existing
    production projects are not disposable staging environments. The isolated Auth/REST contract now passes, including real tokens,
    invitations, scheduling authorization and group isolation. Complete canonical
    frontend/onboarding/curriculum, sharing revocation, notifications and
