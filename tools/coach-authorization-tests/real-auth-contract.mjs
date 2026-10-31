@@ -58,7 +58,7 @@ try{
   await approve();
   if(state==='new')await db.query('delete from private.independent_coach_authorizations');
   if(state==='pending')await db.query("update private.independent_coach_authorizations set status='pending'");
-  if(state==='expired')await db.query('update public.coach_certificates set expires_on=current_date-1');
+  if(state==='expired')await db.query("update public.coach_certificates set expires_on=((statement_timestamp() at time zone 'America/Los_Angeles')::date-1)");
   if(state==='revoked')await db.query("update public.coach_certificates set status='revoked',revoked_at=now()");
   await test(`${state}: real authenticated onboarding status remains available`,async()=>assert.equal(allowed(await rpc('get_my_independent_coach_service_authorization',users.coach)).onboarding_access,true));
   await test(`${state}: real REST draft preparation remains available`,async()=>allowed(await http('/rest/v1/coach_service_packages',users.coach.token,{business_id:id(21),program_id:id(11),name:'Fixture draft',active:false})));

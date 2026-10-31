@@ -74,3 +74,13 @@ attestations through the existing controls. Then run the complete application
 acceptance handoff, including actual iPhone/Safari and assistive technology.
 None of those gates is marked passed by this report. All settled approvals remain
 locked; production release remains held.
+
+## Verification rerun note
+
+The first pull-request rerun crossed midnight UTC while it was still October 30
+in America/Los_Angeles. Its synthetic “expired” certificate used `current_date-1`,
+which produced October 30 and was therefore correctly accepted through the end
+of the approved Pacific-date validity period. The fixture now derives yesterday
+from `statement_timestamp() at time zone 'America/Los_Angeles'`, matching the
+authorization rule. This correction changes test data only; it does not weaken
+or alter certificate expiry behavior.
