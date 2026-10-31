@@ -3,8 +3,8 @@
 This draft implements the already-required orientation as a reviewable product
 walkthrough. It is not an approved course, an issued certificate, accreditation,
 professional licensure, or permission to serve clients. No fee, duration,
-checkout or additional specialty requirement is established here. The proposed
-training mapping is in `coach-training-mapping.json`.
+checkout or additional specialty requirement is established here. The user approved the onboarding mapping on October 30, 2026; course content
+review and publication remain outstanding. The approved mapping is in `coach-training-mapping.json`.
 
 ## 1. Know which workspace you are using
 

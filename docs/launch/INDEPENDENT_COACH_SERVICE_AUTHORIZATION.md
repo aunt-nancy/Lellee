@@ -27,9 +27,12 @@ on every service write. A certificate is valid through its stated expiry date
 in America/Los_Angeles. Approval in editable user metadata or an old JWT is
 never consulted. An acting coach cannot borrow an approved owner's authority.
 
-No requirements version is seeded. The existing catalog has no resolved
-independent orientation/course mapping. The course IDs and requirement version
-must be reviewed before release; the implementation fails closed until then.
+No requirements version is seeded. On October 30 the user approved the prepared
+orientation followed by existing Coaching Foundations and its reviewed completion
+certificate as the independent onboarding mapping. See
+`content/launch-2026-10-30/coach-training-mapping.json` for the exact decision and
+limits. Course content, actual catalog IDs/versions and requirements activation
+remain subject to review before release; the implementation fails closed until then.
 This change does not silently adopt or remove the legacy publication gate's
 ethics/entrepreneurship/three-core/specialty formula. That gate remains an
 additional publication check until its product requirements are reconciled.
@@ -121,9 +124,10 @@ in the result file. Passing local tests does not authorize a production rollout.
 
 ## Required before production approval
 
-1. Resolve and approve the independent orientation/certification course mapping
-   and the legacy extra-course formula. Publish/review the required learning
-   content through its existing controls. Do not grant automatic approvals.
+1. Apply the approved orientation-to-Foundations mapping only after required
+   learning content reviews, verified catalog IDs/versions and separate activation
+   approval. Reconcile the unchanged legacy extra-course formula separately.
+   Do not grant automatic approvals.
 2. Run the migration against a complete isolated canonical PostgreSQL 17 schema;
    run Supabase security advisors and inspect all changed ACLs/policies/triggers.
 3. Complete real coach/client/admin Auth, onboarding, consent, scheduling,

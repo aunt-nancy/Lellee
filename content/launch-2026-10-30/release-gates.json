@@ -38,8 +38,8 @@
   "required_gates": [
     {
       "id": "training_mapping",
-      "status": "unresolved",
-      "detail": "Concrete proposed orientation plus existing Foundations certificate mapping is prepared, but no exact course mapping or legacy formula decision is approved."
+      "status": "mapping_approved_activation_held",
+      "detail": "User approved the prepared orientation followed by existing Coaching Foundations and its reviewed completion certificate on October 30, 2026. This approves mapping only; content reviews, real course/version IDs and activation remain held. Legacy publication formula is unchanged."
     },
     {
       "id": "training_content_signoffs",

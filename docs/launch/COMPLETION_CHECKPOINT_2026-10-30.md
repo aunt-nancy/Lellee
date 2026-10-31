@@ -12,10 +12,11 @@ work is finished.
   design proposals are identified separately. These are unpublished review
   drafts, not 210 clinically validated lessons or a replacement for Recovery's
   742 records. They do not establish full two-year content parity.
-- Concrete walkthrough, knowledge check and candidate training-evidence mapping
-  in `content/launch-2026-10-30`. Foundations is a proposed certification mapping;
-  it is not silently designated as the approved curriculum. The separate
-  orientation candidate and legacy extra-course formula remain unresolved.
+- Concrete walkthrough, knowledge check and approved training-evidence mapping
+  in `content/launch-2026-10-30`. The user approved the sequence on October 30: the prepared orientation,
+  then existing Coaching Foundations and its reviewed completion certificate.
+  This is mapping approval only. Content signoffs and publication remain held;
+  the legacy extra-course formula is unchanged pending separate reconciliation.
 - Content Studio staging function and tests using the runtime's actual captured
   columns, constraints and policies. Staging is idempotent, preserves existing
   published content, inserts only draft records, retains review/source metadata
@@ -58,8 +59,9 @@ they do not authorize changing settled product decisions.
 
 ## Remaining launch blockers
 
-1. **Training mapping/review:** no approved exact orientation/certification course
-   mapping exists. All seven existing professional courses are draft. A final read-only check found zero recorded course signoffs. Required
+1. **Training content/review:** the orientation-to-Foundations mapping is now
+   approved; no active requirements row or course IDs were seeded. All seven
+   existing professional courses remain draft. A final read-only check found zero recorded course signoffs. Required
    human reviews and authentic evidence cannot be fabricated by completing code.
 2. **Authenticated staging:** the canonical Supabase project has no existing
    development branch. No paid branch or new project was created. Existing
@@ -84,7 +86,8 @@ gates pass. Its names, number and sequencing are not changed by this checkpoint.
 
 ## Minimal next handoff when preparation is reviewed
 
-Resolve the proposed training mapping as one concrete decision, then use an
-authorized isolated Supabase environment for real-account acceptance. Only after
+The mapping decision is recorded in `coach-training-mapping.json`; do not ask
+for that approval again. Complete the required content reviews and use an
+authorized isolated Supabase environment for full application acceptance. Only after
 that evidence and device checks pass can a production rollout be proposed. No
 request to reapprove unchanged pricing, design, legal terms or roadmap is needed.
