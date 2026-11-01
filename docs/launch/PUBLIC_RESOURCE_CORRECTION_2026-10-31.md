@@ -72,3 +72,15 @@ environment. Full account/invitation/scheduling/privacy acceptance, qualified
 course signoffs, substantive program-content/feature checks and actual-device
 accessibility remain open. This correction does not authorize a main merge,
 production migration, content publication, marketplace or payments activation.
+
+The exact-code Vercel preview on commit `68881de` was checked: Caregiving controls
+render, Recovery-only controls are hidden, and the unapplied endpoint produces an
+explicit unavailable/Retry state instead of a false empty count. This is frontend
+deployment verification only; no successful hosted RPC response is claimed.
+
+The first CI run used GitHub's synthetic merge commit and included newer unrelated
+main-branch agent documents in the scope check. It stopped at that check. Both
+isolated jobs now explicitly check out `github.event.pull_request.head.sha`, so
+verification covers the same draft source commit as the preview. The original 35
+file hashes and narrow bundle/module checks remain unchanged. Reconciliation with
+the latest main branch is still a prerequisite to any future production merge.
