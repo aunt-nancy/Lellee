@@ -1,0 +1,35 @@
+{
+  "status": "passed",
+  "count": 7,
+  "scope": "Static accessibility correction contract for modal semantics, focus containment, labels, live feedback and minimum target sizing. Physical iPhone/Safari and real assistive-technology acceptance remain manual.",
+  "results": [
+    {
+      "name": "Approved index markup remains unchanged",
+      "status": "passed"
+    },
+    {
+      "name": "Auth overlay is promoted to a named modal dialog",
+      "status": "passed"
+    },
+    {
+      "name": "Modal opening moves focus and blocks the background",
+      "status": "passed"
+    },
+    {
+      "name": "Modal focus is trapped and restored",
+      "status": "passed"
+    },
+    {
+      "name": "Auth fields receive programmatic labels and live feedback",
+      "status": "passed"
+    },
+    {
+      "name": "Small guest and legal targets meet the 24 CSS pixel floor",
+      "status": "passed"
+    },
+    {
+      "name": "Accessibility correction loads without editing the locked page",
+      "status": "passed"
+    }
+  ]
+}

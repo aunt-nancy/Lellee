@@ -14,6 +14,8 @@ on:
       - 'lellee-v1.js'
       - 'caregiving-coordinator.js'
       - 'caregiving-coordinator.css'
+      - 'accessibility-acceptance.js'
+      - 'accessibility-acceptance.css'
       - '.github/workflows/lellee-launch-verification.yml'
 permissions:
   contents: read
@@ -38,6 +40,7 @@ jobs:
       - run: node foundations-contract.mjs
       - run: node public-resources.mjs
       - run: node caregiving-coordination.mjs
+      - run: node accessibility-acceptance.mjs
       - run: node native-pg17.mjs
       # No deployment, production database, email, checkout or repository secrets.
   real-auth-contract:

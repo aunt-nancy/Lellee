@@ -19,7 +19,8 @@ const allowed = new Set([
   'supabase/migrations/20261101040121_public_program_resource_directory.sql',
   'supabase/migrations/20261101045940_caregiving_multi_person_coordination.sql',
   'supabase/migrations/20261101045941_restore_coaching_dashboard_context.sql',
-  'caregiving-coordinator.css', 'caregiving-coordinator.js'
+  'caregiving-coordinator.css', 'caregiving-coordinator.js',
+  'accessibility-acceptance.css', 'accessibility-acceptance.js'
 ]);
 const changed = execFileSync('git', ['diff', '--name-only', lock.baseline_commit, '--'], { cwd: root, encoding: 'utf8' }).trim().split('\n').filter(Boolean);
 for (const path of changed) {
@@ -30,7 +31,7 @@ const original = execFileSync('git', ['show', `${lock.baseline_commit}:index.htm
 assert.equal(readFileSync(new URL('../../index.html', import.meta.url), 'utf8'), original.replace('<a class="skip-link" href="#mainContent">Skip to main content</a>', ''));
 // The previously approved runtime is unchanged except for the exact Caregiving asset loader.
 const pilotBase = execFileSync('git', ['show', 'f4daccfbfe47657e701804604998be14ff48c928:pilot-runtime.js'], { cwd: root, encoding: 'utf8' });
-const caregivingLoader = `\n// Caregiving coordination stays isolated from the locked Recovery markup.\n(()=>{\n if(document.querySelector('script[data-caregiving-coordinator]'))return;\n const style=document.createElement('link');style.rel='stylesheet';style.href='/caregiving-coordinator.css?v=20261101-1';style.dataset.caregivingCoordinator='1';document.head.appendChild(style);\n const script=document.createElement('script');script.src='/caregiving-coordinator.js?v=20261101-1';script.defer=true;script.dataset.caregivingCoordinator='1';document.head.appendChild(script);\n})();\n`;
+const caregivingLoader = `\n// Caregiving coordination stays isolated from the locked Recovery markup.\n(()=>{\n if(document.querySelector('script[data-caregiving-coordinator]'))return;\n const style=document.createElement('link');style.rel='stylesheet';style.href='/caregiving-coordinator.css?v=20261101-1';style.dataset.caregivingCoordinator='1';document.head.appendChild(style);\n const script=document.createElement('script');script.src='/caregiving-coordinator.js?v=20261101-1';script.defer=true;script.dataset.caregivingCoordinator='1';document.head.appendChild(script);\n const a11yStyle=document.createElement('link');a11yStyle.rel='stylesheet';a11yStyle.href='/accessibility-acceptance.css?v=20261101-1';a11yStyle.dataset.accessibilityAcceptance='1';document.head.appendChild(a11yStyle);\n const a11yScript=document.createElement('script');a11yScript.src='/accessibility-acceptance.js?v=20261101-1';a11yScript.defer=true;a11yScript.dataset.accessibilityAcceptance='1';document.head.appendChild(a11yScript);\n})();\n`;
 assert.equal(readFileSync(new URL('../../pilot-runtime.js', import.meta.url), 'utf8'), pilotBase + caregivingLoader);
 // Public coaching copy is locked except the disclosure on its sample preview.
 const coachOriginal = execFileSync('git', ['show', `${lock.baseline_commit}:coach.html`], { cwd: root, encoding: 'utf8' });

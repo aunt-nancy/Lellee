@@ -86,8 +86,8 @@
     },
     {
       "id": "actual_device_accessibility",
-      "status": "not_run",
-      "detail": "No actual iPhone/Safari or complete screen-reader acceptance of the new code."
+      "status": "browser_corrections_passed_actual_device_pending",
+      "detail": "Supported cloud Chrome verification found and corrected account-dialog semantics, focus containment/restoration, labels, live feedback and undersized guest/legal targets. Approval locks and automated accessibility contracts pass. Actual iPhone/Safari and real VoiceOver or equivalent assistive-technology acceptance are still required; see docs/launch/ACCESSIBILITY_ACCEPTANCE_2026-10-31.md."
     },
     {
       "id": "program_content_acceptance",

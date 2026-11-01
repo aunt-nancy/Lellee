@@ -382,4 +382,6 @@
  if(document.querySelector('script[data-caregiving-coordinator]'))return;
  const style=document.createElement('link');style.rel='stylesheet';style.href='/caregiving-coordinator.css?v=20261101-1';style.dataset.caregivingCoordinator='1';document.head.appendChild(style);
  const script=document.createElement('script');script.src='/caregiving-coordinator.js?v=20261101-1';script.defer=true;script.dataset.caregivingCoordinator='1';document.head.appendChild(script);
+ const a11yStyle=document.createElement('link');a11yStyle.rel='stylesheet';a11yStyle.href='/accessibility-acceptance.css?v=20261101-1';a11yStyle.dataset.accessibilityAcceptance='1';document.head.appendChild(a11yStyle);
+ const a11yScript=document.createElement('script');a11yScript.src='/accessibility-acceptance.js?v=20261101-1';a11yScript.defer=true;a11yScript.dataset.accessibilityAcceptance='1';document.head.appendChild(a11yScript);
 })();

@@ -1,0 +1,2 @@
+.launch-auth-links a,#guestJoinNow{display:inline-flex;align-items:center;min-height:24px;padding:5px 3px}
+@media(max-width:820px),(pointer:coarse){.auth-actions button,.auth-browse,.launch-auth-links a,#guestJoinNow{min-height:44px}.launch-auth-links{gap:6px;flex-wrap:wrap}}
