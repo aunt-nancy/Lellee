@@ -16,15 +16,22 @@ const allowed = new Set([
   '.github/workflows/lellee-launch-verification.yml',
   'supabase/migrations/20261029193037_independent_coach_service_authorization.sql',
   'supabase/migrations/20261030161649_isolate_coaching_group_schedule_reads.sql',
-  'supabase/migrations/20261101040121_public_program_resource_directory.sql'
+  'supabase/migrations/20261101040121_public_program_resource_directory.sql',
+  'supabase/migrations/20261101045940_caregiving_multi_person_coordination.sql',
+  'supabase/migrations/20261101045941_restore_coaching_dashboard_context.sql',
+  'caregiving-coordinator.css', 'caregiving-coordinator.js'
 ]);
 const changed = execFileSync('git', ['diff', '--name-only', lock.baseline_commit, '--'], { cwd: root, encoding: 'utf8' }).trim().split('\n').filter(Boolean);
 for (const path of changed) {
   assert.ok(allowed.has(path) || path.startsWith('tools/coach-authorization-tests/') || path.startsWith('docs/launch/') || path.startsWith('content/launch-2026-10-30/'), `Change exceeds correction scope: ${path}`);
 }
-// Consumer markup is locked except removal of the duplicate broken skip link.
+// Consumer markup is locked except the exact approved corrections and Caregiving assets.
 const original = execFileSync('git', ['show', `${lock.baseline_commit}:index.html`], { cwd: root, encoding: 'utf8' });
-assert.equal(readFileSync(new URL('../../index.html', import.meta.url), 'utf8'), original.replace('<a class="skip-link" href="#mainContent">Skip to main content</a>', ''));
+const consumerExpected = original
+  .replace('<a class="skip-link" href="#mainContent">Skip to main content</a>', '')
+  .replace('<link href="/lellee-v1.css" rel="stylesheet"/>', '<link href="/lellee-v1.css" rel="stylesheet"/>\n<link href="/caregiving-coordinator.css?v=20261101-1" rel="stylesheet"/>')
+  .replace('</body>', '<script src="/caregiving-coordinator.js?v=20261101-1"></script>\n</body>');
+assert.equal(readFileSync(new URL('../../index.html', import.meta.url), 'utf8'), consumerExpected);
 // Public coaching copy is locked except the disclosure on its sample preview.
 const coachOriginal = execFileSync('git', ['show', `${lock.baseline_commit}:coach.html`], { cwd: root, encoding: 'utf8' });
 const disclosed = coachOriginal

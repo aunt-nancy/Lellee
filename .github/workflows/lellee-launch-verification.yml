@@ -8,8 +8,12 @@ on:
       - 'supabase/migrations/20261029193037_independent_coach_service_authorization.sql'
       - 'supabase/migrations/20261030161649_isolate_coaching_group_schedule_reads.sql'
       - 'supabase/migrations/20261101040121_public_program_resource_directory.sql'
+      - 'supabase/migrations/20261101045940_caregiving_multi_person_coordination.sql'
+      - 'supabase/migrations/20261101045941_restore_coaching_dashboard_context.sql'
       - 'paths-resources.js'
       - 'lellee-v1.js'
+      - 'caregiving-coordinator.js'
+      - 'caregiving-coordinator.css'
       - '.github/workflows/lellee-launch-verification.yml'
 permissions:
   contents: read
@@ -33,6 +37,7 @@ jobs:
       - run: node approval-lock.mjs
       - run: node foundations-contract.mjs
       - run: node public-resources.mjs
+      - run: node caregiving-coordination.mjs
       - run: node native-pg17.mjs
       # No deployment, production database, email, checkout or repository secrets.
   real-auth-contract:

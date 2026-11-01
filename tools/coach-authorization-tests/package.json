@@ -17,6 +17,7 @@
     "test:native17": "node native-pg17.mjs",
     "test": "node run.mjs && node ui.mjs",
     "test:foundations": "node foundations-contract.mjs",
-    "test:resources": "node public-resources.mjs"
+    "test:resources": "node public-resources.mjs",
+    "test:caregiving": "node caregiving-coordination.mjs"
   }
 }
