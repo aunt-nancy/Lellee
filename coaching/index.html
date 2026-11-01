@@ -6,12 +6,12 @@
 <meta name="theme-color" content="#0d3b39">
 <title>Lellee Coaching Practice Workspace</title>
 <meta name="description" content="Private workspace for independent coaching practices using Lellee Coaching.">
-<link rel="stylesheet" href="/coach-workspace.css?v=20261005-1">
+<link rel="stylesheet" href="/coach-workspace.css?v=20261030-accessibility">
 <link rel="stylesheet" href="/coach-dashboard-live.css?v=20261005-1">
 <link rel="stylesheet" href="/coach-operations-completion.css?v=20261005-1">
 <style>[hidden]{display:none!important}html.coaching-auth-pending .coach-workspace-shell{display:none!important}</style>
 <script>var sb=null;var currentUser=null;document.documentElement.classList.add('coaching-auth-pending');</script>
-<script defer src="/coaching/index-runtime.js?v=20261006-1"></script>
+<script defer src="/coaching/index-runtime.js?v=20261030-launch-corrections"></script>
 </head>
 <body data-coaching-index="20261006-1">
 <div class="coach-workspace-loading" id="coachWorkspaceLoading">
@@ -22,6 +22,7 @@
   </div>
 </div>
 <div class="coach-workspace-shell" hidden inert>
+  <a class="coach-workspace-skip" href="#coachWorkspaceMain">Skip to main content</a>
   <aside class="coach-workspace-sidebar" id="coachWorkspaceSidebar">
     <a class="coach-workspace-logo" href="/coach.html" aria-label="Lellee Coaching home"><img src="/lellee-coaching-logo-dark-transparent-v3.png" alt="Lellee Coaching — Support. Guide. Create Change."></a>
     <nav class="coach-workspace-nav" aria-label="Coaching Practice workspace">
@@ -44,12 +45,13 @@
     <div class="coach-workspace-privacy"><b>Client privacy</b>Coaching operations are separate from personal Lellee journeys. Personal information must be explicitly shared by the client through an authorized coaching relationship; signing in does not grant access to private journals or recovery history.</div>
     <button type="button" class="coach-signout" id="coachWorkspaceSignOut">Sign Out</button>
   </aside>
-  <main class="coach-workspace-main">
+  <main class="coach-workspace-main" id="coachWorkspaceMain" tabindex="-1">
     <header class="coach-workspace-topbar">
       <button class="coach-workspace-mobile-toggle" id="coachWorkspaceMenu" type="button" aria-expanded="false" aria-controls="coachWorkspaceSidebar">Menu</button>
       <div class="coach-workspace-title"><b id="coachWorkspacePageTitle">Coaching Dashboard</b><small>Independent professional workspace</small></div>
       <div class="coach-workspace-account"><span id="coachWorkspaceAccount"></span></div>
     </header>
+    <p id="coachingServiceAuthorizationNotice" class="coach-guardrail" role="status" aria-live="polite">Checking service approval. Your setup and training remain available.</p>
     <div class="coach-workspace-content">
       <section class="page" id="page-coach-business">
         <div class="approved-inner">

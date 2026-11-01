@@ -1,0 +1,118 @@
+{
+  "observed_date": "2026-10-31",
+  "launch_ready": false,
+  "production_rollout_approved": false,
+  "locked_approvals_preserved": true,
+  "evidence": {
+    "authorization_and_privacy_local_checks": {
+      "status": "passed",
+      "count": 152,
+      "scope": "Reduced captured schema, synthetic JWT/roles, local PGlite"
+    },
+    "draft_content_staging_local_checks": {
+      "status": "passed",
+      "count": 12,
+      "scope": "Actual captured Content Studio schema/constraints/RLS and synthetic records"
+    },
+    "browser_fixture_checks": {
+      "status": "passed",
+      "scope": "Supported cloud Chromium; real scripts; simulated Auth/backend; synthetic notes only"
+    },
+    "native_postgresql_17": {
+      "status": "passed",
+      "run_url": "https://github.com/aunt-nancy/Lellee/actions/runs/41126084322",
+      "tested_commit": "1cb864471caed5b442902509c597a21bab586cf4",
+      "counts_as_passed": true,
+      "engine": "PostgreSQL 17.6 native Linux x64",
+      "count": 164
+    },
+    "isolated_real_auth_contract": {
+      "status": "passed",
+      "counts_as_passed": true,
+      "scope": "Real local Supabase Auth/PostgREST with reduced application fixtures; no production accounts or full UI acceptance",
+      "count": 24,
+      "run_url": "https://github.com/aunt-nancy/Lellee/actions/runs/41126084322",
+      "tested_commit": "1cb864471caed5b442902509c597a21bab586cf4"
+    },
+    "foundations_curriculum_contract": {
+      "status": "passed",
+      "count": 18,
+      "scope": "In-memory PostgreSQL, original table definitions, 56 original assessment items and existing shuffled-choice/text-grading functions. No hosted Auth, RLS, full frontend or publication acceptance.",
+      "results_file": "tools/coach-authorization-tests/foundations-contract-results.json"
+    },
+    "latest_pull_request_verification": {
+      "status": "passed",
+      "run_url": "https://github.com/aunt-nancy/Lellee/actions/runs/41171508057",
+      "tested_commit": "d87ba19c08de4d3aa6bb6f1c4cdd5b6e98776622",
+      "scope": "Approval lock, 18 Foundations contract checks, 164 native PostgreSQL 17.6 authorization/privacy/content checks and 24 isolated real Auth/PostgREST checks. The expired-certificate fixture uses the same America/Los_Angeles validity date as the authorization rule."
+    },
+    "protected_preview": {
+      "status": "browser_access_confirmed",
+      "deployment_id": "dpl_81tC9a5oC9UNgD8Q68X7m49mPp6X",
+      "tested_commit": "a8c6b525af026d8e88033f4958bfa047e865d21f",
+      "target": "preview",
+      "access_result": "Protected preview opened in supported cloud Chrome after user sign-in. Connector protection-link requests still returned 403. Landing, Caregiving guest preview and reload were verified; the resource browse boundary failed. See docs/launch/PREVIEW_ACCEPTANCE_2026-10-31.md."
+    },
+    "public_resource_correction": {
+      "status": "prepared_and_isolated_checks_passed",
+      "database_checks": 16,
+      "browser_fixture_checks": 11,
+      "live_migration_applied": false,
+      "published_resources_seeded": false,
+      "scope": "Program-scoped published-directory RPC and guest/private-save frontend correction. Minimal captured-schema/RLS tests and supported Chrome with synthetic data; not deployed-backend acceptance.",
+      "review_file": "docs/launch/PUBLIC_RESOURCE_CORRECTION_2026-10-31.md"
+    }
+  },
+  "required_gates": [
+    {
+      "id": "training_mapping",
+      "status": "mapping_approved_activation_held",
+      "detail": "User approved the prepared orientation followed by existing Coaching Foundations and its reviewed completion certificate on October 30, 2026. This approves mapping only; content reviews, real course/version IDs and activation remain held. Legacy publication formula is unchanged."
+    },
+    {
+      "id": "training_content_signoffs",
+      "status": "not_complete",
+      "detail": "Internal editorial/technical review completed; 53 fictional practice cases and a capstone submission companion prepared. Existing randomization/text grading verified, with 18 isolated curriculum contract checks passing. Qualified source/curriculum/assessment/scope/capstone signoffs and operational-procedure verification remain incomplete; no signoffs invented."
+    },
+    {
+      "id": "canonical_authenticated_acceptance",
+      "status": "requires_isolated_canonical_backend",
+      "detail": "Protected browser access is confirmed. The preview frontend points to the existing production runtime backend; synthetic account/service writes require an isolated canonical environment. Prior 24-check local real Auth contract remains a reduced fixture, not full application acceptance."
+    },
+    {
+      "id": "public_caregiving_resource_browse",
+      "status": "correction_prepared_backend_pending",
+      "detail": "Guest/program controls, a public published-row RPC, accurate empty/error states and protected private saving are prepared and passed 16 isolated database plus 11 browser fixture checks. Migration remains unapplied to hosted production. Read-only runtime inspection found zero published service/local resources, including shared rows. Pair with an isolated migrated backend and review actual resources before claiming live directory readiness."
+    },
+    {
+      "id": "actual_device_accessibility",
+      "status": "browser_corrections_passed_actual_device_pending",
+      "detail": "Supported cloud Chrome verification found and corrected account-dialog semantics, focus containment/restoration, labels, live feedback and undersized guest/legal targets. Approval locks and automated accessibility contracts pass. Actual iPhone/Safari and real VoiceOver or equivalent assistive-technology acceptance are still required; see docs/launch/ACCESSIBILITY_ACCEPTANCE_2026-10-31.md."
+    },
+    {
+      "id": "program_content_acceptance",
+      "status": "draft_prepared",
+      "detail": "210 review drafts across seven non-Recovery programs; no publication or claim of full multi-year parity."
+    },
+    {
+      "id": "program_feature_acceptance",
+      "status": "not_complete",
+      "detail": "Program-specific tools, including multi-person care records and their consolidated dashboard, need acceptance evidence. Content prompts alone are not feature implementation."
+    },
+    {
+      "id": "production_rollout",
+      "status": "held",
+      "detail": "Separate final rollout approval follows completed prerequisite evidence. Marketplace and payments remain off."
+    }
+  ],
+  "phased_release_rule": "An individually ready program may release after its own applicable gates pass; the approved eight-program portfolio and 1+20 roadmap are unchanged.",
+  "claims_excluded": [
+    "All launch work finished",
+    "Full security audit passed",
+    "Live real-account acceptance passed",
+    "Actual iPhone verified",
+    "Draft content clinically validated",
+    "All eight pathways ready",
+    "Marketplace or payments activated"
+  ]
+}

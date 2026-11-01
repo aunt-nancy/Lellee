@@ -1,0 +1,317 @@
+[
+  {
+    "table_name": "form_assignments",
+    "column_name": "id",
+    "data_type": "uuid",
+    "column_default": "gen_random_uuid()",
+    "is_nullable": "NO"
+  },
+  {
+    "table_name": "form_assignments",
+    "column_name": "form_id",
+    "data_type": "uuid",
+    "column_default": null,
+    "is_nullable": "NO"
+  },
+  {
+    "table_name": "form_assignments",
+    "column_name": "form_version_id",
+    "data_type": "uuid",
+    "column_default": null,
+    "is_nullable": "YES"
+  },
+  {
+    "table_name": "form_assignments",
+    "column_name": "user_id",
+    "data_type": "uuid",
+    "column_default": null,
+    "is_nullable": "NO"
+  },
+  {
+    "table_name": "form_assignments",
+    "column_name": "assigned_by",
+    "data_type": "uuid",
+    "column_default": null,
+    "is_nullable": "YES"
+  },
+  {
+    "table_name": "form_assignments",
+    "column_name": "assigned_scope",
+    "data_type": "text",
+    "column_default": "'program'::text",
+    "is_nullable": "NO"
+  },
+  {
+    "table_name": "form_assignments",
+    "column_name": "business_id",
+    "data_type": "uuid",
+    "column_default": null,
+    "is_nullable": "YES"
+  },
+  {
+    "table_name": "form_assignments",
+    "column_name": "organization_id",
+    "data_type": "uuid",
+    "column_default": null,
+    "is_nullable": "YES"
+  },
+  {
+    "table_name": "form_assignments",
+    "column_name": "program_id",
+    "data_type": "uuid",
+    "column_default": null,
+    "is_nullable": "YES"
+  },
+  {
+    "table_name": "form_assignments",
+    "column_name": "due_at",
+    "data_type": "timestamp with time zone",
+    "column_default": null,
+    "is_nullable": "YES"
+  },
+  {
+    "table_name": "form_assignments",
+    "column_name": "status",
+    "data_type": "text",
+    "column_default": "'assigned'::text",
+    "is_nullable": "NO"
+  },
+  {
+    "table_name": "form_assignments",
+    "column_name": "created_at",
+    "data_type": "timestamp with time zone",
+    "column_default": "now()",
+    "is_nullable": "NO"
+  },
+  {
+    "table_name": "form_assignments",
+    "column_name": "completed_at",
+    "data_type": "timestamp with time zone",
+    "column_default": null,
+    "is_nullable": "YES"
+  },
+  {
+    "table_name": "form_definitions",
+    "column_name": "id",
+    "data_type": "uuid",
+    "column_default": "gen_random_uuid()",
+    "is_nullable": "NO"
+  },
+  {
+    "table_name": "form_definitions",
+    "column_name": "program_id",
+    "data_type": "uuid",
+    "column_default": null,
+    "is_nullable": "YES"
+  },
+  {
+    "table_name": "form_definitions",
+    "column_name": "organization_id",
+    "data_type": "uuid",
+    "column_default": null,
+    "is_nullable": "YES"
+  },
+  {
+    "table_name": "form_definitions",
+    "column_name": "business_id",
+    "data_type": "uuid",
+    "column_default": null,
+    "is_nullable": "YES"
+  },
+  {
+    "table_name": "form_definitions",
+    "column_name": "title",
+    "data_type": "text",
+    "column_default": null,
+    "is_nullable": "NO"
+  },
+  {
+    "table_name": "form_definitions",
+    "column_name": "description",
+    "data_type": "text",
+    "column_default": null,
+    "is_nullable": "YES"
+  },
+  {
+    "table_name": "form_definitions",
+    "column_name": "form_type",
+    "data_type": "text",
+    "column_default": null,
+    "is_nullable": "NO"
+  },
+  {
+    "table_name": "form_definitions",
+    "column_name": "privacy_mode",
+    "data_type": "text",
+    "column_default": "'private_user'::text",
+    "is_nullable": "NO"
+  },
+  {
+    "table_name": "form_definitions",
+    "column_name": "status",
+    "data_type": "text",
+    "column_default": "'draft'::text",
+    "is_nullable": "NO"
+  },
+  {
+    "table_name": "form_definitions",
+    "column_name": "current_version",
+    "data_type": "integer",
+    "column_default": "1",
+    "is_nullable": "NO"
+  },
+  {
+    "table_name": "form_definitions",
+    "column_name": "sensitive",
+    "data_type": "boolean",
+    "column_default": "false",
+    "is_nullable": "NO"
+  },
+  {
+    "table_name": "form_definitions",
+    "column_name": "created_by",
+    "data_type": "uuid",
+    "column_default": null,
+    "is_nullable": "YES"
+  },
+  {
+    "table_name": "form_definitions",
+    "column_name": "created_at",
+    "data_type": "timestamp with time zone",
+    "column_default": "now()",
+    "is_nullable": "NO"
+  },
+  {
+    "table_name": "form_definitions",
+    "column_name": "updated_at",
+    "data_type": "timestamp with time zone",
+    "column_default": "now()",
+    "is_nullable": "NO"
+  },
+  {
+    "table_name": "form_questions",
+    "column_name": "id",
+    "data_type": "uuid",
+    "column_default": "gen_random_uuid()",
+    "is_nullable": "NO"
+  },
+  {
+    "table_name": "form_questions",
+    "column_name": "form_version_id",
+    "data_type": "uuid",
+    "column_default": null,
+    "is_nullable": "NO"
+  },
+  {
+    "table_name": "form_questions",
+    "column_name": "question_key",
+    "data_type": "text",
+    "column_default": null,
+    "is_nullable": "NO"
+  },
+  {
+    "table_name": "form_questions",
+    "column_name": "prompt",
+    "data_type": "text",
+    "column_default": null,
+    "is_nullable": "NO"
+  },
+  {
+    "table_name": "form_questions",
+    "column_name": "question_type",
+    "data_type": "text",
+    "column_default": null,
+    "is_nullable": "NO"
+  },
+  {
+    "table_name": "form_questions",
+    "column_name": "required",
+    "data_type": "boolean",
+    "column_default": "false",
+    "is_nullable": "NO"
+  },
+  {
+    "table_name": "form_questions",
+    "column_name": "options",
+    "data_type": "jsonb",
+    "column_default": "'[]'::jsonb",
+    "is_nullable": "NO"
+  },
+  {
+    "table_name": "form_questions",
+    "column_name": "display_order",
+    "data_type": "integer",
+    "column_default": "100",
+    "is_nullable": "NO"
+  },
+  {
+    "table_name": "form_questions",
+    "column_name": "sensitive",
+    "data_type": "boolean",
+    "column_default": "false",
+    "is_nullable": "NO"
+  },
+  {
+    "table_name": "form_versions",
+    "column_name": "id",
+    "data_type": "uuid",
+    "column_default": "gen_random_uuid()",
+    "is_nullable": "NO"
+  },
+  {
+    "table_name": "form_versions",
+    "column_name": "form_id",
+    "data_type": "uuid",
+    "column_default": null,
+    "is_nullable": "NO"
+  },
+  {
+    "table_name": "form_versions",
+    "column_name": "version_number",
+    "data_type": "integer",
+    "column_default": null,
+    "is_nullable": "NO"
+  },
+  {
+    "table_name": "form_versions",
+    "column_name": "status",
+    "data_type": "text",
+    "column_default": "'draft'::text",
+    "is_nullable": "NO"
+  },
+  {
+    "table_name": "form_versions",
+    "column_name": "instructions",
+    "data_type": "text",
+    "column_default": null,
+    "is_nullable": "YES"
+  },
+  {
+    "table_name": "form_versions",
+    "column_name": "consent_text",
+    "data_type": "text",
+    "column_default": null,
+    "is_nullable": "YES"
+  },
+  {
+    "table_name": "form_versions",
+    "column_name": "created_by",
+    "data_type": "uuid",
+    "column_default": null,
+    "is_nullable": "YES"
+  },
+  {
+    "table_name": "form_versions",
+    "column_name": "created_at",
+    "data_type": "timestamp with time zone",
+    "column_default": "now()",
+    "is_nullable": "NO"
+  },
+  {
+    "table_name": "form_versions",
+    "column_name": "published_at",
+    "data_type": "timestamp with time zone",
+    "column_default": null,
+    "is_nullable": "YES"
+  }
+]

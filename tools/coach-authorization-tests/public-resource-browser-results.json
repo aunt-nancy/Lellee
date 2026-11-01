@@ -1,0 +1,19 @@
+{
+  "observed_date": "2026-10-31",
+  "status": "passed",
+  "scope": "Supported cloud Chrome, actual resource markup and edited runtime, simulated RPC and private saved storage. No production keys, customers, writes or live migration.",
+  "checks": [
+    {"name": "Caregiving guest sees program-specific heading, filter and categories, with Recovery News hidden", "status": "passed"},
+    {"name": "Guest Save opens sign-in notice; synthetic write count remains zero", "status": "passed"},
+    {"name": "Empty directory explicitly reports no published Caregiving resources", "status": "passed"},
+    {"name": "Directory failure reports unavailable and Retry instead of zero results", "status": "passed"},
+    {"name": "Switching to Recovery restores original approach options, categories and Recovery News", "status": "passed"},
+    {"name": "Signed-in synthetic service Save changes to Saved and records one write", "status": "passed"},
+    {"name": "Failed save leaves Save unchanged, reports failure and adds no write", "status": "passed"},
+    {"name": "Failed saved-state read disables save controls", "status": "passed"},
+    {"name": "Delayed Caregiving response cannot overwrite the selected Returning Home directory", "status": "passed"},
+    {"name": "JavaScript website and malformed phone values are not rendered as links; sponsored card remains labeled separately", "status": "passed"},
+    {"name": "Reload after synthetic sign-out immediately clears and hides old saved rows during a delayed response", "status": "passed"}
+  ],
+  "not_verified": ["Full canonical application Auth/consent/invitation flow", "New RPC in a deployed backend", "Actual iPhone/Safari or full screen-reader acceptance"]
+}

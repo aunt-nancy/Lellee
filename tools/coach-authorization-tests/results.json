@@ -1,0 +1,568 @@
+{
+  "engine": "PostgreSQL 18.6 (PGlite 0.5.13) on wasm32-unknown-emscripten, compiled by emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 6.0.5 (1db513782be24469589d7cb8a1f1834e9a33f271), 32-bit",
+  "scope": "Actual migration and guards with reduced catalog-derived schema; real RPC bodies; synthetic accounts; payment/admin helpers isolated",
+  "passed": 140,
+  "total": 140,
+  "results": [
+    {
+      "name": "new: RPC invitation",
+      "passed": true
+    },
+    {
+      "name": "new: RPC scheduling",
+      "passed": true
+    },
+    {
+      "name": "new: direct scheduling",
+      "passed": true
+    },
+    {
+      "name": "new: direct active offer",
+      "passed": true
+    },
+    {
+      "name": "new: direct coach message",
+      "passed": true
+    },
+    {
+      "name": "new: RPC assignment",
+      "passed": true
+    },
+    {
+      "name": "new: RPC intake",
+      "passed": true
+    },
+    {
+      "name": "new: RPC consultation conversion",
+      "passed": true
+    },
+    {
+      "name": "new: RPC session confirmation",
+      "passed": true
+    },
+    {
+      "name": "new: RPC session completion",
+      "passed": true
+    },
+    {
+      "name": "new: direct group session",
+      "passed": true
+    },
+    {
+      "name": "new: direct group activation",
+      "passed": true
+    },
+    {
+      "name": "new: direct group message",
+      "passed": true
+    },
+    {
+      "name": "new: direct group announcement",
+      "passed": true
+    },
+    {
+      "name": "new: direct coaching note",
+      "passed": true
+    },
+    {
+      "name": "new: direct legacy session",
+      "passed": true
+    },
+    {
+      "name": "new: onboarding status remains available",
+      "passed": true
+    },
+    {
+      "name": "new: client acceptance cannot activate an unqualified coach",
+      "passed": true
+    },
+    {
+      "name": "new: draft service preparation",
+      "passed": true
+    },
+    {
+      "name": "new: practice profile remains editable",
+      "passed": true
+    },
+    {
+      "name": "new: self-reported training submission",
+      "passed": true
+    },
+    {
+      "name": "new: client privacy revocation remains available",
+      "passed": true
+    },
+    {
+      "name": "new: cancellation remains available",
+      "passed": true
+    },
+    {
+      "name": "new: relationship termination remains available",
+      "passed": true
+    },
+    {
+      "name": "pending: RPC invitation",
+      "passed": true
+    },
+    {
+      "name": "pending: RPC scheduling",
+      "passed": true
+    },
+    {
+      "name": "pending: direct scheduling",
+      "passed": true
+    },
+    {
+      "name": "pending: direct active offer",
+      "passed": true
+    },
+    {
+      "name": "pending: direct coach message",
+      "passed": true
+    },
+    {
+      "name": "pending: RPC assignment",
+      "passed": true
+    },
+    {
+      "name": "pending: RPC intake",
+      "passed": true
+    },
+    {
+      "name": "pending: RPC consultation conversion",
+      "passed": true
+    },
+    {
+      "name": "pending: RPC session confirmation",
+      "passed": true
+    },
+    {
+      "name": "pending: RPC session completion",
+      "passed": true
+    },
+    {
+      "name": "pending: direct group session",
+      "passed": true
+    },
+    {
+      "name": "pending: direct group activation",
+      "passed": true
+    },
+    {
+      "name": "pending: direct group message",
+      "passed": true
+    },
+    {
+      "name": "pending: direct group announcement",
+      "passed": true
+    },
+    {
+      "name": "pending: direct coaching note",
+      "passed": true
+    },
+    {
+      "name": "pending: direct legacy session",
+      "passed": true
+    },
+    {
+      "name": "pending: onboarding status remains available",
+      "passed": true
+    },
+    {
+      "name": "pending: client acceptance cannot activate an unqualified coach",
+      "passed": true
+    },
+    {
+      "name": "pending: draft service preparation",
+      "passed": true
+    },
+    {
+      "name": "pending: practice profile remains editable",
+      "passed": true
+    },
+    {
+      "name": "pending: self-reported training submission",
+      "passed": true
+    },
+    {
+      "name": "pending: client privacy revocation remains available",
+      "passed": true
+    },
+    {
+      "name": "pending: cancellation remains available",
+      "passed": true
+    },
+    {
+      "name": "pending: relationship termination remains available",
+      "passed": true
+    },
+    {
+      "name": "approved: RPC invitation",
+      "passed": true
+    },
+    {
+      "name": "approved: RPC scheduling",
+      "passed": true
+    },
+    {
+      "name": "approved: direct scheduling",
+      "passed": true
+    },
+    {
+      "name": "approved: direct active offer",
+      "passed": true
+    },
+    {
+      "name": "approved: direct coach message",
+      "passed": true
+    },
+    {
+      "name": "approved: RPC assignment",
+      "passed": true
+    },
+    {
+      "name": "approved: RPC intake",
+      "passed": true
+    },
+    {
+      "name": "approved: RPC consultation conversion",
+      "passed": true
+    },
+    {
+      "name": "approved: RPC session confirmation",
+      "passed": true
+    },
+    {
+      "name": "approved: RPC session completion",
+      "passed": true
+    },
+    {
+      "name": "approved: direct group session",
+      "passed": true
+    },
+    {
+      "name": "approved: direct group activation",
+      "passed": true
+    },
+    {
+      "name": "approved: direct group message",
+      "passed": true
+    },
+    {
+      "name": "approved: direct group announcement",
+      "passed": true
+    },
+    {
+      "name": "approved: direct coaching note",
+      "passed": true
+    },
+    {
+      "name": "approved: direct legacy session",
+      "passed": true
+    },
+    {
+      "name": "approved: onboarding status remains available",
+      "passed": true
+    },
+    {
+      "name": "Approved: client acceptance",
+      "passed": true
+    },
+    {
+      "name": "approved: draft service preparation",
+      "passed": true
+    },
+    {
+      "name": "approved: practice profile remains editable",
+      "passed": true
+    },
+    {
+      "name": "approved: self-reported training submission",
+      "passed": true
+    },
+    {
+      "name": "approved: client privacy revocation remains available",
+      "passed": true
+    },
+    {
+      "name": "approved: cancellation remains available",
+      "passed": true
+    },
+    {
+      "name": "approved: relationship termination remains available",
+      "passed": true
+    },
+    {
+      "name": "expired: RPC invitation",
+      "passed": true
+    },
+    {
+      "name": "expired: RPC scheduling",
+      "passed": true
+    },
+    {
+      "name": "expired: direct scheduling",
+      "passed": true
+    },
+    {
+      "name": "expired: direct active offer",
+      "passed": true
+    },
+    {
+      "name": "expired: direct coach message",
+      "passed": true
+    },
+    {
+      "name": "expired: RPC assignment",
+      "passed": true
+    },
+    {
+      "name": "expired: RPC intake",
+      "passed": true
+    },
+    {
+      "name": "expired: RPC consultation conversion",
+      "passed": true
+    },
+    {
+      "name": "expired: RPC session confirmation",
+      "passed": true
+    },
+    {
+      "name": "expired: RPC session completion",
+      "passed": true
+    },
+    {
+      "name": "expired: direct group session",
+      "passed": true
+    },
+    {
+      "name": "expired: direct group activation",
+      "passed": true
+    },
+    {
+      "name": "expired: direct group message",
+      "passed": true
+    },
+    {
+      "name": "expired: direct group announcement",
+      "passed": true
+    },
+    {
+      "name": "expired: direct coaching note",
+      "passed": true
+    },
+    {
+      "name": "expired: direct legacy session",
+      "passed": true
+    },
+    {
+      "name": "expired: onboarding status remains available",
+      "passed": true
+    },
+    {
+      "name": "expired: client acceptance cannot activate an unqualified coach",
+      "passed": true
+    },
+    {
+      "name": "expired: draft service preparation",
+      "passed": true
+    },
+    {
+      "name": "expired: practice profile remains editable",
+      "passed": true
+    },
+    {
+      "name": "expired: self-reported training submission",
+      "passed": true
+    },
+    {
+      "name": "expired: client privacy revocation remains available",
+      "passed": true
+    },
+    {
+      "name": "expired: cancellation remains available",
+      "passed": true
+    },
+    {
+      "name": "expired: relationship termination remains available",
+      "passed": true
+    },
+    {
+      "name": "revoked: RPC invitation",
+      "passed": true
+    },
+    {
+      "name": "revoked: RPC scheduling",
+      "passed": true
+    },
+    {
+      "name": "revoked: direct scheduling",
+      "passed": true
+    },
+    {
+      "name": "revoked: direct active offer",
+      "passed": true
+    },
+    {
+      "name": "revoked: direct coach message",
+      "passed": true
+    },
+    {
+      "name": "revoked: RPC assignment",
+      "passed": true
+    },
+    {
+      "name": "revoked: RPC intake",
+      "passed": true
+    },
+    {
+      "name": "revoked: RPC consultation conversion",
+      "passed": true
+    },
+    {
+      "name": "revoked: RPC session confirmation",
+      "passed": true
+    },
+    {
+      "name": "revoked: RPC session completion",
+      "passed": true
+    },
+    {
+      "name": "revoked: direct group session",
+      "passed": true
+    },
+    {
+      "name": "revoked: direct group activation",
+      "passed": true
+    },
+    {
+      "name": "revoked: direct group message",
+      "passed": true
+    },
+    {
+      "name": "revoked: direct group announcement",
+      "passed": true
+    },
+    {
+      "name": "revoked: direct coaching note",
+      "passed": true
+    },
+    {
+      "name": "revoked: direct legacy session",
+      "passed": true
+    },
+    {
+      "name": "revoked: onboarding status remains available",
+      "passed": true
+    },
+    {
+      "name": "revoked: client acceptance cannot activate an unqualified coach",
+      "passed": true
+    },
+    {
+      "name": "revoked: draft service preparation",
+      "passed": true
+    },
+    {
+      "name": "revoked: practice profile remains editable",
+      "passed": true
+    },
+    {
+      "name": "revoked: self-reported training submission",
+      "passed": true
+    },
+    {
+      "name": "revoked: client privacy revocation remains available",
+      "passed": true
+    },
+    {
+      "name": "revoked: cancellation remains available",
+      "passed": true
+    },
+    {
+      "name": "revoked: relationship termination remains available",
+      "passed": true
+    },
+    {
+      "name": "Direct verified training is rejected",
+      "passed": true
+    },
+    {
+      "name": "Direct forged course linkage is rejected",
+      "passed": true
+    },
+    {
+      "name": "Direct verified credential is rejected",
+      "passed": true
+    },
+    {
+      "name": "Coaches cannot approve their own authorization",
+      "passed": true
+    },
+    {
+      "name": "Unapproved second coach cannot borrow owner approval",
+      "passed": true
+    },
+    {
+      "name": "Other program cannot borrow approval",
+      "passed": true
+    },
+    {
+      "name": "Anonymous caller cannot inspect authorization",
+      "passed": true
+    },
+    {
+      "name": "Private predicate is not executable by coaches",
+      "passed": true
+    },
+    {
+      "name": "Explicit client acceptance activates the qualified relationship",
+      "passed": true
+    },
+    {
+      "name": "Actual invitation token acceptance records client acceptance",
+      "passed": true
+    },
+    {
+      "name": "Valid certificate is accepted on its expiry date",
+      "passed": true
+    },
+    {
+      "name": "Expired orientation is enforced on the next request",
+      "passed": true
+    },
+    {
+      "name": "Unconfigured requirements fail closed",
+      "passed": true
+    },
+    {
+      "name": "Unrelated course certificate does not qualify",
+      "passed": true
+    },
+    {
+      "name": "Public listings are filtered after revocation",
+      "passed": true
+    },
+    {
+      "name": "Revocation is effective without refreshing JWT",
+      "passed": true
+    },
+    {
+      "name": "Editable approval metadata cannot bypass the gate",
+      "passed": true
+    },
+    {
+      "name": "Cancellation cannot smuggle a reschedule",
+      "passed": true
+    },
+    {
+      "name": "Direct pausing cannot forge client acceptance",
+      "passed": true
+    },
+    {
+      "name": "Future employee tables receive no gate triggers",
+      "passed": true
+    }
+  ]
+}

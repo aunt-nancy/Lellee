@@ -1,0 +1,71 @@
+{
+  "status": "passed",
+  "count": 16,
+  "scope": "New public directory RPC in a minimal captured-schema/RLS fixture; synthetic rows; no live migration or resource publication.",
+  "results": [
+    {
+      "name": "Anonymous guest can read selected Caregiving and explicit shared service resources",
+      "status": "passed"
+    },
+    {
+      "name": "Other program resources are excluded",
+      "status": "passed"
+    },
+    {
+      "name": "Draft and inactive-category resources are excluded",
+      "status": "passed"
+    },
+    {
+      "name": "Non-Recovery does not receive unscoped legacy Recovery resources",
+      "status": "passed"
+    },
+    {
+      "name": "Recovery retains published legacy resources and excludes explicit other-program rows",
+      "status": "passed"
+    },
+    {
+      "name": "Private columns and saved notes never appear in anonymous projection",
+      "status": "passed"
+    },
+    {
+      "name": "Anonymous direct directory table reads remain restricted by existing RLS",
+      "status": "passed"
+    },
+    {
+      "name": "Anonymous private saved-resource table is not granted",
+      "status": "passed"
+    },
+    {
+      "name": "Anonymous write privilege is not created",
+      "status": "passed"
+    },
+    {
+      "name": "Unknown and missing programs fail without a Recovery fallback",
+      "status": "passed"
+    },
+    {
+      "name": "Retired programs are not publicly projected",
+      "status": "passed"
+    },
+    {
+      "name": "Approved preview aliases resolve to canonical program slugs",
+      "status": "passed"
+    },
+    {
+      "name": "Authenticated projection follows the same publication and program scope",
+      "status": "passed"
+    },
+    {
+      "name": "Public default function execution is revoked from unrelated roles",
+      "status": "passed"
+    },
+    {
+      "name": "Planned program read does not activate or publish it",
+      "status": "passed"
+    },
+    {
+      "name": "Empty published directory has an explicit empty array",
+      "status": "passed"
+    }
+  ]
+}

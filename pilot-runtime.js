@@ -34,6 +34,8 @@
   let activeContent = [];
   let todayItem = null;
   let selectedChoices = new Set();
+  let activityLoadSequence = 0;
+  let responseLoadOkay = false;
 
   function page(name){
     if (typeof window.showPage === 'function') window.showPage(name);
@@ -134,13 +136,14 @@
   }
 
   async function openProgram(program){
+    ++activityLoadSequence;
     if(program.isRecovery){
       activeProgram=null;
       page('today');
       return;
     }
     activeProgram=program;
-    await loadProgramRuntime(program);
+    if(!await loadProgramRuntime(program)) return;
     renderProgramHome();
     page('program-home');
   }
@@ -152,6 +155,7 @@
       sb.from('program_journey_stages').select('id,stage_key,name,description,sequence,start_day,end_day,status').eq('program_id',program.id).in('status',['published','review','draft']).order('sequence'),
       sb.from('program_content_items').select('id,stage_id,content_key,content_type,title,intro_text,body_text,suggested_choices,reflection_prompt,sequence,day_number,week_number,estimated_minutes,status,tags').eq('program_id',program.id).in('status',['published','review','draft']).order('sequence')
     ]);
+    if(activeProgram?.id!==program.id) return false;
     for(const q of [progressQ,modulesQ,stagesQ,contentQ]) if(q.error) throw q.error;
     activeProgress=progressQ.data||{current_day:1,current_week:1,current_stage_id:null};
     activeModules=modulesQ.data||[];
@@ -162,18 +166,38 @@
     if(stage && !activeProgress.current_stage_id) activeProgress.current_stage_id=stage.id;
 
     todayItem = activeContent.find(c=>c.stage_id===stage?.id) || activeContent.find(c=>Array.isArray(c.tags)&&c.tags.includes('weekly_review')) || activeContent[0] || null;
-    selectedChoices=new Set();
+    if(todayItem) await loadActivityResponse(todayItem,program.id);
+    return activeProgram?.id===program.id;
+  }
 
-    if(todayItem){
-      const {data,error}=await sb.from('pilot_daily_responses')
+  async function loadActivityResponse(item,programId){
+      const request=++activityLoadSequence;
+      selectedChoices=new Set();
+      responseLoadOkay=false;
+      let result;
+      try { result=await sb.from('pilot_daily_responses')
         .select('selected_choices,reflection,completed_at')
-        .eq('user_id',user.id).eq('program_id',program.id).eq('content_item_id',todayItem.id).maybeSingle();
+        .eq('user_id',user.id).eq('program_id',programId).eq('content_item_id',item.id).maybeSingle(); }
+      catch { result={data:null,error:{message:'Saved response unavailable'}}; }
+      if(request!==activityLoadSequence || activeProgram?.id!==programId || todayItem?.id!==item.id) return;
+      const {data,error}=result;
+      responseLoadOkay=!error;
       if(!error && data){
         selectedChoices=new Set(data.selected_choices||[]);
-        todayItem._savedReflection=data.reflection||'';
-        todayItem._completedAt=data.completed_at||null;
+        item._savedReflection=data.reflection||'';
+        item._completedAt=data.completed_at||null;
       }
-    }
+  }
+
+  async function chooseActivity(item){
+    if(!activeProgram || !activeContent.includes(item)) return;
+    const programId=activeProgram.id;
+    todayItem=item;
+    if(item.stage_id) activeProgress.current_stage_id=item.stage_id;
+    await loadActivityResponse(item,programId);
+    if(activeProgram?.id!==programId || todayItem?.id!==item.id) return;
+    renderProgramHome();
+    page('program-home');
   }
 
   function renderProgramHome(){
@@ -186,18 +210,22 @@
     $('#runtimeStageLabel').textContent=stage?.name||'Starting Point';
 
     const title=$('#runtimeTodayTitle'), intro=$('#runtimeTodayIntro'), choices=$('#runtimeTodayChoices'), refWrap=$('#runtimeTodayReflectionWrap'), refLabel=$('#runtimeTodayReflectionLabel'), ref=$('#runtimeTodayReflection'), save=$('#runtimeSaveToday'), msg=$('#runtimeTodayMsg');
+    ref.setAttribute('aria-labelledby','runtimeTodayReflectionLabel');
+    msg.setAttribute('role','status'); msg.setAttribute('aria-live','polite');
     choices.innerHTML='';
     msg.textContent='';
 
     if(todayItem){
       title.textContent=todayItem.title||'Your next step';
-      intro.textContent=todayItem.intro_text||todayItem.body_text||'Choose one useful step for today.';
+      intro.textContent=todayItem.body_text||todayItem.intro_text||'Choose one useful step for today.';
+      intro.style.whiteSpace='pre-line';
       const list=Array.isArray(todayItem.suggested_choices)?todayItem.suggested_choices:[];
       list.forEach(choice=>{
         const b=document.createElement('button');
         b.type='button'; b.className='runtime-choice'; b.textContent=choice;
         b.classList.toggle('selected',selectedChoices.has(choice));
-        b.addEventListener('click',()=>{selectedChoices.has(choice)?selectedChoices.delete(choice):selectedChoices.add(choice);b.classList.toggle('selected')});
+        b.setAttribute('aria-pressed',String(selectedChoices.has(choice)));
+        b.addEventListener('click',()=>{selectedChoices.has(choice)?selectedChoices.delete(choice):selectedChoices.add(choice);b.classList.toggle('selected');b.setAttribute('aria-pressed',String(selectedChoices.has(choice)))});
         choices.appendChild(b);
       });
       if(todayItem.reflection_prompt){
@@ -207,8 +235,9 @@
       } else {
         refWrap.classList.add('hidden'); ref.value='';
       }
-      save.disabled=false;
-      if(todayItem._completedAt) msg.textContent='Saved previously — you can revise it.';
+      save.disabled=!responseLoadOkay;
+      if(!responseLoadOkay) msg.textContent='Your saved response could not be loaded. Reopen the activity to retry before saving.';
+      else if(todayItem._completedAt) msg.textContent='Saved previously — you can revise it.';
     } else {
       title.textContent='This program is ready for structure review';
       intro.textContent='The program is enrolled for internal testing, but no readable pilot content is available yet.';
@@ -262,6 +291,7 @@
     activeStages.forEach((s,index)=>{
       const b=document.createElement('button');
       b.className='runtime-journey-stage-button';
+      b.setAttribute('aria-current',s.id===currentId?'step':'false');
       if(s.id===currentId)b.classList.add('current');
       b.innerHTML=`<span>${index+1}</span><div><b>${esc(s.name)}</b><small>${esc(s.description||'')}</small></div>`;
       b.addEventListener('click',()=>renderStageContent(s));
@@ -286,30 +316,46 @@
     items.forEach(item=>{
       const a=document.createElement('article');
       a.className='runtime-content-card';
-      a.innerHTML=`<div><span>${esc((item.content_type||'prompt').replaceAll('_',' '))}</span><em>${item.estimated_minutes||5} min</em></div><h4>${esc(item.title)}</h4><p>${esc(item.intro_text||item.body_text||'')}</p>${item.reflection_prompt?`<blockquote>${esc(item.reflection_prompt)}</blockquote>`:''}`;
+      a.innerHTML=`<div><span>${esc((item.content_type||'prompt').replaceAll('_',' '))}</span><em>${item.estimated_minutes||5} min</em></div><h4>${esc(item.title)}</h4><p style="white-space:pre-line">${esc(item.body_text||item.intro_text||'')}</p>${item.reflection_prompt?`<blockquote>${esc(item.reflection_prompt)}</blockquote>`:''}`;
+      const use=document.createElement('button');
+      use.type='button'; use.className='runtime-open-program';
+      use.textContent='Use this activity';
+      use.setAttribute('aria-label','Use activity: '+item.title);
+      use.addEventListener('click',()=>chooseActivity(item));
+      a.appendChild(use);
       wrap.appendChild(a);
     });
   }
 
   async function saveToday(){
-    if(!activeProgram || !todayItem || !user)return;
+    if(!activeProgram || !todayItem || !user || !responseLoadOkay)return;
     const btn=$('#runtimeSaveToday'), msg=$('#runtimeTodayMsg');
+    const program=activeProgram, item=todayItem;
+    const progress={...activeProgress};
     btn.disabled=true; msg.textContent='Saving…';
     const reflection=$('#runtimeTodayReflection')?.value?.trim()||null;
     const payload={
-      user_id:user.id, program_id:activeProgram.id, content_item_id:todayItem.id,
+      user_id:user.id, program_id:program.id, content_item_id:item.id,
       selected_choices:[...selectedChoices], reflection, completed_at:new Date().toISOString(), updated_at:new Date().toISOString()
     };
-    const {error}=await sb.from('pilot_daily_responses').upsert(payload,{onConflict:'user_id,program_id,content_item_id'});
-    if(error){msg.textContent='Could not save yet. Please try again.';console.error(error)}
-    else {
-      await sb.from('pilot_program_progress').upsert({
-        user_id:user.id,program_id:activeProgram.id,current_day:activeProgress?.current_day||1,current_week:activeProgress?.current_week||1,current_stage_id:activeProgress?.current_stage_id||activeStages[0]?.id||null,last_opened_at:new Date().toISOString(),updated_at:new Date().toISOString()
+    const same=()=>activeProgram?.id===program.id && todayItem?.id===item.id;
+    let responseSaved=false;
+    try {
+      const {error}=await sb.from('pilot_daily_responses').upsert(payload,{onConflict:'user_id,program_id,content_item_id'});
+      if(error) throw error;
+      responseSaved=true;
+      if(!same()) return;
+      const {error:progressError}=await sb.from('pilot_program_progress').upsert({
+        user_id:user.id,program_id:program.id,current_day:progress.current_day||1,current_week:progress.current_week||1,current_stage_id:progress.current_stage_id||item.stage_id||null,last_opened_at:new Date().toISOString(),updated_at:new Date().toISOString()
       },{onConflict:'user_id,program_id'});
-      msg.textContent='Saved privately to this program.';
-      todayItem._completedAt=new Date().toISOString();
-    }
-    btn.disabled=false;
+      if(same()){
+        msg.textContent=progressError?'Activity saved privately. The journey position could not be updated; you can try saving again.':'Saved privately to this program.';
+        item._completedAt=new Date().toISOString();
+      }
+    } catch(error) {
+      if(same()) msg.textContent=responseSaved?'Activity saved privately. The journey position could not be updated; you can try saving again.':'Could not save yet. Please try again.';
+      console.error(error);
+    } finally { if(same()) btn.disabled=!responseLoadOkay; }
   }
 
   async function init(){
@@ -329,4 +375,13 @@
   }
 
   init();
+})();
+
+// Caregiving coordination stays isolated from the locked Recovery markup.
+(()=>{
+ if(document.querySelector('script[data-caregiving-coordinator]'))return;
+ const style=document.createElement('link');style.rel='stylesheet';style.href='/caregiving-coordinator.css?v=20261101-1';style.dataset.caregivingCoordinator='1';document.head.appendChild(style);
+ const script=document.createElement('script');script.src='/caregiving-coordinator.js?v=20261101-1';script.defer=true;script.dataset.caregivingCoordinator='1';document.head.appendChild(script);
+ const a11yStyle=document.createElement('link');a11yStyle.rel='stylesheet';a11yStyle.href='/accessibility-acceptance.css?v=20261101-1';a11yStyle.dataset.accessibilityAcceptance='1';document.head.appendChild(a11yStyle);
+ const a11yScript=document.createElement('script');a11yScript.src='/accessibility-acceptance.js?v=20261101-1';a11yScript.defer=true;a11yScript.dataset.accessibilityAcceptance='1';document.head.appendChild(a11yScript);
 })();

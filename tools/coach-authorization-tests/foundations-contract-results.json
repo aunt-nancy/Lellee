@@ -1,0 +1,87 @@
+{
+  "status": "passed",
+  "count": 18,
+  "engine": "PostgreSQL 18.6 (PGlite 0.5.13) on wasm32-unknown-emscripten, compiled by emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 6.0.5 (1db513782be24469589d7cb8a1f1834e9a33f271), 32-bit",
+  "scope": "In-memory PostgreSQL with original table DDL, 56 authored items and current repository learner/grading functions; no hosted Auth, full frontend, RLS or production writes.",
+  "source_sha256": {
+    "supabase/migrations/20260930000703_professional_training_foundation.sql": "8997b63580a10a3569cb702af88090ad0b1f7386a32afc3ae2dda6057681a016",
+    "supabase/migrations/20260930002844_coaching_foundations_content_draft.sql": "c0ff0e6e4807ea3df17612ba73ce417558357bf35fe13d5fed499f76743e3125",
+    "supabase/migrations/20260930002947_coaching_foundations_assessments_a.sql": "c14c66204179bbe9590b28b6f0a4baf96fde3cfaa27ed7142eb4547dd5ed89c9",
+    "supabase/migrations/20260930003019_coaching_foundations_assessments_b.sql": "d91da2e721a1316c8a3389b33f3787e8b1e716f25032c14966fe372977d418b0",
+    "supabase/migrations/20260930015723_professional_assessment_choice_randomization.sql": "ce2dd55522580ea1f0770236dcdae4feb9b9cb8fc2d1c41e3efe0e204acf97ff"
+  },
+  "results": [
+    {
+      "name": "Original draft bank contains 56 items and 23 scenarios",
+      "status": "passed"
+    },
+    {
+      "name": "Anonymous actor is rejected",
+      "status": "passed"
+    },
+    {
+      "name": "Unpublished course blocks an enrolled learner",
+      "status": "passed"
+    },
+    {
+      "name": "Learner payload omits answer keys and rationales",
+      "status": "passed"
+    },
+    {
+      "name": "Displayed choices preserve original text and use existing server shuffle",
+      "status": "passed"
+    },
+    {
+      "name": "All wrong answer texts score zero",
+      "status": "passed"
+    },
+    {
+      "name": "Answer-index objects do not accidentally pass the text contract",
+      "status": "passed"
+    },
+    {
+      "name": "Missing answer is rejected without an attempt row",
+      "status": "passed"
+    },
+    {
+      "name": "Locked next module is inaccessible",
+      "status": "passed"
+    },
+    {
+      "name": "Correct displayed answer texts pass scope_role_boundaries and unlock next module",
+      "status": "passed"
+    },
+    {
+      "name": "Correct displayed answer texts pass ethics_privacy_consent and unlock next module",
+      "status": "passed"
+    },
+    {
+      "name": "Correct displayed answer texts pass trauma_cultural_responsiveness and unlock next module",
+      "status": "passed"
+    },
+    {
+      "name": "Correct displayed answer texts pass communication_skills and unlock next module",
+      "status": "passed"
+    },
+    {
+      "name": "Correct displayed answer texts pass goals_accountability and unlock next module",
+      "status": "passed"
+    },
+    {
+      "name": "Correct displayed answer texts pass documentation_shared_progress and unlock next module",
+      "status": "passed"
+    },
+    {
+      "name": "Correct displayed answer texts pass risk_referral_escalation and unlock next module",
+      "status": "passed"
+    },
+    {
+      "name": "Capstone remains unpassed by quiz progression",
+      "status": "passed"
+    },
+    {
+      "name": "Unenrolled actor cannot read another learner module",
+      "status": "passed"
+    }
+  ]
+}

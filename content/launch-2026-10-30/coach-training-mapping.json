@@ -1,0 +1,71 @@
+{
+  "version": "independent-onboarding-mapping-2026-10-30",
+  "status": "mapping_approved_activation_held",
+  "user_requirement": "Independent coaches complete orientation, onboarding certification and business approval before client-facing work; onboarding access remains available.",
+  "orientation": {
+    "existing_course": false,
+    "content_file": "independent-coach-orientation.md",
+    "reuses_existing_foundation_topics": [
+      "scope_role_boundaries",
+      "ethics_privacy_consent",
+      "documentation_shared_progress"
+    ],
+    "includes_product_walkthrough": true,
+    "evidence_needed": "Administrator-verified completed orientation training record linked to the exact reviewed and published orientation course/version; self-reported evidence is insufficient.",
+    "approved_course_key": "independent_coaching_orientation"
+  },
+  "onboarding_certification": {
+    "existing_course_status": "draft",
+    "required_existing_modules": [
+      "scope_role_boundaries",
+      "ethics_privacy_consent",
+      "trauma_cultural_responsiveness",
+      "communication_skills",
+      "goals_accountability",
+      "documentation_shared_progress",
+      "risk_referral_escalation",
+      "foundations_capstone"
+    ],
+    "evidence_needed": "Current administrator-issued certificate linked to completed, verified training and the same coach and business; course/module/assessment/capstone reviews remain mandatory.",
+    "approved_existing_course_key": "coaching_foundations"
+  },
+  "legacy_publication_formula": {
+    "status": "unchanged_pending_reconciliation",
+    "orientation": "Approved mapping to separate independent_coaching_orientation walkthrough; course still requires review and publication",
+    "ethics": "Existing Foundations ethics module is relevant content, but is not automatically a separately approved ethics course",
+    "entrepreneurship": "No distinct qualifying course was established in the current seven-course catalog",
+    "three_core_courses": "Current catalog has one foundation course; modules are not silently counted as three courses",
+    "specialty": "Existing specialty courses remain draft and do not supply automatic service authorization"
+  },
+  "professional_course_review_controls": "Retain existing qualified in-house review, capstone, verification, issue/expiry/revocation controls and recorded signoffs; do not fabricate reviewer identities or turn on the temporary dual-review override.",
+  "monthly_ethics_policy": "Existing informational reminder policy is unchanged.",
+  "future_staff_learning_coaching": "No change, no activation and no cross-lane qualification.",
+  "changes_to_approved_pricing": false,
+  "publishes_course_or_sets_checkout": false,
+  "grants_coach_approval": false,
+  "seeds_active_requirements_version": false,
+  "mapping_approval": {
+    "approved_date": "2026-10-30",
+    "timezone": "America/Los_Angeles",
+    "authority": "User approval in this conversation",
+    "response": "Yes",
+    "decision_presented": "Do you approve the prepared orientation followed by the existing Coaching Foundations course and its reviewed completion certificate as the independent-coach onboarding path? This would establish the mapping without approving unfinished course content or activating charges.",
+    "scope": "Mapping and sequence only: prepared orientation, then Coaching Foundations and its reviewed completion certificate.",
+    "excluded": [
+      "Course or assessment content signoffs",
+      "Reviewer qualification or capstone signoffs",
+      "Course publication or checkout",
+      "Prices or charges",
+      "Coach or business authorization",
+      "Active requirements configuration",
+      "Legacy extra-course formula changes",
+      "Production rollout"
+    ]
+  },
+  "required_sequence": [
+    "independent_coaching_orientation",
+    "coaching_foundations",
+    "reviewed_coaching_foundations_completion_certificate"
+  ],
+  "remaining_prerequisites": "Review and publish the orientation and Foundations through existing controls, resolve actual catalog IDs and reviewed versions, retain the legacy publication formula until separately reconciled, and complete acceptance before any separately approved activation. No requirement row or authorization is seeded."
+}

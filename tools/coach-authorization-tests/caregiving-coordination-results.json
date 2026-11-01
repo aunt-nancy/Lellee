@@ -1,0 +1,55 @@
+{
+  "status": "passed",
+  "count": 12,
+  "scope": "Synthetic PostgreSQL 17-compatible Caregiving data contract, RLS isolation, three-recipient workflow, UI contract and Coaching RPC reproducibility.",
+  "results": [
+    {
+      "name": "Migration creates private recipient and record tables",
+      "status": "passed"
+    },
+    {
+      "name": "Anonymous access is not granted",
+      "status": "passed"
+    },
+    {
+      "name": "One caregiver can maintain at least three separate profiles",
+      "status": "passed"
+    },
+    {
+      "name": "Appointments, medications, notes, routines and contacts stay attached to their profiles",
+      "status": "passed"
+    },
+    {
+      "name": "A consolidated overview can query every owned profile and open item",
+      "status": "passed"
+    },
+    {
+      "name": "A different signed-in user cannot read another caregiver records",
+      "status": "passed"
+    },
+    {
+      "name": "Cross-account record attachment is blocked by RLS and owned foreign key",
+      "status": "passed"
+    },
+    {
+      "name": "Unknown record categories are rejected",
+      "status": "passed"
+    },
+    {
+      "name": "Recipient deletion cascades only that recipient records",
+      "status": "passed"
+    },
+    {
+      "name": "Frontend exposes the six required Caregiving views and no local sensitive-data fallback",
+      "status": "passed"
+    },
+    {
+      "name": "Coaching dashboard RPC is recorded with explicit least-privilege execution",
+      "status": "passed"
+    },
+    {
+      "name": "Coaching dashboard RPC installs and returns a safe empty workspace for a new coach",
+      "status": "passed"
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "scope": "Original draft content plus actual captured Content Studio columns, constraints and RLS; synthetic records only",
+  "passed": 12,
+  "total": 12,
+  "results": [
+    {
+      "name": "Seven packs and 210 unpublished, source-linked, participant-selected activities validate",
+      "passed": true
+    },
+    {
+      "name": "Staging requires an explicit isolated-session marker and makes no partial write",
+      "passed": true
+    },
+    {
+      "name": "Stage the package without overwriting an existing published item",
+      "passed": true
+    },
+    {
+      "name": "Repeated staging is idempotent",
+      "passed": true
+    },
+    {
+      "name": "All seven programs have 30 items, with valid program-scoped stage links",
+      "passed": true
+    },
+    {
+      "name": "New records contain no fabricated review, publication or author approval",
+      "passed": true
+    },
+    {
+      "name": "All new drafts retain source references and lower-energy alternatives in review metadata",
+      "passed": true
+    },
+    {
+      "name": "Program activation states and published Recovery content remain unchanged",
+      "passed": true
+    },
+    {
+      "name": "Ordinary signed-in users cannot read any staged draft",
+      "passed": true
+    },
+    {
+      "name": "Anonymous users cannot read staged drafts or stages",
+      "passed": true
+    },
+    {
+      "name": "Verified fixture administrator can review all 210 items",
+      "passed": true
+    },
+    {
+      "name": "Unknown program prevents all writes and leaves existing records intact",
+      "passed": true
+    }
+  ]
+}
