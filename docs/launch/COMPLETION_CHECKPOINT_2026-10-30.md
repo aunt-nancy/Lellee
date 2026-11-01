@@ -7,7 +7,7 @@ canonical backend because the preview still targets the production runtime.
 See `PREVIEW_ACCEPTANCE_2026-10-31.md` for exact evidence and the proposed correction.
 
 Follow-up: the user approved that resource correction. It is prepared with 16
-passing isolated SQL/RLS checks and 10 supported-Chrome fixture checks. The new
+passing isolated SQL/RLS checks and 11 supported-Chrome fixture checks. The new
 public read function remains unapplied to production. The existing live resource
 tables contain zero published rows; no directory content was invented. See
 `PUBLIC_RESOURCE_CORRECTION_2026-10-31.md`. Full migrated-backend acceptance remains open.

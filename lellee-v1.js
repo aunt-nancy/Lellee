@@ -518,7 +518,8 @@ function show(msg,error=false){const t=q('#globalToast');if(t){t.textContent=msg
 async function loadResources(){
   const request=++resourceRequest,user=resourceUser();
   resourceRows=[];savedIds=new Set();resourceLoading=true;resourceLoadError=false;savedLoadError=false;
-  renderResources();
+  if(q('#resourceSavedListV2'))q('#resourceSavedListV2').innerHTML='';
+  setResourceView('finder');
   try{
     const slug=await selectedResourceProgram();
     if(!slug)throw new Error('Choose a support program');
@@ -639,6 +640,7 @@ async function toggleSave(key){
   renderResources();
 }
 function setResourceView(v){
+  if(resourceLoading||resourceLoadError)v='finder';
   if(resourceProgram!=='recovery'&&v==='news')v='finder';
   resourceView=v;
   qa('[data-resource-view]').forEach(b=>b.classList.toggle('active',b.dataset.resourceView===v));

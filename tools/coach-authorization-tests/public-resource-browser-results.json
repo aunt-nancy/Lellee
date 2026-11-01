@@ -12,7 +12,8 @@
     {"name": "Failed save leaves Save unchanged, reports failure and adds no write", "status": "passed"},
     {"name": "Failed saved-state read disables save controls", "status": "passed"},
     {"name": "Delayed Caregiving response cannot overwrite the selected Returning Home directory", "status": "passed"},
-    {"name": "JavaScript website and malformed phone values are not rendered as links; sponsored card remains labeled separately", "status": "passed"}
+    {"name": "JavaScript website and malformed phone values are not rendered as links; sponsored card remains labeled separately", "status": "passed"},
+    {"name": "Reload after synthetic sign-out immediately clears and hides old saved rows during a delayed response", "status": "passed"}
   ],
   "not_verified": ["Full canonical application Auth/consent/invitation flow", "New RPC in a deployed backend", "Actual iPhone/Safari or full screen-reader acceptance"]
 }

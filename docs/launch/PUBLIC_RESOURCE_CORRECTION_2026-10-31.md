@@ -26,7 +26,8 @@ remain Recovery-specific; explicitly different-program local rows are excluded.
 Guests may browse and open public provider links; saving prompts sign-in. Signed-in
 saves use the correct existing local/service saved table and check errors before
 claiming success. Unknown saved state disables mutation rather than overwriting
-it. Responses are guarded against program/user changes while loading. Non-HTTP(S)
+it. Each directory reload clears the old private saved list and shows the public
+loading panel immediately. Responses are guarded against program/user changes while loading. Non-HTTP(S)
 website values and malformed phone values are not rendered as links.
 
 Loading, unavailable and empty states are distinct. Published sponsorship remains
@@ -40,7 +41,7 @@ clinical appropriateness is promised by this correction.
   table/private data/write denial, alias resolution, no fallback and no activation.
   The fixture uses the captured fields/read-policy behavior with synthetic rows;
   it is not a complete database clone. See `public-resource-results.json`.
-- Ten browser checks pass in supported cloud Chrome using actual resource markup
+- Eleven browser checks pass in supported cloud Chrome using actual resource markup
   and runtime with simulated backend/storage. See
   `public-resource-browser-results.json`. No production account or write is used.
 - The approval checker still fingerprints all 35 protected files. It additionally

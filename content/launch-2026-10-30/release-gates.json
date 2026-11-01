@@ -56,7 +56,7 @@
     "public_resource_correction": {
       "status": "prepared_and_isolated_checks_passed",
       "database_checks": 16,
-      "browser_fixture_checks": 10,
+      "browser_fixture_checks": 11,
       "live_migration_applied": false,
       "published_resources_seeded": false,
       "scope": "Program-scoped published-directory RPC and guest/private-save frontend correction. Minimal captured-schema/RLS tests and supported Chrome with synthetic data; not deployed-backend acceptance.",
@@ -82,7 +82,7 @@
     {
       "id": "public_caregiving_resource_browse",
       "status": "correction_prepared_backend_pending",
-      "detail": "Guest/program controls, a public published-row RPC, accurate empty/error states and protected private saving are prepared and passed 16 isolated database plus 10 browser fixture checks. Migration remains unapplied to hosted production. Read-only runtime inspection found zero published service/local resources, including shared rows. Pair with an isolated migrated backend and review actual resources before claiming live directory readiness."
+      "detail": "Guest/program controls, a public published-row RPC, accurate empty/error states and protected private saving are prepared and passed 16 isolated database plus 11 browser fixture checks. Migration remains unapplied to hosted production. Read-only runtime inspection found zero published service/local resources, including shared rows. Pair with an isolated migrated backend and review actual resources before claiming live directory readiness."
     },
     {
       "id": "actual_device_accessibility",
