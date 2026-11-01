@@ -376,3 +376,10 @@
 
   init();
 })();
+
+// Caregiving coordination stays isolated from the locked Recovery markup.
+(()=>{
+ if(document.querySelector('script[data-caregiving-coordinator]'))return;
+ const style=document.createElement('link');style.rel='stylesheet';style.href='/caregiving-coordinator.css?v=20261101-1';style.dataset.caregivingCoordinator='1';document.head.appendChild(style);
+ const script=document.createElement('script');script.src='/caregiving-coordinator.js?v=20261101-1';script.defer=true;script.dataset.caregivingCoordinator='1';document.head.appendChild(script);
+})();

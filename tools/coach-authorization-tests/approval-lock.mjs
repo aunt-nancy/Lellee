@@ -25,13 +25,13 @@ const changed = execFileSync('git', ['diff', '--name-only', lock.baseline_commit
 for (const path of changed) {
   assert.ok(allowed.has(path) || path.startsWith('tools/coach-authorization-tests/') || path.startsWith('docs/launch/') || path.startsWith('content/launch-2026-10-30/'), `Change exceeds correction scope: ${path}`);
 }
-// Consumer markup is locked except the exact approved corrections and Caregiving assets.
+// Consumer markup is locked except removal of the duplicate broken skip link.
 const original = execFileSync('git', ['show', `${lock.baseline_commit}:index.html`], { cwd: root, encoding: 'utf8' });
-const consumerExpected = original
-  .replace('<a class="skip-link" href="#mainContent">Skip to main content</a>', '')
-  .replace('<link href="/lellee-v1.css" rel="stylesheet"/>', '<link href="/lellee-v1.css" rel="stylesheet"/>\n<link href="/caregiving-coordinator.css?v=20261101-1" rel="stylesheet"/>')
-  .replace('</body>', '<script src="/caregiving-coordinator.js?v=20261101-1"></script>\n</body>');
-assert.equal(readFileSync(new URL('../../index.html', import.meta.url), 'utf8'), consumerExpected);
+assert.equal(readFileSync(new URL('../../index.html', import.meta.url), 'utf8'), original.replace('<a class="skip-link" href="#mainContent">Skip to main content</a>', ''));
+// The previously approved runtime is unchanged except for the exact Caregiving asset loader.
+const pilotBase = execFileSync('git', ['show', 'f4daccfbfe47657e701804604998be14ff48c928:pilot-runtime.js'], { cwd: root, encoding: 'utf8' });
+const caregivingLoader = `\n// Caregiving coordination stays isolated from the locked Recovery markup.\n(()=>{\n if(document.querySelector('script[data-caregiving-coordinator]'))return;\n const style=document.createElement('link');style.rel='stylesheet';style.href='/caregiving-coordinator.css?v=20261101-1';style.dataset.caregivingCoordinator='1';document.head.appendChild(style);\n const script=document.createElement('script');script.src='/caregiving-coordinator.js?v=20261101-1';script.defer=true;script.dataset.caregivingCoordinator='1';document.head.appendChild(script);\n})();\n`;
+assert.equal(readFileSync(new URL('../../pilot-runtime.js', import.meta.url), 'utf8'), pilotBase + caregivingLoader);
 // Public coaching copy is locked except the disclosure on its sample preview.
 const coachOriginal = execFileSync('git', ['show', `${lock.baseline_commit}:coach.html`], { cwd: root, encoding: 'utf8' });
 const disclosed = coachOriginal

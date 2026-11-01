@@ -5,7 +5,7 @@ import { PGlite } from '@electric-sql/pglite';
 const root=new URL('../../',import.meta.url),read=path=>readFileSync(new URL(path,root),'utf8');
 const migration=read('supabase/migrations/20261101045940_caregiving_multi_person_coordination.sql');
 const dashboardMigration=read('supabase/migrations/20261101045941_restore_coaching_dashboard_context.sql');
-const runtime=read('caregiving-coordinator.js'),page=read('index.html');
+const runtime=read('caregiving-coordinator.js'),page=read('pilot-runtime.js');
 const db=new PGlite(),results=[];
 const id=n=>`40000000-0000-0000-0000-${String(n).padStart(12,'0')}`;
 async function check(name,fn){await fn();results.push({name,status:'passed'});}
