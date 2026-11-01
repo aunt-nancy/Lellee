@@ -52,6 +52,15 @@
       "tested_commit": "a8c6b525af026d8e88033f4958bfa047e865d21f",
       "target": "preview",
       "access_result": "Protected preview opened in supported cloud Chrome after user sign-in. Connector protection-link requests still returned 403. Landing, Caregiving guest preview and reload were verified; the resource browse boundary failed. See docs/launch/PREVIEW_ACCEPTANCE_2026-10-31.md."
+    },
+    "public_resource_correction": {
+      "status": "prepared_and_isolated_checks_passed",
+      "database_checks": 16,
+      "browser_fixture_checks": 10,
+      "live_migration_applied": false,
+      "published_resources_seeded": false,
+      "scope": "Program-scoped published-directory RPC and guest/private-save frontend correction. Minimal captured-schema/RLS tests and supported Chrome with synthetic data; not deployed-backend acceptance.",
+      "review_file": "docs/launch/PUBLIC_RESOURCE_CORRECTION_2026-10-31.md"
     }
   },
   "required_gates": [
@@ -72,8 +81,8 @@
     },
     {
       "id": "public_caregiving_resource_browse",
-      "status": "failed",
-      "detail": "Caregiving opens for guests and persists through reload, but Browse Shared Resources shows Recovery-specific controls and an empty list. The loaded legacy resource runtime exits before loading for guests. A scoped public directory correction and regression checks are required. No live resource counts or anonymous RLS access were established."
+      "status": "correction_prepared_backend_pending",
+      "detail": "Guest/program controls, a public published-row RPC, accurate empty/error states and protected private saving are prepared and passed 16 isolated database plus 10 browser fixture checks. Migration remains unapplied to hosted production. Read-only runtime inspection found zero published service/local resources, including shared rows. Pair with an isolated migrated backend and review actual resources before claiming live directory readiness."
     },
     {
       "id": "actual_device_accessibility",

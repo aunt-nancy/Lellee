@@ -7,6 +7,9 @@ on:
       - 'content/launch-2026-10-30/**'
       - 'supabase/migrations/20261029193037_independent_coach_service_authorization.sql'
       - 'supabase/migrations/20261030161649_isolate_coaching_group_schedule_reads.sql'
+      - 'supabase/migrations/20261101040121_public_program_resource_directory.sql'
+      - 'paths-resources.js'
+      - 'lellee-v1.js'
       - '.github/workflows/lellee-launch-verification.yml'
 permissions:
   contents: read
@@ -28,6 +31,7 @@ jobs:
       - run: npm ci
       - run: node approval-lock.mjs
       - run: node foundations-contract.mjs
+      - run: node public-resources.mjs
       - run: node native-pg17.mjs
       # No deployment, production database, email, checkout or repository secrets.
   real-auth-contract:

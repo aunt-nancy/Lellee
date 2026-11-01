@@ -80,3 +80,8 @@ Current remaining gates include this public resource correction, complete
 authenticated flow acceptance, qualified course signoffs, program feature/content
 acceptance and actual iPhone/Safari/assistive-technology checks. Launch remains
 held. All settled approvals remain locked.
+
+Follow-up after user approval: `PUBLIC_RESOURCE_CORRECTION_2026-10-31.md` records
+the prepared correction, explicit public projection and 16 SQL/10 browser-fixture
+checks. This original preview observation remains historical evidence of the
+failure; it is not relabeled as live backend acceptance.
