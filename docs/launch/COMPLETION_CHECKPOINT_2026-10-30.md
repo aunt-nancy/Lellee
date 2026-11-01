@@ -1,5 +1,11 @@
 # Launch completion checkpoint — October 30, 2026
 
+October 31 update: protected preview access is confirmed in cloud Chrome. Public
+Caregiving browsing and reload pass; guest resource browsing fails in the legacy
+Recovery-specific directory. Full authenticated testing requires an isolated
+canonical backend because the preview still targets the production runtime.
+See `PREVIEW_ACCEPTANCE_2026-10-31.md` for exact evidence and the proposed correction.
+
 Scope: finish the authorized launch preparation while preserving every settled
 approval. This is a factual checkpoint, not launch approval or a claim that all
 work is finished.

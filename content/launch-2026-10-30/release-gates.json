@@ -1,5 +1,5 @@
 {
-  "observed_date": "2026-10-30",
+  "observed_date": "2026-10-31",
   "launch_ready": false,
   "production_rollout_approved": false,
   "locked_approvals_preserved": true,
@@ -47,11 +47,11 @@
       "scope": "Approval lock, 18 Foundations contract checks, 164 native PostgreSQL 17.6 authorization/privacy/content checks and 24 isolated real Auth/PostgREST checks. The expired-certificate fixture uses the same America/Los_Angeles validity date as the authorization rule."
     },
     "protected_preview": {
-      "status": "ready_access_blocked",
-      "deployment_id": "dpl_426GeYbaV5xdYF4TswC7KTTqKeey",
-      "tested_commit": "d87ba19c08de4d3aa6bb6f1c4cdd5b6e98776622",
+      "status": "browser_access_confirmed",
+      "deployment_id": "dpl_81tC9a5oC9UNgD8Q68X7m49mPp6X",
+      "tested_commit": "a8c6b525af026d8e88033f4958bfa047e865d21f",
       "target": "preview",
-      "access_result": "The connected Vercel account returned HTTP 403 while reading the deployment protection link. Browser-facing route acceptance was not performed."
+      "access_result": "Protected preview opened in supported cloud Chrome after user sign-in. Connector protection-link requests still returned 403. Landing, Caregiving guest preview and reload were verified; the resource browse boundary failed. See docs/launch/PREVIEW_ACCEPTANCE_2026-10-31.md."
     }
   },
   "required_gates": [
@@ -67,8 +67,13 @@
     },
     {
       "id": "canonical_authenticated_acceptance",
-      "status": "blocked_preview_access",
-      "detail": "The latest isolated real Auth/PostgREST contract passed 24 tests with a reduced application fixture. The exact-commit Vercel preview is READY, but the connected Vercel account returned HTTP 403 while requesting its protected access link. Full canonical frontend/onboarding/curriculum/consent acceptance remains unexecuted."
+      "status": "requires_isolated_canonical_backend",
+      "detail": "Protected browser access is confirmed. The preview frontend points to the existing production runtime backend; synthetic account/service writes require an isolated canonical environment. Prior 24-check local real Auth contract remains a reduced fixture, not full application acceptance."
+    },
+    {
+      "id": "public_caregiving_resource_browse",
+      "status": "failed",
+      "detail": "Caregiving opens for guests and persists through reload, but Browse Shared Resources shows Recovery-specific controls and an empty list. The loaded legacy resource runtime exits before loading for guests. A scoped public directory correction and regression checks are required. No live resource counts or anonymous RLS access were established."
     },
     {
       "id": "actual_device_accessibility",
